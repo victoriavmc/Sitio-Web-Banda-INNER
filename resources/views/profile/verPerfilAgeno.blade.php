@@ -51,8 +51,6 @@
                                                 class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"></img>
                                         @endif
 
-
-
                                         <h1 class="text-xl font-bold">
                                             {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
                                         </h1>
@@ -66,7 +64,7 @@
                                     <div class="flex flex-col">
                                         <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Contenido
                                             Descargable
-                                            como {{ $usuario->rol->rol }}</span>
+                                            como {{ $usuario->roles->rol }}</span>
                                         <ul>
                                             <li class="mb-2">Escuchar</li>
                                             <li class="mb-2">Fondos</li>

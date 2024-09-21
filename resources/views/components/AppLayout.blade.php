@@ -57,7 +57,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Noticias</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="">Foro</a>
+                    <a class="hover:animate-pulse" href="#">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
@@ -148,7 +148,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Noticias</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="">Foro</a>
+                    <a class="hover:animate-pulse" href="#">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
