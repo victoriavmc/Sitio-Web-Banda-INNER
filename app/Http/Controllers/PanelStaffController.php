@@ -75,7 +75,7 @@ class panelStaffController extends Controller
             }
         }
 
-        return view('perfil.panelStaff', [
+        return view('profile.panelStaff', [
             'usuarios' => $usuarios,
             'roles' => $roles,
             'rol' => $rol,
@@ -89,7 +89,7 @@ class panelStaffController extends Controller
     {
         $usuarios = $this->listar($request);
         // Retornar la tabla de staff para ser renderizada
-        return view('perfil.partials.staff-table', ['usuarios' => $usuarios])->render();
+        return view('profile.partials.staff-table', ['usuarios' => $usuarios])->render();
     }
 
     #Miramos Imagen Especifica, enviamos la ruta

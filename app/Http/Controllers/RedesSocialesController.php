@@ -87,6 +87,11 @@ class redessocialesController extends Controller
     # Agregar una nueva red social
     public function agregarRed(Request $request)
     {
+        // Verificar acceso
+        if ($this->rol == 3 || $this->rol == 4) {
+            abort(403, 'Acceso denegado');
+        }
+
         // Validar entrada del usuario
         $request->validate([
             'linkRedSocial' => 'max:255|required',
@@ -125,6 +130,11 @@ class redessocialesController extends Controller
     # Guardar redes sociales de la BANDA seleccionadas
     public function guardarRedes(Request $request)
     {
+        // Verificar acceso
+        if ($this->rol == 3 || $this->rol == 4) {
+            abort(403, 'Acceso denegado');
+        }
+
         $linksRedSocial = $request->linkRedSocial ?? []; // Si es null, asigna un array vacío
 
         foreach ($linksRedSocial as $id => $nuevoLinkRedSocial) {
@@ -140,6 +150,8 @@ class redessocialesController extends Controller
             'message' => 'Las redes sociales han sido actualizadas correctamente.',
         ]);
     }
+
+
 
     // Guardar red social del staff
     public function guardarRedesStaff(Request $request)
@@ -183,7 +195,7 @@ class redessocialesController extends Controller
     }
 
     // Eliminar la red social del staff
-    public function eliminarRedesBanda(Request $request)
+    public function eliminarRedSocialStaff(Request $request)
     {
         // Verificar acceso
         if ($this->rol == 3 || $this->rol == 4) {
