@@ -195,29 +195,10 @@
                             </li>
                             <hr>
                         @endif
-                        {{-- TEMPORAL --}}
-                        <li class="min-w-max">
-                            <a href="{{ route('subirImagen') }}"
-                                class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        class="fill-current group-hover:text-cyan-600 {{ Request::is('panel-de-underConstruction') ? 'text-cyan-300' : 'text-gray-600' }}"
-                                        d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                                    <path
-                                        class="fill-current group-hover:text-cyan-300 {{ Request::is('panel-de-underConstruction') ? 'text-cyan-600' : 'text-gray-300' }}"
-                                        d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                                </svg>
-                                <span
-                                    class="-mr-1 font-medium group-hover:text-cyan-600 {{ Request::is('analiticas') ? 'text-cyan-600' : 'text-gray-600' }}">Imagenes</span>
-                            </a>
-                        </li>
-                        {{-- BORRAR DESPUES --}}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
     {{ $slot }}
 </x-AppLayout>
