@@ -51,8 +51,6 @@
                                                 class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"></img>
                                         @endif
 
-
-
                                         <h1 class="text-xl font-bold">
                                             {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
                                         </h1>
