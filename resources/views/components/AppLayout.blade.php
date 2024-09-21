@@ -82,7 +82,6 @@
                 @endif
             </div>
 
-
             <!-- Dropdown menu -->
             @if ($isAuthenticated)
                 <div id="dropdown-perfil"

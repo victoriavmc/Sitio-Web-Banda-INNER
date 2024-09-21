@@ -59,7 +59,7 @@
                                 <div class="flex flex-col">
                                     <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Contenido
                                         Descargable
-                                        como {{ $usuario->rol->rol }}</span>
+                                        como {{ $usuario->roles->rol }}</span>
                                     <ul>
                                         <li class="text-gray-700 mb-2">Escuchar</li>
                                         <li class="text-gray-700 mb-2">Fondos</li>

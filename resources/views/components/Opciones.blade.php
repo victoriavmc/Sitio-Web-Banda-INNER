@@ -200,5 +200,6 @@
             </div>
         </div>
     </div>
-    {{ $slot }}
+    <<<<<<< HEAD=======>>>>>>> c5ceb0f1fd8779b4034cbc704da977bc705adb45
+        {{ $slot }}
 </x-AppLayout>
