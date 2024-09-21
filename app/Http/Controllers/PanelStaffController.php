@@ -75,7 +75,7 @@ class panelStaffController extends Controller
             }
         }
 
-        return view('perfil.panelStaff', [
+        return view('profile.panelStaff', [
             'usuarios' => $usuarios,
             'roles' => $roles,
             'rol' => $rol,
@@ -176,7 +176,6 @@ class panelStaffController extends Controller
         $usuario = Usuario::find($id);
 
         #Eliminar en CASCADA
-
         return redirect()->route('panel-de-staff')->with('alertEliminacion', [
             'type' => 'Success',
             'message' => 'La cuenta y la imagen fueron eliminadas con éxito',
