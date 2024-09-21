@@ -151,7 +151,25 @@ class redessocialesController extends Controller
         ]);
     }
 
+    // Método para eliminar redes sociales de la BANDA
+    public function eliminarRedesBanda(Request $request)
+    {
+        $idRedSocial = $request->id;
+        $redSocial = RedesSociales::find($idRedSocial);
 
+        if ($redSocial) {
+            $redSocial->delete();
+            return redirect()->back()->with('alertCambios', [
+                'type' => 'Success',
+                'message' => 'La red social ha sido eliminada correctamente.',
+            ]);
+        } else {
+            return redirect()->back()->with('alertCambios', [
+                'type' => 'Error',
+                'message' => 'No se pudo eliminar la red social.',
+            ]);
+        }
+    }
 
     // Guardar red social del staff
     public function guardarRedesStaff(Request $request)
