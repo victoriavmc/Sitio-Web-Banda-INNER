@@ -60,13 +60,13 @@ Route::get('/logout', [loginController::class, 'logout'])
 
 // Vistas inicio de sesion
 Route::view('/login', "auth.login")
-->name('login')->middleware('guest');
+    ->name('login')->middleware('guest');
 
 Route::get('/registro', function () {
-$paises = new Paisnacimiento();
-$paises = Paisnacimiento::get();
+    $paises = new Paisnacimiento();
+    $paises = Paisnacimiento::get();
 
-return view('auth.registro', compact('paises'));
+    return view('auth.registro', compact('paises'));
 })->name('registro')->middleware('guest');
 //---------------------------------------------------------------
 
@@ -116,41 +116,53 @@ Route::post('/perfil/eliminar-red-social-banda', [redessocialesController::class
 Route::post('/perfil/guardar-redes-staff', [redessocialesController::class, 'guardarRedesStaff'])
     ->name('guardar-redes-staff')->middleware('auth');
 
-Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedSocialStaff'])
+Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedesStaff'])
     ->name('eliminar-red-social-staff')->middleware('auth');
 
 // ----------------------- Panel de Usuarios -----------------------
 Route::get('/panel-de-usuarios', [panelUsuariosController::class, 'panel'])
-->name('panel-de-usuarios')->middleware('auth');
+    ->name('panel-de-usuarios')->middleware('auth');
 
 Route::post('/panel-de-usuarios/modificar-rol/{id}', [panelUsuariosController::class, 'modificarRol'])
-->name('modificar-rol')->middleware('auth');
+    ->name('modificar-rol')->middleware('auth');
 
 Route::post('/panel-de-usuarios/borrar-imagen/{id}', [panelUsuariosController::class, 'borrarImagen'])
-->name('borrar-imagen')->middleware('auth');
+    ->name('borrar-imagen')->middleware('auth');
 
 Route::post('/panel-de-usuarios/eliminar-usuario/{id}', [panelUsuariosController::class, 'eliminarUsuario'])
-->name('eliminar-usuario')->middleware('auth');
+    ->name('eliminar-usuario')->middleware('auth');
 
 // ----------------------- Panel de Staff -----------------------
 Route::get('/panel-de-staff', [panelStaffController::class, 'panel'])
-->name('panel-de-staff')->middleware('auth');
+    ->name('panel-de-staff')->middleware('auth');
 
 Route::post('/panel-de-staff/modificar-rol/{id}', [panelStaffController::class, 'modificarRol'])
-->name('modificar-rol-staff')->middleware('auth');
+    ->name('modificar-rol-staff')->middleware('auth');
 
 Route::post('/panel-de-staff/borrar-imagen/{id}', [panelStaffController::class, 'borrarImagenStaff'])
-->name('borrar-imagen-staff')->middleware('auth');
+    ->name('borrar-imagen-staff')->middleware('auth');
 
 Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class, 'eliminarStaff'])
-->name('eliminar-staff')->middleware('auth');
+    ->name('eliminar-staff')->middleware('auth');
 //---------------------------------------------------------------
 
 // EN CONSTRUCCION
 Route::view('/underConstruction', "underConstruction")
     ->name('underConstruction');
 
+//----------------------- CARPETA CONTENIDO -----------------------
 
+//----------------------- CARPETA FORUM -----------------------
+
+//-----------------------------------------------------------------
+
+//----------------------- CARPETA NEWS -----------------------
+
+//-----------------------------------------------------------------
+
+//----------------------- CARPETA HISTORY -----------------------
+
+//-----------------------------------------------------------------
 
 // // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])

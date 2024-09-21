@@ -183,7 +183,7 @@ class redessocialesController extends Controller
     }
 
     // Eliminar la red social del staff
-    public function eliminarRedesBanda(Request $request)
+    public function eliminarRedesStaff(Request $request)
     {
         // Verificar acceso
         if ($this->rol == 3 || $this->rol == 4) {
@@ -215,5 +215,25 @@ class redessocialesController extends Controller
             'type' => 'Error',
             'message' => 'No se encontró la red social del staff.',
         ]);
+    }
+
+    // Método para eliminar redes sociales
+    public function eliminarRedesBanda(Request $request)
+    {
+        $idRedSocial = $request->input('red_social_id');
+        $redSocial = RedesSociales::find($idRedSocial);
+
+        if ($redSocial) {
+            $redSocial->delete();
+            return redirect()->back()->with('alertCambios', [
+                'type' => 'Success',
+                'message' => 'La red social ha sido eliminada correctamente.',
+            ]);
+        } else {
+            return redirect()->back()->with('alertCambios', [
+                'type' => 'Error',
+                'message' => 'No se pudo eliminar la red social.',
+            ]);
+        }
     }
 }
