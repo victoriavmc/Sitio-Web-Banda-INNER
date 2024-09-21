@@ -29,17 +29,7 @@ class Usuario extends Authenticatable
 
     public function rol()
     {
-        return $this->belongsTo(Rol::class, 'rol_idrol', 'idrol');
-    }
-
-    public function seguidoresPrincipales()
-    {
-        return $this->hasMany(Seguidores::class, 'usuarioPrincipal', 'idusuarios');
-    }
-
-    public function seguidoresSecundarios()
-    {
-        return $this->hasMany(Seguidores::class, 'usuarioSeguidor', 'idusuarios');
+        return $this->belongsTo(Roles::class, 'rol_idrol', 'idrol');
     }
 
     public function revisionImagenes()
