@@ -183,7 +183,7 @@ class redessocialesController extends Controller
     }
 
     // Eliminar la red social del staff
-    public function eliminarRedesStaff(Request $request)
+    public function eliminarRedesStaff()
     {
         // Verificar acceso
         if ($this->rol == 3 || $this->rol == 4) {
@@ -217,7 +217,7 @@ class redessocialesController extends Controller
         ]);
     }
 
-    // Método para eliminar redes sociales
+    // Método para eliminar redes sociales de la BANDA
     public function eliminarRedesBanda(Request $request)
     {
         $idRedSocial = $request->input('red_social_id');
