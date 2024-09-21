@@ -106,7 +106,8 @@ El proyecto está diseñado para ser escalable, seguro y fácil de mantener, per
 -   Asegúrate de tener instalados los siguientes paquetes:
     ````composer upgrade
     npm install vite
-    npm run build```
+    npm run build
+    npm run dev (EJECUTA)```
     ````
 
 ### En el php.init:
