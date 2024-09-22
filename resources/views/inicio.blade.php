@@ -121,7 +121,7 @@
                             Únete a las conversaciones en nuestro foro y comparte tus opiniones con los demas.
                         </p>
                         <div class="flex justify-end mt-5">
-                            <a class="relative" href="#">
+                            <a class="relative" href="{{route('foro')}}">
                                 <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
                                 <span
                                     class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Foro</span>
