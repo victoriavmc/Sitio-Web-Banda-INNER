@@ -5,10 +5,12 @@
             <div class='bg-white opacity-95 rounded-lg p-4 flex'>
                 <li class="relative flex flex-col sm:flex-row xl:flex-col items-start">
                     <div class="order-1 sm:ml-6 xl:ml-0">
+                        <p class="text-black text-sm mb-4">Publicado el: {{ $noticia->fechaSubida }}</p>
 
                         <h1 class="mb-1 text-slate-900 font-semibold">
                             <span class="mb-1 block text-lg leading-6 text-red-500">{{ $noticia->titulo }}</span>
                         </h1>
+
                         <div class="mt-3 prose prose-slate prose-sm text-base text-slate-600">
                             <p>{{ $noticia->descripcion }}</p>
                         </div>
