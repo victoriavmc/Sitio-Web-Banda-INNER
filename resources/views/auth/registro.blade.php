@@ -1,9 +1,9 @@
 <x-AppLayout title="Registro">
-    <div class="wrapper bg-center justify-center" style="background-image: url('{{ asset('img/registro_fondo.jpg') }}');">
+    <div class="wrapper bg-center justify-center" style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
         <div class="inner bg-black bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
-                <img class="pequeño" src="{{ asset('img/registro_costado.jpg') }}" alt="AgusFacha">
+                <img class="pequeño" src="{{ asset('img/logeo/registro_costado.jpg') }}" alt="AgusFacha">
             </div>
 
             <!-- Columna del formulario -->

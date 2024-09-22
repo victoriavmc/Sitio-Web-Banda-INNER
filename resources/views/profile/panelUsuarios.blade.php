@@ -136,7 +136,7 @@
                                                     <button type="button" data-usuario-id="{{ $usuario->idusuarios }}"
                                                         onclick="openModal(this)">
                                                         <img class="w-5 h-6"
-                                                            src="{{ asset('img/icono_modificar.jpg') }}"
+                                                            src="{{ asset('img/panel/icono_modificar.jpg') }}"
                                                             alt="Modificar Rol">
                                                     </button>
                                                 </div>
@@ -146,7 +146,7 @@
                                                         @csrf
                                                         <button type="submit">
                                                             <img class="w-5 h-6"
-                                                                src="{{ asset('img/icono_eliminar_imagen.jpg') }}"
+                                                                src="{{ asset('img/panel/icono_eliminar_imagen.jpg') }}"
                                                                 alt="Eliminar Imagen">
                                                         </button>
                                                     </form>
@@ -158,7 +158,7 @@
                                                         @csrf
                                                         <button type="submit">
                                                             <img class="w-5 h-6"
-                                                                src="{{ asset('img/icono_eliminar.jpg') }}"
+                                                                src="{{ asset('img/panel/icono_eliminar.jpg') }}"
                                                                 alt="Eliminar Usuario">
                                                         </button>
                                                     </form>

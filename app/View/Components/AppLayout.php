@@ -16,27 +16,13 @@ use Illuminate\Support\Facades\Storage;
 
 class AppLayout extends Component
 {
-    public $linkSpotify;
-    public $linkYoutube;
-    public $linkInstagram;
-    public $linkItunes;
+    public $links;
     public $nombreUsuario;
     public $isAuthenticated;
     public $imagenPerfil;
 
     public function __construct()
     {
-        $redSocial = RedesSociales::where('nombreRedSocial', 'Youtube')->first();
-        $this->linkYoutube = $redSocial->linkRedSocial;
-
-        $redSocial = RedesSociales::where('nombreRedSocial', 'Spotify')->first();
-        $this->linkSpotify = $redSocial->linkRedSocial;
-
-        $redSocial = RedesSociales::where('nombreRedSocial', 'Instagram')->first();
-        $this->linkInstagram = $redSocial->linkRedSocial;
-
-        $redSocial = RedesSociales::where('nombreRedSocial', 'iTunes')->first();
-        $this->linkItunes = $redSocial->linkRedSocial;
 
         $this->isAuthenticated = Auth::check();
 
@@ -70,12 +56,17 @@ class AppLayout extends Component
             $this->imagenPerfil = asset('img/logo_usuario.png');
         }
     }
-
+    #Recupero las redes y muestro en la vista
+    public function linksRedes()
+    {
+        return $this->links = RedesSociales::whereRaw('nombreRedSocial NOT REGEXP "^[0-9]"')->get();
+    }
     /**
      * Get the view / contents that represent the component.
      */
     public function render(): View|Closure|string
     {
+        $links=$this->linksRedes();
         return view('components.AppLayout');
     }
 }

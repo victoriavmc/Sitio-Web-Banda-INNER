@@ -26,7 +26,8 @@
                                                 <div class="text-gray-400">
                                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                                         rel="noopener noreferrer">
-                                                        <img class="w-38" src="{{ asset('img/logoOficial_deezer.svg') }}"
+                                                        <img class="w-38"
+                                                            src="{{ asset('img/biografia/logoOficial_deezer.svg') }}"
                                                             alt="Deezer">
                                                     </a>
                                                 </div>
@@ -36,7 +37,8 @@
                                                 <div class="text-gray-400">
                                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                                         rel="noopener noreferrer">
-                                                        <img class=" h-40" src="{{ asset('img/logoOficial_spotify.svg') }}"
+                                                        <img class=" h-40"
+                                                            src="{{ asset('img/biografia/logoOficial_spotify.svg') }}"
                                                             alt="Spotify">
                                                     </a>
                                                 </div>
@@ -46,7 +48,8 @@
                                                 <div class="text-gray-400">
                                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                                         rel="noopener noreferrer">
-                                                        <img class=" h-40" src="{{ asset('img/logoOficial_youtube.svg') }}"
+                                                        <img class=" h-40"
+                                                            src="{{ asset('img/biografia/logoOficial_youtube.svg') }}"
                                                             alt="Youtube">
                                                     </a>
                                                 </div>
@@ -56,7 +59,8 @@
                                                 <div class="text-gray-400">
                                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                                         rel="noopener noreferrer">
-                                                        <img class=" h-40" src="{{ asset('img/logoOficial_iTunes.svg') }}"
+                                                        <img class=" h-40"
+                                                            src="{{ asset('img/biografia/logoOficial_iTunes.svg') }}"
                                                             alt="iTunes">
                                                     </a>
                                                 </div>
@@ -67,7 +71,7 @@
                                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                                         rel="noopener noreferrer">
                                                         <img class=" h-20"
-                                                            src="{{ asset('img/logoOficial_amazon_music.svg') }}"
+                                                            src="{{ asset('img/biografia/logoOficial_amazon_music.svg') }}"
                                                             alt="Amazon Music">
                                                     </a>
                                                 </div>

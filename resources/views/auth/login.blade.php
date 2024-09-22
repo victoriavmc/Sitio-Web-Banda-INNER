@@ -17,7 +17,7 @@
 
     {{-- Contenedor del formulario de inicio de sesión con un fondo de imagen --}}
     <div class="loginLargo bg-cover bg-center flex items-center justify-center"
-        style="background-image: url(' {{ asset('img/login_fondo.jpg') }} ');">
+        style="background-image: url(' {{ asset('img/logeo/login_fondo.jpg') }} ');">
 
         {{-- Se inicializan datos reactivos con Alpine.js: email, password, name --}}
         <div x-data="{ email: '', password: '', name: '' }"
