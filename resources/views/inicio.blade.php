@@ -59,7 +59,7 @@
         <div class="elfsight-app-c25daa8f-eca3-4838-88f3-7ce10b757860" data-elfsight-app-lazy></div>
     </div>
 
-    {{-- NOSOTROS Y FORO --}}
+    {{-- NOTICIAS Y FORO --}}
     <div class="h-screen bg-cover flex justify-center font-amsterdam  items-center bg-center"
         style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
         <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] lg:gap-8 xl:w-[55%] flex lg:flex-col gap-2">
@@ -121,7 +121,7 @@
                             Únete a las conversaciones en nuestro foro y comparte tus opiniones con los demas.
                         </p>
                         <div class="flex justify-end mt-5">
-                            <a class="relative" href="{{route('foro')}}">
+                            <a class="relative" href="{{ route('foro') }}">
                                 <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
                                 <span
                                     class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Foro</span>
