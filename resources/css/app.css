@@ -575,6 +575,23 @@ select option {
   color: black;
 }
 
+.slider {
+  width: 50%;
+}
+
+.slick-slide {
+  margin: 0px 3px;
+}
+
+.slick-slide img {
+  width: 100%;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

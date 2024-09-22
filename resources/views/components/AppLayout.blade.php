@@ -8,12 +8,12 @@
     @if ($login ?? false)
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     @endif
-
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick-theme.css" />
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
     <link rel="icon" href="{{ asset('img/logo_perropepsi.ico') }}" />
     <title>INNER</title>
 </head>
@@ -33,7 +33,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Musica</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Eventos</a>
+                    <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Historia</a>
@@ -133,7 +133,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Musica</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Eventos</a>
+                    <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Historia</a>
@@ -207,6 +207,19 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).on('ready', function() {
+            $(".center").slick({
+                dots: true,
+                infinite: true,
+                centerMode: true,
+                slidesToShow: 4,
+                slidesToScroll: 3
+            });
+        });
+    </script>
 </body>
 
 </html>

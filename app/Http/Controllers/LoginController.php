@@ -142,38 +142,34 @@ class LoginController extends Controller
     #SOLICITAR PIN
     public function solicitarPin(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|exists:usuarios,correoElectronicoUser',
+        ]);
+
         // Obtener el valor del campo 'email' del request
         $input = $request->input('email');
 
-        // Validar si el valor ingresado es un correo electrónico
-        $isEmail = filter_var($input, FILTER_VALIDATE_EMAIL);
+        // Generar un PIN aleatorio de 6 caracteres
+        $pin = Str::random(6);
 
-        if ($isEmail) {
-            // Generar un PIN aleatorio de 6 caracteres
-            $pin = Str::random(6);
+        // Buscar el usuario en la base de datos por su correo electrónico
+        $usuario = Usuario::where('correoElectronicoUser', $input)->first();
 
-            // Buscar el usuario en la base de datos por su correo electrónico
-            $usuario = Usuario::where('correoElectronicoUser', $input)->first();
+        // Actualizar el usuario con el nuevo PIN hasheado
+        $usuario->pinOlvidoUser = Hash::make($pin);
+        $usuario->save();
 
-            // Actualizar el usuario con el nuevo PIN hasheado
-            $usuario->pinOlvidoUser = Hash::make($pin);
-            $usuario->save();
+        // Almacenar el correo electrónico en la sesión para uso posterior
+        session(['email' => $input]);
 
-            // Almacenar el correo electrónico en la sesión para uso posterior
-            session(['email' => $input]);
+        // Enviar un correo electrónico al usuario con el PIN generado
+        Mail::to($usuario->correoElectronicoUser)->send(new msjPinOlvido($pin));
 
-            // Enviar un correo electrónico al usuario con el PIN generado
-            Mail::to($usuario->correoElectronicoUser)->send(new msjPinOlvido($pin));
-
-            // Redirigir al usuario a la página de comprobación de PIN con un mensaje de advertencia
-            return redirect(route('comprobarPin'))->with('alertRestablecer', [
-                'type' => 'Warning',
-                'message' => 'Por favor, revisa tu correo electrónico donde se te envió el pin de olvido. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
-            ]);
-        } else {
-            // Si el correo no es válido, redirigir de vuelta con un mensaje de error
-            return redirect()->back()->withErrors(['email' => 'No se pudo encontrar un usuario con ese correo electrónico o nombre de usuario.']);
-        }
+        // Redirigir al usuario a la página de comprobación de PIN con un mensaje de advertencia
+        return redirect(route('comprobarPin'))->with('alertRestablecer', [
+            'type' => 'Warning',
+            'message' => 'Por favor, revisa tu correo electrónico donde se te envió el pin de olvido. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
+        ]);
     }
 
     #COMPROBAR PIN

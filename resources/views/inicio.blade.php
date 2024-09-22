@@ -19,6 +19,39 @@
     </div>
 
     {{-- SHOWS --}}
+    <div class="text-black bg-black h-screen bg-cover bg-center"
+        style="background-image:url({{ asset('img/index_fondo_evento.jpg') }})">
+        <div class="flex flex-col h-screen justify-center">
+            <h3 class="text-7xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
+                EVENTOS</h3>
+            <div class="flex w-full justify-center py-10 pr-10 m-0">
+                <section class="center slider" style="">
+                    @foreach ($shows as $show)
+                        <div class=" px-4 py-6"
+                            style="display: flex; flex-direction:column; background-image:url({{ asset('img/index_fondo_contenido_evento.jpg') }}); background-position:center;">
+                            <div>
+                                <p class="font-semibold mb-2">{{ $show->fechashow }}</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-2xl mb-2">{{ $show->lugarlocal->nombreLugar }}</p>
+                            </div>
+                            <div>
+                                <p class="mb-2">{{ $show->lugarlocal->calle . ' ' . $show->lugarlocal->numero }}</p>
+                            </div>
+                            <div>
+                                <p class="mb-2">
+                                    {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}
+                                </p>
+                            </div>
+                            <a href="">Adquirir Entrada</a>
+                        </div>
+                    @endforeach
+                </section>
+            </div>
+        </div>
+
+    </div>
+
 
     {{-- Youtube Spotify --}}
     <div class="relative">
