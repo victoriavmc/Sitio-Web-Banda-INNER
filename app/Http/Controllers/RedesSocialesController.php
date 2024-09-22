@@ -223,7 +223,7 @@ class redessocialesController extends Controller
     }
 
     // Eliminar la red social del staff
-    public function eliminarRedSocialStaff(Request $request)
+    public function eliminarRedSocialStaff()
     {
         // Verificar acceso
         if ($this->rol == 3 || $this->rol == 4) {

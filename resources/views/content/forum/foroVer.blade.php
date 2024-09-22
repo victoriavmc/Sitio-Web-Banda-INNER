@@ -5,7 +5,7 @@
             <div class="max-w-3xl mx-auto">
                 <!-- Blog post header -->
                 <div>
-                    <h1 class="text-3xl text-black font-bold mt-6 mb-4">{{ $publicacion->tituloForo }}</h1>
+                    <h1 class="text-3xl text-black font-bold mt-6 mb-4">{{ $publicacion->titulo }}</h1>
                     <p class="text-black text-sm mb-4">Publicado el: {{ $publicacion->fechaSubidaPublicacion }}</p>
                 </div>
 

@@ -36,7 +36,7 @@
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Historia</a>
+                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Artistas</a>
@@ -54,10 +54,10 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Galeria</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Noticias</a>
+                    <a class="hover:animate-pulse" href="{{ route('noticias') }}">Noticias</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="#">Foro</a>
+                    <a class="hover:animate-pulse" href="{{ route('foro') }}">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
@@ -136,7 +136,7 @@
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Historia</a>
+                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Artistas</a>
@@ -145,10 +145,10 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Galeria</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Noticias</a>
+                    <a class="hover:animate-pulse" href="{{ route('noticias') }}">Noticias</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="#">Foro</a>
+                    <a class="hover:animate-pulse" href="{{ route('foro') }}">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>

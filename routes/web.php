@@ -3,6 +3,7 @@
 use App\Http\Controllers\applayoutCrontroller;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\comentariosController;
+use App\Http\Controllers\ContenidoController;
 use App\Http\Controllers\eventosController;
 use App\Http\Controllers\galeriaController;
 use App\Http\Controllers\historiaController;
@@ -101,6 +102,7 @@ Route::post('/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
 Route::delete('/perfil/eliminar-cuenta', [perfilController::class, 'eliminarCuenta'])
     ->name('eliminar-cuenta')->middleware('auth');
 
+// ---------------------- MODIFICAR REDES SOCIALES----------------------
 Route::post('/perfil/guardar-redes', [redessocialesController::class, 'guardarRedes'])
     ->name('guardar-redes')->middleware('auth');
 
@@ -160,15 +162,22 @@ Route::view('/underConstruction', "underConstruction")
 //----------------------- CARPETA CONTENIDO -----------------------
 
 //----------------------- CARPETA FORUM -----------------------
+// VER PUBLICACIONES
+Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
+
+// VER PUBLICACION DE FORO POR UNIDAD
+Route::get('/foro/foroVer', [ContenidoController::class, 'publicacionForoUnica'])->name('foroVer');
 
 //-----------------------------------------------------------------
 
 //----------------------- CARPETA NEWS -----------------------
+Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('noticias');
 
 //-----------------------------------------------------------------
 
 //----------------------- CARPETA HISTORY -----------------------
-
+// VER PUBLICACIONES
+Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('biografia');
 //-----------------------------------------------------------------
 
 

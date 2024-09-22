@@ -2,9 +2,12 @@
 
 namespace App\View\Components;
 
+#CLASES
 use App\Models\Imagenes;
 use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
+
+#OTRAS COSAS
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
