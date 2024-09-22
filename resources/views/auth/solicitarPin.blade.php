@@ -14,7 +14,7 @@
                     Ingresa tu correo para que podamos enviarte el pin de recuperacion
                 </p>
                 <div class="input-field relative">
-                    <input x-model="email" name="email" type="email" id="email"
+                    <input x-model="email" name="email" type="text" id="email"
                         class="w-full font-urbanist px-4 py-3 rounded-lg bg-white bg-opacity-20 focus:bg-opacity-30 focus:ring-2 focus:ring-orange-500 text-white placeholder-gray-200 transition duration-200"
                         placeholder="Correo">
                     <i class="fas fa-envelope absolute right-3 top-3 text-white"></i>

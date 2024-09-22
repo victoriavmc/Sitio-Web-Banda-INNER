@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Show;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class inicioController extends Controller
 {
-    public function __invoke()
+    public function index()
     {
-        return view('inicio');
+        $shows = Show::orderBy('fechashow', 'desc')->get();
+
+        return view('inicio', compact('shows'));
     }
 }

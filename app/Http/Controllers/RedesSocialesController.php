@@ -114,6 +114,11 @@ class redessocialesController extends Controller
     # Separa que boton selecciono del formulario
     public function procesarRedes(Request $request)
     {
+        // Verificar acceso
+        if ($this->rol == 3 || $this->rol == 4) {
+            abort(403, 'Acceso denegado');
+        }
+
         $actionType = $request->input('action_type');
 
         if ($actionType == 'guardar') {
@@ -154,6 +159,11 @@ class redessocialesController extends Controller
     // Método para eliminar redes sociales de la BANDA
     public function eliminarRedesBanda(Request $request)
     {
+        // Verificar acceso
+        if ($this->rol == 3 || $this->rol == 4) {
+            abort(403, 'Acceso denegado');
+        }
+
         $idRedSocial = $request->id;
         $redSocial = RedesSociales::find($idRedSocial);
 

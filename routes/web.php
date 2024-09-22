@@ -25,7 +25,7 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-Route::get('/', InicioController::class)
+Route::get('/', [InicioController::class, 'index'])
     ->name('inicio');
 
 
@@ -48,13 +48,13 @@ Route::post('/validar-registro', [loginController::class, 'register'])
     ->name('validar-registro')->middleware('guest');
 
 Route::post('/solicitar-pin', [loginController::class, 'solicitarPin'])
-    ->name('solicitar-pin')->middleware('auth');
+    ->name('solicitar-pin')->middleware('guest');
 
 Route::post('/comprobar-pin', [loginController::class, 'comprobarPin'])
-    ->name('comprobar-pin')->middleware('auth');
+    ->name('comprobar-pin')->middleware('guest');
 
 Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
-    ->name('restablecer-contrasenia')->middleware('auth');
+    ->name('restablecer-contrasenia')->middleware('guest');
 
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
@@ -148,6 +148,13 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
     ->name('eliminar-staff')->middleware('auth');
 //---------------------------------------------------------------
 
+//----------------------- CARPETA EVENTOS -----------------------
+// ----------------------- Eventos -----------------------
+Route::get('/eventos', [eventosController::class, 'eventos'])
+    ->name('eventos');
+//-----------------------------------------------------------------
+
+
 // EN CONSTRUCCION
 Route::view('/underConstruction', "underConstruction")
     ->name('underConstruction');
@@ -172,6 +179,9 @@ Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('no
 // VER PUBLICACIONES
 Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('biografia');
 //-----------------------------------------------------------------
+
+
+
 
 // // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])

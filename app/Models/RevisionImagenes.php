@@ -11,7 +11,6 @@ class RevisionImagenes extends Model
 
     protected $table = "revisionimagenes";
     public $primaryKey = "idrevisionImagenescol";
-
     public $timestamps = false;
 
     public function usuario()
