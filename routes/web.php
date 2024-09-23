@@ -152,6 +152,9 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
 // ----------------------- Eventos -----------------------
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
+
+Route::get('/eventos/{id}', [eventosController::class, 'evento'])
+    ->name('evento');
 //-----------------------------------------------------------------
 
 
@@ -175,6 +178,7 @@ Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
 
 // VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
+//-------------------------- -----------------------------
 
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS
@@ -182,8 +186,6 @@ Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])->name('art
 
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
-
-
 //-------------------------- -----------------------------
 
 
