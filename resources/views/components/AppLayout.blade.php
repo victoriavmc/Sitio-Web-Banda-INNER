@@ -11,10 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick.css" />
-    <link rel="stylesheet" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick-theme.css" />
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
     <link rel="icon" href="{{ asset('img/logo_perropepsi.ico') }}" />
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
     <title>INNER</title>
 </head>
 
@@ -165,72 +163,83 @@
     {{-- Pie de pagina --}}
     <footer
         class="footer z-10 w-full border-t shadow flex items-center justify-between p-2 sm:px-10 bg-black border-gray-600 font-amsterdam">
-        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            © @php echo date('Y') @endphp <a href="/" class="hover:underline">INNER.</a> Todos los derechos reservados.
-        </span>
-        <ul class="flex">
-            @foreach ($links as $link)
-                @if ($link->linkRedSocial)
-                    @switch($link->nombreRedSocial)
-                        @case('Deezer')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-6 mr-1" src="{{ asset('img/footer/logo_deezer.png') }}" alt="Deezer">
-                                </a>
-                            </li>
-                        @break
+        <div>
+            <span class="text-sm sm:text-center text-gray-400">
+                © @php echo date('Y') @endphp Aranda Santiago y VictoriaVMC. Todos los derechos reservados.
+            </span>
+            <span class="text-sm sm:text-center text-gray-400">
+                <a href="{{ route('terminos-de-servicio') }}" class="hover:underline">Terminos de Servicio.</a>
+            </span>
+        </div>
+        <div>
+            <ul class="flex items-center">
+                @foreach ($links as $link)
+                    @if ($link->linkRedSocial)
+                        @switch($link->nombreRedSocial)
+                            @case('Deezer')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_deezer.png') }}"
+                                            alt="Deezer">
+                                    </a>
+                                </li>
+                            @break
 
-                        @case('Spotify')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-5 mr-1" src="{{ asset('img/footer/logo_spotify.png') }}" alt="Spotify">
-                                </a>
-                            </li>
-                        @break
+                            @case('Spotify')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_spotify.png') }}"
+                                            alt="Spotify">
+                                    </a>
+                                </li>
+                            @break
 
-                        @case('Youtube')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-6 mr-1" src="{{ asset('img/footer/logo_youtube.png') }}" alt="YouTube">
-                                </a>
-                            </li>
-                        @break
+                            @case('Youtube')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_youtube.png') }}"
+                                            alt="YouTube">
+                                    </a>
+                                </li>
+                            @break
 
-                        @case('iTunes')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-6 mr-1" src="{{ asset('img/footer/logo_apple.png') }}" alt="iTunes">
-                                </a>
-                            </li>
-                        @break
+                            @case('iTunes')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_apple.png') }}" alt="iTunes">
+                                    </a>
+                                </li>
+                            @break
 
-                        @case('Amazon Music')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-6 mr-1" src="{{ asset('img/footer/logo_amazon_music.png') }}"
-                                        alt="Amazon Music">
-                                </a>
-                            </li>
-                        @break
+                            @case('Amazon Music')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_amazon_music.png') }}"
+                                            alt="Amazon Music">
+                                    </a>
+                                </li>
+                            @break
 
-                        @case('Instagram')
-                            <li class="text-gray-400">
-                                <a href="{{ $link->linkRedSocial }}" target="_blank"
-                                    class="flex items-center hover:underline me-4 md:me-6">
-                                    <img class="w-5 mr-1" src="{{ asset('img/footer/logo_instagram.png') }}"
-                                        alt="Instagram">
-                                </a>
-                            </li>
-                        @break
-                    @endswitch
-                @endif
-            @endforeach
-        </ul>
+                            @case('Instagram')
+                                <li class="text-gray-400">
+                                    <a href="{{ $link->linkRedSocial }}" target="_blank"
+                                        class="flex items-center me-4 md:me-6">
+                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_instagram.png') }}"
+                                            alt="Instagram">
+                                    </a>
+                                </li>
+                            @break
+                        @endswitch
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+
     </footer>
 
 
@@ -243,19 +252,7 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript">
-        $(document).on('ready', function() {
-            $(".center").slick({
-                dots: true,
-                infinite: true,
-                centerMode: true,
-                slidesToShow: 4,
-                slidesToScroll: 3
-            });
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </body>
 
 </html>

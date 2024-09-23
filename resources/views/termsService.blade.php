@@ -1,6 +1,6 @@
 <x-AppLayout>
 
-    <div class="bg-white text-black dark:bg-black dark:text-white">
+    <div class="bg-white text-black h-[85.5vh] dark:bg-black dark:text-white">
         <div class="container mx-auto px-4 py-8">
             <p class="mb-4">
                 Fecha: {{ now() }}

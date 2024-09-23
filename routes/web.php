@@ -182,6 +182,9 @@ Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('
 
 
 
+Route::view('/terminos-de-servicio', 'termsService')->name('terminos-de-servicio');
+
+
 
 // // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])
