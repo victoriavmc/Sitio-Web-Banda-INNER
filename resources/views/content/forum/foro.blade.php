@@ -29,15 +29,31 @@
                          </div>
                          <div class="mt-2">
                              <a class="text-2xl text-gray-900 font-bold hover:text-gray-600"
-                                 href="#">{{ $publicacion->titulo }}</a>
+                                 href="{{ route('foroUnico', $publicacion->idcontenidos) }}">{{ $publicacion->titulo }}</a>
                              <p class="mt-2 text-base text-gray-800">{{ $publicacion->descripcion }}</p>
                          </div>
                          <div class="flex justify-between items-center mt-4">
                              <a class="text-green-600 text-sm font-bold"
-                                 href="{{ route('foroVer', $publicacion->idcontenidos) }}">Leer Mas</a>
+                                 href="{{ route('foroUnico', $publicacion->idcontenidos) }}">Leer Mas</a>
                              <div class="flex items-center">
+                                 {{-- VEO LA CANTIDAD DE COMENTARIOS QUE TIENE --}}
+                                 <div class=" px-3 py-1 rounded-lg flex space-x-2 flex-row">
+                                     <div
+                                         class=" text-black cursor-pointer text-center text-md justify-center items-center flex">
+                                         <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                             viewBox="0 0 24 24" height="1em" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg" class="text-md">
+                                             <path
+                                                 d="M20 2H4c-1.103 0-2 .897-2 2v18l5.333-4H20c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm0 14H6.667L4 18V4h16v12z">
+                                             </path>
+                                             <circle cx="15" cy="10" r="2"></circle>
+                                             <circle cx="9" cy="10" r="2"></circle>
+                                         </svg>
+                                         <span
+                                             class="text-md text-black mx-1">{{ $comentarios[$publicacion->idcontenidos]['comentarios'] ?? 0 }}</span>
+                                     </div>
+                                 </div>
                                  <!-- Recupera la visualización de estrellas para la publicación actual -->
-
                                  @php
                                      $estrellasVisuales = $recuperoLikes[$publicacion->idcontenidos];
                                  @endphp

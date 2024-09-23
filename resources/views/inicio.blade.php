@@ -132,71 +132,71 @@
     </div>
 
     {{-- NOTICIAS Y FORO --}}
-    <div class="h-screen bg-cover flex justify-center font-amsterdam  items-center bg-center"
+    <div class="min-h-screen bg-cover flex justify-center font-amsterdam items-center bg-center"
         style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
-        <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] lg:gap-8 xl:w-[55%] flex lg:flex-col gap-2">
-            <div class="lg:flex gap-16 lg:gap-8">
-                <div class="flex-1 flex justify-center flex-col">
-                    <h3 class="sobreNosotros text-center text-5xl font-amsterdam mb-7 text-uppercase mt-5 deepshadow">
-                        noticias proximamente...</h3>
-                    {{-- <div class="flex-1 flex flex-col justify-between">
-                        <div class="flex items-center mb-3 w-full">
-                            <img class="w-44" src="{{ asset('img/nosotros_a1tomi.jpg') }}"
-                                alt="Logo de la banda de Tomás Casalone">
-                            <div class="ml-4 w-full text-center">
-                                <h3 class="font-bold text-3xl">Tomás Casalone</h3>
-                                <p class="text-gray-500">
-                                    <span class="font-bold text-2xl text-red-600 role">Guitarra y Voz.</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex justify-center items-center w-full">
-                            <img class="w-44" src="{{ asset('img/nosotros_a2david.png') }}"
-                                alt="Logo de la banda de David Copa">
-                            <div class="ml-4 w-full text-center">
-                                <h3 class="font-bold text-3xl">David Copa</h3>
-                                <p class="text-gray-500">
-                                    <span class="font-bold text-2xl text-red-600 role">Guitarra.</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-3 w-full">
-                            <img class="w-44" src="{{ asset('img/nosotros_a3herni.jpg') }}"
-                                alt="Logo de la banda de Hernán Ramírez">
-                            <div class="ml-4 w-full text-center">
-                                <h3 class="font-bold text-3xl">Hernán Ramírez</h3>
-                                <p class="text-gray-500">
-                                    <span class="font-bold text-2xl text-red-600 role">Batería.</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-3 w-full">
-                            <img class="w-44" src="{{ asset('img/nosotros_a4agus.jpg') }}"
-                                alt="Logo de la banda de Agustin Casalone">
-                            <div class="ml-4 w-full text-center">
-                                <h3 class="font-bold text-3xl">Agustin Casalone</h3>
-                                <p class="text-gray-500">
-                                    <span class="font-bold text-2xl text-red-600 role">Bajo.</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
+        <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] xl:w-[70%] flex flex-col gap-8">
+            <div class="lg:flex gap-8">
+                {{-- Columna 1: Noticias --}}
                 <div class="flex-1 flex flex-col">
-                    <h3 class="text-center font-amsterdam mb-7 mt-5 text-5xl text-uppercas deepshadow">FORO</h3>
-                    <div class="flex-1 flex flex-col justify-around">
-                        <div class="flex justify-center h-[50%] items-center">
-                            <img class="w-3/4" src="{{ asset('img/nosotros_foro.png') }}" alt="">
+                    <h3 class="text-center text-5xl font-amsterdam mb-7 text-uppercase deepshadow">
+                        Noticias</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        {{-- NOTICIAS --}}
+                        @foreach ($noticias as $noticia)
+                            <div class="bg-white rounded-xl shadow-lg p-4">
+                                <div class="relative overflow-hidden rounded-xl">
+                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
+                                        @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
+                                            <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
+                                                alt="Imagen de {{ $noticia->titulo }}"
+                                                class="object-cover w-full h-48" />
+                                        @else
+                                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                                class="object-cover w-full h-48" />
+                                        @endif
+                                    </a>
+                                </div>
+                                <div class="p-4">
+                                    <p class="text-sm font-semibold text-gray-700">{{ $noticia->fechaSubida }}</p>
+                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
+                                        class="block text-xl font-semibold text-blue-gray-900 mt-2 hover:text-black">
+                                        {{ $noticia->titulo }}
+                                    </a>
+                                    <p class="text-base text-black mt-4">{{ $noticia->descripcion }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="flex justify-end mt-5">
+                        <a class="relative" href="{{ route('noticias') }}">
+                            <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
+                            <span
+                                class="relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Más
+                                Noticias</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Columna 2: Foro --}}
+                <div class="flex-1 flex flex-col">
+                    <h3 class="text-center text-5xl font-amsterdam mb-7 text-uppercase deepshadow">Foro</h3>
+
+                    <div class="flex flex-col justify-around h-full">
+                        <div class="flex justify-center">
+                            <img class="w-3/4" src="{{ asset('img/nosotros_foro.png') }}" alt="Foro de la comunidad">
                         </div>
-                        <h3 class="font-bold text-center mt-3 text-3xl">Para la Comunidad Apasionada!</h3>
-                        <p class=" text-2xl mt-2">¿Eres un apasionado de nuestra comunidad?
-                            Únete a las conversaciones en nuestro foro y comparte tus opiniones con los demas.
-                        </p>
-                        <div class="flex justify-end mt-5">
+                        <h3 class="font-bold text-center mt-3 text-3xl">¡Para la Comunidad Apasionada!</h3>
+                        <p class="text-2xl mt-2 text-center">Únete a las conversaciones en nuestro foro y comparte tus
+                            opiniones con los demás.</p>
+
+                        <div class="flex justify-center mt-5">
                             <a class="relative" href="{{ route('foro') }}">
                                 <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
                                 <span
-                                    class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Foro</span>
+                                    class="relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Ir
+                                    al Foro</span>
                             </a>
                         </div>
                     </div>

@@ -1,32 +1,30 @@
 <?php
 
-use App\Http\Controllers\applayoutCrontroller;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\comentariosController;
 use App\Http\Controllers\ContenidoController;
 use App\Http\Controllers\eventosController;
-use App\Http\Controllers\galeriaController;
-use App\Http\Controllers\historiaController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\loginController;
-use App\Http\Controllers\musicaController;
-use App\Http\Controllers\nosotrosController;
-use App\Http\Controllers\noticiasController;
 use App\Http\Controllers\panelStaffController;
 use App\Http\Controllers\panelUsuariosController;
 use App\Http\Controllers\perfilController;
-use App\Http\Controllers\publicacionesForoController;
 use App\Http\Controllers\redessocialesController;
-use App\Http\Controllers\subirImagenController;
-use App\Http\Middleware\verificarPost;
 use App\Models\Paisnacimiento;
-use App\Models\redessociales;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 
+//----------------------- SUELTOS -----------------------
+// INICIO
 Route::get('/', [InicioController::class, 'index'])
     ->name('inicio');
+
+// EN CONSTRUCCION
+Route::view('/underConstruction', "underConstruction")
+    ->name('underConstruction');
+
+// TERMINOS Y CONDICIONES
+
+
+// --------------------------------------------------------------
+
 
 
 //----------------------- CARPETA AUTH -----------------------
@@ -59,7 +57,7 @@ Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
 
-// Vistas inicio de sesion
+// ----------------------- Vistas inicio de sesion -----------------------
 Route::view('/login', "auth.login")
     ->name('login')->middleware('guest');
 
@@ -148,6 +146,7 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
     ->name('eliminar-staff')->middleware('auth');
 //---------------------------------------------------------------
 
+
 //----------------------- CARPETA EVENTOS -----------------------
 // ----------------------- Eventos -----------------------
 Route::get('/eventos', [eventosController::class, 'eventos'])
@@ -155,30 +154,31 @@ Route::get('/eventos', [eventosController::class, 'eventos'])
 //-----------------------------------------------------------------
 
 
-// EN CONSTRUCCION
-Route::view('/underConstruction', "underConstruction")
-    ->name('underConstruction');
 
 //----------------------- CARPETA CONTENIDO -----------------------
 
+//----------------------- CARPETA HISTORY -----------------------
+// VER BIOGRAFIA
+Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('biografia');
+
+//----------------------- CARPETA NEWS -----------------------
+// VER NOTICIAS
+Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('noticias');
+
+// VER NOTICIAS POR UNIDAD
+Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])->name('noticiaUnica');
+
 //----------------------- CARPETA FORUM -----------------------
-// VER PUBLICACIONES
+// VER FORO
 Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
 
 // VER PUBLICACION DE FORO POR UNIDAD
-Route::get('/foro/foroVer', [ContenidoController::class, 'publicacionForoUnica'])->name('foroVer');
+Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
+
 
 //-----------------------------------------------------------------
 
-//----------------------- CARPETA NEWS -----------------------
-Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('noticias');
 
-//-----------------------------------------------------------------
-
-//----------------------- CARPETA HISTORY -----------------------
-// VER PUBLICACIONES
-Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('biografia');
-//-----------------------------------------------------------------
 
 
 
