@@ -107,17 +107,20 @@
                         @foreach ($noticias as $noticia)
                             <div class="bg-white rounded-xl shadow-lg p-4">
                                 <div class="relative overflow-hidden rounded-xl">
-                                    @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
-                                        <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
-                                            alt="Imagen de {{ $noticia->titulo }}" class="object-cover w-full h-48" />
-                                    @else
-                                        <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                            class="object-cover w-full h-48" />
-                                    @endif
+                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
+                                        @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
+                                            <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
+                                                alt="Imagen de {{ $noticia->titulo }}"
+                                                class="object-cover w-full h-48" />
+                                        @else
+                                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                                class="object-cover w-full h-48" />
+                                        @endif
+                                    </a>
                                 </div>
                                 <div class="p-4">
                                     <p class="text-sm font-semibold text-gray-700">{{ $noticia->fechaSubida }}</p>
-                                    <a href="#"
+                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
                                         class="block text-xl font-semibold text-blue-gray-900 mt-2 hover:text-black">
                                         {{ $noticia->titulo }}
                                     </a>
