@@ -1,24 +1,26 @@
 <x-AppLayout>
-    <div class="bg-gray-600 contenedor p-10">
-        <div class='grid gap-3'>
+    <div class="bg-gray-300 contenedor p-10">
+        <div class='grid grid-cols-2 gap-3'>
+            {{-- EVENTOS --}}
             @foreach ($shows as $show)
-                <article>
-                    <div class="max-w-4xl px-10 my-4 py-6 bg-white bg-opacity-70 rounded-lg shadow-md">
-                        <div class="flex justify-end items-center">
-                            <span class="text-base text-gray-900 font-normal">{{ $show->fechashow }}</span>
-                        </div>
-                        <div class="mt-2">
-                            <a class="text-2xl text-gray-900 font-bold hover:text-gray-600"
-                                href="#">{{ $show->lugarlocal->nombreLugar }}</a>
-                            <p class="mt-2 text-base text-gray-800">
-                                {{ $show->lugarlocal->calle . ' ' . $show->lugarlocal->numero }}</p>
-                        </div>
-                        <div class="flex justify-between items-center mt-4">
-                            <a class="text-green-600 text-sm font-bold"
-                                href="{{ route('foroVer', $show->idshow) }}">Leer Mas</a>
-                        </div>
+                <div class="flex gap-5 items-start bg-white p-3 rounded-xl">
+                    <img src="{{ asset(Storage::url($show->revisionImagenes->imagenes->subidaImg)) }}"alt="Imagen de {{ $show->nombreLugar }}"
+                        class="w-60" />
+                    <div class="text-sm w-full flex flex-col gap-2">
+                        <p class="text-black text-lg">{{ $show->fechashow }}</p>
+                        <a href="" class="text-black text-4xl font-medium hover:text-indigo-600 leading-none">
+                            {{ $show->lugarlocal->nombreLugar }}
+                        </a>
+                        <p class="text-black text-lg">{{ $show->lugarlocal->localidad }}</p>
+                        <p class="text-black text-lg">
+                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
+                        <p class="text-black text-lg">
+                            {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
                     </div>
-                </article>
+                    <div class="h-full flex items-end">
+                        <a class="" href="">Adquirir Entrada</a>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>

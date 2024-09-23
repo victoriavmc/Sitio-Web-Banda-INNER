@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Imagenes;
+use App\Models\LugarLocal;
+use App\Models\RevisionImagenes;
 use App\Models\Show;
 use Illuminate\Http\Request;
 

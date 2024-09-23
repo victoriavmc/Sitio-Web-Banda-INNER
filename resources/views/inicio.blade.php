@@ -12,10 +12,8 @@
         </x-alerts>
     @endif
 
-    <div class="w-full h-full bg-black bg-opacity-50"></div>
-
     <div class="flex justify-center">
-        <img class="" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
+        <img class="h-[90vh]" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
     </div>
 
     {{-- SHOWS --}}
