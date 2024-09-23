@@ -23,12 +23,6 @@ class Comentarios extends Model
         return $this->belongsTo(Contenidos::class, 'contenidos_idcontenidos', 'idcontenidos');
     }
 
-    // Relación con Usuarios
-    public function usuario()
-    {
-        return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
-    }
-
     // Relación con RevisionImagenes
     public function revisionImagenes()
     {

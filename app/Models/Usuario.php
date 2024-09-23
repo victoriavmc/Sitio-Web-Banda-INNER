@@ -47,17 +47,6 @@ class Usuario extends Authenticatable
         return $this->hasMany(Actividad::class, 'usuarios_idusuarios', 'idusuarios');
     }
 
-    public function contenidos()
-    {
-        return $this->hasMany(Contenidos::class, 'usuarios_idusuarios', 'idusuarios');
-    }
-
-    public function comentarios()
-    {
-        return $this->hasMany(Comentarios::class, 'usuarios_idusuarios', 'idusuarios');
-    }
-
-
     public function getAuthIdentifierName()
     {
         // Este método le indica a Laravel qué campo de la base de datos debe usar como identificador del usuario.

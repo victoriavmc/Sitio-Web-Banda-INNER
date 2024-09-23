@@ -17,12 +17,6 @@ class Contenidos extends Model
         return $this->belongsTo(TipoContenido::class, 'tipoContenido_idtipoContenido', 'idtipoContenido');
     }
 
-    // Relación con Usuarios
-    public function usuario()
-    {
-        return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
-    }
-
     // Relación con Actividad
     public function actividad()
     {

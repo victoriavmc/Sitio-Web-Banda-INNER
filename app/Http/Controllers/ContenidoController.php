@@ -105,7 +105,9 @@ class ContenidoController extends Controller
             $recuperoPublicacion = Contenidos::find($idContent);
 
             // Obtenemos el ID del usuario asociado a la publicación
-            $idUser = $recuperoPublicacion->usuarios_idusuarios;
+            $idUser = $recuperoPublicacion->Actividad_idActividad;
+            $idUser = Actividad::find($idUser);
+            $idUser = $idUser->usuarios_idusuarios;
 
             // Obtenemos la información completa del autor
             $autor = Usuario::where('idusuarios', $idUser)->first();
@@ -195,7 +197,9 @@ class ContenidoController extends Controller
         #tengo que visualizar el comentario con las actividades que presenta cada una
         foreach ($comentarios as $comentario) {
             #Recuperar idCadaComentarioIndivididual y quien realiza el comentario
-            $idUser = $comentario->usuarios_idusuarios;
+            $idUser = $comentario->Actividad_idActividad;
+            $idUser = Actividad::find($idUser);
+            $idUser = $idUser->usuarios_idusuarios;
             $idRevisionImg = $comentario->revisionImagenes_idrevisionImagenescol;
 
             #Recuperar el usuario que comento:
