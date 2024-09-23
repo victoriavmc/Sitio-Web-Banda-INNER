@@ -39,7 +39,7 @@
                     <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Artistas</a>
+                    <a class="hover:animate-pulse" href="{{ route('artistas') }}">Artistas</a>
                 </li>
             </ul>
 
@@ -63,7 +63,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Staff</a>
+                    <a class="hover:animate-pulse" href="{{ route('staff') }}">Staff</a>
                 </li>
             </ul>
 
@@ -139,7 +139,7 @@
                     <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Artistas</a>
+                    <a class="hover:animate-pulse" href="{{ route('artistas') }}">Artistas</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Galeria</a>
@@ -154,7 +154,7 @@
                     <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Staff</a>
+                    <a class="hover:animate-pulse" href="{{ route('staff') }}">Staff</a>
                 </li>
             </ul>
         </div>

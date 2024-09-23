@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobsController;
 use App\Http\Controllers\ContenidoController;
 use App\Http\Controllers\eventosController;
 use App\Http\Controllers\inicioController;
@@ -175,11 +176,15 @@ Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
 // VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
 
+//------------------------ CARPETA JOB --------------------------
+// VER ARTISTAS
+Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])->name('artistas');
 
-//-----------------------------------------------------------------
+// VER STAFF
+Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
 
 
-
+//-------------------------- -----------------------------
 
 
 
