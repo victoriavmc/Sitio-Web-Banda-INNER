@@ -14,14 +14,26 @@
                     <div class="prose text-black text-base prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
                         {{ $recuperoPublicacion->descripcion }}
                     </div>
-                    <!-- Imagen/es -->
+                    <!-- Imagen Principal -->
                     <div class="flex justify-center">
-                        @if (!empty($listaPublicacionConImg))
-                            @foreach ($listaPublicacionConImg as $rutaImagen)
-                                <img src="{{ asset(Storage::url($rutaImagen)) }}" class="max-w-xl mb-8" alt="ImagenForo">
-                            @endforeach
+                        @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
+                            <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" class="max-w-xl mb-8"
+                                alt="ImagenForo">
                         @endif
                     </div>
+
+                    {{-- Esto Muchas Imagenes --}}
+                    <!-- Mostrar imágenes adicionales si hay más de una -->
+                    @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 1)
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                            @foreach (array_slice($listaPublicacionConImg, 1) as $imagen)
+                                <div>
+                                    <img class="object-cover object-center w-full h-40 max-w-full rounded-lg"
+                                        src="{{ asset(Storage::url($imagen)) }}" alt="Galería">
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 
