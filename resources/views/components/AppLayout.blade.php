@@ -28,7 +28,7 @@
                     <a class="hover:animate-pulse" href="{{ route('inicio') }}">Inicio</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Musica</a>
+                    <a class="hover:animate-pulse" href="{{ route('discografia') }}">Musica</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
@@ -58,7 +58,7 @@
                     <a class="hover:animate-pulse" href="{{ route('foro') }}">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
+                    <a class="hover:animate-pulse" href="{{ route('superFan') }}">Acceso Exclusivo</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('staff') }}">Staff</a>
@@ -128,7 +128,7 @@
                     <a class="hover:animate-pulse" href="{{ route('inicio') }}">Inicio</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Musica</a>
+                    <a class="hover:animate-pulse" href="{{ route('discografia') }}">Musica</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
@@ -149,7 +149,7 @@
                     <a class="hover:animate-pulse" href="{{ route('foro') }}">Foro</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out text-red-600 hover:text-red-600 hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">SuperFan</a>
+                    <a class="hover:animate-pulse" href="{{ route('superFan') }}">Acceso Exclusivo</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('staff') }}">Staff</a>
@@ -164,10 +164,10 @@
     <footer
         class="footer z-10 w-full border-t shadow flex items-center justify-between p-2 sm:px-10 bg-black border-gray-600 font-amsterdam">
         <div>
-            <span class="text-sm sm:text-center text-gray-400">
-                © @php echo date('Y') @endphp Aranda Santiago y VictoriaVMC. Todos los derechos reservados.
+            <span class="text-sm sm:text-center text-white">
+                © @php echo date('Y') @endphp Santi y VictoriaVMC. Todos los derechos reservados.
             </span>
-            <span class="text-sm sm:text-center text-gray-400">
+            <span class="ml-4 text-sm sm:text-center text-white">
                 <a href="{{ route('terminos-de-servicio') }}" class="hover:underline">Terminos de Servicio.</a>
             </span>
         </div>

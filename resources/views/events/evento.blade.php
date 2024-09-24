@@ -1,3 +1,0 @@
-<x-AppLayout>
-
-</x-AppLayout>
