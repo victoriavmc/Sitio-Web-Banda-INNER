@@ -143,9 +143,6 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
 // ------------------------------------------------- Eventos -------------------------------------
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
-
-Route::get('/eventos/{id}', [eventosController::class, 'evento'])
-    ->name('evento');
 ##################################################################################################
 //----------------------- CARPETA CONTENIDO -----------------------
 #
