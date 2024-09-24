@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\ContenidoController;
-use App\Http\Controllers\eventosController;
-use App\Http\Controllers\inicioController;
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\panelStaffController;
-use App\Http\Controllers\panelUsuariosController;
-use App\Http\Controllers\perfilController;
-use App\Http\Controllers\redessocialesController;
+use App\Http\Controllers\EventosController;
+use App\Http\Controllers\InicioController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PanelStaffController;
+use App\Http\Controllers\PanelUsuariosController;
+use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\RedesSocialesController;
 use App\Models\Paisnacimiento;
 use Illuminate\Support\Facades\Route;
 
@@ -187,7 +187,6 @@ Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])->name('art
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
 //-------------------------- -----------------------------
-
 
 Route::view('/terminos-de-servicio', 'termsService')->name('terminos-de-servicio');
 
