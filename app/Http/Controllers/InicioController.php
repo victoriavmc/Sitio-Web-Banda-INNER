@@ -8,7 +8,6 @@ use App\Models\Imagenes;
 use App\Models\ImagenesContenido;
 use App\Models\RevisionImagenes;
 use App\Models\Show;
-use App\Models\Usuario;
 
 # OTROS
 use Illuminate\Http\Request;
