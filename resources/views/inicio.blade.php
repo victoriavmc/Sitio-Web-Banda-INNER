@@ -17,7 +17,7 @@
     </div>
 
     {{-- SHOWS --}}
-    <div class="h-screen bg-gray-900 bg-center bg-cover flex flex-col items-center justify-center"
+    <div class="bg-gray-900 bg-center bg-cover flex flex-col items-center justify-center"
         style="background-image:url({{ asset('img/index_fondo_evento.jpg') }})">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos

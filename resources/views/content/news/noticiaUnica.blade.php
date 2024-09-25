@@ -1,95 +1,73 @@
 <x-AppLayout>
-    <!-- NOTICIA INDIVIDUAL -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[86.5vh] bg-white">
-        <div class="max-w-3xl mx-auto">
-            <!-- NOTICIA header -->
-            <div class="py-8">
-                <h1 class="text-3xl font-bold mb-2 text-black">{{ $recuperoPublicacion->titulo }}</h1>
-                <p class="text-gray-500 text-sm">Publicado el: <time
-                        datetime="2022-04-05">{{ $recuperoPublicacion->fechaSubida }}</time></p>
-            </div>
-
-            <!-- Image Principal -->
-
-            @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
-                <!-- Mostrar la primera imagen de la lista -->
-                <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
-                    class="w-full h-auto mb-8">
-            @else
-                <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
-                <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto" class="w-full h-auto mb-8">
-            @endif
-
-            <!-- NOTICIA Contenido -->
-            <div class="prose prose-sm text-black sm:prose lg:prose-lg xl:prose-xl mx-auto">
-                <p>{{ $recuperoPublicacion->descripcion }}</p>
-            </div>
-        </div>
-
-        <!-- Mostrar imágenes adicionales si hay más de una -->
-        @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 1)
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-                @foreach (array_slice($listaPublicacionConImg, 1) as $imagen)
-                    <div>
-                        <img class="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                            src="{{ asset(Storage::url($imagen)) }}" alt="Galería">
+    <section class="bg-gray-900">
+        <!-- Container -->
+        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
+            <!-- Title -->
+            <h2 class="text-center text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }} </h2>
+            <br>
+            <!-- Content -->
+            <div class="mx-auto grid gap-8 lg:grid-cols-2">
+                <a href="#" class="flex flex-col gap-4 rounded-md [grid-area:1/1/4/2] lg:pr-8">
+                    @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
+                        <!-- Mostrar la primera imagen de la lista -->
+                        <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
+                            class="w-full h-72 inline-block object-cover">
+                    @else
+                        <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
+                        <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                            class="w-full h-72 inline-block object-cover">
+                    @endif
+                    <div class="flex flex-col items-start py-4">
+                        <div class="mb-4 rounded-md bg-gray-100 px-2 py-1.5">
+                            <p class="text-sm font-semibold text-blue-600"> {{ $recuperoPublicacion->fechaSubida }} </p>
+                        </div>
+                        <p class="mb-4 text-base font-normal md:text-lg"> {{ $recuperoPublicacion->descripcion }} </p>
                     </div>
-                @endforeach
-            </div>
-        @endif
-
-
-
-        {{-- Apartado Noticias y eventos --}}
-        {{-- NOTICIAS --}}
-        <div class="sm:col-span-6 lg:col-span-4">
-            @foreach ($mostrarAparteNoticias as $noticiaExtra)
-                <div class="flex items-start mb-3 pb-3">
-                    <a href="{{ route('noticiaUnica', $noticiaExtra->idcontenidos) }}" class="inline-block mr-3">
-                        @if (isset($noticiaExtra->imagenes) && !empty($noticiaExtra->imagenes[0]))
-                            <img src="{{ asset(Storage::url($noticiaExtra->imagenes[0])) }}"
-                                alt="Imagen de {{ $noticiaExtra->titulo }}" class="w-20 h-20 bg-cover bg-center" />
-                        @else
-                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                class="w-20 h-20 bg-cover bg-center" />
-                        @endif
-                    </a>
-                    <div class="text-sm">
-                        <p class="text-gray-600 text-xs">{{ $noticiaExtra->fechaSubida }}</p>
+                </a>
+                {{-- Apartado Noticias y eventos --}}
+                <div class="md:flex md:justify-between lg:flex-col">
+                    {{-- NOTICIAS --}}
+                    @foreach ($mostrarAparteNoticias as $noticiaExtra)
                         <a href="{{ route('noticiaUnica', $noticiaExtra->idcontenidos) }}"
-                            class="text-gray-900 font-medium hover:text-indigo-600 leading-none">
-                            {{ $noticiaExtra->titulo }}
+                            class="flex flex-col pb-5 lg:mb-3 lg:flex-row lg:border-b lg:border-gray-300">
+                            @if (isset($noticiaExtra->imagenes) && !empty($noticiaExtra->imagenes[0]))
+                                <img src="{{ asset(Storage::url($noticiaExtra->imagenes[0])) }}"
+                                    alt="Imagen de {{ $noticiaExtra->titulo }}"
+                                    class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                            @else
+                                <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                    class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                            @endif
+                            <div class="flex flex-col items-start pt-4 lg:px-8">
+                                <div class="mb-2 rounded-md bg-gray-100 px-2 py-1.5">
+                                    <p class="text-sm font-semibold text-blue-600"> {{ $noticiaExtra->fechaSubida }}
+                                    </p>
+                                </div>
+                                <p class="mb-2 text-sm font-bold sm:text-base"> {{ $noticiaExtra->titulo }} </p>
+                            </div>
                         </a>
-                        <p class="text-base text-black mt-4">{{ $noticiaExtra->descripcion }}</p>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        {{-- EVENTOS --}}
-        <div class="sm:col-span-6 lg:col-span-4">
-            @foreach ($mostrarAparteEventos as $eventos)
-                <div class="flex items-start mb-3 pb-3">
-                    {{-- {{ route('showUnico', $eventos->idshow) }} --}}
-                    <a href="" class="inline-block mr-3">
-                        @if (isset($eventos['imagenes']) && !empty($eventos['imagenes'][0]))
-                            <img src="{{ asset(Storage::url($eventos['imagenes'][0])) }}"
-                                alt="Imagen de {{ $eventos['nombreLugar'] }}" class="w-20 h-20 bg-cover bg-center" />
-                        @else
-                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                class="w-20 h-20 bg-cover bg-center" />
-                        @endif
-                    </a>
-                    <div class="text-sm">
-                        <p class="text-gray-600 text-xs">{{ $eventos['fechashow'] }}</p>
-                        {{-- {{ route('showUnico', $eventos->idshow) }} --}}
-                        <a href="" class="text-gray-900 font-medium hover:text-indigo-600 leading-none">
-                            {{ $eventos['nombreLugar'] }}
+                    @endforeach
+                    {{-- EVENTOS --}}
+                    @foreach ($mostrarAparteEventos as $eventos)
+                        <a href="#" class="flex flex-col pb-5 lg:mb-3 lg:flex-row lg:border-b lg:border-gray-300">
+                            @if (isset($eventos['imagenes']) && !empty($eventos['imagenes'][0]))
+                                <img src="{{ asset(Storage::url($eventos['imagenes'][0])) }}"
+                                    alt="Imagen de {{ $eventos['nombreLugar'] }}"
+                                    class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                            @else
+                                <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                    class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                            @endif
+                            <div class="flex flex-col items-start pt-4 lg:px-8">
+                                <div class="mb-2 rounded-md bg-gray-100 px-2 py-1.5">
+                                    <p class="text-sm font-semibold text-blue-600"> {{ $eventos['fechashow'] }} </p>
+                                </div>
+                                <p class="mb-2 text-sm font-bold sm:text-base"> {{ $eventos['nombreLugar'] }} </p>
+                            </div>
                         </a>
-                    </div>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
         </div>
-
-
-    </div>
+    </section>
 </x-AppLayout>

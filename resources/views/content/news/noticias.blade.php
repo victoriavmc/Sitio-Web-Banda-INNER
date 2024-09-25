@@ -6,8 +6,7 @@
                 <div class='bg-white opacity-95 rounded-lg p-4 flex'>
                     <div class="flex flex-col sm:flex-row xl:flex-col items-start">
                         <div class="order-1 sm:ml-6 xl:ml-0 flex flex-col">
-
-                            <div>
+                            <div class="flex justify-center">
                                 <!-- Enlace en la imagen -->
                                 <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
                                     @if ($noticia->imagenes && count($noticia->imagenes) > 0)
@@ -19,7 +18,6 @@
                                     @endif
                                 </a>
                             </div>
-
                             <div>
                                 <p class="text-black text-sm mb-4">Publicado el: {{ $noticia->fechaSubida }}</p>
 
@@ -30,11 +28,9 @@
                                             class="mb-1 block text-lg leading-6 text-red-500">{{ $noticia->titulo }}</span>
                                     </h1>
                                 </a>
-
                                 <div class="mt-3 prose prose-slate prose-sm text-base text-slate-600">
                                     <p>{{ $noticia->descripcion }}</p>
                                 </div>
-
                                 <!-- Botón "Leer Más" -->
                                 <a class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6"
                                     href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
@@ -51,7 +47,6 @@
                     </div>
                 </div>
             @endforeach
-
         </ul>
     </div>
 </x-AppLayout>
