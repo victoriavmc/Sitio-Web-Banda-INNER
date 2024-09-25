@@ -180,6 +180,8 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])->name('discografia');
 // VER ALBUM Galera
 Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])->name('albumGaleria');
+// Traer API YT
+Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])->name('actualizarYt');
 ##################################################################################################
 
 // // Subir tipo de imagen
