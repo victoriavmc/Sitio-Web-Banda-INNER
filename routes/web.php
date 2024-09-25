@@ -1,5 +1,6 @@
 <?php
 #Controllers
+use App\Http\Controllers\AlbumGaleriaController;
 use App\Http\Controllers\AlbumMusicaController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\ContenidoController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PanelUsuariosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\SuperFanController;
+
 
 #Modelo
 use App\Models\Paisnacimiento;
@@ -176,6 +178,9 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
 //------------------------ CARPETA UTILS (ALBUMS) ------------------------
 // VER ALBUM Musica
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])->name('discografia');
+// VER ALBUM Galera
+Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])->name('albumGaleria');
+##################################################################################################
 
 // // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])
