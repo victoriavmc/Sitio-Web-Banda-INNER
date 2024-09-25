@@ -49,7 +49,7 @@
             <!-- Menú derecho -->
             <ul class="font-amsterdam hidden xl:flex text-xl gap-6 z-10">
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Galeria</a>
+                    <a class="hover:animate-pulse" href="{{ route('albumGaleria') }}">Galeria</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('noticias') }}">Noticias</a>
@@ -140,7 +140,7 @@
                     <a class="hover:animate-pulse" href="{{ route('artistas') }}">Artistas</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('underConstruction') }}">Galeria</a>
+                    <a class="hover:animate-pulse" href="{{ route('albumGaleria') }}">Galeria</a>
                 </li>
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('noticias') }}">Noticias</a>

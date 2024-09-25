@@ -40,18 +40,24 @@ class AlbumMusicaController extends Controller
             // Verificar si hay canciones antes de recorrer
             if ($canciones) {
                 foreach ($canciones as $cancion) {
-                    $listacanciones[] = $cancion->tituloCancion;
+                    // Añadir los detalles de la canción: nombre, letra en español y letra en inglés
+                    $listacanciones[] = [
+                        'titulo' => $cancion->tituloCancion,
+                        'letra_en_espanol' => $cancion->letraEspCancion ?? 'Letra en español no disponible',
+                        'letra_en_ingles' => $cancion->letraInglesCancion ?? 'Letra en inglés no disponible',
+                    ];
                 }
             }
 
-            // Agregar los datos a la lista
+            // Agregar los datos del álbum junto con las canciones
             $listaAlbum[] = [
                 'titulo' => $albumTitulo,
                 'fecha' => $albumFecha,
                 'imagen' => $albumImagen,
-                'canciones' => $listacanciones, // Guardar solo los títulos de las canciones
+                'canciones' => $listacanciones, // Guardar los detalles completos de las canciones
             ];
         }
+
         return $listaAlbum;
     }
 }

@@ -125,8 +125,8 @@
     {{-- INSTAGRAM --}}
     <div class="bg-white flex justify-center items-center">
         {{-- Fondo imagen agregar --}}
-        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-        <div class="elfsight-app-c25daa8f-eca3-4838-88f3-7ce10b757860" data-elfsight-app-lazy></div>
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-c24daa8f-eca3-4838-88f3-7ce10b757860" data-elfsight-app-lazy></div>
     </div>
 
     {{-- NOTICIAS Y FORO --}}
