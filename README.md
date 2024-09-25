@@ -104,10 +104,6 @@ El proyecto está diseñado para ser escalable, seguro y fácil de mantener, per
 ### Importante!
 
 -   Asegúrate de tener instalados los siguientes paquetes:
-
-    Instala fruitcake/laravel-cors
-    composer require fruitcake/laravel-cors --with-all-dependencies
-
     ````INSTALLAR DESDE SITIO WEB OFICIAL cacert.pem
     composer upgrade
     npm install vite
