@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 #Clases
+use App\Models\Actividad;
+use App\Models\Contenidos;
 use App\Models\DatosPersonales;
 use App\Models\imagenes;
 use App\Models\Paisnacimiento;
 use App\Models\RevisionImagenes;
 use App\Models\Usuario;
 use App\Models\Redsocial;
-use App\Models\Seguidores;
+use App\Models\Comentarios;
 
 #Mails
 use App\Mail\msjBajaCuenta;
@@ -23,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PerfilController extends Controller
 {
@@ -34,20 +37,51 @@ class PerfilController extends Controller
     public $imagenPerfil;
     public $imagenExistePerfilEspecifico;
 
-    #Identifico el usuario
+    # Identifico el usuario
     public function identificaUsername()
     {
         $usuario = Auth::user();
         $usuario = Usuario::where('usuarioUser', $usuario->usuarioUser)->first();
-        return $usuario;
+
+        // Verifico si el usuario existe antes de buscar la imagen
+        if ($usuario) {
+            // Concatenar nombre y apellido
+            $nombreApellido = $usuario->datospersonales->nombreDP . ' ' . $usuario->datospersonales->apellidoDP;
+            $imagen = $this->buscarImagen($usuario->idusuarios); // Pasamos el ID del usuario
+            $usuario->imagenPerfil = $imagen; // Añadimos la imagen al objeto usuario
+            $usuario->nombreApellido = $nombreApellido; // Añadir nombre y apellido al objeto usuario
+        }
+
+        return $usuario; // Asegúrate de retornar el objeto usuario
     }
 
-    #Envio a la vista
+    # Envio a la vista PROPIA
     public function perfil()
     {
-        $usuario = $this->identificaUsername();
-        return view('profile.perfil', compact('usuario'));
+        // Identifica al usuario
+        $usuario = $this->identificaUsername(); // Aquí usuario ya contiene la imagen
+
+        // Comprobar si el usuario existe
+        if (!$usuario) {
+            // Redirigir o manejar el caso en que no se encuentra el usuario
+            return redirect()->route('login')->with('error', 'Usuario no encontrado.');
+        }
+
+        // Establecer un valor por defecto para la imagen de perfil si no se encuentra
+        $imagenPerfil = $usuario->imagenPerfil ?? 'ruta/a/imagen/default.png'; // Cambiar por la ruta de una imagen por defecto
+
+        // Obtener el nombre y apellido
+        $nombreApellido = $usuario->nombreApellido ?? ''; // Obtener el nombre y apellido del objeto usuario
+
+        // Llama a la función para obtener los comentarios relacionados con publicaciones
+        $comentariosConPublicacion = $this->obtenerComentariosConPublicacion($usuario->idusuarios);
+
+        $publicaciones = $this->publicaciones($usuario->idusuarios);
+
+        // Retornar los datos a la vista
+        return view('profile.perfil', compact('usuario', 'imagenPerfil', 'nombreApellido', 'comentariosConPublicacion', 'publicaciones'));
     }
+
 
     #Envio a la vista los datos de Perfil (Datos Cargados Texto)
     public function modificarPerfil()
@@ -299,11 +333,8 @@ class PerfilController extends Controller
     }
 
     #Busco Imagen de un Usuario Especifico (VER COMO USAR)
-    public function buscarImagen(Request $request)
+    public function buscarImagen($idUser)
     {
-        // Guardo el id del usuario
-        $idUser = $request->idusuarios;
-
         // Ahora busco en la tabla revisionImagenes
         $imagenPerfil = RevisionImagenes::where('usuarios_idusuarios', $idUser)
             ->where('tipodefoto_idtipoDeFoto', 1)
@@ -313,15 +344,12 @@ class PerfilController extends Controller
             $idImagenP = $imagenPerfil->imagenes_idimagenes;
 
             // Ahora busco la imagen en la tabla imagenes
-            $ubicacionImagen = Imagenes::where('idimagenes', $idImagenP)
-                ->first();
+            $ubicacionImagen = Imagenes::where('idimagenes', $idImagenP)->first();
 
-            $ubicarImagen = $ubicacionImagen ? $ubicacionImagen->subidaImg : null;
-        } else {
-            $ubicarImagen = null; // Inicializo la variable
+            return $ubicacionImagen ? $ubicacionImagen->subidaImg : null;
         }
 
-        $this->imagenExistePerfilEspecifico = $ubicarImagen;
+        return null; // Si no hay imagen
     }
 
     #Si alguien reporta una cuenta
@@ -377,4 +405,126 @@ class PerfilController extends Controller
     #ELIMINAR CUENTA EN CASCADA
     #CUANDO ELIMINA LA CUENTA, DEBE ELIMINAR TODO LO RELACIONADO AL USUARIO MENOS LA PARTE LOGICA QUE ES USUARIO, DATOS PERSONALES Y ANOTARLO EN HISTORIALUSUARIOS 
     public function eliminarCuenta(Request $request) {}
+
+
+    #Mostramos Los comentarios si tiene el usuario
+    public function obtenerComentariosConPublicacion($data)
+    {
+        // Obtengo las actividades del usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $data)->get();
+
+        // Inicializo un array para almacenar los datos procesados
+        $comentariosArray = [];
+
+        // Recorro las actividades para obtener los comentarios correspondientes
+        foreach ($actividades as $actividad) {
+            // Obtengo los comentarios de la actividad
+            $comentarios = Comentarios::where('Actividad_idActividad', $actividad->idActividad)
+                ->orderBy('fechaComent', 'desc')
+                ->get();
+
+            foreach ($comentarios as $comentario) {
+                // Limitar la descripción a 20 palabras
+                $comentario->descripcion = Str::words($comentario->descripcion, 20);
+                $fechaComentario = $comentario->fechaComent;
+
+                // Relacionar el comentario con su publicación
+                $publicacion = Contenidos::find($comentario->contenidos_idcontenidos);
+
+                if ($publicacion) {
+                    $idPublicacion = $publicacion->idcontenidos;
+                    $publicacionComentada = $publicacion->titulo;
+                    $publicacionSubida = $publicacion->fechaSubida;
+
+                    // Almacenar los datos en el array
+                    $comentariosArray[] = [
+                        'idPublicacion' => $idPublicacion,
+                        'descripcion' => $comentario->descripcion,
+                        'fechaComentario' => $fechaComentario,
+                        'publicacionTitulo' => $publicacionComentada,
+                        'publicacionFechaSubida' => $publicacionSubida
+                    ];
+                }
+            }
+        }
+
+        // Retorna el array con todos los comentarios y sus publicaciones
+        return $comentariosArray;
+    }
+
+
+    #Mostramos Las publicaciones si tiene el usuario
+    public function publicaciones($userId)
+    {
+        // Obtengo las actividades del usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $userId)->get();
+
+        // Inicializo un array para almacenar los datos procesados
+        $contenidosArray = [];
+
+        // Recorro las actividades para obtener los contenidos correspondientes
+        foreach ($actividades as $actividad) {
+            // Obtengo los contenidos de la actividad
+            $contenidos = Contenidos::where('Actividad_idActividad', $actividad->idActividad)->where('tipoContenido_idtipoContenido', 1)
+                ->orderBy('fechaSubida', 'desc')
+                ->get();
+
+            foreach ($contenidos as $publicacion) {
+                // Limitar la descripción a 20 palabras
+                $idPublicacion = $publicacion->idcontenidos;
+                $publicacionTitulo = $publicacion->titulo;
+                $publicacion->descripcion = Str::words($publicacion->descripcion, 25);
+                $fechaPublicacion = $publicacion->fechaSubida;
+
+                // Almacenar los datos en el array
+                $contenidosArray[] = [
+                    'idPublicacion' => $idPublicacion,
+                    'publicacionTitulo' => $publicacionTitulo,
+                    'descripcion' => $publicacion->descripcion,
+                    'fechaPublicacion' => $fechaPublicacion,
+                ];
+            }
+        }
+
+        // Retorna el array con todos los contenidos y sus publicaciones
+        return $contenidosArray;
+    }
+
+    #Logica de perfil ajeno
+    public function verPerfilAjeno($id)
+    {
+        // Identifico el usuario ajeno
+        $otroUsuario = Usuario::find($id); // Use the parameter directly
+
+        // Verifico si el usuario existe
+        if ($otroUsuario) {
+
+            // Obtengo el nombre de usuario
+            $usuarioUser = $otroUsuario->usuarioUser;
+            $nombreApellido = $otroUsuario->datospersonales->nombreDP . ' ' . $otroUsuario->datospersonales->apellidoDP;
+
+            // Obtengo el rol del usuario
+
+            $tipoRol = $otroUsuario->rol->rol;
+
+            // Busco la imagen de perfil
+            $imagenPerfil = $this->buscarImagen($otroUsuario->idusuarios);
+
+            $comentariosConPublicacion = $this->obtenerComentariosConPublicacion($id);
+            $publicaciones = $this->publicaciones($id);
+
+            // Retorna la vista con la información del usuario
+            return view('profile.verPerfilAjeno', [
+                'usuarioUser' => $usuarioUser,
+                'nombreApellido' => $nombreApellido,
+                'tipoRol' => $tipoRol,
+                'imagen' => $imagenPerfil,
+                'comentariosConPublicacion' => $comentariosConPublicacion,
+                'publicaciones' => $publicaciones,
+            ]);
+        } else {
+            // Manejo de error si el usuario no se encuentra
+            return redirect()->route('some.route')->with('error', 'Usuario no encontrado.');
+        }
+    }
 }

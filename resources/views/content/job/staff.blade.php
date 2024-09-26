@@ -12,28 +12,31 @@
                         @foreach ($listaStaff as $item)
                             @if (!in_array($item['rol'], ['Guitar', 'Vocalist and Guitar', 'Bass Guitar', 'Drummer']))
                                 <div class="flex flex-wrap w-full">
-                                    <div class="flex flex-col mr-5 text-center mb-11 lg:mr-16">
-                                        <div class="inline-block mb-4 relative shrink-0 rounded-[.95rem]">
-                                            @if ($item['imagen'] != null)
-                                                <!-- Si existe la imagen entonces muestra aquí -->
-                                                <img src="{{ asset(Storage::url($item['imagen'])) }}"
-                                                    alt="Imagen Principal"
-                                                    class="w-[230px] h-[230px] max-w-[230px] max-h-[230px] object-cover mb-8">
-                                            @else
-                                                <!-- Mostrar una imagen por defecto si no hay imagen -->
-                                                <img src="{{ asset('img/logo_usuario.png') }}" alt="Imagen por defecto"
-                                                    class="w-[230px] h-[230px] max-w-[230px] max-h-[230px] object-cover mb-8">
-                                            @endif
-                                        </div>
+                                    <a href="{{ route('perfil-ajeno', $item['id']) }}">
+                                        <div class="flex flex-col mr-5 text-center mb-11 lg:mr-16">
+                                            <div class="inline-block mb-4 relative shrink-0 rounded-[.95rem]">
+                                                @if ($item['imagen'] != null)
+                                                    <!-- Si existe la imagen entonces muestra aquí -->
+                                                    <img src="{{ asset(Storage::url($item['imagen'])) }}"
+                                                        alt="Imagen Principal"
+                                                        class="w-[230px] h-[230px] max-w-[230px] max-h-[230px] object-cover mb-8">
+                                                @else
+                                                    <!-- Mostrar una imagen por defecto si no hay imagen -->
+                                                    <img src="{{ asset('img/logo_usuario.png') }}"
+                                                        alt="Imagen por defecto"
+                                                        class="w-[230px] h-[230px] max-w-[230px] max-h-[230px] object-cover mb-8">
+                                                @endif
+                                            </div>
 
-                                        <div class="text-center">
-                                            <a href="javascript:void(0)"
-                                                class="text-dark font-semibold hover:text-primary text-[1.25rem] transition-colors duration-200 ease-in-out">
-                                                {{ $item['nombre'] . ' ' . $item['apellido'] }}
-                                            </a>
-                                            <span class="block font-medium text-muted">{{ $item['rol'] }}</span>
+                                            <div class="text-center">
+                                                <a href="javascript:void(0)"
+                                                    class="text-dark font-semibold hover:text-primary text-[1.25rem] transition-colors duration-200 ease-in-out">
+                                                    {{ $item['nombre'] . ' ' . $item['apellido'] }}
+                                                </a>
+                                                <span class="block font-medium text-muted">{{ $item['rol'] }}</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach

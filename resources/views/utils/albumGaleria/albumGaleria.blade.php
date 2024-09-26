@@ -70,6 +70,17 @@
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Videos Oficiales</h2>
 
                 {{-- Botón para actualizar videos --}}
+                <div class="text-center mb-5">
+                    <form action="{{ route('actualizarYt') }}" method="POST">
+                        @csrf <!-- Asegúrate de incluir el token CSRF -->
+                        <button type="submit"
+                            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                            Actualizar Videos
+                        </button>
+                    </form>
+                </div>
+
+
                 <div class="flex flex-wrap justify-between gap-5">
                     @foreach ($listaYt as $index => $video)
                         <div class="video-container mb-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/5"> <!-- Ancho adaptativo -->

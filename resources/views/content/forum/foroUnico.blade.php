@@ -67,23 +67,25 @@
             <!-- Quien sube la publicacion -->
             <div
                 class="w-full max-w-2xl my-4 flex flex-col items-start space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 px-4 py-8 border-2 border-dashed border-gray-400 dark:border-gray-400 shadow-lg rounded-lg">
-                <span
-                    class="text-xs font-medium top-0 left-0 rounded-br-lg rounded-tl-lg px-2 py-1 bg-primary-100 dark:bg-gray-900 dark:text-black border-gray-400 dark:border-gray-400 border-b-2 border-r-2 border-dashed">
-                    Usuario
-                </span>
-                <div class="w-full flex justify-center sm:justify-start sm:w-auto">
-                    <img class="object-cover w-20 h-20 mt-3 mr-3 rounded-full"
-                        src="{{ $autor['ruta_imagen'] ? asset(Storage::url($autor['ruta_imagen'])) : asset('img/logo_usuario.png') }}"
-                        alt="Imagen del usuario">
-                </div>
-                <div class="w-full sm:w-auto flex flex-col items-center sm:items-start">
-                    <p class="font-display mb-2 text-2xl font-semibold text-black" itemprop="author">
-                        {{ $autor['usuario']->usuarioUser }}
-                    </p>
-                    <div class="mb-4 md:text-lg ">
-                        <p class="text-black">{{ $autor['usuario']->rol->rol }}</p>
+                <a href="{{ route('perfil-ajeno', $autor['usuario']->idusuarios) }}">
+                    <span
+                        class="text-xs font-medium top-0 left-0 rounded-br-lg rounded-tl-lg px-2 py-1 bg-primary-100 dark:bg-gray-900 dark:text-black border-gray-400 dark:border-gray-400 border-b-2 border-r-2 border-dashed">
+                        Usuario
+                    </span>
+                    <div class="w-full flex justify-center sm:justify-start sm:w-auto">
+                        <img class="object-cover w-20 h-20 mt-3 mr-3 rounded-full"
+                            src="{{ $autor['ruta_imagen'] ? asset(Storage::url($autor['ruta_imagen'])) : asset('img/logo_usuario.png') }}"
+                            alt="Imagen del usuario">
                     </div>
-                </div>
+                    <div class="w-full sm:w-auto flex flex-col items-center sm:items-start">
+                        <p class="font-display mb-2 text-2xl font-semibold text-black" itemprop="author">
+                            {{ $autor['usuario']->usuarioUser }}
+                        </p>
+                        <div class="mb-4 md:text-lg ">
+                            <p class="text-black">{{ $autor['usuario']->rol->rol }}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
         {{-- COMENTARIOS --}}
@@ -93,24 +95,28 @@
                 @foreach ($comentarios as $comentario)
                     <div class="space-y-4 mb-4">
                         <div class="flex">
-                            <div class="flex-shrink-0 mr-3">
-                                <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
-                                    src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
-                                    alt="Usuario">
-                            </div>
-                            <div class="flex-1 border rounded-lg text-black px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                                <strong>{{ $comentario['autor']->usuarioUser }}</strong> <!-- Nombre de autor -->
-                                <span class="text-xs text-black">{{ $comentario['comentario']->fechaComent }}</span>
-                                <!-- Fecha del comentario -->
-                                <p class="text-sm text-black">
-                                    {{ $comentario['comentario']->descripcion }} <!-- Descripción del comentario -->
-                                </p>
-                            </div>
+
+                            <a href="{{ route('perfil-ajeno', $comentario['autor']->idusuarios) }}">
+                                <div class="flex-shrink-0 mr-3">
+                                    <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+                                        src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
+                                        alt="Usuario">
+                                </div>
+                                <div
+                                    class="flex-1 border rounded-lg text-black px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                                    <strong>{{ $comentario['autor']->usuarioUser }}</strong> <!-- Nombre de autor -->
+                            </a>
+                            <span class="text-xs text-black">{{ $comentario['comentario']->fechaComent }}</span>
+                            <!-- Fecha del comentario -->
+                            <p class="text-sm text-black">
+                                {{ $comentario['comentario']->descripcion }} <!-- Descripción del comentario -->
+                            </p>
                         </div>
                     </div>
-                @endforeach
-            @endif
         </div>
+        @endforeach
+        @endif
+    </div>
     </div>
 
 </x-AppLayout>

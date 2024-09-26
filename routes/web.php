@@ -77,6 +77,10 @@ Route::get('/perfil', [perfilController::class, 'perfil'])
 
 Route::get('/modificar-perfil', [perfilController::class, 'modificarPerfil'])
     ->name('modificar-perfil')->middleware('auth');
+
+// PERFIL AJENO
+Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
+    ->name('perfil-ajeno');
 // -------------------------------------------- Redes ---------------------------------
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])
     ->name('modificar-redes')->middleware('auth');
