@@ -1,43 +1,47 @@
 <x-AppLayout>
-    <div class='container'>
-        <div class="max-w-2xl mx-auto p-4">
-            <form action={{ route('crearPublicacion') }} method="POST">
-                <div class="mb-6">
-                    <label for="tituloForo" class="block text-lg font-medium text-gray-800 mb-1">TituloForo</label>
-                    <input type="text" id="tituloForo" name="tituloForo"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                        required>
-                </div>
+    <!-- Columna del formulario -->
+    <div class="form-column flex-1 flex justify-center items-center bg-white">
+        <form action="{{ route('crearPForo', ['type' => 1]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <h1 class="font-bold deepshadow mb-4 text-black">Crear Publicación de Foro</h1>
 
-                <div class="mb-6">
-                    <label for="descriptorForo" class="block text-lg font-medium text-gray-800 mb-1">Contenido</label>
-                    <textarea id="descriptorForo" name="descriptorForo"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" rows="6"
-                        required></textarea>
-                </div>
+            {{-- Titulo --}}
+            <div class="form-wrapper mb-4">
+                <label for="titulo" class="form-label text-black">Título</label>
+                @error('titulo')
+                    <span class="font-bold text-red-500">{{ $message }}</span>
+                @enderror
+                <input type="text" name="titulo" placeholder="titulo"
+                    class="form-control pl-0 text-black bg-black bg-opacity-0"">
+            </div>
 
-                {{-- NO TODAVIA --}}
-                {{-- <div class="mb-6">
-                    <label for="image" class="block text-lg font-medium text-gray-800 mb-1">Imagen: (1 por
-                        publicacion)</label>
-                    <input type="file" id="image" name="image" accept="image/*" class="w-full">
-                </div> --}}
+            <!-- Descripcion -->
+            <div class="form-wrapper mb-4 font-urbanist">
+                <label for="descripcion" class="form-label text-black">Descripción</label>
+                @error('descripcion')
+                    <span class="font-bold text-red-500">{{ $message }}</span>
+                @enderror
+                <textarea type="text" name="descripcion" placeholder="descripcion"
+                    class="form-control pl-0 text-black bg-black bg-opacity-0""></textarea>
+            </div>
 
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="px-6 py-2 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 focus:outline-none">Subir
-                        Publicacion</button>
-                </div>
-            </form>
-        </div>
-        <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
-        <script>
-            ClassicEditor
-                .create(document.querySelector('#content'))
-                .catch(error => {
-                    console.error(error);
-                });
-        </script>
+            <!-- Imagen/es -->
+            <div class="form-wrapper mb-4">
+                <label for="image" class="form-label text-black">Imagen/es (* Es opcional, pero la primera es para la
+                    portada)</label>
+                @error('imagen')
+                    <span class="font-bold text-red-500">{{ $message }}</span>
+                @enderror
+                <input type="file" name="imagen[]" class="form-control pl-0 text-black bg-black bg-opacity-0"
+                    multiple>
+
+            </div>
+
+            <!-- Botón de Crear Publicacion -->
+            <div class="m-auto w-max">
+                <button type="submit"
+                    class="px-6 py-2 bg-indigo-500 text-black font-semibold rounded-md hover:bg-indigo-600 focus:outline-none">Enviar</button>
+            </div>
+        </form>
     </div>
-
 </x-AppLayout>

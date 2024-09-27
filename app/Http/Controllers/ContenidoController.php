@@ -16,6 +16,7 @@ use App\Models\Usuario;
 
 #OTROS
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ContenidoController extends Controller
@@ -476,5 +477,85 @@ class ContenidoController extends Controller
         }
 
         return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia'));
+    }
+
+    #CREAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
+    public function crearPForo(Request $request, $type)
+    {
+        // Validar la entrada
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'imagen.*' => 'nullable|image|max:2048',
+        ]);
+
+        // Crear una nueva actividad
+        $actividad = new Actividad();
+        $actividad->save();
+
+        // Crear nuevo contenido según el tipo
+        $contenido = new Contenidos();
+        $contenido->titulo = $request->titulo;
+        $contenido->descripcion = $request->descripcion;
+        $contenido->tipoContenido_idtipoContenido = $type;
+        $contenido->fechaSubida = now();
+        $contenido->Actividad_idActividad = $actividad->idActividad;
+        $contenido->save();
+
+        // Manejar la carga de las imágenes, si se proporcionan
+        if ($request->hasFile('imagen')) {
+            foreach ($request->file('imagen') as $imageFile) {
+                // Almacenar la imagen en public/img
+                $path = $imageFile->store('img', 'public'); // Guardar en public/img
+
+                // Crear una nueva entrada en la tabla de imágenes
+                $imagen = new Imagenes();
+                $imagen->subidaImg = 'public/img/' . basename($path); // Guardar ruta relativa
+                $imagen->fechaSubidaImg = now();
+                $imagen->contenidoDescargable = 'No';
+                $imagen->save();
+
+                //Relacionar con RevisionImagenes y con ImagenesContenido
+
+                // Crear relación con revisionImagenes
+                $revisionImagen = new RevisionImagenes();
+                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios; // Relacionar con el usuario
+                $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
+                if ($type == 1) {
+                    $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Foro
+                } else {
+                    $revisionImagen->tipodefoto_idtipoDeFoto = 2; // Noticias o Biografia
+                }
+                $revisionImagen->save();
+
+                // Relacionar la imagen con el contenido
+                $imagenContenido = new ImagenesContenido();
+                $imagenContenido->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
+                $imagenContenido->contenidos_idcontenidos = $contenido->idcontenidos;
+                $imagenContenido->save();
+            }
+        }
+
+        #Switch primero para separar que tipo de contenido es y redirigir
+        switch ($type) {
+            case 1:
+                #Si es foro
+                return redirect()->route('foro')->with('success', 'Publicación creada con éxito.');
+                break;
+            case 2:
+                #Si es noticias
+                return redirect()->route('noticias')->with('success', 'Noticia creada con éxito.');
+                break;
+            case 3:
+                #Si es biografia
+                return redirect()->route('biografia')->with('success', 'Biografia creada con éxito.');
+                break;
+        }
+    }
+
+    #VER FORMULARIO FORO
+    public function verFormularioForo()
+    {
+        return view('content.forum.foropublicaciones');
     }
 }

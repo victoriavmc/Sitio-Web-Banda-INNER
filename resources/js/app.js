@@ -17,14 +17,14 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
-let map = L.map("mapa").setView([-26.174986, -58.168595], 16);
+let map = L.map("mapa").setView([], 16);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([-26.174986, -58.168595]).addTo(map)
-        .bindPopup('Ubicaciòn Del Evento')
+    L.marker([]).addTo(map)
+        .bindPopup('Ubicación Del Evento')
         .openPopup();
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -152,33 +152,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
-
-// YOUTUBE PASA VIDEO
-// let currentSlide = 0;
-
-// function showSlide(index) {
-//     const slides = document.querySelectorAll('.card');
-//     if (index >= slides.length) currentSlide = 0;
-//     else if (index < 0) currentSlide = slides.length - 1;
-//     else currentSlide = index;
-
-//     slides.forEach((slide, i) => {
-//         slide.style.transform = `translateX(-${currentSlide * 100}%)`;
-//     });
-// }
-
-// function nextSlide() {
-//     showSlide(currentSlide + 1);
-// }
-
-// function prevSlide() {
-//     showSlide(currentSlide - 1);
-// }
-
-// Mostrar el primer slide
-// showSlide(currentSlide);
-
-
-
