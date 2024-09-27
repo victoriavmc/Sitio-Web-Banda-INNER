@@ -799,6 +799,12 @@ select option {
   height: 80%;
 }
 
+/* Estilos para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Tamaño de la barra de desplazamiento */
+  scrollbar-color: #888 transparent /* Color del thumb y del track */
+}
+
 /**
  * Swiper 11.1.14
  * Most modern mobile touch slider and framework with hardware accelerated transitions

@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="bg-white flex justify-center items-center h-[86.5vh] flex-col">
+    <div class="bg-white flex justify-center items-center min-h-[86.5vh] flex-col">
         <div>
             <!-- Foro-->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +72,7 @@
                     Usuario
                 </span>
                 <div class="w-full flex justify-center sm:justify-start sm:w-auto">
-                    <img class="object-cover w-20 h-20 mt-3 mr-3 rounded-full"
+                    <img class="object-cover w-20 h-20 rounded-full"
                         src="{{ $autor['ruta_imagen'] ? asset(Storage::url($autor['ruta_imagen'])) : asset('img/logo_usuario.png') }}"
                         alt="Imagen del usuario">
                 </div>
