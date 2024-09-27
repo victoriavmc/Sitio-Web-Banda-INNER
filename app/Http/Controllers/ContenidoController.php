@@ -637,4 +637,84 @@ class ContenidoController extends Controller
         // Pasar el contenido, imágenes, tipo de contenido y el ID a la vista
         return view('content.forum.foromodificar', compact('contenido', 'imagenes', 'tipoContenido'));
     }
+
+    // Método para eliminar contenido
+    public function eliminarContenido($id)
+    {
+        // Obtener el contenido a eliminar por su ID
+        $contenido = Contenidos::findOrFail($id);
+
+        // Obtener el ID de la actividad relacionada
+        $actividadId = $contenido->Actividad_idActividad;
+
+        // Obtener todos los comentarios asociados al contenido
+        $comentarios = $contenido->comentarios;
+
+        // Eliminar los comentarios asociados
+        foreach ($comentarios as $comentario) {
+            // Si el comentario tiene una revisión de imagen asociada
+            if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                // Obtener la revisión de imagen asociada al comentario
+                $revisionImagen = RevisionImagenes::find($comentario->revisionImagenes_idrevisionImagenescol);
+                if ($revisionImagen) {
+                    // Obtener la imagen asociada a la revisión
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+
+                    // Eliminar la revisión de imagen
+                    $revisionImagen->delete();
+
+                    // Eliminar la imagen si existe
+                    if ($imagen) {
+                        $imagen->delete();
+                    }
+                }
+            }
+
+            // Eliminar el comentario
+            $comentario->delete();
+        }
+
+        // Obtener las imágenes de contenido asociadas
+        $imagenesContenido = $contenido->imagenesContenido;
+
+        // Eliminar las imágenes de contenido y sus revisiones
+        foreach ($imagenesContenido as $imagenContenido) {
+            $idReviImg = $imagenContenido->revisionImagenes_idrevisionImagenescol;
+
+            // Primero eliminamos el vínculo de imagenContenido
+            $imagenContenido->delete();
+
+            // Verificar si hay revisiones de imagen
+            if ($idReviImg) {
+                // Obtener la revisión de imagen
+                $revisionImagen = RevisionImagenes::find($idReviImg);
+                if ($revisionImagen) {
+                    // Obtener la imagen asociada
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+
+                    // Eliminar la revisión de imagen
+                    $revisionImagen->delete();
+
+                    // Eliminar la imagen si existe
+                    if ($imagen) {
+                        $imagen->delete();
+                    }
+                }
+            }
+        }
+
+        // Eliminar el contenido
+        $contenido->delete();
+
+        // Obtener la actividad para comprobar si tiene otros contenidos
+        $actividad = Actividad::findOrFail($actividadId);
+
+        // Verificar si la actividad tiene otros contenidos antes de eliminarla
+        if ($actividad->contenidos()->count() === 0) {
+            $actividad->delete(); // Eliminar la actividad si no tiene contenidos relacionados
+        }
+
+        // Redirigir a la función indexForo después de eliminar
+        return redirect()->route('foro')->with('success', 'Contenido, actividad y comentarios eliminados con éxito.');
+    }
 }

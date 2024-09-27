@@ -5,6 +5,14 @@
                 class
             ="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-
             4 rounded">Modificar</a>
+
+            <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
+                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+            </form>
         @endif
         <div>
             <!-- Foro-->

@@ -9,23 +9,6 @@
         <textarea name="descripcion" required>{{ old('descripcion', $contenido->descripcion) }}</textarea>
     </div>
     <div>
-        <label for="imagen">Imágenes actuales:</label>
-        <div class="current-images">
-            @if ($imagenes->isEmpty())
-                <p>No hay imágenes disponibles.</p>
-            @else
-                @foreach ($imagenes as $imagen)
-                    <div class="image-container">
-                        <img src="{{ asset($imagen->subidaImg) }}" alt="Imagen"
-                            style="max-width: 200px; max-height: 200px; margin: 5px;">
-                        <p>Fecha de subida: {{ $imagen->fechaSubidaImg }}</p>
-                    </div>
-                @endforeach
-            @endif
-        </div>
-    </div>
-
-    <div>
         <label for="imagen">Imagen/es (*Opcional, pero la primera es portada)</label>
         <input type="file" name="imagen[]" multiple>
     </div>

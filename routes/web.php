@@ -184,7 +184,8 @@ Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class
 // Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
 
-
+//Ruta para eliminar la publicacion especifica
+Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])->name('eliminarContenido');
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS
