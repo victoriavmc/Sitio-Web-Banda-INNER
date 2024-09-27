@@ -178,6 +178,13 @@ Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormulari
 // Ruta para crear la publicación
 Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
 
+// Ruta para mostrar el formulario de modificación
+Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+
+// Ruta para actualizar la publicación (este es el método POST)
+Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+
+
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS

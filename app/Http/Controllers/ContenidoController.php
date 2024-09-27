@@ -479,7 +479,7 @@ class ContenidoController extends Controller
         return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia'));
     }
 
-    #CREAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
+    #CREAR PUBLICACION (FORO-NOTICIAS)
     public function crearP(Request $request, $type)
     {
         // Validar la entrada
@@ -553,9 +553,88 @@ class ContenidoController extends Controller
         }
     }
 
-    #VER FORMULARIO FORO
+    #VER FORMULARIO CREAR PUBLICACIONES
     public function verFormularioForo()
     {
         return view('content.forum.foropublicaciones');
+    }
+
+    #MODIFICAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
+    public function modificarP(Request $request, $id)
+    {
+        // Obtener el contenido a editar por ID
+        $contenido = Contenidos::findOrFail($id);
+
+        // Validar la entrada
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'imagen.*' => 'nullable|image|max:2048',
+        ]);
+
+        // Actualizar el contenido
+        $contenido->titulo = $request->titulo;
+        $contenido->descripcion = $request->descripcion;
+        $contenido->save(); // Guarda los cambios en el contenido
+
+        // Manejar la carga de las nuevas imágenes, si se proporcionan
+        if ($request->hasFile('imagen')) {
+            foreach ($request->file('imagen') as $imageFile) {
+                // Almacenar la imagen en public/storage/img
+                $path = $imageFile->store('public/img'); // Guardar en public/storage/img
+
+                // Guardar la ruta correcta en la base de datos
+                $imagen = new Imagenes();
+                $imagen->subidaImg = 'public/img/' . basename($path); // Solo guardar la ruta relativa
+                $imagen->fechaSubidaImg = now();
+                $imagen->contenidoDescargable = 'No';
+                $imagen->save();
+
+                // Relacionar con RevisionImagenes y con ImagenesContenido
+                $revisionImagen = new RevisionImagenes();
+                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios; // Relacionar con el usuario
+                $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
+
+                // Determinar el tipo de foto
+                if ($contenido->tipoContenido_idtipoContenido == 1) {
+                    $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Foro
+                } else {
+                    $revisionImagen->tipodefoto_idtipoDeFoto = 2; // Noticias o Biografía
+                }
+                $revisionImagen->save();
+
+                // Relacionar la imagen con el contenido
+                $imagenContenido = new ImagenesContenido();
+                $imagenContenido->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
+                $imagenContenido->contenidos_idcontenidos = $contenido->idcontenidos;
+                $imagenContenido->save();
+            }
+        }
+
+        // Redirigir según el tipo de contenido
+        switch ($contenido->tipoContenido_idtipoContenido) {
+            case 1:
+                return redirect()->route('foro')->with('success', 'Publicación actualizada con éxito.');
+            case 2:
+                return redirect()->route('noticias')->with('success', 'Noticia actualizada con éxito.');
+            case 3:
+                return redirect()->route('biografia')->with('success', 'Biografía actualizada con éxito.');
+        }
+    }
+
+    #VER FORMULARIO MODIFICAR PUBLICACIONES(FORO-NOTICIAS-BIOGRAFIA)
+    public function editarP($id)
+    {
+        // Obtener el contenido a editar por ID
+        $contenido = Contenidos::findOrFail($id);
+
+        // Obtener las imágenes asociadas
+        $imagenes = $contenido->imagenesContenido; // Esta es la relación que debes haber definido en tu modelo
+
+        // Obtener el tipo de contenido
+        $tipoContenido = $contenido->tipoContenido_idtipoContenido; // 1: Foro, 2: Noticias, 3: Biografía
+
+        // Pasar el contenido, imágenes, tipo de contenido y el ID a la vista
+        return view('content.forum.foromodificar', compact('contenido', 'imagenes', 'tipoContenido'));
     }
 }

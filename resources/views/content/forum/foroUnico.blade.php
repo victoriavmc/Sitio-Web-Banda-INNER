@@ -1,5 +1,11 @@
 <x-AppLayout>
     <div class="bg-white flex justify-center items-center min-h-[86.5vh] flex-col">
+        @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios)
+            <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
+                class
+            ="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-
+            4 rounded">Modificar</a>
+        @endif
         <div>
             <!-- Foro-->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
