@@ -253,6 +253,7 @@ class PerfilController extends Controller
             $imagen = new Imagenes();
             $imagen->subidaImg = $path;
             $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
             $imagen->save();
 
             $userId = $usuarioBD->idusuarios;

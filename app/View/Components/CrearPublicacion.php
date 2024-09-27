@@ -4,17 +4,17 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class FormularioCreate extends Component
+class CrearPublicacion extends Component
 {
-    public $formType; // Para definir el tipo de formulario
+    public $action;
 
-    public function __construct($formType)
+    public function __construct($action)
     {
-        $this->formType = $formType;
+        $this->action = $action;
     }
 
     public function render()
     {
-        return view('components.formulario-create');
+        return view('components.crear-publicacion');
     }
 }

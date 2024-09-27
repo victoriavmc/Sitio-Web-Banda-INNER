@@ -480,7 +480,7 @@ class ContenidoController extends Controller
     }
 
     #CREAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
-    public function crearPForo(Request $request, $type)
+    public function crearP(Request $request, $type)
     {
         // Validar la entrada
         $request->validate([
@@ -505,12 +505,12 @@ class ContenidoController extends Controller
         // Manejar la carga de las imágenes, si se proporcionan
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
-                // Almacenar la imagen en public/img
-                $path = $imageFile->store('img', 'public'); // Guardar en public/img
+                // Almacenar la imagen en public/storage/img
+                $path = $imageFile->store('public/img'); // Guardar en public/storage/img
 
-                // Crear una nueva entrada en la tabla de imágenes
+                // Guardar la ruta correcta en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = 'public/img/' . basename($path); // Guardar ruta relativa
+                $imagen->subidaImg = 'public/img/' . basename($path); // Solo guardar la ruta relativa
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();

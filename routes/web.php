@@ -172,11 +172,11 @@ Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
 // VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
 
-// Ver el formulario para crear una publicación
+// Ruta para ver el formulario
 Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])->name('verFormularioForo');
 
-// Crear publicación dependiendo del tipo
-Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearPForo'])->name('crearPForo');
+// Ruta para crear la publicación
+Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
 
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
