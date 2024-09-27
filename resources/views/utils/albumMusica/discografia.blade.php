@@ -20,7 +20,7 @@
                             </figcaption>
                         </figure>
                         <div class="song-list hidden" id="songs-{{ $album['titulo'] }}">
-                            @foreach ($album['canciones'] as $titulo)
+                            @foreach ($album['canciones'] as $titulos)
                                 <div
                                     class="relative flex flex-col rounded-lg bg-white shadow-sm border border-slate-200">
                                     <nav class="flex min-w-[240px] flex-col gap-1 py-1.5">

@@ -77,6 +77,10 @@ Route::get('/perfil', [perfilController::class, 'perfil'])
 
 Route::get('/modificar-perfil', [perfilController::class, 'modificarPerfil'])
     ->name('modificar-perfil')->middleware('auth');
+
+// PERFIL AJENO
+Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
+    ->name('perfil-ajeno');
 // -------------------------------------------- Redes ---------------------------------
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])
     ->name('modificar-redes')->middleware('auth');
@@ -180,6 +184,8 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])->name('discografia');
 // VER ALBUM Galera
 Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])->name('albumGaleria');
+// Traer API YT
+Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])->name('actualizarYt');
 ##################################################################################################
 
 // // Subir tipo de imagen

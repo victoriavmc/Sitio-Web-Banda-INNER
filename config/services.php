@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+        'search_endpoint' => env('SEARCH_ENPOINT'),
+        'userId' => env('ID_YOUTUBE')
+    ]
 
 ];

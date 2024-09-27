@@ -17,6 +17,16 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
+let map = L.map("mapa").setView([-26.174986, -58.168595], 16);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([-26.174986, -58.168595]).addTo(map)
+        .bindPopup('Ubicaciòn Del Evento')
+        .openPopup();
+
 document.addEventListener('DOMContentLoaded', function () {
     const alerts = document.querySelectorAll('.alert-fixed');
 

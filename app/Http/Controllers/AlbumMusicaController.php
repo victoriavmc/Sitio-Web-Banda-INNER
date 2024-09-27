@@ -14,7 +14,7 @@ class AlbumMusicaController extends Controller
     public function indexAlbumMusica()
     {
         $listaAlbum = $this->mostrarAlbumnes();
-        return view('utils.albumMusica.discografia', ['listaAlbum' => $listaAlbum]);
+        return view('utils.albumMusica.discografia', compact('listaAlbum'));
     }
 
     public function mostrarAlbumnes()

@@ -18,32 +18,8 @@
                         <div class="col-span-4 sm:col-span-3">
                             <div class="bg-white shadow rounded-lg p-6">
                                 <div class="flex flex-col items-center">
-                                    @php
-                                        // Guardo el id del usuario
-                                        $idUser = $usuario->idusuarios;
-
-                                        // Ahora busco en la tabla revisionImagenes
-                                        $imagenPerfil = DB::table('revisionimagenes')
-                                            ->where('usuarios_idusuarios', $idUser)
-                                            ->where('tipodefoto_idtipoDeFoto', 1)
-                                            ->first();
-
-                                        if ($imagenPerfil) {
-                                            $idImagenP = $imagenPerfil->imagenes_idimagenes;
-
-                                            // Ahora busco la imagen en la tabla imagenes
-                                            $ubicacionImagen = DB::table('imagenes')
-                                                ->where('idimagenes', $idImagenP)
-                                                ->first();
-
-                                            $ubicarImagen = $ubicacionImagen ? $ubicacionImagen->subidaImg : null;
-                                        } else {
-                                            $ubicarImagen = null; // Inicializo la variable
-                                        }
-                                    @endphp
-
-                                    @if ($ubicarImagen)
-                                        <img src='{{ asset(Storage::url($ubicarImagen)) }}'
+                                    @if ($imagenPerfil)
+                                        <img src='{{ asset(Storage::url($imagenPerfil)) }}'
                                             class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
                                     @else
                                         <img src='{{ asset('img/logo_usuario.png') }}'
@@ -51,7 +27,7 @@
                                     @endif
 
                                     <h1 class="text-gray-700 text-xl font-bold">
-                                        {{ $usuario->datospersonales->nombreDP . ' ' . $usuario->datospersonales->apellidoDP }}
+                                        {{ $nombreApellido }}
                                     </h1>
                                     <p class="text-gray-700">{{ $usuario->usuarioUser }}</p>
                                 </div>
@@ -72,24 +48,54 @@
                             <div class="bg-white shadow rounded-lg p-6">
                                 <h2 class="text-xl font-bold mt-6 mb-4">Comentarios</h2>
                                 <div class="mb-6">
-                                    <div class="flex justify-between flex-wrap gap-2 w-full">
-                                        <span class="text-gray-700 italic">breve comentario de 30 caracteres
-                                            max</span>
-                                        <p>
-                                            <span class="text-gray-700 mr-2">hecho en TITULO dia Fecha</span>
-                                        </p>
-                                    </div>
+                                    @if (count($comentariosConPublicacion) > 0)
+                                        @foreach ($comentariosConPublicacion as $comentario)
+                                            <div class="flex justify-between flex-wrap gap-2 w-full">
+                                                <a href="{{ route('foroUnico', $comentario['idPublicacion']) }}">
+                                                    <!-- Usar notación de array -->
+                                                    <span
+                                                        class="text-gray-700 italic">{{ $comentario['descripcion'] }}</span>
+                                                    <p>
+                                                        <span class="text-gray-700 mr-2">hecho en
+                                                            {{ $comentario['publicacionTitulo'] }} el día
+                                                            {{ $comentario['fechaComentario'] }}</span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="text-gray-700">
+                                            <p>El usuario no realizó comentarios todavía.</p>
+                                        </div>
+                                    @endif
+
+
                                 </div>
                                 <h2 class="text-xl font-bold mt-6 mb-4">Publicaciones</h2>
                                 <div class="mb-6">
-                                    <div class="flex justify-between flex-wrap gap-2 w-full">
-                                        <span class="text-gray-700 font-bold">Titulo de la publicacion</span>
+                                    @if (count($publicaciones) > 0)
+                                        @foreach ($publicaciones as $publicacion)
+                                            <a href="{{ route('foroUnico', $publicacion['idPublicacion']) }}">
+                                                <div class="flex justify-between flex-wrap gap-2 w-full">
+                                                    <span
+                                                        class="text-gray-700 font-bold">{{ $publicacion['publicacionTitulo'] }}</span>
+                                                </div>
+                                                <p>
+                                                    <span
+                                                        class="text-gray-700 mr-2 italic">{{ $publicacion['descripcion'] }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="text-gray-700 mr-2 italic">Hecho el:
+                                                        {{ $publicacion['fechaPublicacion'] }}</span>
+                                                </p>
+                                            </a>
+                                        @endforeach
+                                    @else
+                                        <div class="text-gray-700">
+                                            <p>El usuario no presenta publicaciones.</p>
+                                        </div>
+                                    @endif
 
-                                    </div>
-                                    <p>
-                                        <span class="text-gray-700 mr-2 italic">breve descripcion de 30 caracteres
-                                            max</span>
-                                    </p>
                                 </div>
                             </div>
                         </div>

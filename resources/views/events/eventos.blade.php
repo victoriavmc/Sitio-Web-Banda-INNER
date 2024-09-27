@@ -1,3 +1,4 @@
+<div id="mapa" class="w-96 h-96"></div>
 <x-AppLayout>
     <div class="p-10" style="background-color: #1c1b1b">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
@@ -37,10 +38,7 @@
                         </div>
                     </div>
                     {{-- Google Maps --}}
-                    <iframe class="w-full h-full"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.120652310013!2d-58.38611082363708!3d-34.60111047295533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccac630121623%3A0x53386f2ac88991a9!2sTeatro%20Col%C3%B3n!5e0!3m2!1ses-419!2sar!4v1727189966021!5m2!1ses-419!2sar"
-                        style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+
                 </div>
             @endforeach
         </div>

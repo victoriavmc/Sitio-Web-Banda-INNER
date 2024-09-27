@@ -85,7 +85,6 @@ class JobsController extends Controller
         foreach ($staffs as $staff) {
             // Recupero los detalles del staff
             $idStaffUsuario = $staff->usuarios_idusuarios;
-
             $nombrestaff = $staff->usuario->datosPersonales->nombreDP ?? 'Nombre no disponible';
             $apellidostaff = $staff->usuario->datosPersonales->apellidoDP ?? 'Apellido no disponible';
             $rol = $staff->tipoStaff->nombreStaff ?? 'Rol no disponible';
@@ -103,6 +102,7 @@ class JobsController extends Controller
 
             // Construyo un array con los detalles del staff
             $listaStaff[] = [
+                'id' => $idStaffUsuario,
                 'nombre' => $nombrestaff,
                 'apellido' => $apellidostaff,
                 'rol' => $rol,
