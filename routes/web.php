@@ -186,6 +186,16 @@ Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::clas
 
 //Ruta para eliminar la publicacion especifica
 Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])->name('eliminarContenido');
+
+// CREAR Comentario
+Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])->name('crearComentario');
+
+// MODIFICAR COMENTARIO
+Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])->name('modificarComentario');
+
+// ELIMINAR COMENTARIO
+Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])->name('eliminarComentario');
+
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS

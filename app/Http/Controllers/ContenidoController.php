@@ -15,6 +15,7 @@ use App\Models\Show;
 use App\Models\Usuario;
 
 #OTROS
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -190,38 +191,43 @@ class ContenidoController extends Controller
     #Comentarios
     public function comentariosActividad($idContent)
     {
-        #Comentarios entro a la tabla, para relacionar a la actividad que corresponde al contenido especifico
+        // Recuperar los comentarios relacionados con el contenido específico
         $comentarios = Comentarios::where('contenidos_idcontenidos', $idContent)->get();
 
-        # Array para almacenar la información de cada comentario
+        // Array para almacenar la información de cada comentario
         $resultadoComentarios = [];
-        #tengo que visualizar el comentario con las actividades que presenta cada una
+
+        // Recorrer cada comentario
         foreach ($comentarios as $comentario) {
-            #Recuperar idCadaComentarioIndivididual y quien realiza el comentario
-            $idUser = $comentario->Actividad_idActividad;
-            $idUser = Actividad::find($idUser);
-            $idUser = $idUser->usuarios_idusuarios;
-            $idRevisionImg = $comentario->revisionImagenes_idrevisionImagenescol;
+            // Recuperar el id de la actividad asociada al comentario
+            $idActividad = $comentario->Actividad_idActividad;
 
-            #Recuperar el usuario que comento:
-            $autorComentario = $this->usuarioAutor($idUser, 2);
+            // Obtener la actividad y el id del usuario que realizó el comentario
+            $actividad = Actividad::find($idActividad);
+            if ($actividad) {
+                $idUsuario = $actividad->usuarios_idusuarios; // Asegúrate de que esta relación es correcta
 
-            #Recuperar la imagen de la tabla Revision Imagenes
-            $rutaImagen = $this->ImagenesContenido($idRevisionImg, 2);
+                // Recuperar el autor del comentario
+                $autorComentario = $this->usuarioAutor($idUsuario, 2);
 
-            #Envio todos los datos de los comentarios toda el array de autor y el array de la imagen unica de ruta 
-            # Formar el array con la información completa del comentario
-            $resultadoComentarios[] = [
-                'comentario' => $comentario,         // Detalles del comentario
-                'autor' => $autorComentario['usuario'],  // Información del usuario que comentó
-                'imagenAutor' => $autorComentario['ruta_imagen'],  // Imagen de perfil del usuario
-                'imagenComentario' => $rutaImagen   // Imagen asociada al comentario (si existe)
-            ];
+                // Recuperar la imagen asociada al comentario
+                $idRevisionImg = $comentario->revisionImagenes_idrevisionImagenescol;
+                $rutaImagen = $this->ImagenesContenido($idRevisionImg, 2);
+
+                // Formar el array con la información completa del comentario
+                $resultadoComentarios[] = [
+                    'comentario' => $comentario,             // Detalles del comentario
+                    'autor' => $autorComentario['usuario'],   // Información del usuario que comentó
+                    'imagenAutor' => $autorComentario['ruta_imagen'], // Imagen de perfil del usuario
+                    'imagenComentario' => $rutaImagen         // Imagen asociada al comentario (si existe)
+                ];
+            }
         }
 
-        # Retornar los comentarios como una colección
+        // Retornar los comentarios como una colección
         return collect($resultadoComentarios);
     }
+
 
     #Solo Obtengo PUBLICACIONES DEL FORO-NOTICIAS-BIOGRAFIA
     public function getPublicaciones($dato)
@@ -716,5 +722,158 @@ class ContenidoController extends Controller
 
         // Redirigir a la función indexForo después de eliminar
         return redirect()->route('foro')->with('success', 'Contenido, actividad y comentarios eliminados con éxito.');
+    }
+
+    # Crear un nuevo comentario
+    public function crearComentario(Request $request, $idContent)
+    {
+        // Validar los datos
+        $request->validate([
+            'contenido' => 'nullable|string|max:500|required_without_all:imagen',
+            'imagen' => 'nullable|image|max:2048|required_without_all:contenido',
+        ]);
+
+        // Crear una nueva actividad
+        $actividad = new Actividad();
+        $actividad->save();
+
+        // Crear un nuevo comentario
+        $comentario = new Comentarios();
+        $comentario->fechaComent = now();
+        $comentario->descripcion = $request->contenido; // Asegúrate de usar 'contenido'
+        $comentario->Actividad_idActividad = $actividad->idActividad; // Asociar la actividad creada
+        $comentario->contenidos_idcontenidos = $idContent; // Asociar el contenido específico
+
+        // Manejo de imagen
+        if ($request->hasFile('imagen')) {
+            $imagen = new Imagenes();
+            $rutaImagen = $request->file('imagen')->store('imagenes', 'public');
+            $imagen->subidaImg = $rutaImagen;
+            $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
+            $imagen->save();
+
+            // Crear la revisión de la imagen
+            $revisionImagen = new RevisionImagenes();
+            $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
+            $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Supongamos que '5' es el tipo de foto para comentarios
+            $revisionImagen->save();
+
+            // Asociar la revisión de la imagen al comentario
+            $comentario->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
+        }
+
+        $comentario->save();
+
+        return redirect()->route('foroUnico', ['data' => $idContent])->with('success', 'Comentario agregado exitosamente.');
+    }
+
+    #Modificar un comentario especifico
+    public function modificarComentario(Request $request, $idComentario)
+    {
+        // Validar los datos
+        $request->validate([
+            'contenido' => 'nullable|string|max:500|required_without_all:imagen',
+            'imagen' => 'nullable|image|max:2048|required_without_all:contenido',
+        ]);
+
+        // Recuperar el comentario existente
+        $comentario = Comentarios::find($idComentario);
+
+        if (!$comentario) {
+            return redirect()->back()->with('error', 'Comentario no encontrado.');
+        }
+
+        // Actualizar el contenido del comentario
+        $comentario->descripcion = $request->contenido;
+
+        // Manejo de imagen
+        if ($request->hasFile('imagen')) {
+            // Solo eliminar la imagen anterior si se ha seleccionado una nueva
+            if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                $revisionImagen = RevisionImagenes::find($comentario->revisionImagenes_idrevisionImagenescol);
+                if ($revisionImagen && $revisionImagen->imagenes) { // Verifica que la imagen exista
+                    // Eliminar la imagen antigua
+                    Storage::disk('public')->delete($revisionImagen->imagenes->subidaImg);
+                    $revisionImagen->delete(); // También eliminar la revisión de imagen si es necesario
+                }
+            }
+
+            // Guardar la nueva imagen
+            $imagen = new Imagenes();
+            $rutaImagen = $request->file('imagen')->store('imagenes', 'public');
+            $imagen->subidaImg = $rutaImagen;
+            $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
+            $imagen->save();
+
+            // Crear la revisión de la nueva imagen
+            $revisionImagen = new RevisionImagenes();
+            $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
+            $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Supongamos que '5' es el tipo de foto para comentarios
+            $revisionImagen->save();
+
+            // Asociar la nueva revisión de la imagen al comentario
+            $comentario->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
+        }
+
+        // Si no se subió una nueva imagen, se mantendrá la imagen existente
+
+        $comentario->save();
+
+        return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('success', 'Comentario modificado exitosamente.');
+    }
+
+    #Eliminar Comentario
+    public function eliminarComentario($idComentario)
+    {
+        // Recuperar el comentario existente
+        $comentario = Comentarios::find($idComentario);
+
+        if (!$comentario) {
+            return redirect()->back()->with('error', 'Comentario no encontrado.');
+        }
+
+        // Almacenar la id de la actividad relacionada
+        $actividadId = $comentario->Actividad_idActividad;
+
+        // Manejo de la imagen y revisión de imagen
+        $revisionImagenId = $comentario->revisionImagenes_idrevisionImagenescol;
+
+        // Eliminar el comentario
+        $comentario->delete();
+
+        // Eliminar la actividad relacionada si existe
+        if ($actividadId) {
+            $actividad = Actividad::find($actividadId);
+            if ($actividad) {
+                $actividad->delete();
+            }
+        }
+
+        // Eliminar la revisión de imagen y la imagen asociada
+        if ($revisionImagenId) {
+            $revisionImagen = RevisionImagenes::find($revisionImagenId);
+            if ($revisionImagen) {
+                // Eliminar la revisión de la imagen
+                $revisionImagen->delete();
+
+                // Eliminar la imagen asociada
+                if ($revisionImagen->imagenes_idimagenes) {
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+
+                    if ($imagen) {
+                        // Eliminar la imagen del almacenamiento
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                        // Eliminar la imagen de la base de datos
+                        $imagen->delete();
+                    }
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Comentario eliminado exitosamente.');
     }
 }

@@ -1,11 +1,15 @@
 <x-AppLayout>
     <div class="bg-white flex justify-center items-center min-h-[86.5vh] flex-col">
+        {{-- Botón para modificar: solo el autor puede modificar --}}
         @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios)
             <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
-                class
-            ="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-
-            4 rounded">Modificar</a>
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+        @endif
 
+        {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
+        @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios ||
+                Auth::user()->rol->idrol == 1 ||
+                Auth::user()->rol->idrol == 2)
             <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
                 @csrf
@@ -103,34 +107,118 @@
             </div>
         </div>
         {{-- COMENTARIOS --}}
-        <div class="antialiased mx-auto max-w-screen-sm">
-            <h2 class="mb-4 text-lg font-semibold text-black">Comentarios</h2>
-            @if ($comentarios->isNotEmpty())
+        <h1 class="mb-4 text-black">Comentarios</h1>
+
+        <!-- Formulario para agregar un nuevo comentario -->
+        <div class="card-body text-black">
+            <form action="{{ route('crearComentario', $recuperoPublicacion->idcontenidos) }}" method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="form-group mb-3">
+                    <label for="contenido">Contenido del Comentario:</label>
+                    <textarea name="contenido" id="contenido" class="form-control" rows="3" placeholder="Escribe tu comentario..."></textarea>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="imagen">Subir Imagen (opcional):</label>
+                    <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control">
+                </div>
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                    Agregar Comentario
+                </button>
+            </form>
+        </div>
+
+        {{-- Mostrar los comentarios existentes --}}
+        <div class="card-body">
+            @if ($comentarios->isEmpty())
+                <p>No hay comentarios aún.</p>
+            @else
                 @foreach ($comentarios as $comentario)
                     <div class="space-y-4 mb-4">
                         <div class="flex">
-
                             <a href="{{ route('perfil-ajeno', $comentario['autor']->idusuarios) }}">
                                 <div class="flex-shrink-0 mr-3">
                                     <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
                                         src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
                                         alt="Usuario">
                                 </div>
-                                <div
-                                    class="flex-1 border rounded-lg text-black px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                                    <strong>{{ $comentario['autor']->usuarioUser }}</strong> <!-- Nombre de autor -->
                             </a>
-                            <span class="text-xs text-black">{{ $comentario['comentario']->fechaComent }}</span>
-                            <!-- Fecha del comentario -->
-                            <p class="text-sm text-black">
-                                {{ $comentario['comentario']->descripcion }} <!-- Descripción del comentario -->
-                            </p>
+                            <div class="flex-1 border rounded-lg text-black px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                                <strong>{{ $comentario['autor']->usuarioUser }}</strong>
+                                <span class="text-xs text-black">{{ $comentario['comentario']->fechaComent }}</span>
+                                <p class="text-sm text-black">{{ $comentario['comentario']->descripcion }}</p>
+
+                                <!-- Mostrar la imagen del comentario si existe -->
+                                @if (
+                                    !empty($comentario['imagenComentario']) &&
+                                        is_array($comentario['imagenComentario']) &&
+                                        count($comentario['imagenComentario']) > 0)
+                                    <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
+                                        class="mt-2 rounded-lg max-w-xs" alt="Imagen del comentario">
+                                @endif
+                            </div>
                         </div>
                     </div>
-        </div>
-        @endforeach
-        @endif
-    </div>
-    </div>
 
+                    {{-- MODIFICAR COMENTARIO SOLO MOSTRAR SI TOCA EL BOTON --}}
+                    @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios ||
+                            Auth::user()->rol->idrol == 1 ||
+                            Auth::user()->rol->idrol == 2)
+                        <div class="card-body text-black">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{ route('modificarComentario', $comentario['comentario']->idcomentarios) }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group mb-3">
+                                    <label for="contenido">Comentario:</label>
+                                    <textarea name="contenido" id="contenido" class="form-control" rows="3" placeholder="Escribe tu comentario...">{{ old('contenido', $comentario['comentario']->descripcion) }}</textarea>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="imagen">Subir Imagen (opcional):</label>
+                                    <input type="file" name="imagen" id="imagen" accept="image/*"
+                                        class="form-control">
+                                </div>
+
+                                <!-- Mostrar la imagen actual -->
+                                @if (!empty($comentario['imagenComentario']) && is_array($comentario['imagenComentario']))
+                                    <p>Imagen actual:</p>
+                                    <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
+                                        class="mt-2 rounded-lg max-w-xs" alt="Imagen actual">
+                                @endif
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                                    Modificar Comentario
+                                </button>
+                            </form>
+
+                            <!-- Botón para eliminar comentario -->
+                            <form action="{{ route('eliminarComentario', $comentario['comentario']->idcomentarios) }}"
+                                method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                    Eliminar Comentario
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endforeach
+            @endif
+        </div>
+
+    </div>
 </x-AppLayout>
