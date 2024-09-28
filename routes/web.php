@@ -164,13 +164,53 @@ Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('no
 
 // VER NOTICIAS POR UNIDAD
 Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])->name('noticiaUnica');
-#
+
+// Ruta para ver el formulario de crear noticias
+Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormularioNoticia'])->name('verFormularioNoticia');
+
+// Ruta para crear una nueva publicación
+Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
+
+// Ruta para mostrar el formulario de modificación
+Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+
+// Ruta para actualizar la publicación (este es el método POST)
+Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+
+//REPORTAR FORO PUBLICACION
+Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])->name('reportarActividad');
+
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO
 Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
 
 // VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
+
+// Ruta para ver el formulario
+Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])->name('verFormularioForo');
+
+// Ruta para crear la publicación
+Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
+
+// Ruta para mostrar el formulario de modificación
+Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+
+// Ruta para actualizar la publicación (este es el método POST)
+Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+
+//Ruta para eliminar la publicacion especifica
+Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])->name('eliminarContenido');
+
+// CREAR Comentario
+Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])->name('crearComentario');
+
+// MODIFICAR COMENTARIO
+Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])->name('modificarComentario');
+
+// ELIMINAR COMENTARIO
+Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])->name('eliminarComentario');
+
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS

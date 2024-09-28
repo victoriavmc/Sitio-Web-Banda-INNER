@@ -1,5 +1,6 @@
 <x-AppLayout title="Registro">
-    <div class="wrapper bg-center justify-center" style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
+    <div class="wrapper bg-center justify-center"
+        style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
         <div class="inner bg-black bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
@@ -105,6 +106,36 @@
                         <i class="zmdi zmdi-lock"></i>
                     </div>
 
+                    {{-- Agregado de Términos y Condiciones OFICIAL --}}
+                    <div class="flex flex-col items-start mt-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="terminos" name="terminos" required>
+                            <label for="terminos" class="ml-2">
+                                Acepto los
+                                <a href="{{ route('terminos-de-servicio') }}" target="_blank"
+                                    class="text-blue-500 underline">
+                                    Términos y Condiciones
+                                </a>
+                            </label>
+                        </div>
+                        <span class="text-red-500 mt-1" id="error-terminos" style="display: none;">Debe aceptar los
+                            términos y condiciones.</span>
+                    </div>
+                    <br>
+
+                    <script>
+                        document.querySelector('form').addEventListener('submit', function(event) {
+                            const checkbox = document.getElementById('terminos');
+                            const error = document.getElementById('error-terminos');
+
+                            if (!checkbox.checked) {
+                                event.preventDefault();
+                                error.style.display = 'block';
+                            } else {
+                                error.style.display = 'none';
+                            }
+                        });
+                    </script>
                     <!-- Botón de Registro -->
                     <div class="m-auto w-max">
                         <button type="submit" class="bn1">Registrarse

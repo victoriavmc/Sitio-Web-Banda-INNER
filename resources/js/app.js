@@ -143,8 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
 let map = L.map("mapa").setView([], 16);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

@@ -21,7 +21,7 @@
                 <ul class="text-lg text-black space-y-3">
                     <li>Registrate y podras tener:</li>
                     <li>- Acceso para leer contenido del foro</li>
-                    <li>- Reaccionar con "like" o "dislike" (sin poder comentar)</li>
+                    {{-- <li>- Reaccionar con "like" o "dislike" (sin poder comentar)</li> --}}
                     <li>- Descargar 3 imágenes exclusivas de fondo</li>
                     <li>- Descargar 1 canción disponible</li>
                 </ul>

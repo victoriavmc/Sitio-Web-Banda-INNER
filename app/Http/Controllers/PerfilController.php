@@ -253,6 +253,7 @@ class PerfilController extends Controller
             $imagen = new Imagenes();
             $imagen->subidaImg = $path;
             $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
             $imagen->save();
 
             $userId = $usuarioBD->idusuarios;
@@ -507,6 +508,10 @@ class PerfilController extends Controller
 
             $tipoRol = $otroUsuario->rol->rol;
 
+            if ($tipoRol == 'Staff') {
+                $nombreRol = $otroUsuario->staffExtra->tipoStaff->nombreStaff ?? 'Rol no disponible';
+            }
+
             // Busco la imagen de perfil
             $imagenPerfil = $this->buscarImagen($otroUsuario->idusuarios);
 
@@ -518,6 +523,7 @@ class PerfilController extends Controller
                 'usuarioUser' => $usuarioUser,
                 'nombreApellido' => $nombreApellido,
                 'tipoRol' => $tipoRol,
+                'nombreRol' => $nombreRol,
                 'imagen' => $imagenPerfil,
                 'comentariosConPublicacion' => $comentariosConPublicacion,
                 'publicaciones' => $publicaciones,
