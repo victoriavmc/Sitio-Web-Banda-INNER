@@ -29,4 +29,3 @@ class Actividad extends Model
         return $this->hasMany(Comentarios::class, 'Actividad_idActividad', 'idActividad');
     }
 }
-

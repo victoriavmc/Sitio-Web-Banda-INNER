@@ -1,4 +1,3 @@
-<div id="mapa" class="w-96 h-96"></div>
 <x-AppLayout>
     <div class="p-10" style="background-color: #1c1b1b">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
@@ -38,7 +37,7 @@
                         </div>
                     </div>
                     {{-- Google Maps --}}
-
+                    {{-- <div id="mapa" class="w-96 h-96"></div> --}}
                 </div>
             @endforeach
         </div>

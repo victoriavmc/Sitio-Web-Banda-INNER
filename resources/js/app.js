@@ -17,15 +17,15 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
-let map = L.map("mapa").setView([-26.174986, -58.168595], 16);
+document.getElementById('menu-toggle').addEventListener('click', function () {
+    const dropdown = document.getElementById('dropdown-menu');
+    dropdown.classList.toggle('hidden');
+});
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    L.marker([-26.174986, -58.168595]).addTo(map)
-        .bindPopup('Ubicaciòn Del Evento')
-        .openPopup();
+document.getElementById('perfil-toggle').addEventListener('click', function() {
+    const dropdownPerfil = document.getElementById('dropdown-perfil');
+    dropdownPerfil.classList.toggle('hidden');
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const alerts = document.querySelectorAll('.alert-fixed');
@@ -53,16 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-});
-
-document.getElementById('menu-toggle').addEventListener('click', function () {
-    const dropdown = document.getElementById('dropdown-menu');
-    dropdown.classList.toggle('hidden');
-});
-
-document.getElementById('perfil-toggle').addEventListener('click', function() {
-    const dropdownPerfil = document.getElementById('dropdown-perfil');
-    dropdownPerfil.classList.toggle('hidden');
 });
 
 // Alerta para eliminar tu cuenta
@@ -152,6 +142,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+
+let map = L.map("mapa").setView([], 16);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([]).addTo(map)
+        .bindPopup('Ubicaciòn Del Evento')
+        .openPopup();
 
 
 
