@@ -12,6 +12,7 @@ use App\Http\Controllers\PanelUsuariosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\SuperFanController;
+use App\View\Components\DividirContenidoExclusivo;
 
 
 #Modelo
