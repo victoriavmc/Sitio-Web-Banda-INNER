@@ -19,8 +19,10 @@
                      </div>
                  </div>
 
-                 <a class="bg-green-500 hover:bg-green-400 text-white text-base font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
-                     href="{{ route('verFormularioForo') }}">Crear Publicación</a>
+                 @if (Auth::check())
+                     <a class="bg-green-500 hover:bg-green-400 text-white text-base font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+                         href="{{ route('verFormularioForo') }}">Crear Publicación</a>
+                 @endif
 
              </div>
              @foreach ($recuperoPublicaciones as $publicacion)
