@@ -509,7 +509,9 @@ class PerfilController extends Controller
             $tipoRol = $otroUsuario->rol->rol;
 
             if ($tipoRol == 'Staff') {
-                $nombreRol = $otroUsuario->staffExtra->tipoStaff->nombreStaff ?? 'Rol no disponible';
+                $nombreRol = $otroUsuario->staffExtra->tipoStaff->nombreStaff ?? ' ';
+            } else {
+                $nombreRol = ' ';
             }
 
             // Busco la imagen de perfil

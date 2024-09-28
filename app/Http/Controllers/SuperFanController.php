@@ -10,6 +10,4 @@ class SuperFanController extends Controller
     {
         return view('content.superFan');
     }
-
-    # Selecciona cual visualiza si es un tercero o alguien registrado
 }
