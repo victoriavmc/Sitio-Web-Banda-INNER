@@ -1,6 +1,19 @@
 <x-AppLayout>
     <!-- Container -->
     <div class="bg-[#232125] min-h-[86.5vh] px-5 py-16 md:px-10 md:py-10">
+        {{-- Botón para modificar: solo el autor puede modificar --}}
+        @if ((Auth::user()->idusuarios == Auth::user()->rol->idrol) == 1 || Auth::user()->rol->idrol == 2)
+            <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+            {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
+            <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
+                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+            </form>
+        @endif
         <!-- Title -->
         <h2 class="text-center text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }} </h2>
         <br>

@@ -170,6 +170,14 @@ Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormulari
 
 // Ruta para crear una nueva publicación
 Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
+
+// Ruta para mostrar el formulario de modificación
+Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+
+// Ruta para actualizar la publicación (este es el método POST)
+Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+
+
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO
 Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
