@@ -142,8 +142,8 @@
                         {{-- </form> --}}
                     </div>
                 </div>
-                {{-- En caso de ser 3 --}}
-            @elseif (Auth::user()->rol->idrol == 3)
+                {{-- En caso de ser 4 --}}
+            @elseif (Auth::user()->rol->idrol == 4)
                 <div class="grid grid-cols-2 gap-4  z-10 relative">
 
                     {{-- Lado Izquierdo Descargas --}}
@@ -237,8 +237,8 @@
                         </div>
                     </div>
                 </div>
-                {{-- En caso de ser 4 --}}
-            @elseif (Auth::user()->rol->idrol == 4)
+                {{-- En caso de ser 3 --}}
+            @elseif (Auth::user()->rol->idrol == 3)
                 <div class="grid grid-cols-2 gap-4  z-10 relative">
 
                     {{-- Lado Izquierdo Descargas --}}
