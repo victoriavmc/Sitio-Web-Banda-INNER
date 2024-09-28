@@ -241,12 +241,23 @@ class ContenidoController extends Controller
     # ENVIO A LA VISTA LAS PUBLICACIONES DEL FORO
     public function indexForo()
     {
-        #Recupero solo publicaciones Foro
+        // Recupero solo publicaciones Foro
         $recuperoPublicaciones = $this->contenidosReducidos(1);
-        $recuperoLikes = $this->contadorEstrellasVisual();
-        $comentarios = $this->contadorComentarios();
+
+        // Si no hay publicaciones, inicializo las variables correspondientes
+        if ($recuperoPublicaciones->isEmpty()) {
+            $recuperoLikes = []; // o null, dependiendo de cómo manejes los likes
+            $comentarios = [];    // o null, dependiendo de cómo manejes los comentarios
+        } else {
+            // Si hay publicaciones, continuo con la lógica
+            $recuperoLikes = $this->contadorEstrellasVisual();
+            $comentarios = $this->contadorComentarios();
+        }
+
+        // Retorno la vista con los datos
         return view('/content/forum/foro', compact('recuperoPublicaciones', 'recuperoLikes', 'comentarios'));
     }
+
 
     # VER PUNTUACIONES DEL FORO
     public function contadorEstrellas()
@@ -552,10 +563,6 @@ class ContenidoController extends Controller
                 #Si es noticias
                 return redirect()->route('noticias')->with('success', 'Noticia creada con éxito.');
                 break;
-            case 3:
-                #Si es biografia
-                return redirect()->route('biografia')->with('success', 'Biografia creada con éxito.');
-                break;
         }
     }
 
@@ -565,6 +572,11 @@ class ContenidoController extends Controller
         return view('content.forum.foropublicaciones');
     }
 
+    #VER FORMULARIO CREAR PUBLICACIONES
+    public function verFormularioNoticia()
+    {
+        return view('content.news.crearnoticias');
+    }
     #MODIFICAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
     public function modificarP(Request $request, $id)
     {
@@ -640,8 +652,15 @@ class ContenidoController extends Controller
         // Obtener el tipo de contenido
         $tipoContenido = $contenido->tipoContenido_idtipoContenido; // 1: Foro, 2: Noticias, 3: Biografía
 
-        // Pasar el contenido, imágenes, tipo de contenido y el ID a la vista
-        return view('content.forum.foromodificar', compact('contenido', 'imagenes', 'tipoContenido'));
+        // Redirigir según el tipo de contenido
+        switch ($contenido->tipoContenido_idtipoContenido) {
+            case 1:
+                return view('content.forum.foromodificar', compact('contenido', 'imagenes', 'tipoContenido'));
+            case 2:
+                return view('content.news.noticiasmodificar', compact('contenido', 'imagenes', 'tipoContenido'));
+            case 3:
+                return view('content.history.modificarbiografia', compact('contenido', 'imagenes', 'tipoContenido'));
+        }
     }
 
     // Método para eliminar contenido
@@ -658,6 +677,9 @@ class ContenidoController extends Controller
 
         // Eliminar los comentarios asociados
         foreach ($comentarios as $comentario) {
+            // Eliminar el comentario
+            $comentario->delete();
+
             // Si el comentario tiene una revisión de imagen asociada
             if ($comentario->revisionImagenes_idrevisionImagenescol) {
                 // Obtener la revisión de imagen asociada al comentario
@@ -675,9 +697,6 @@ class ContenidoController extends Controller
                     }
                 }
             }
-
-            // Eliminar el comentario
-            $comentario->delete();
         }
 
         // Obtener las imágenes de contenido asociadas
@@ -719,9 +738,13 @@ class ContenidoController extends Controller
         if ($actividad->contenidos()->count() === 0) {
             $actividad->delete(); // Eliminar la actividad si no tiene contenidos relacionados
         }
-
-        // Redirigir a la función indexForo después de eliminar
-        return redirect()->route('foro')->with('success', 'Contenido, actividad y comentarios eliminados con éxito.');
+        // Redirigir según el tipo de contenido
+        switch ($contenido->tipoContenido_idtipoContenido) {
+            case 1:
+                return redirect()->route('foro')->with('success', 'Contenidos con sus respectivos comentarios y imagenes eliminados con éxito.');
+            case 2:
+                return redirect()->route('noticias')->with('success', 'Contenido de la Noticias y sus imagenes eliminados con éxito.');
+        }
     }
 
     # Crear un nuevo comentario

@@ -164,7 +164,12 @@ Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('no
 
 // VER NOTICIAS POR UNIDAD
 Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])->name('noticiaUnica');
-#
+
+// Ruta para ver el formulario de crear noticias
+Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormularioNoticia'])->name('verFormularioNoticia');
+
+// Ruta para crear una nueva publicación
+Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO
 Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');

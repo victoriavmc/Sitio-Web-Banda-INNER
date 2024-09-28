@@ -1,6 +1,10 @@
 <x-AppLayout>
     <div class="bg-cover bg-center w-full p-10" style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
         <ul class="grid grid-cols-1 xl:grid-cols-3 gap-y-10 gap-x-6 items-start p-8">
+            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                <a href="{{ route('verFormularioNoticia') }}"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Noticia</a>
+            @endif
 
             @foreach ($recuperoNoticias as $noticia)
                 <div class='bg-white opacity-95 rounded-lg p-4 flex'>
@@ -10,7 +14,8 @@
                                 <!-- Enlace en la imagen -->
                                 <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
                                     @if ($noticia->imagenes && count($noticia->imagenes) > 0)
-                                        <img src="{{ asset(Storage::url($noticia->imagenes[0])) }}" alt="ImagenPrincipal"
+                                        <img src="{{ asset(Storage::url($noticia->imagenes[0])) }}"
+                                            alt="ImagenPrincipal"
                                             class="mb-6 shadow-md rounded-lg bg-slate-50 max-w-96 max-h-96">
                                     @else
                                         <img src="{{ asset('img/logo_inner_negro.png') }}" alt="ImagenPrincipal"
