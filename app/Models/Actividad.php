@@ -35,7 +35,7 @@ class Actividad extends Model
     {
         // Este evento se ejecuta justo antes de que se cree un nuevo registro
         static::creating(function ($actividad) {
-            // Asignar valores por defecto si no se han establecido
+            // Asignar valores por defecto si no se han establecido ESTO ELIMINAR DESPUES
             $actividad->contadorMg = $actividad->contadorMg ?? 0;
             $actividad->contadorNM = $actividad->contadorNM ?? 0;
             $actividad->reporte = $actividad->reporte ?? 0;
@@ -46,22 +46,8 @@ class Actividad extends Model
         });
     }
 
-    // Método para reportar
-    public function reportar()
+    public function interacciones()
     {
-        $this->increment('reporte');
-        $this->actualizarReportes();
-    }
-
-    // Método para actualizar la tabla de reportes
-    protected function actualizarReportes()
-    {
-        $usuarioId = $this->usuarios_idusuarios;
-
-        // Buscar el registro en la tabla reportes para el usuario
-        $reporte = Redsocial::where('usuarios_idusuarios', $usuarioId)->first();
-
-        // Si ya existe, simplemente incrementamos el contador de reportes
-        $reporte->increment('reportes');
+        return $this->hasMany(interacciones::class);
     }
 }

@@ -228,7 +228,7 @@
                             Precio: $16
                         </p>
                         <div class="flex justify-center">
-                            <a href={{ route('login') }} class='text-black'>
+                            <a href={{ route('underConstruction') }} class='text-black'>
                                 <button
                                     class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                     ¡Accede a Contenido Premium!
