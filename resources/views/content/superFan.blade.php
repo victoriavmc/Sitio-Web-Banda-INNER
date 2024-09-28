@@ -142,8 +142,8 @@
                         {{-- </form> --}}
                     </div>
                 </div>
-                {{-- En caso de ser 3 --}}
-            @elseif (Auth::user()->rol->idrol == 3)
+                {{-- En caso de ser 4 --}}
+            @elseif (Auth::user()->rol->idrol == 4)
                 <div class="grid grid-cols-2 gap-4  z-10 relative">
 
                     {{-- Lado Izquierdo Descargas --}}
@@ -228,7 +228,7 @@
                             Precio: $16
                         </p>
                         <div class="flex justify-center">
-                            <a href={{ route('login') }} class='text-black'>
+                            <a href={{ route('underConstruction') }} class='text-black'>
                                 <button
                                     class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                     ¡Accede a Contenido Premium!
@@ -237,8 +237,8 @@
                         </div>
                     </div>
                 </div>
-                {{-- En caso de ser 4 --}}
-            @elseif (Auth::user()->rol->idrol == 4)
+                {{-- En caso de ser 3 --}}
+            @elseif (Auth::user()->rol->idrol == 3)
                 <div class="grid grid-cols-2 gap-4  z-10 relative">
 
                     {{-- Lado Izquierdo Descargas --}}

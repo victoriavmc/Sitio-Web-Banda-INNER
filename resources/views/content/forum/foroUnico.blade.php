@@ -126,25 +126,29 @@
             <h1 class="mb-4 text-black">Comentarios</h1>
 
             <!-- Formulario para agregar un nuevo comentario -->
-            <div class="card-body text-black">
-                <form action="{{ route('crearComentario', $recuperoPublicacion->idcontenidos) }}" method="POST"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group mb-3">
-                        <label for="contenido">Contenido del Comentario:</label>
-                        <textarea name="contenido" id="contenido" class="form-control" rows="3" placeholder="Escribe tu comentario..."></textarea>
-                    </div>
+            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2 || Auth::user()->rol->idrol == 3)
+                <div class="card-body text-black">
+                    <form action="{{ route('crearComentario', $recuperoPublicacion->idcontenidos) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <label for="contenido">Contenido del Comentario:</label>
+                            <textarea name="contenido" id="contenido" class="form-control" rows="3" placeholder="Escribe tu comentario..."></textarea>
+                        </div>
 
-                    <div class="form-group mb-3">
-                        <label for="imagen">Subir Imagen (opcional):</label>
-                        <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control">
-                    </div>
-                    <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                        Agregar Comentario
-                    </button>
-                </form>
-            </div>
+                        <div class="form-group mb-3">
+                            <label for="imagen">Subir Imagen (opcional):</label>
+                            <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control">
+                        </div>
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                            Agregar Comentario
+                        </button>
+                    </form>
+                </div>
+            @endif
+
+
 
             {{-- Mostrar los comentarios existentes --}}
             <div class="card-body">
@@ -222,7 +226,9 @@
                                 </form>
                             </div>
                         @endif
-                        @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                        @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios ||
+                                Auth::user()->rol->idrol == 1 ||
+                                Auth::user()->rol->idrol == 2)
                             <!-- Botón para eliminar comentario -->
                             <form action="{{ route('eliminarComentario', $comentario['comentario']->idcomentarios) }}"
                                 method="POST" style="display:inline;">
