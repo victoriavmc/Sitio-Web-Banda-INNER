@@ -33,21 +33,17 @@
                                             {{ $nombreApellido }}
                                         </h1>
                                         <p class="text-gray-700">{{ $usuarioUser }}</p>
-                                        <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                                        {{-- <div class="mt-6 flex flex-wrap gap-4 justify-center">
                                             <a href="#"
                                                 class="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded">Reportar</a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <hr class="my-6 border-t border-gray-300">
-                                    <div class="flex flex-col">
-                                        <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Contenido
-                                            Descargable
-                                            como {{ $tipoRol }}</span>
-                                        <ul>
-                                            <li class="mb-2">Escuchar</li>
-                                            <li class="mb-2">Fondos</li>
-                                            <li class="mb-2">Premium</li>
-                                        </ul>
+                                    <div class='flex text-black flex-col items-center'>
+                                        <p>{{ $tipoRol }}</p>
+                                        @if ($tipoRol == 'Staff' || $tipoRol == 'Admin')
+                                            <p>{{ $nombreRol }}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

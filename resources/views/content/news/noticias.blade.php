@@ -1,11 +1,12 @@
 <x-AppLayout>
     <div class="bg-cover bg-center w-full p-10" style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
         <ul class="grid grid-cols-1 xl:grid-cols-3 gap-y-10 gap-x-6 items-start p-8">
-            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                <a href="{{ route('verFormularioNoticia') }}"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Noticia</a>
-            @endif
-
+            @auth
+                @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                    <a href="{{ route('verFormularioNoticia') }}"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Noticia</a>
+                @endif
+            @endauth
             @foreach ($recuperoNoticias as $noticia)
                 <div class='bg-white opacity-95 rounded-lg p-4 flex'>
                     <div class="flex flex-col sm:flex-row xl:flex-col items-start">

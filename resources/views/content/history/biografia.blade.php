@@ -12,10 +12,12 @@
                     <div class="bg-white relative top-0 -mt-32 p-5 sm:p-10">
                         <h1 class="text-black font-bold text-center text-8xl mb-2">{{ $biografia->titulo }}
                         </h1>
-                        @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                            <a href="{{ route('editarP', $biografia->idcontenidos) }}"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
-                        @endif
+                        @auth
+                            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                                <a href="{{ route('editarP', $biografia->idcontenidos) }}"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+                            @endif
+                        @endauth
                         <p class="text-base text-black leading-8 my-5">{{ $biografia->descripcion }}
                         </p>
                     </div>
