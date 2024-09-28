@@ -177,6 +177,8 @@ Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'ed
 // Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
 
+//REPORTAR FORO PUBLICACION
+Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])->name('reportarActividad');
 
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO

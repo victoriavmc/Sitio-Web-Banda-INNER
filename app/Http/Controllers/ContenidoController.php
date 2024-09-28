@@ -899,4 +899,16 @@ class ContenidoController extends Controller
 
         return redirect()->back()->with('success', 'Comentario eliminado exitosamente.');
     }
+
+    # Los likes y dislike solo afectan al foro y comentario
+    # Cada contenido//comentario presenta su propia Actividad. Donde en actividad se registra la cantidad de likes, dislikes y reportes. Segun el boton debe de agregar reporte,likes o dislikes a la actividad especifica
+    #AGREGAR NUEVA TABLA
+
+    #Agregar Reporte
+    public function reportarActividad($idActividad)
+    {
+        $actividad = Actividad::findOrFail($idActividad);
+        $actividad->reportar();
+        return redirect()->back()->with('success', 'Actividad reportada.');
+    }
 }

@@ -45,4 +45,23 @@ class Actividad extends Model
             }
         });
     }
+
+    // Método para reportar
+    public function reportar()
+    {
+        $this->increment('reporte');
+        $this->actualizarReportes();
+    }
+
+    // Método para actualizar la tabla de reportes
+    protected function actualizarReportes()
+    {
+        $usuarioId = $this->usuarios_idusuarios;
+
+        // Buscar el registro en la tabla reportes para el usuario
+        $reporte = Redsocial::where('usuarios_idusuarios', $usuarioId)->first();
+
+        // Si ya existe, simplemente incrementamos el contador de reportes
+        $reporte->increment('reportes');
+    }
 }
