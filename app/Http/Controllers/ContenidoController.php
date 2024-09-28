@@ -520,10 +520,11 @@ class ContenidoController extends Controller
         $contenido->save();
 
         // Manejar la carga de las imágenes, si se proporcionan
+        // Manejar la carga de las imágenes, si se proporcionan
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
-                // Almacenar la imagen en public/storage/img
-                $path = $imageFile->store('public/img'); // Guardar en public/storage/img
+                // Almacenar la imagen en public/storage/img usando $imageFile
+                $path = $imageFile->store('img', 'public'); // Guardar en public/storage/img
 
                 // Guardar la ruta correcta en la base de datos
                 $imagen = new Imagenes();
@@ -532,7 +533,7 @@ class ContenidoController extends Controller
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
 
-                //Relacionar con RevisionImagenes y con ImagenesContenido
+                // Relacionar con RevisionImagenes y con ImagenesContenido
 
                 // Crear relación con revisionImagenes
                 $revisionImagen = new RevisionImagenes();
@@ -552,6 +553,7 @@ class ContenidoController extends Controller
                 $imagenContenido->save();
             }
         }
+
 
         #Switch primero para separar que tipo de contenido es y redirigir
         switch ($type) {
@@ -599,7 +601,7 @@ class ContenidoController extends Controller
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
                 // Almacenar la imagen en public/storage/img
-                $path = $imageFile->store('public/img'); // Guardar en public/storage/img
+                $path = $imageFile->store('img', 'public'); // Guardar en public/storage/img
 
                 // Guardar la ruta correcta en la base de datos
                 $imagen = new Imagenes();
@@ -679,17 +681,21 @@ class ContenidoController extends Controller
         foreach ($comentarios as $comentario) {
             // Eliminar el comentario
             $comentario->delete();
-
             // Si el comentario tiene una revisión de imagen asociada
             if ($comentario->revisionImagenes_idrevisionImagenescol) {
                 // Obtener la revisión de imagen asociada al comentario
                 $revisionImagen = RevisionImagenes::find($comentario->revisionImagenes_idrevisionImagenescol);
+
                 if ($revisionImagen) {
                     // Obtener la imagen asociada a la revisión
                     $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
 
                     // Eliminar la revisión de imagen
                     $revisionImagen->delete();
+
+                    if ($imagen && Storage::exists($imagen->subidaImg)) {
+                        Storage::delete($imagen->subidaImg);
+                    }
 
                     // Eliminar la imagen si existe
                     if ($imagen) {

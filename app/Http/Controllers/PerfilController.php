@@ -249,7 +249,7 @@ class PerfilController extends Controller
         $usuarioBD = $this->identificaUsername();
 
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('public/img');
+            $path = $request->file('imagen')->store('img', 'public');
             $imagen = new Imagenes();
             $imagen->subidaImg = $path;
             $imagen->fechaSubidaImg = now();
