@@ -2,7 +2,7 @@
     <div class="max-w-screen-xl mx-auto p-5 sm:p-10 h-[86.5vh]">
         <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-20">
             @foreach ($listaArtistas as $artista)
-                <a href="{{ $artista['link'] }}" class="flex" target="_blank">
+                <a href="{{ $artista['link'] }}" class="flex gap-2" target="_blank">
                     <div class="rounded-lg shadow-md">
                         <h1 class="text-lg font-bold mb-2 uppercase">
                             @foreach (str_split($artista['nombre']) as $letra)
