@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AlbumVideo extends Model
 {
-    protected $table = 'albumVideo';
+    protected $table = 'albumvideo';
     protected $primaryKey = 'idalbumVideo';
     public $timestamps = false;
 

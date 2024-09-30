@@ -16,7 +16,7 @@ class StaffExtra extends Model
     // Traigo las claves foraneas de redes y usuarios
     public function redessociales()
     {
-        return $this->belongsTo(redessociales::class, 'redesSociales_idredesSociales', 'idredesSociales');
+        return $this->belongsTo(RedesSociales::class, 'redesSociales_idredesSociales', 'idredesSociales');
     }
     public function usuario()
     {

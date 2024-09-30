@@ -71,7 +71,7 @@ class JobsController extends Controller
             ];
         }
         // Retornar a la vista
-        return view('/content/job/artistas', compact('listaArtistas'));
+        return view('content.job.artistas', compact('listaArtistas'));
     }
 
     #Mostrar indexStaff
@@ -111,6 +111,6 @@ class JobsController extends Controller
             ];
         }
         // Retornar a la vista después de procesar todos los staffs
-        return view('/content/job/Staff', compact('listaStaff'));
+        return view('content.job.staff', compact('listaStaff'));
     }
 }

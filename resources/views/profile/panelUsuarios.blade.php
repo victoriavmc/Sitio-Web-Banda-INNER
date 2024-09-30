@@ -10,9 +10,9 @@
         </x-alerts>
     @endif
 
-    <div class="flex flex-col justify-center items-center bg-white h-[85.5vh]">
+    <div class="flex flex-col bg-white min-h-[85.5vh]">
         <div
-            class="mx-auto flex w-full flex-col px-5 pt-0 md:h-[unset] md:max-w-[95%] lg:h-[100vh] lg:max-w-[70%] lg:px-6 xl:pl-0 mt-10">
+            class="mx-auto mb-10 flex w-full flex-col px-5 pt-0 md:h-[unset] md:max-w-[95%] lg:h-[100vh] lg:max-w-[70%] lg:px-6 xl:pl-0 mt-10">
             <div class="h-min w-full rounded-lg">
                 <form class="flex items-center max-w-sm my-2" method="GET" action="{{ route('panel-de-usuarios') }}">
                     <label for="simple-search" class="sr-only">Buscar</label>

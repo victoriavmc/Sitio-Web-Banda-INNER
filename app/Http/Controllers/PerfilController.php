@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Actividad;
 use App\Models\Contenidos;
 use App\Models\DatosPersonales;
-use App\Models\imagenes;
+use App\Models\Imagenes;
 use App\Models\Paisnacimiento;
 use App\Models\RevisionImagenes;
 use App\Models\Usuario;
