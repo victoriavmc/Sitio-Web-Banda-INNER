@@ -27,11 +27,11 @@
                 @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
                     <!-- Mostrar la primera imagen de la lista -->
                     <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
-                        class="w-full h-72 inline-block object-cover">
+                        class="w-full h-full inline-block object-cover">
                 @else
                     <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                        class="w-full h-72 inline-block object-cover">
+                        class="w-full h-full inline-block object-cover">
                 @endif
                 {{-- EN CASO DE QUE HAYA IMÁGENES --}}
                 @if (count($listaPublicacionConImg) > 1)

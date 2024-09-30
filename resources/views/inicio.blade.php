@@ -130,7 +130,7 @@
     </div>
 
     {{-- NOTICIAS Y FORO --}}
-    <div class="min-h-[86vh] bg-cover flex justify-center font-amsterdam items-center bg-center"
+    <div class="min-h-[86vh] bg-cover p-10 flex justify-center font-amsterdam items-center bg-center"
         style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
         <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] xl:w-[70%] flex flex-col gap-8">
             <div class="lg:flex gap-8">
@@ -143,21 +143,22 @@
                         {{-- NOTICIAS --}}
                         @foreach ($noticias as $noticia)
                             <div class="bg-white rounded-xl shadow-lg p-4">
-                                <div class="relative overflow-hidden rounded-xl">
-                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
+                                <div class="relative overflow-hidden rounded-xl mb-2">
+                                    <a class="flex justify-center"
+                                        href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
                                         @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
                                             <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
                                                 alt="Imagen de {{ $noticia->titulo }}"
-                                                class="object-cover w-full h-48" />
+                                                class="object-cover w-48 h-48 object-center" />
                                         @else
                                             <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                                class="object-cover w-full h-48" />
+                                                class="object-cover w-full h-48 object-center" />
                                         @endif
                                     </a>
                                 </div>
-                                <div class="p-4">
+                                <div class="">
                                     <p class="text-sm font-semibold text-gray-700">{{ $noticia->fechaSubida }}</p>
-                                    <a href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
+                                    <a class="w-full" href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
                                         class="block text-xl font-semibold text-blue-gray-900 mt-2 hover:text-black">
                                         {{ $noticia->titulo }}
                                     </a>

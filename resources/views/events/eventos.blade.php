@@ -25,7 +25,7 @@
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
                             @if (now() < $show->fechashow)
-                                <a href="{{ $show->linkCompraEntrada }}" target="_blank">
+                                <a href="https://www.instagram.com/direct/t/117977966259675/" target="_blank">
                                     <button class="boton-vermas">
                                         <p>Adquirir Entrada</p>
                                     </button>
