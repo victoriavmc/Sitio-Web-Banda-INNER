@@ -1,26 +1,29 @@
-<form action="{{ route('crearP', $action) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    {{-- Título --}}
-    <div class="form-wrapper mb-4">
-        <label for="titulo" class="form-label text-black">Título</label>
-        <input type="text" name="titulo" placeholder="titulo"
-            class="form-control pl-0 text-black bg-black bg-opacity-0">
-    </div>
-    <!-- Descripción -->
-    <div class="form-wrapper mb-4 font-urbanist">
-        <label for="descripcion" class="form-label text-black">Descripción</label>
-        <textarea type="text" name="descripcion" placeholder="descripcion"
-            class="form-control pl-0 text-black bg-black bg-opacity-0"></textarea>
-    </div>
-    <!-- Imagen/es -->
-    <div class="form-wrapper mb-4">
-        <label for="image" class="form-label text-black">Imagen/es (* Es opcional, pero la primera es para la
-            portada)</label>
-        <input type="file" name="imagen[]" class="form-control pl-0 text-black bg-black bg-opacity-0" multiple>
-    </div>
-    <!-- Botón de Crear Publicación -->
-    <div class="m-auto w-max">
-        <button type="submit"
-            class="px-6 py-2 bg-indigo-500 text-black font-semibold rounded-md hover:bg-indigo-600 focus:outline-none">Enviar</button>
-    </div>
-</form>
+<div class="flex justify-center">
+    <form action="{{ route('crearP', $action) }}" method="POST" enctype="multipart/form-data"
+        class="border-2 border-black p-4 rounded-xl">
+        @csrf
+        <div class="flex flex-col gap-4">
+            {{-- Título --}}
+            <div class="flex flex-col gap-1">
+                <label for="titulo" class="font-semibold text-lg">Título</label>
+                <input type="text" name="titulo" placeholder="titulo" class="rounded-xl">
+            </div>
+            <!-- Descripción -->
+            <div class="flex flex-col gap-1 font-urbanist">
+                <label for="descripcion" class="font-semibold text-lg">Descripción</label>
+                <textarea type="text" name="descripcion" placeholder="descripcion"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <!-- Imagen/es -->
+            <div class="flex flex-col gap-1">
+                <label for="image" class="font-semibold text-lg">Imagen/es (* Es opcional, pero la primera es para la
+                    portada)</label>
+                <input type="file" name="imagen[]" class="rounded-xl" multiple>
+            </div>
+            <!-- Botón de Crear Publicación -->
+            <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">Enviar
+            </button>
+        </div>
+    </form>
+</div>

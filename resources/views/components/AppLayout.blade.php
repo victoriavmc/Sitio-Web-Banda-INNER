@@ -5,9 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @if ($login ?? false)
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -16,6 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
         integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css">
     <link rel="icon" href="{{ asset('img/logo_perropepsi.ico') }}" />
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
     <title>INNER</title>
@@ -71,7 +69,7 @@
             </ul>
 
             <!-- Ícono usuario a la derecha -->
-            <div class="absolute flex items-center right-4 mr-6 sm:mr-20 z-10">
+            <div class="absolute flex items-center right-4 mr-6 sm:mr-20 z-30">
                 @if ($isAuthenticated)
                     <button id="perfil-toggle">
                         <img type="button" class="w-10 h-10 rounded-full cursor-pointer bg-white border-white"
@@ -88,7 +86,7 @@
             <!-- Dropdown menu -->
             @if ($isAuthenticated)
                 <div id="dropdown-perfil"
-                    class="hidden absolute right-0 text-left top-12 mt-7 mr-9 w-40 divide-y rounded-lg shadow bg-black opacity-80 divide-gray-600 z-20">
+                    class="hidden absolute right-0 text-left top-12 mt-7 mr-9 w-40 divide-y rounded-lg shadow bg-black opacity-80 divide-gray-600 z-40">
                     <div class="px-4 py-3 text-sm font-bold text-white">
                         <div><span class="text-white">{{ $nombreUsuario }}</span></div>
                     </div>
@@ -115,8 +113,8 @@
             @endif
 
             <!-- Botón desplegable para pantallas menores a 1280px -->
-            <div class="xl:hidden flex items-center absolute ml-5 sm:ml-20 left-4 z-10">
-                <button id="menu-toggle" class="text-gray-400 hover:text-white focus:outline-none">
+            <div class="xl:hidden flex items-center absolute ml-5 sm:ml-20 left-4 z-30">
+                <button id="menu-toggle" class=" text-gray-400 hover:text-white focus:outline-none z-30">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:w-8 sm:h-8" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -127,7 +125,7 @@
         </nav>
 
         <!-- Menú desplegable (oculto por defecto) -->
-        <div id="dropdown-menu" class="hidden font-amsterdam text-left border-t border-gray-600 text-gray-300">
+        <div id="dropdown-menu" class="hidden font-amsterdam text-left border-t border-gray-600 text-gray-300 z-40">
             <ul class="flex flex-col ml-10 mt-4 mb-4 gap-4 text-xl">
                 <li class="transition-colors duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('inicio') }}">Inicio</a>
@@ -248,18 +246,40 @@
     </footer>
 
 
-    @if ($login ?? false)
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    @endif
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
 </body>
+
+@if ($login ?? false)
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+@endif
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    // Mostrar/ocultar el menú al hacer clic en el botón
+    menuToggle.addEventListener('click', function(event) {
+        dropdownMenu.classList.toggle('hidden');
+        event.stopPropagation(); // Prevenir que el clic se propague al documento
+    });
+
+    // Cerrar el menú si se hace clic fuera de él
+    document.addEventListener('click', function(event) {
+        const isClickInsideMenu = dropdownMenu.contains(event.target) || menuToggle.contains(event
+            .target);
+
+        if (!isClickInsideMenu) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+</script>
 
 </html>

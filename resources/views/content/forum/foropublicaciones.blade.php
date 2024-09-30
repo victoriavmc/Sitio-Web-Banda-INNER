@@ -1,6 +1,6 @@
 <x-AppLayout>
-    <div class='bg-cover container bg-white'>
-        <h1 class="font-bold deepshadow mb-4 text-black">Crear Publicación de Foro</h1>
+    <div class="flex flex-col gap-7 justify-center bg-white min-h-[85.5vh] text-black">
+        <h1 class="text-center text-4xl">Crear Publicación de Foro</h1>
         <x-crear-publicacion :action="1"></x-crear-publicacion>
     </div>
 </x-AppLayout>

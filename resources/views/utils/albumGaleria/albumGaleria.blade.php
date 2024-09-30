@@ -1,22 +1,22 @@
 <x-AppLayout>
-    <div class="bg-white bg-cover">
-        <div class="container  mx-auto py-10">
+    <div class="bg-white min-h-[85.5vh] p-10 bg-cover">
+        <div class="text-center">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Columna 1 -->
-                <div class="bg-gray-600 p-6 shadow-md rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">
+                {{-- <div class="bg-gray-600 p-6 shadow-md rounded-lg">
+                    <h2 class="text-xl font-bold">
                         <a class="hover:animate-pulse" href="#album-imagenes">Imágenes Exclusivas</a>
                     </h2>
-                </div>
+                </div> --}}
                 <!-- Columna 2 -->
-                <div class="bg-gray-600 p-6 shadow-md rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">
+                {{-- <div class="bg-gray-600 p-6 shadow-md rounded-lg">
+                    <h2 class="text-xl font-bold">
                         <a class="hover:animate-pulse" href="#album-videos-exclusivos">Videos Exclusivos</a>
                     </h2>
-                </div>
+                </div> --}}
                 <!-- Columna 3 -->
                 <div class="bg-gray-600 p-6 shadow-md rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">
+                    <h2 class="text-xl font-bold">
                         <a class="hover:animate-pulse" href="#album-videos-oficiales">Videos Oficiales</a>
                     </h2>
                 </div>
@@ -24,7 +24,7 @@
         </div>
 
         {{-- Album de Imagenes --}}
-        <section id="album-imagenes">
+        {{-- <section id="album-imagenes">
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Imágenes Exclusivas</h2>
                 <div class="mx-auto grid justify-items-stretch gap-4 md:grid-cols-2 lg:gap-10">
@@ -42,10 +42,10 @@
 
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         {{-- Album de Videos Exclusivos --}}
-        <section id="album-videos-exclusivos">
+        {{-- <section id="album-videos-exclusivos">
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Videos Exclusivos</h2>
                 <div class="mx-auto grid justify-items-stretch gap-4 md:grid-cols-2 lg:gap-10">
@@ -62,23 +62,30 @@
                     @endforeach
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         {{-- Album Videos Oficiales --}}
         <section id="album-videos-oficiales">
-            <div class="p-5 sm:p-8">
-                <h2 class="text-center text-3xl font-bold md:text-5xl">Videos Oficiales</h2>
+            <div class="mt-10">
+                <div class="flex flex-col gap-5">
+                    <h2 class="text-center text-3xl font-bold md:text-5xl">Videos Oficiales</h2>
 
-                {{-- Botón para actualizar videos --}}
-                <div class="text-center mb-5">
-                    <form action="{{ route('actualizarYt') }}" method="POST">
-                        @csrf <!-- Asegúrate de incluir el token CSRF -->
-                        <button type="submit"
-                            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
-                            Actualizar Videos
-                        </button>
-                    </form>
+                    {{-- Botón para actualizar videos --}}
+                    @auth
+                        @if (auth()->user()->rol->idrol == 1 || auth()->user()->rol->idrol == 2)
+                            <div class="text-center mb-5">
+                                <form action="{{ route('actualizarYt') }}" method="POST">
+                                    @csrf <!-- Asegúrate de incluir el token CSRF -->
+                                    <button type="submit"
+                                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                                        Actualizar Videos
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    @endauth
                 </div>
+
 
 
                 <div class="flex flex-wrap justify-between gap-5">

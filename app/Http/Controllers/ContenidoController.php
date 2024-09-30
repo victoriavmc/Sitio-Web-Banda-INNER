@@ -241,6 +241,13 @@ class ContenidoController extends Controller
     # ENVIO A LA VISTA LAS PUBLICACIONES DEL FORO
     public function indexForo()
     {
+        if (!Auth::check()) {
+            return redirect()->route('superFan')->with('alertRegistro', [
+                'type' => 'Warning',
+                'message' => 'Solo los usuarios registrados pueden acceder al foro.',
+            ]);
+        }
+
         // Recupero solo publicaciones Foro
         $recuperoPublicaciones = $this->contenidosReducidos(1);
 

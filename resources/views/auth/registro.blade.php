@@ -1,7 +1,7 @@
 <x-AppLayout title="Registro">
     <div class="wrapper bg-center justify-center"
         style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
-        <div class="inner bg-black bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
+        <div class="inner bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
                 <img class="pequeño" src="{{ asset('img/logeo/registro_costado.jpg') }}" alt="AgusFacha">
@@ -20,14 +20,14 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="text" name="nombre" placeholder="Nombre"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0" value="{{ old('nombre') }}">
+                            class="form-control pl-0 text-black bg-black bg-opacity-0" value="{{ old('nombre') }}">
                     </div>
                     <div class="form-wrapper mb-4">
                         @error('apellido')
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="text" name="apellido" placeholder="Apellido"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0" value="{{ old('apellido') }}">
+                            class="form-control pl-0 text-black bg-black bg-opacity-0" value="{{ old('apellido') }}">
                     </div>
 
                     <!-- Fecha de Nacimiento -->
@@ -36,7 +36,7 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="date" name="fechaNacimiento"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0"
+                            class="form-control pl-0 text-black bg-black bg-opacity-0"
                             value="{{ old('fechaNacimiento') }}">
                         <i class="zmdi zmdi-calendar icon-white"></i>
                     </div>
@@ -47,7 +47,7 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="text" name="usuario" autocomplete="new-password" placeholder="Usuario"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0" value="{{ old('usuario') }}">
+                            class="form-control pl-0 text-black bg-black bg-opacity-0" value="{{ old('usuario') }}">
                         <i class="zmdi zmdi-account"></i>
                     </div>
 
@@ -57,7 +57,7 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <select id="country-select" name="paisDeNacimiento"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0">
+                            class="form-control pl-0 text-black bg-black bg-opacity-0">
                             <option value="" disabled selected>Pais de nacimiento</option>
                             @foreach ($paises as $pais)
                                 <option value="{{ $pais->idPaisNacimiento }}">{{ $pais->nombrePN }}
@@ -75,7 +75,7 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="email" name="email" autocomplete="new-password"
-                            placeholder="Correo Electrónico" class="form-control pl-0 text-white bg-black bg-opacity-0"
+                            placeholder="Correo Electrónico" class="form-control pl-0 text-black bg-black bg-opacity-0"
                             value="{{ old('email') }}">
                         <i class="zmdi zmdi-email"></i>
                     </div>
@@ -85,7 +85,7 @@
                         @error('genero')
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
-                        <select name="genero" id="" class="form-control text-white bg-black bg-opacity-0">
+                        <select name="genero" id="" class="form-control text-black bg-black bg-opacity-0">
                             <option value="" disabled selected>Género</option>
                             <option value="Masculino" {{ old('genero') == 'Masculino' ? 'selected' : '' }}>Masculino
                             </option>
@@ -102,7 +102,7 @@
                             <span class="font-bold text-red-500">{{ $message }}</span>
                         @enderror
                         <input type="password" name="password" autocomplete="new-password" placeholder="Contraseña"
-                            class="form-control pl-0 text-white bg-black bg-opacity-0">
+                            class="form-control pl-0 text-black bg-black bg-opacity-0">
                         <i class="zmdi zmdi-lock"></i>
                     </div>
 
@@ -111,9 +111,8 @@
                         <div class="flex items-center">
                             <input type="checkbox" id="terminos" name="terminos" required>
                             <label for="terminos" class="ml-2">
-                                Acepto los
-                                <a href="{{ route('terminos-de-servicio') }}" target="_blank"
-                                    class="text-blue-500 underline">
+                                <span class="text-black">Acepto los</span>
+                                <a href="{{ route('terminos-de-servicio') }}" target="_blank" class="bn-16 bn16">
                                     Términos y Condiciones
                                 </a>
                             </label>
@@ -121,7 +120,11 @@
                         <span class="text-red-500 mt-1" id="error-terminos" style="display: none;">Debe aceptar los
                             términos y condiciones.</span>
                     </div>
-                    <br>
+
+                    <p class="text-black font-urbanist my-4">
+                        Ya tienes una cuenta?
+                        <a href="{{ route('login') }}" class="bn-16 bn16">Inicia Sesion</a>
+                    </p>
 
                     <script>
                         document.querySelector('form').addEventListener('submit', function(event) {
@@ -137,9 +140,8 @@
                         });
                     </script>
                     <!-- Botón de Registro -->
-                    <div class="m-auto w-max">
-                        <button type="submit" class="bn1">Registrarse
-                            <i class="zmdi zmdi-arrow-right"></i>
+                    <div class="m-auto w-max ">
+                        <button type="submit" class="bn1 rounded-xl text-white bg-red bg-red-500">Registrarse
                         </button>
                     </div>
                 </form>

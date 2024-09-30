@@ -315,7 +315,7 @@ option {
 }
 
 input.form-control::placeholder {
-  color: white;
+  color: black;
   opacity: 1;
   font-family: "Urbanist";
 }
@@ -326,7 +326,6 @@ input.form-control::placeholder {
   padding: 0.6em 1.7em;
   border: 0.1em solid black;
   margin: 0 0.3em 0.3em 0;
-  background: hsl(220, 85%, 50%);
   border-radius: 0.12em;
   box-sizing: border-box;
   text-decoration: none;
@@ -339,7 +338,7 @@ input.form-control::placeholder {
 
 .bn1:hover {
   color: #000000;
-  background-color: hsl(182, 96%, 54%);
+  background-color: hsl(9, 79%, 46%);
 }
 
 @media (min-width: 768px) {
@@ -545,6 +544,25 @@ select option {
 }
 
 .bn32:hover {
+  color: #ffffff;
+  background-position: 100%;
+}
+
+.bn16 {
+  border-color: #ffffff;
+  padding: 0.3em;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  color: #ffffff;
+  background-image: linear-gradient(45deg, transparent 50%, hsl(9, 79%, 48%) 50%);
+  background-position: 20%;
+  background-size: 400%;
+  -webkit-transition: background 500ms ease-in-out, color 500ms ease-in-out;
+  transition: background 500ms ease-in-out, color 500ms ease-in-out;
+}
+
+.bn16:hover {
   color: #ffffff;
   background-position: 100%;
 }

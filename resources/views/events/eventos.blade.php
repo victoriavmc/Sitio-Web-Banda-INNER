@@ -24,7 +24,7 @@
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
-                            <a href="{{ $show->linkCompraEntrada }}" target="_blank">
+                            {{-- <a href="{{ $show->linkCompraEntrada }}" target="_blank">
                                 <button class="boton-vermas">
                                     <p>Adquirir Entrada</p>
                                 </button>
@@ -33,11 +33,11 @@
                                 <button class="boton-vermas">
                                     <p>Ver en Google Maps</p>
                                 </button>
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                     {{-- Google Maps --}}
-                    {{-- <div id="mapa" class="w-96 h-96"></div> --}}
+                    <div id="mapa" class="w-full h-full"></div>
                 </div>
             @endforeach
         </div>

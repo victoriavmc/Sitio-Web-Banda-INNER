@@ -4,16 +4,18 @@
         {{-- Botón para modificar: solo el autor puede modificar --}}
         @auth
             @if ((Auth::user()->idusuarios == Auth::user()->rol->idrol) == 1 || Auth::user()->rol->idrol == 2)
-                <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
-                {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
-                <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
-                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
-                </form>
+                <div class="flex gap-5 mb-5">
+                    <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+                    {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
+                    <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
+                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+                    </form>
+                </div>
             @endif
         @endauth
         <!-- Title -->

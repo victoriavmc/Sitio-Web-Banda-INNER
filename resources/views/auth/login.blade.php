@@ -90,7 +90,7 @@
             {{-- </div> --}}
             {{-- Enlaces para registro y restablecimiento de contraseña --}}
             <p class="text-white font-urbanist text-center mt-6">
-                Ya tienes una cuenta?
+                No tienes una cuenta?
                 <a href="{{ route('registro') }}" class="bn-32 bn32">Registrate</a>
             </p>
 

@@ -4,10 +4,10 @@
             {{ $message }}
         </x-alerts>
     @enderror
-    <div class="absolute bg-gray-100">
+    <div class="absolute h-[85.5vh] bg-gray-100">
         <div
-            class="sidebar  w-[3.35rem] overflow-hidden border-r hover:w-64 hover:bg-white hover:shadow-lg transition-all duration-300">
-            <div class="flex h-[85.5vh] flex-col justify-between pt-2 pb-6">
+            class="sidebar w-[3.35rem] overflow-hidden border-r hover:w-64 hover:bg-white hover:shadow-lg transition-all duration-300">
+            <div class="flex flex-col justify-between pt-2 pb-6">
                 <div>
                     <ul class=" mt-8 space-y-2 tracking-wide">
                         <li class="min-w-max">
