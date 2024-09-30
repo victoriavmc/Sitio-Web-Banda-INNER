@@ -119,7 +119,7 @@ Route::post('/perfil/eliminar-red-social-banda', [redessocialesController::class
 Route::post('/perfil/guardar-redes-staff', [redessocialesController::class, 'guardarRedesStaff'])
     ->name('guardar-redes-staff')->middleware('auth');
 
-Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedesStaff'])
+Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedSocialStaff'])
     ->name('eliminar-red-social-staff')->middleware('auth');
 // ---------------------------------- Panel de Usuarios ------------------------------------------
 Route::get('/panel-de-usuarios', [panelUsuariosController::class, 'panel'])

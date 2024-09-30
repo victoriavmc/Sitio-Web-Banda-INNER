@@ -1,12 +1,21 @@
 <x-AppLayout>
     <!-- component -->
-    <div class="m-auto min-h-[85.5vh] bg-cover"
+    <div class="m-auto min-h-[86vh] bg-cover"
         style="background-image: url({{ asset('/img/albums/musica/musica_fondo.jpg') }})">
-        <!-- Centering wrapper -->
-        @foreach ($listaAlbum as $album)
-            <div class="flex justify-center items-center bg-black bg-opacity-30 min-h-[85.5vh]">
+        <div class="flex flex-col gap-5 justify-center items-center bg-black bg-opacity-30 min-h-[85.5vh]">
+            <h3 class="text-7xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
+                Discografia
+            </h3>
+            <!-- Centering wrapper -->
+            @foreach ($listaAlbum as $album)
                 <div>
+                    <figcaption class="card__caption flex items-center gap-4 mb-2">
+                        <h2 class="card__title text-xl font-bold" onclick="toggleSongs('{{ $album['titulo'] }}')">
+                            {{ $album['titulo'] }}</h2>
+                        <p class="card__snippet">({{ $album['fecha'] }})</p>
+                    </figcaption>
                     <div class="flex gap-2">
+
                         <figure class="" onclick="toggleSongs('{{ $album['titulo'] }}')">
                             <img class="w-[400px]" src="{{ asset(Storage::url($album['imagen'])) }}"
                                 alt="{{ $album['titulo'] }}">
@@ -41,14 +50,9 @@
                             </div>
                         </div>
                     </div>
-                    <figcaption class="card__caption">
-                        <h2 class="card__title" onclick="toggleSongs('{{ $album['titulo'] }}')">
-                            {{ $album['titulo'] }}</h2>
-                        <p class="card__snippet">{{ $album['fecha'] }}</p>
-                    </figcaption>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
     <script>
         function toggleSongs(albumTitle) {

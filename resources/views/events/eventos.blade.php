@@ -24,12 +24,15 @@
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
+                            @if (now() < $show->fechashow)
+                                <a href="{{ $show->linkCompraEntrada }}" target="_blank">
+                                    <button class="boton-vermas">
+                                        <p>Adquirir Entrada</p>
+                                    </button>
+                                </a>
+                            @endif
+
                             {{-- <a href="{{ $show->linkCompraEntrada }}" target="_blank">
-                                <button class="boton-vermas">
-                                    <p>Adquirir Entrada</p>
-                                </button>
-                            </a>
-                            <a href="{{ $show->linkCompraEntrada }}" target="_blank">
                                 <button class="boton-vermas">
                                     <p>Ver en Google Maps</p>
                                 </button>

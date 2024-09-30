@@ -111,11 +111,11 @@
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                             loading="lazy"></iframe>
                     </div>
-                    <div class="row-span-2 p-2 flex flex-col items-center justify-center mx-2">
+                    {{-- <div class="row-span-2 p-2 flex flex-col items-center justify-center mx-2">
                         <h3 class="text-7xl font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
                             YOUTUBE OFICIAL
                         </h3>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@
     </div>
 
     {{-- NOTICIAS Y FORO --}}
-    <div class="min-h-screen bg-cover flex justify-center font-amsterdam items-center bg-center"
+    <div class="min-h-[86vh] bg-cover flex justify-center font-amsterdam items-center bg-center"
         style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
         <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] xl:w-[70%] flex flex-col gap-8">
             <div class="lg:flex gap-8">

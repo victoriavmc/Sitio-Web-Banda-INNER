@@ -86,24 +86,32 @@
                                         class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted px-6 dark:hover:bg-gray-900">
                                         <td
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
-                                                src="{{ $usuario->urlImagen }}">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
+                                                    src="{{ $usuario->urlImagen }}">
+                                            </a>
                                         </td>
                                         <td
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                {{ $usuario->usuarioUser }}</p>
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
+                                                    {{ $usuario->usuarioUser }}</p>
+                                            </a>
                                         </td>
                                         <td
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                {{ $usuario->correoElectronicoUser }}</p>
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
+                                                    {{ $usuario->correoElectronicoUser }}</p>
+                                            </a>
                                         </td>
                                         <td
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
-                                            </p>
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
+                                                    {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
+                                                </p>
+                                            </a>
                                         </td>
                                         <td
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">

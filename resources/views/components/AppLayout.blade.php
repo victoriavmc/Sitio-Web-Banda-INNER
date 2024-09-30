@@ -26,7 +26,7 @@
     <header class=" bg-black bg-opacity-60 text-center w-full border-b border-gray-600 z-10">
         <nav class="flex items-center justify-center text-gray-300 relative">
             <!-- Menú izquierdo -->
-            <ul class="hidden font-amsterdam xl:flex text-xl gap-6 z-10">
+            <ul class="hidden font-amsterdam lg:flex text-xl gap-4 xl:gap-6 z-10">
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('inicio') }}">Inicio</a>
                 </li>
@@ -45,12 +45,12 @@
             </ul>
 
             <!-- Logo centrado -->
-            <a class="z-10 mx-8" href="{{ route('inicio') }}">
-                <img class="w-36 sm:w-56" src="{{ asset('img/logo_inner.png') }}" alt="">
+            <a class="z-10 mx-4 xl:mx-8" href="{{ route('inicio') }}">
+                <img class="xl:w-52 w-40" src="{{ asset('img/logo_inner.png') }}" alt="">
             </a>
 
             <!-- Menú derecho -->
-            <ul class="font-amsterdam hidden xl:flex text-xl gap-6 z-10">
+            <ul class="font-amsterdam hidden lg:flex text-xl gap-4 xl:gap-6 z-10">
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('albumGaleria') }}">Galeria</a>
                 </li>
@@ -69,7 +69,7 @@
             </ul>
 
             <!-- Ícono usuario a la derecha -->
-            <div class="absolute flex items-center right-4 mr-6 sm:mr-20 z-30">
+            <div class="absolute flex items-center right-1 mr-6 z-30">
                 @if ($isAuthenticated)
                     <button id="perfil-toggle">
                         <img type="button" class="w-10 h-10 rounded-full cursor-pointer bg-white border-white"
@@ -113,7 +113,7 @@
             @endif
 
             <!-- Botón desplegable para pantallas menores a 1280px -->
-            <div class="xl:hidden flex items-center absolute ml-5 sm:ml-20 left-4 z-30">
+            <div class="lg:hidden flex items-center absolute ml-5 sm:ml-20 left-4 z-30">
                 <button id="menu-toggle" class=" text-gray-400 hover:text-white focus:outline-none z-30">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:w-8 sm:h-8" viewBox="0 0 24 24"
                         stroke="currentColor">
