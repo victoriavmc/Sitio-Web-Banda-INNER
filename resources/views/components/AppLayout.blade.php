@@ -22,7 +22,7 @@
 @php $inicio = $inicio ?? false; @endphp
 
 
-<body class="bg-black  text-gray-300">
+<body class=" text-gray-300" style="background-color: #121212">
     <header class=" bg-black bg-opacity-60 text-center w-full border-b border-gray-600 z-10">
         <nav class="flex items-center justify-center text-gray-300 relative">
             <!-- Menú izquierdo -->
