@@ -13,11 +13,11 @@
     @endif
 
     <div class="flex justify-center">
-        <img class="h-[90vh]" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
+        <img class="h-[91vh]" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
     </div>
 
     {{-- SHOWS --}}
-    <div class="bg-gray-900 bg-center bg-cover flex flex-col items-center justify-center"
+    <div class="bg-gray-900 min-h-screen bg-center bg-cover flex flex-col items-center justify-center"
         style="background-image:url({{ asset('img/index_fondo_evento.jpg') }})">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos
@@ -91,7 +91,7 @@
 
 
     {{-- Youtube Spotify --}}
-    <div class="relative">
+    <div class="relative min-h-screen">
         <img class="absolute inset-0 w-full h-full object-cover blur-sm"
             src="{{ asset('img/index_fondo_spotify_yt.png') }}" alt="Fondo">
         <div class="relative z-10 lg:p-4">
@@ -130,7 +130,7 @@
     </div>
 
     {{-- NOTICIAS Y FORO --}}
-    <div class="min-h-[86vh] bg-cover p-10 flex justify-center font-amsterdam items-center bg-center"
+    <div class="min-h-screen bg-cover p-10 flex justify-center font-amsterdam items-center bg-center"
         style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
         <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] xl:w-[70%] flex flex-col gap-8">
             <div class="lg:flex gap-8">
@@ -205,7 +205,7 @@
     </div>
 
     {{-- MULTIMEDIA --}}
-    <div class="bg-cover flex justify-center items-center anchoPantalla"
+    <div class="bg-cover min-h-screen flex justify-center items-center anchoPantalla"
         style="background-image: url({{ asset('img/index_fondo_multi.jpg') }}); background-position: left; background-size: cover;">
 
         {{-- Contenedor del contenido centrado --}}

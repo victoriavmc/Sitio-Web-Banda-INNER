@@ -1,7 +1,7 @@
 <x-AppLayout title="Login" :login=true>
-    <div class="loginLargo bg-cover bg-center flex items-center justify-center"
+    <div class="min-h-[87vh] bg-cover bg-center flex items-center justify-center"
         style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_herni.jpg') }} ');">
-        
+
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"
             x-init="gsap.from($el, { opacity: 0, y: 50, duration: 1, ease: 'back' });
@@ -22,7 +22,7 @@
                         class="w-full font-urbanist px-4 py-3 rounded-lg bg-white bg-opacity-20 focus:bg-opacity-30 focus:ring-2 focus:ring-orange-500 text-white placeholder-gray-200 transition duration-200"
                         placeholder="Nueva contraseña">
                     <i class="fas fa-lock absolute right-3 top-3 text-white"></i>
-                    
+
                     @error('password')
                         <span class="font-bold text-red-500">{{ $message }}</span>
                     @enderror

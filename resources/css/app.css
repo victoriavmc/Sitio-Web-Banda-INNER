@@ -377,11 +377,6 @@ h3.deepshadow {
   height: 100vh
 }
 
-.loginLargo {
-  height: 85.5vh
-}
-
-
 select {
   background-color: transparent;
   /* Mantiene el input con fondo transparente */

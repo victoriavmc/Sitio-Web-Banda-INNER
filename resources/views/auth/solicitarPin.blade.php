@@ -1,5 +1,5 @@
 <x-AppLayout title="Login" :login=true>
-    <div class="loginLargo bg-cover bg-center flex items-center justify-center"
+    <div class="min-h-[87vh] bg-cover bg-center flex items-center justify-center"
         style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_agus.png') }} ');">
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"

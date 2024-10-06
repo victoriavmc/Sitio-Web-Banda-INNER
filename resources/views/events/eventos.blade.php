@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="p-10" style="background-color: #121212">
+    <div class="p-10 min-h-[87vh]" style="background-color: #121212">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos
         </h3>

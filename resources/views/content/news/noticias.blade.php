@@ -1,5 +1,6 @@
 <x-AppLayout>
-    <div class="bg-cover bg-center w-full p-10" style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
+    <div class="min-h-[87vh] bg-cover bg-center w-full p-10"
+        style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
         @auth
             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
                 <a href="{{ route('verFormularioNoticia') }}"

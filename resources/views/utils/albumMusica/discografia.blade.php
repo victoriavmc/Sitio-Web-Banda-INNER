@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div>
+    <div class="min-h-[87vh]">
         <div style="background-image: url({{ asset('/img/albums/musica/musica_fondo.jpg') }})"
             class="bg-cover bg-center flex justify-center items-center h-96">
             <div class="absolute bg-black bg-opacity-30 h-96 w-full"></div>

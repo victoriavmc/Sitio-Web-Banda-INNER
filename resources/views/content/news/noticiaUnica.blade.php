@@ -1,6 +1,6 @@
 <x-AppLayout>
     <!-- Container -->
-    <div class="bg-[#232125] min-h-[86.5vh] px-5 py-16 md:px-10 md:py-10">
+    <div class="bg-[#232125] min-h-[87vh] px-5 py-16 md:px-10 md:py-10">
         {{-- Botón para modificar: solo el autor puede modificar --}}
         @auth
             @if ((Auth::user()->idusuarios == Auth::user()->rol->idrol) == 1 || Auth::user()->rol->idrol == 2)
