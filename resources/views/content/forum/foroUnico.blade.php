@@ -1,6 +1,6 @@
 <x-AppLayout>
     @if (Auth::check() && Auth::user()->rol)
-        <div class="bg-white flex justify-center items-center min-h-[86.5vh] p-10 flex-col">
+        <div class="bg-white flex justify-center items-center min-h-[86vh] p-10 flex-col">
             <div
                 class="flex my-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 px-4 py-8 dark:border-gray-400 shadow-lg rounded-lg">
                 <!-- Quien sube la publicacion -->

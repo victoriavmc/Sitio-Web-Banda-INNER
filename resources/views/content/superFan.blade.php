@@ -8,7 +8,7 @@
     @endif
 
     <!-- Fondo de pantalla completo -->
-    <div class="relative min-h-[87vh] flex flex-col gap-10 p-5 bg-cover"
+    <div class="relative min-h-[86vh] flex flex-col gap-10 p-5 bg-cover"
         style="background-image: url({{ asset('img/superfan_fondo.png') }})">
 
         {{-- SI ES INVITADO --}}

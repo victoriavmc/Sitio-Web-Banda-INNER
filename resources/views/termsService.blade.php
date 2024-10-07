@@ -1,6 +1,6 @@
 <x-AppLayout>
 
-    <div class="bg-white text-black min-h-[87vh] dark:bg-black dark:text-white">
+    <div class="bg-white text-black min-h-[86vh] dark:bg-black dark:text-white">
         <div class="px-4 py-6">
             <p class="text-right justify-end text-base">
                 Fecha: {{ '24 / 09 / 2024' }}

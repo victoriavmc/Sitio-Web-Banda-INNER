@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="bg-cover p-10 min-h-[85.5vh]" style="background-image: url('{{ asset('img/perfil_fondo.jpg') }}')">
+    <div class="bg-cover p-10 min-h-[86vh]" style="background-image: url('{{ asset('img/perfil_fondo.jpg') }}')">
         @if (session('alertInicioSesion'))
             <x-alerts :type="session('alertInicioSesion')['type']">
                 {{ session('alertInicioSesion')['message'] }}

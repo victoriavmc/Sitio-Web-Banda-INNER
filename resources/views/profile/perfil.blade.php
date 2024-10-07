@@ -11,7 +11,7 @@
                 {{ session('alertCambios')['message'] }}
             </x-alerts>
         @endif
-        <div class="flex justify-center items-center min-h-[85.5vh]">
+        <div class="flex justify-center items-center min-h-[86vh]">
             <div class="flex bg-white bg-opacity-70 justify-center p-6 gap-6">
                 <div class="container mx-auto py-8">
                     <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">

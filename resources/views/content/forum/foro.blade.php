@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="bg-cover min-h-[87vh] bg-center w-full p-10"
+    <div class="bg-cover min-h-[86vh] bg-center w-full p-10"
         style="background-image: url('{{ asset('img/foro_fondo.jpg') }}')">
         <div class='grid gap-3 justify-center'>
             <!-- Buscador -->

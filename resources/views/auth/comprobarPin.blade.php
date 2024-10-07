@@ -4,7 +4,7 @@
             {{ session('alertRestablecer')['message'] }}
         </x-alerts>
     @endif
-    <div class="min-h-[87vh] bg-cover bg-bottom flex items-center justify-center"
+    <div class="min-h-[86vh] bg-cover bg-bottom flex items-center justify-center"
         style="background-image: url(' {{ asset('img/logeo/pin_fondo.jpg') }} ');">
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"

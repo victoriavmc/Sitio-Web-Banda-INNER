@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="bg-white min-h-[87vh] p-10 bg-cover">
+    <div class="bg-white min-h-[86vh] p-10 bg-cover">
         <div class="text-center">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Columna 1 -->

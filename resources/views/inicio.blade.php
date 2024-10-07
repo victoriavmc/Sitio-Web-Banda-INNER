@@ -294,8 +294,4 @@
             </div>
         </div>
     </div>
-
-
-
-
 </x-AppLayout>

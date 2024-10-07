@@ -19,7 +19,9 @@
     <title>INNER</title>
 </head>
 
-@php $inicio = $inicio ?? false; @endphp
+@php
+    $inicio = $inicio ?? false;
+@endphp
 
 
 <body class=" text-gray-300" style="background-color: #121212">
