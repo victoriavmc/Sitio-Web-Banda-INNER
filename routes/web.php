@@ -151,13 +151,13 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
 
-Route::get('/evento/modificar/{id}', [eventosController::class, 'formularioModificar'])
+Route::get('/eventos/modificar/{id}', [eventosController::class, 'formularioModificar'])
     ->name('modificar-formulario');
 
-Route::put('/evento/modificar/{id}', [eventosController::class, 'modificarEvento'])
+Route::put('/eventos/modificar/{id}', [eventosController::class, 'modificarEvento'])
     ->name('modificar-evento');
 
-Route::delete('/evento/eliminar/{id}', [eventosController::class, 'eliminarEvento'])
+Route::delete('/eventos/eliminar/{id}', [eventosController::class, 'eliminarEvento'])
     ->name('eliminar-evento');
 ##################################################################################################
 //----------------------- CARPETA CONTENIDO -----------------------

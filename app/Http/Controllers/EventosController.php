@@ -69,17 +69,11 @@ class eventosController extends Controller
 
     public function eliminarEvento($id)
     {
-        $show = Show::findOrFail($id);
+        $show = Show::find($id);
 
-        $revisionImagen = RevisionImagenes::findOrFail($show->revisionImagenes_idrevisionImagenescol);
+        $revisionImagen = RevisionImagenes::find($show->revisionImagenes_idrevisionImagenescol);
 
-        $ubicacion = UbicacionShow::findOrFail($show->ubicacionShow_idubicacionShow);
-
-        $lugar = LugarLocal::findOrFail($show->lugarlocal->idLugarLocal);
-
-        $lugar->delete();
-
-        $ubicacion->delete();
+        $show->delete();
 
         if ($revisionImagen) {
             // Obtener la imagen asociada a la revisión
@@ -98,7 +92,6 @@ class eventosController extends Controller
             }
         }
 
-        $show->delete();
-        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
+        return redirect(view('events.eventos'))->with('success', 'El evento se ha modificado correctamente.');
     }
 }

@@ -66,8 +66,7 @@
                                             clip-rule="evenodd" />
                                     </svg>
                                 </a>
-                                <form action="{{ route('eliminar-evento', $show->idshow) }}" method="POST"
-                                    class="formEliminarUsuario">
+                                <form action="{{ route('eliminar-evento', $show->idshow) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
