@@ -151,6 +151,12 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
 
+Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
+    ->name('crear-formulario');
+
+Route::put('/eventos/crear', [eventosController::class, 'crearEvento'])
+    ->name('crear-evento');
+
 Route::get('/eventos/modificar/{id}', [eventosController::class, 'formularioModificar'])
     ->name('modificar-formulario');
 

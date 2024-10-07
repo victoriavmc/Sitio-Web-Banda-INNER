@@ -19,6 +19,27 @@ class eventosController extends Controller
         return view('events.eventos', compact('shows'));
     }
 
+    public function formularioCrear()
+    {
+        $ubicaciones = UbicacionShow::all();
+        return view('events.crearEvento', compact('ubicaciones'));
+    }
+
+    public function crearEvento(Request $request)
+    {
+        // Validaciones
+        $request->validate([
+            'lugar' => 'required|string|max:255',
+            'fecha' => 'required|date_format:Y-m-d\TH:i',
+            'provincia' => 'required',
+            'calle' => 'required|string|max:255',
+            'numero' => 'required|numeric',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
+    }
+
     public function formularioModificar($id)
     {
         $show = Show::findOrFail($id);

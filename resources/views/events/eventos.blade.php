@@ -6,10 +6,10 @@
 
         @auth
             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                <div class="mb-5 flex items-center gap-10">
-                    <a href="{{ route('inicio') }}"
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Agregar</a>
-                </div>
+            <div class="mb-5 flex items-center gap-10">
+                <a href="{{ route('crear-formulario') }}"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Agregar</a>
+            </div>
             @endif
         @endauth
         {{-- EVENTOS --}}
