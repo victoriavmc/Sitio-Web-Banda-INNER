@@ -27,8 +27,8 @@ CREATE TABLE `actividad` (
   `usuarios_idusuarios` int NOT NULL,
   PRIMARY KEY (`idActividad`),
   KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
-  CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,6 @@ CREATE TABLE `actividad` (
 
 LOCK TABLES `actividad` WRITE;
 /*!40000 ALTER TABLE `actividad` DISABLE KEYS */;
-INSERT INTO `actividad` VALUES (2,2),(3,3),(4,4),(5,5);
 /*!40000 ALTER TABLE `actividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,9 +225,9 @@ CREATE TABLE `comentarios` (
   KEY `fk_table1_contenidos1_idx` (`contenidos_idcontenidos`),
   KEY `fk_comentarios_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_comentarios_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
-  CONSTRAINT `fk_table1_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`) ON DELETE CASCADE,
+  CONSTRAINT `fk_table1_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
   CONSTRAINT `fk_table1_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,7 +236,6 @@ CREATE TABLE `comentarios` (
 
 LOCK TABLES `comentarios` WRITE;
 /*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
-INSERT INTO `comentarios` VALUES (2,'2024-10-07','terertte',5,2,NULL);
 /*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,9 +256,9 @@ CREATE TABLE `contenidos` (
   PRIMARY KEY (`idcontenidos`),
   KEY `fk_contenidos_tipoContenido1_idx` (`tipoContenido_idtipoContenido`),
   KEY `fk_contenidos_Actividad1_idx` (`Actividad_idActividad`),
-  CONSTRAINT `fk_contenidos_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`) ON DELETE CASCADE,
+  CONSTRAINT `fk_contenidos_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
   CONSTRAINT `fk_contenidos_tipoContenido1` FOREIGN KEY (`tipoContenido_idtipoContenido`) REFERENCES `tipocontenido` (`idtipoContenido`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +267,6 @@ CREATE TABLE `contenidos` (
 
 LOCK TABLES `contenidos` WRITE;
 /*!40000 ALTER TABLE `contenidos` DISABLE KEYS */;
-INSERT INTO `contenidos` VALUES (2,'2024-10-06','q32','eqwqewqwe',1,2),(3,'2024-10-04','ew','gfgfg',1,3);
 /*!40000 ALTER TABLE `contenidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,7 +290,7 @@ CREATE TABLE `datospersonales` (
   KEY `fk_datosPersonales_PaisNacimiento1_idx` (`PaisNacimiento_idPaisNacimiento`),
   CONSTRAINT `fk_datosPersonales_PaisNacimiento1` FOREIGN KEY (`PaisNacimiento_idPaisNacimiento`) REFERENCES `paisnacimiento` (`idPaisNacimiento`),
   CONSTRAINT `fk_datosPersonales_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -302,7 +299,6 @@ CREATE TABLE `datospersonales` (
 
 LOCK TABLES `datospersonales` WRITE;
 /*!40000 ALTER TABLE `datospersonales` DISABLE KEYS */;
-INSERT INTO `datospersonales` VALUES (3,'Santiago','Arandano','2004-06-14','Masculino',1,9),(4,'VictoriaV','MaidanaC','2002-02-16','Femenino',2,9),(5,'KevinA','Schneider','1997-04-02','Masculino',3,9),(6,'Carlos','Gómez','1990-05-10','Masculino',4,9),(7,'Lucía','Pérez','1988-11-23','Femenino',5,9),(8,'Andrés','Fernández','1995-07-14','Masculino',6,9),(9,'María','Rodríguez','1993-03-30','Femenino',9,9),(10,'Javier','López','1992-09-18','Masculino',10,9),(11,'Juana','Martinez','1999-03-30','Femenino',11,9),(12,'Camila','Paz','2000-09-18','Femenino',12,9),(34,'Fan Sin Sub','Fan Basico','2012-04-05','Masculino',33,9),(35,'Fan Con Sub','SuperFan','1990-04-08','Femenino',34,9),(36,'Fan Prueba','vemos','1990-09-08','Otro',35,9),(46,'David','Copa','1990-10-09','Masculino',45,9),(47,'Tomas','Casalone','1996-02-29','Masculino',46,9),(48,'Agustin','Casalone','2002-01-12','Masculino',47,9),(49,'Hernan','Ramirez','1995-03-27','Masculino',48,9);
 /*!40000 ALTER TABLE `datospersonales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -323,7 +319,7 @@ CREATE TABLE `historialusuario` (
   PRIMARY KEY (`idhistorialusuario`),
   KEY `fk_historialusuario_datospersonales1_idx` (`datospersonales_idDatosPersonales`),
   CONSTRAINT `fk_historialusuario_datospersonales1` FOREIGN KEY (`datospersonales_idDatosPersonales`) REFERENCES `datospersonales` (`idDatosPersonales`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,7 +328,6 @@ CREATE TABLE `historialusuario` (
 
 LOCK TABLES `historialusuario` WRITE;
 /*!40000 ALTER TABLE `historialusuario` DISABLE KEYS */;
-INSERT INTO `historialusuario` VALUES (62,'Inactivo','Sí',NULL,'2024-10-06',3),(63,'Activo','No',NULL,'2024-10-06',4),(64,'Activo','No',NULL,'2024-10-06',5),(65,'Activo','No',NULL,'2024-10-06',6),(66,'Activo','No',NULL,'2024-10-06',7),(67,'Activo','No',NULL,'2024-10-06',8),(68,'Activo','No',NULL,'2024-10-06',9),(69,'Activo','No',NULL,'2024-10-06',10),(70,'Activo','No',NULL,'2024-10-06',11),(71,'Activo','No',NULL,'2024-10-06',12),(72,'Activo','No',NULL,'2024-10-06',34),(73,'Activo','No',NULL,'2024-10-06',35),(74,'Activo','No',NULL,'2024-10-06',36);
 /*!40000 ALTER TABLE `historialusuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,7 +344,7 @@ CREATE TABLE `imagenes` (
   `fechaSubidaImg` date DEFAULT NULL,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
   PRIMARY KEY (`idimagenes`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +401,7 @@ CREATE TABLE `interacciones` (
   PRIMARY KEY (`idinteracciones`),
   KEY `fk_usuarios_has_actividad_actividad1_idx` (`actividad_idActividad`),
   KEY `fk_usuarios_has_actividad_usuarios1_idx` (`usuarios_idusuarios`),
-  CONSTRAINT `fk_usuarios_has_actividad_actividad1` FOREIGN KEY (`actividad_idActividad`) REFERENCES `actividad` (`idActividad`) ON DELETE CASCADE,
+  CONSTRAINT `fk_usuarios_has_actividad_actividad1` FOREIGN KEY (`actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
   CONSTRAINT `fk_usuarios_has_actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -508,7 +503,7 @@ CREATE TABLE `redessociales` (
   `linkRedSocial` varchar(512) DEFAULT NULL,
   `nombreRedSocial` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idredesSociales`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -563,8 +558,8 @@ CREATE TABLE `revisionimagenes` (
   KEY `fk_usuarios_has_imagenes_usuarios1_idx` (`usuarios_idusuarios`),
   KEY `fk_revisionImagenes_tipodefoto1_idx` (`tipodefoto_idtipoDeFoto`),
   CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `tipodefoto` (`idtipoDeFoto`),
-  CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`) ON DELETE CASCADE,
-  CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`) ON DELETE CASCADE
+  CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
+  CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -713,7 +708,7 @@ CREATE TABLE `tipodefoto` (
 
 LOCK TABLES `tipodefoto` WRITE;
 /*!40000 ALTER TABLE `tipodefoto` DISABLE KEYS */;
-INSERT INTO `tipodefoto` VALUES (1,'Usuarios'),(2,'Contenido'),(3,'MultimediaGeneral'),(4,'Flyers'),(5,'Foro'),(6,'Portada'),(7,'Fijas');
+INSERT INTO `tipodefoto` VALUES (1,'Usuarios'),(2,'Contenido Staff'),(3,'Multimedia General'),(4,'Flyers'),(5,'Contenido Foro'),(6,'Portada'),(7,'Fijas');
 /*!40000 ALTER TABLE `tipodefoto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -782,7 +777,7 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`idusuarios`),
   KEY `fk_usuarios_rol1_idx` (`rol_idrol`),
   CONSTRAINT `fk_usuarios_rol1` FOREIGN KEY (`rol_idrol`) REFERENCES `roles` (`idrol`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -791,7 +786,6 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'santi','$2y$12$a9zXQi0oOvUv/T.wmQwlyOxi6Fwd8Y9/hytgCdO5bcTrlmFQkcuj2',NULL,'santiago.aranda.81@gmail.com',1),(2,'victoriavmc','$2y$12$Dc9/phLfRbTAyQIoOBnsQedG55Y4fuExRtNc8TCTyNNlIwL41TSSy',NULL,'victoriavmcortitrabajos@gmail.com',2),(3,'kevin','$2y$12$olp4BtsXUrFo2AKOsLnnPO30IFIDfGfE/r0A0dvBFDQXlBoAbnbUG',NULL,'schneiderk985@gmail.com',2),(4,'carlosg','$2y$12$iwRj0ZEs94NTP0Y4ynctGO4hIWvXMRRSlxATQ.OcUmoVdZM5T3a6a',NULL,'carlitog@example.com',4),(5,'luciap','$2y$12$qtp9cYv1EYVSRzUOOigbouiXKOoNgqEdwMOIgEHmXhmBB.N.b4czy',NULL,'lucia.perez@example.com',4),(6,'andresf','$2y$12$txmh19CQkTibu5I0vV8g0eXqUiod5J0s20iWRhWLQTHIn69ybivym',NULL,'andres.fernandez@example.com',4),(9,'mariar','$2y$12$FGyg/yHJx.zoOkrWoLbKvO30wuBPdH2YdkxYbZzK4YgHhjJho1N3.',NULL,'maria.rodriguez@example.com',4),(10,'javierl','$2y$12$X4lJZfdbSkXu2AMERQJJquQBRPzEVP6MppVKRBrIxo3wuIZvcIfyy',NULL,'javier.lopez@example.com',4),(11,'juana','$2y$12$FGyg/yHJx.zoOkrWoLbKvO30wuBPdH2YdkxYbZzK4YgHhjJho1N3.',NULL,'juani@example.com',3),(12,'cami','$2y$12$X4lJZfdbSkXu2AMERQJJquQBRPzEVP6MppVKRBrIxo3wuIZvcIfyy',NULL,'campaz@example.com',3),(33,'fansinsub','$2y$12$v7uuy1s.KH/DILck0QOSyusmTJYzKBrgBSt/IlYWMyUf.CUO/CUDC',NULL,'fanbasico@example.com',4),(34,'fanconsub','$2y$12$w8fetCl/aSq8WQ9jiFquX.IOl3f5fac8lkC5AK6o5SKzoJh9KXuGK',NULL,'superfan@examle.com',3),(35,'fanprueba','$2y$12$2KehDx82zSwEIYOq/TsqzOX8uQRiOn7Q9c7hmcJEgvpmJKMQaGTVa',NULL,'dasdada@example.com',4),(45,'davidcop','$2y$12$W6FP0TAcwYiJEWiWJjQM/uE0cQ9EuNlFICRUipRnZbm6bIXumC0O2',NULL,'copadavid1@hotmail.com',2),(46,'atomize29','$2y$12$wbJ7A5ThDxQ/6q7KN91PBeQREWKM.btR6ELUR0y82S789KyNDKfLm',NULL,'tomascasalone@example',2),(47,'agustin12','$2y$12$YkG6RQy71389AKGDq8aKWOgEgVSD764lrqKZb6AuKCl8dqU.Ozyym',NULL,'aguscasalone@example',2),(48,'hernirami','$2y$12$XI2g1GJ2BYtjFztDMOJLTuciH9EVcVA5z4IjFHI19h5b/msPv1pb.','$2y$12$18yQDc.mEXXT67ehksGsSuq//y42Q97O5hPt8hgzWz6svnek7b3WK','herniramirez@example.com',2);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -854,4 +848,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-06 23:58:09
+-- Dump completed on 2024-10-07 23:49:57
