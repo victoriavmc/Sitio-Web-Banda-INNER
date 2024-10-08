@@ -18,7 +18,11 @@
                 <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500"
                     style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
                     <img class="h-full"
-                        src="{{ asset(Storage::url($show->revisionImagenes->imagenes->subidaImg)) }}"alt="Imagen de {{ $show->nombreLugar }}" />
+                        src="{{ $show->revisionImagenes && $show->revisionImagenes->imagenes
+                            ? asset(Storage::url($show->revisionImagenes->imagenes->subidaImg))
+                            : asset('img\logo_inner.png') }}"
+                        alt="Imagen de {{ $show->nombreLugar }}" />
+
                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
