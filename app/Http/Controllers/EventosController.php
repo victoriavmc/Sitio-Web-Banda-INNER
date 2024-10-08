@@ -9,7 +9,9 @@ use App\Models\RevisionImagenes;
 use App\Models\Show;
 use App\Models\UbicacionShow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class eventosController extends Controller
 {
@@ -21,23 +23,60 @@ class eventosController extends Controller
 
     public function formularioCrear()
     {
+        $lugares = LugarLocal::all();
         $ubicaciones = UbicacionShow::all();
-        return view('events.crearEvento', compact('ubicaciones'));
+        return view('events.crearEvento', compact('ubicaciones', 'lugares'));
     }
 
     public function crearEvento(Request $request)
     {
-        // Validaciones
-        $request->validate([
-            'lugar' => 'required|string|max:255',
+        // Validar los campos
+        $validator = Validator::make($request->all(), [
+            'nuevo_lugar' => 'required_without:lugar|string|max:255',  // Requerido si no se selecciona un lugar existente
+            'lugar' => 'required_without:nuevo_lugar|string|max:255',  // Requerido si no se agrega uno nuevo
             'fecha' => 'required|date_format:Y-m-d\TH:i',
             'provincia' => 'required',
-            'calle' => 'required|string|max:255',
-            'numero' => 'required|numeric',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'calle' => ['required_if:nuevo_lugar,!=,null', 'string', 'max:255'],  // Solo requerido si se está agregando un nuevo lugar
+            'numero' => ['required_if:nuevo_lugar,!=,null', 'numeric'],  // Solo requerido si se está agregando un nuevo lugar
+        ], [
+            'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
+            'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
+            'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
         ]);
 
-        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Crear el lugar si se seleccionó "Agregar uno nuevo"
+        if ($request->filled('nuevo_lugar')) {
+            $nuevoLugar = LugarLocal::create([
+                'nombreLugar' => $request->input('nuevo_lugar'),
+                'calle' => $request->input('calle'),
+                'numero' => $request->input('numero'),
+            ]);
+            $lugarId = $nuevoLugar->idlugarLocal;
+        } else {
+            // Usar el lugar existente
+            $lugarId = $request->input('lugar');
+        }
+
+        // Crear el evento (Show)
+        $evento = Show::create([
+            'fechashow' => $request->input('fecha'),
+            'estadoShow' => 'pendiente',  // Estado predeterminado
+            'ubicacionShow_idubicacionShow' => $request->input('provincia'),
+            'lugarLocal_idlugarLocal' => $lugarId,
+        ]);
+
+        // Manejar la subida de imagen
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('imagenes');
+            $evento->update(['imagen_path' => $path]);
+        }
+
+        return redirect()->route('eventos.index')->with('success', 'Evento creado con éxito');
     }
 
     public function formularioModificar($id)
@@ -113,6 +152,6 @@ class eventosController extends Controller
             }
         }
 
-        return redirect(view('events.eventos'))->with('success', 'El evento se ha modificado correctamente.');
+        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
     }
 }

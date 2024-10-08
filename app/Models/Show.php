@@ -11,6 +11,13 @@ class Show extends Model
     protected $primaryKey = 'idshow';  // Clave primaria
     public $timestamps = false;  // Sin columnas created_at y updated_at
 
+    protected $fillable = [
+        'fechashow',
+        'estadoShow',
+        'ubicacionShow_idubicacionShow',
+        'lugarLocal_idlugarLocal',
+    ];
+
     // Relación con UbicacionShow
     public function ubicacionShow()
     {

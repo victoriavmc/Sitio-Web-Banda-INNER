@@ -154,7 +154,7 @@ Route::get('/eventos', [eventosController::class, 'eventos'])
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
     ->name('crear-formulario');
 
-Route::put('/eventos/crear', [eventosController::class, 'crearEvento'])
+Route::post('/eventos/crear', [eventosController::class, 'crearEvento'])
     ->name('crear-evento');
 
 Route::get('/eventos/modificar/{id}', [eventosController::class, 'formularioModificar'])
@@ -244,7 +244,7 @@ Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexA
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])->name('actualizarYt');
 ##################################################################################################
 
-// // Subir tipo de imagen
+// Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])
 //     ->name('subirImagen')->middleware('auth');
 
