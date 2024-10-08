@@ -9,6 +9,7 @@ use App\Models\RevisionImagenes;
 use App\Models\Show;
 use App\Models\UbicacionShow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -67,11 +68,6 @@ class eventosController extends Controller
             $lugarId = $request->input('lugar');
         }
 
-        // Verificar si $lugarId es un entero antes de continuar
-        // if (!is_numeric($lugarId)) {
-        //     return redirect()->back()->withErrors(['lugar' => 'El lugar seleccionado no es válido.'])->withInput();
-        // }
-
         // Crear el evento (Show) utilizando el ID del lugar
         $evento = new Show();
         $evento->fechashow = $request->input('fecha');
@@ -79,11 +75,29 @@ class eventosController extends Controller
         $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
         $evento->lugarLocal_idlugarLocal = $lugarId;
 
+
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('imagenes');
-            $evento->update(['imagen_path' => $path]);
+            $path = $request->file('imagen')->store('img', 'public');
+
+            $imagen = new Imagenes();
+            $imagen->subidaImg = $path;
+            $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
+            $imagen->save();
+
+            // Crear la revisión de la imagen
+            $revisionImagen = new RevisionImagenes();
+            $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
+            $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Supongamos que '5' es el tipo de foto para comentarios
+            $revisionImagen->save();
+
+            // Asociar la revisión de la imagen al comentario
+            $evento->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
+
+        $evento->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
         return redirect(route('eventos'))->with('alertCrear', [
@@ -96,8 +110,9 @@ class eventosController extends Controller
     public function formularioModificar($id)
     {
         $show = Show::findOrFail($id);
+        $lugares = LugarLocal::all();
         $ubicaciones = UbicacionShow::all();
-        return view('events.modificarevento', compact('show', 'ubicaciones'));
+        return view('events.modificarevento', compact('show', 'ubicaciones', 'lugares'));
     }
 
     public function modificarEvento(Request $request, $id)
@@ -146,29 +161,43 @@ class eventosController extends Controller
 
     public function eliminarEvento($id)
     {
+
         $show = Show::find($id);
 
-        $revisionImagen = RevisionImagenes::find($show->revisionImagenes_idrevisionImagenescol);
+        if ($show->revisionImagenes_idrevisionImagenescol) {
+            // Obtener la revisión de imagen asociada
+            $revisionImagen = RevisionImagenes::find($show->revisionImagenes_idrevisionImagenescol);
 
-        $show->delete();
+            if ($revisionImagen) {
+                // Obtener la imagen asociada a la revisión
+                $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
 
-        if ($revisionImagen) {
-            // Obtener la imagen asociada a la revisión
-            $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                // Eliminar primero el evento (Show) para liberar la clave foránea
+                $show->delete();
 
-            // Eliminar la revisión de imagen
-            $revisionImagen->delete();
+                // Eliminar la revisión de imagen después de eliminar el evento
+                $revisionImagen->delete();
 
-            if ($imagen && Storage::exists($imagen->subidaImg)) {
-                Storage::delete($imagen->subidaImg);
+                // Eliminar la imagen del almacenamiento y de la base de datos
+                if ($imagen) {
+                    if (Storage::disk('public')->exists($imagen->subidaImg)) {
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                    }
+
+                    $imagen->delete();  // Eliminar la imagen de la base de datos
+                }
+            } else {
+                // Eliminar el evento si no tiene revisión de imagen
+                $show->delete();
             }
-
-            // Eliminar la imagen si existe
-            if ($imagen) {
-                $imagen->delete();
-            }
+        } else {
+            // Si no hay revisión de imagen, solo eliminar el evento
+            $show->delete();
         }
 
-        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
+        return redirect()->back()->with('alertBorrar', [
+            'type' => 'Success',
+            'message' => 'Se ha borrado el evento!',
+        ]);
     }
 }

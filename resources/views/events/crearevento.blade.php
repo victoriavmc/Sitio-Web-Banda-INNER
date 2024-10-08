@@ -35,9 +35,9 @@
                         <!-- Lugar -->
                         <div class="flex flex-col gap-1">
                             <label class="font-semibold text-lg" for="lugar-nuevo">Lugar</label>
-                            <input id="lugar-nuevo" name="lugar" type="text" value="{{ old('lugar') }}"
+                            <input id="lugar-nuevo" name="nuevo_lugar" type="text" value="{{ old('nuevo_lugar') }}"
                                 class="rounded-xl" disabled>
-                            @error('lugar')
+                            @error('nuevo_lugar')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>

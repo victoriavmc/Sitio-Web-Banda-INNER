@@ -535,7 +535,7 @@ class ContenidoController extends Controller
 
                 // Guardar la ruta correcta en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = 'public/img/' . basename($path); // Solo guardar la ruta relativa
+                $imagen->subidaImg = $path; // Solo guardar la ruta relativa
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
@@ -612,7 +612,7 @@ class ContenidoController extends Controller
 
                 // Guardar la ruta correcta en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = 'public/img/' . basename($path); // Solo guardar la ruta relativa
+                $imagen->subidaImg = $path; // Solo guardar la ruta relativa
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
@@ -783,7 +783,7 @@ class ContenidoController extends Controller
         // Manejo de imagen
         if ($request->hasFile('imagen')) {
             $imagen = new Imagenes();
-            $rutaImagen = $request->file('imagen')->store('imagenes', 'public');
+            $rutaImagen = $request->file('imagen')->store('img', 'public');
             $imagen->subidaImg = $rutaImagen;
             $imagen->fechaSubidaImg = now();
             $imagen->contenidoDescargable = 'No';

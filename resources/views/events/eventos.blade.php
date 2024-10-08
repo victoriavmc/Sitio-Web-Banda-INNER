@@ -1,16 +1,19 @@
 <x-AppLayout>
     @if (session('alertCrear'))
-        {{-- Componente personalizado para mostrar alertas, utilizando los datos almacenados en la sesión --}}
         <x-alerts :type="session('alertCrear')['type']">
             {{ session('alertCrear')['message'] }}
         </x-alerts>
     @endif
 
-    {{-- Comprueba si hay mensajes de alerta en la sesión para el registro --}}
     @if (session('alertModificar'))
-        {{-- Componente de alerta para el registro exitoso o fallido --}}
         <x-alerts :type="session('alertModificar')['type']">
             {{ session('alertModificar')['message'] }}
+        </x-alerts>
+    @endif
+
+    @if (session('alertBorrar'))
+        <x-alerts :type="session('alertBorrar')['type']">
+            {{ session('alertBorrar')['message'] }}
         </x-alerts>
     @endif
 
@@ -32,23 +35,24 @@
             @foreach ($shows as $show)
                 <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500"
                     style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
-                    @if ($show->revisionImagenes)
-                        <img class="h-full"
-                            src="{{ asset(Storage::url($show->revisionImagenes->imagenes->subidaImg)) }}"alt="Imagen de {{ $show->nombreLugar }}" />
-                    @else
-                        <img class="h-full" src="{{ asset('img/xd.jpg') }}"alt="Imagen por defecto" />
-                    @endif
+                    <img class="h-full"
+                        src="{{ $show->revisionImagenes && $show->revisionImagenes->imagenes
+                            ? asset(Storage::url($show->revisionImagenes->imagenes->subidaImg))
+                            : asset('img\logo_inner.png') }}"
+                        alt="Imagen de {{ $show->nombreLugar }}" />
+
                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
+                        <p class="text-lg">
+                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
+                        <p class="text-lg">
                         <p class="text-4xl font-medium hover:text-[#e60b0b] leading-none">
                             {{ $show->lugarlocal->nombreLugar }}
                         </p>
                         <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
-                        <p class="text-lg">
-                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
-                        <p class="text-lg">
-                            {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
+
+                        {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">

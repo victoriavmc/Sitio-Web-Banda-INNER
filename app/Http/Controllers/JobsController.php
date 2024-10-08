@@ -55,7 +55,7 @@ class JobsController extends Controller
             $nombreArtista = $artista->staffExtra->usuario->datosPersonales->nombreDP;
             $apellidoArtista = $artista->staffExtra->usuario->datosPersonales->apellidoDP;
             $rol = $artista->staffExtra->tipoStaff->nombreStaff;
-            $redSocial = $artista->staffExtra->redessociales->linkRedSocial;
+            $redSocial = $artista->staffExtra->redessociales->linkRedSocial ?? '#';
 
             // Recupero la imagen del artista (esto será una cadena de una sola imagen)
             $imagenArtista = $this->ImagenesContenido($artista->revisionImagenes_idrevisionImagenescol);
