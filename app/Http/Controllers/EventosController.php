@@ -37,8 +37,8 @@ class eventosController extends Controller
             'fecha' => 'required|date_format:Y-m-d\TH:i',
             'provincia' => 'required',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'calle' => ['required_if:nuevo_lugar,!=,null', 'string', 'max:255'],  // Solo requerido si se está agregando un nuevo lugar
-            'numero' => ['required_if:nuevo_lugar,!=,null', 'numeric'],  // Solo requerido si se está agregando un nuevo lugar
+            'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',  // Solo requerido si se está agregando un nuevo lugar
+            'numero' => 'required_if:nuevo_lugar,!=,null|numeric',  // Solo requerido si se está agregando un nuevo lugar
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
@@ -49,26 +49,35 @@ class eventosController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Inicializar la variable para el ID del lugar
+        $lugarId = null;
+
         // Crear el lugar si se seleccionó "Agregar uno nuevo"
         if ($request->filled('nuevo_lugar')) {
-            $nuevoLugar = LugarLocal::create([
-                'nombreLugar' => $request->input('nuevo_lugar'),
-                'calle' => $request->input('calle'),
-                'numero' => $request->input('numero'),
-            ]);
-            $lugarId = $nuevoLugar->idlugarLocal;
+            // Crear un nuevo lugar
+            $nuevoLugar = new LugarLocal();
+            $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
+            $nuevoLugar->calle = $request->input('calle');
+            $nuevoLugar->numero = $request->input('numero');
+            $nuevoLugar->save();
+
+            $lugarId = $nuevoLugar->idlugarLocal; // Obtener el ID del nuevo lugar
         } else {
             // Usar el lugar existente
             $lugarId = $request->input('lugar');
         }
 
-        // Crear el evento (Show)
-        $evento = Show::create([
-            'fechashow' => $request->input('fecha'),
-            'estadoShow' => 'pendiente',  // Estado predeterminado
-            'ubicacionShow_idubicacionShow' => $request->input('provincia'),
-            'lugarLocal_idlugarLocal' => $lugarId,
-        ]);
+        // Verificar si $lugarId es un entero antes de continuar
+        // if (!is_numeric($lugarId)) {
+        //     return redirect()->back()->withErrors(['lugar' => 'El lugar seleccionado no es válido.'])->withInput();
+        // }
+
+        // Crear el evento (Show) utilizando el ID del lugar
+        $evento = new Show();
+        $evento->fechashow = $request->input('fecha');
+        $evento->estadoShow = 'pendiente';
+        $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
+        $evento->lugarLocal_idlugarLocal = $lugarId;
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
@@ -76,8 +85,13 @@ class eventosController extends Controller
             $evento->update(['imagen_path' => $path]);
         }
 
-        return redirect()->route('eventos.index')->with('success', 'Evento creado con éxito');
+        // Redirigir a la vista de eventos con un mensaje de éxito
+        return redirect(route('eventos'))->with('alertCrear', [
+            'type' => 'Success',
+            'message' => 'Se ha creado el evento!',
+        ]);
     }
+
 
     public function formularioModificar($id)
     {
@@ -124,7 +138,10 @@ class eventosController extends Controller
         $show->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect()->back()->with('success', 'El evento se ha modificado correctamente.');
+        return redirect(route('eventos'))->with('alertModificar', [
+            'type' => 'Success',
+            'message' => 'Se ha modificado el evento!',
+        ]);
     }
 
     public function eliminarEvento($id)
