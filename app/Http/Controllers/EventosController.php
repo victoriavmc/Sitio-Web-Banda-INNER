@@ -26,7 +26,7 @@ class eventosController extends Controller
     {
         $lugares = LugarLocal::all();
         $ubicaciones = UbicacionShow::all();
-        return view('events.crearEvento', compact('ubicaciones', 'lugares'));
+        return view('events.crearevento', compact('ubicaciones', 'lugares'));
     }
 
     public function crearEvento(Request $request)
