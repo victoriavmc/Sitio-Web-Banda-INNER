@@ -8,7 +8,7 @@
                 @csrf
                 @method('PUT') <!-- Método PUT para actualizar -->
 
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-4     ">
                     <!-- Lugar -->
                     <div class="flex flex-col gap-1">
                         <label id="label-lugar" class="font-semibold text-lg" for="select-lugar">Lugares</label>
