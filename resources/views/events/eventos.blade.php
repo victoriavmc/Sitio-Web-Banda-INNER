@@ -26,14 +26,15 @@
                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
+                        <p class="text-lg">
+                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
+                        <p class="text-lg">
                         <p class="text-4xl font-medium hover:text-[#e60b0b] leading-none">
                             {{ $show->lugarlocal->nombreLugar }}
                         </p>
                         <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
-                        <p class="text-lg">
-                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
-                        <p class="text-lg">
-                            {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
+
+                        {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
                         <p class="event-date text-lg">
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
