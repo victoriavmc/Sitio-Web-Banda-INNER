@@ -1,5 +1,5 @@
 <x-opciones>
-    <div class="flex justify-center items-center bg-cover h-[86vh]"
+    <div class="flex justify-center items-center bg-cover min-h-screen"
         style="background-image: url('{{ asset('img/perfil_fondo.jpg') }}')">
         @if (session('alertInicioSesion'))
             <x-alerts :type="session('alertInicioSesion')['type']">

@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="max-w-screen-xl mx-auto p-5 sm:p-10 h-[86vh]">
+    <div class="max-w-screen-xl mx-auto p-5 sm:p-10 min-h-screen">
         <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-20">
             @foreach ($listaArtistas as $artista)
                 <a href="{{ $artista['link'] }}" class="flex gap-2" target="_blank">

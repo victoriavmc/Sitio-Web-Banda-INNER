@@ -10,7 +10,7 @@
         </x-alerts>
     @endif
 
-    <div class="flex flex-col bg-white min-h-[86vh]">
+    <div class="flex flex-col bg-white min-h-screen">
         <div
             class="mx-auto mb-10 flex w-full flex-col px-5 pt-0 md:h-[unset] md:max-w-[95%] lg:h-[100vh] lg:max-w-[70%] lg:px-6 xl:pl-0 mt-10">
             <div class="h-min w-full rounded-lg">
