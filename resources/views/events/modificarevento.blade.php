@@ -13,9 +13,10 @@
                     <div class="flex flex-col gap-1">
                         <label id="label-lugar" class="font-semibold text-lg" for="select-lugar">Lugares</label>
                         <select id="select-lugar" class="rounded-xl p-2.5" name="lugar">
-                            <option value="" selected disabled>Lugares cargados</option>
+                            <option value="" disabled>Lugares cargados</option>
                             @foreach ($lugares as $lugar)
-                                <option value="{{ $lugar->idlugarLocal }}" {{ old('lugar') }}>
+                                <option value="{{ $lugar->idlugarLocal }}"
+                                    {{ $lugar->idlugarLocal == $show->lugarLocal_idlugarLocal ? 'selected' : '' }}>
                                     {{ $lugar->nombreLugar . ', ' . $lugar->calle . ' ' . $lugar->numero }}
                                 </option>
                             @endforeach
@@ -36,8 +37,9 @@
                         <!-- Lugar -->
                         <div class="flex flex-col gap-1">
                             <label class="font-semibold text-lg" for="lugar-nuevo">Lugar</label>
-                            <input id="lugar-nuevo" name="nuevo_lugar" type="text" value="{{ old('nuevo_lugar') }}"
-                                class="rounded-xl" disabled>
+                            <input id="lugar-nuevo" name="nuevo_lugar" type="text"
+                                value="{{ old('nuevo_lugar', $show->lugarlocal->nombreLugar) }}" class="rounded-xl"
+                                disabled>
                             @error('nuevo_lugar')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
@@ -46,8 +48,8 @@
                         <!-- Calle -->
                         <div class="flex flex-col gap-1">
                             <label class="font-semibold text-lg" for="calle">Calle</label>
-                            <input id="calle" name="calle" type="text" value="{{ old('calle') }}"
-                                class="rounded-xl" disabled>
+                            <input id="calle" name="calle" type="text"
+                                value="{{ old('calle', $show->lugarlocal->calle) }}" class="rounded-xl" disabled>
                             @error('calle')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
@@ -56,8 +58,8 @@
                         <!-- Numero -->
                         <div class="flex flex-col gap-1">
                             <label class="font-semibold text-lg" for="numero">Número</label>
-                            <input id="numero" name="numero" type="number" value="{{ old('numero') }}"
-                                class="rounded-xl" disabled>
+                            <input id="numero" name="numero" type="number"
+                                value="{{ old('numero', $show->lugarlocal->numero) }}" class="rounded-xl" disabled>
                             @error('numero')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
@@ -68,7 +70,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="font-semibold text-lg" for="fecha">Fecha y hora</label>
                         <input id="fecha" class="rounded-xl" type="datetime-local" name="fecha"
-                            value="{{ old('fecha', $show->fechaShow) }}">
+                            value="{{ old('fecha', $show->fechashow) }}">
                         @error('fecha')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror

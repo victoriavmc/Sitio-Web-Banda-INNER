@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="flex flex-col gap-7 justify-center bg-white min-h-[86vh] text-black">
+    <div class="flex flex-col gap-7 justify-center bg-white min-h-[86vh] text-black p-4">
         <h1 class="text-center text-4xl">Crear Evento</h1>
 
         <div class="flex justify-center">
