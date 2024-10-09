@@ -28,7 +28,7 @@ class AlbumMusicaController extends Controller
         foreach ($albumes as $album) {
             // Verificar si las relaciones existen para evitar errores
             $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
-            $albumFecha = $album->albumdatos->fechaAlbum ?? 'Fecha no disponible';
+            $albumFecha = $album->albumdatos->fechaSubido ?? 'Fecha no disponible';
             $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
 
             // Inicializar la lista de canciones para cada álbum

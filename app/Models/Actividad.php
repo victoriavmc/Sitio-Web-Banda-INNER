@@ -35,11 +35,6 @@ class Actividad extends Model
     {
         // Este evento se ejecuta justo antes de que se cree un nuevo registro
         static::creating(function ($actividad) {
-            // Asignar valores por defecto si no se han establecido ESTO ELIMINAR DESPUES
-            $actividad->contadorMg = $actividad->contadorMg ?? 0;
-            $actividad->contadorNM = $actividad->contadorNM ?? 0;
-            $actividad->reporte = $actividad->reporte ?? 0;
-
             if (Auth::check()) {
                 $actividad->usuarios_idusuarios = Auth::user()->idusuarios;
             }
