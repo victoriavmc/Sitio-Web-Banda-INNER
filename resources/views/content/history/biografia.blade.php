@@ -1,8 +1,8 @@
 <x-AppLayout>
-    @foreach ($recuperoBiografia as $biografia)
-        @if (!empty($biografia->imagenes) && isset($biografia->imagenes[0]))
+    @if ($recuperoBiografia)
+        @if (!empty($recuperoBiografia->imagenes) && isset($recuperoBiografia->imagenes[0]))
             <div class="bg-cover bg-center text-center overflow-hidden"
-                style="min-height: 600px; background-image:url('{{ asset(Storage::url($biografia->imagenes[0])) }}')"
+                style="min-height: 600px; background-image:url('{{ asset(Storage::url($recuperoBiografia->imagenes[0])) }}')"
                 title="Banda">
             </div>
         @else
@@ -15,21 +15,19 @@
                 <div
                     class="mt-3 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
                     <div class="bg-white relative top-0 -mt-32 p-5 sm:p-10">
-                        <h1 class="text-black font-bold text-center text-8xl mb-2">{{ $biografia->titulo }}
-                        </h1>
+                        <h1 class="text-black font-bold text-center text-8xl mb-2">{{ $recuperoBiografia->titulo }}</h1>
                         @auth
                             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                                <a href="{{ route('editarP', $biografia->idcontenidos) }}"
+                                <a href="{{ route('editarP', $recuperoBiografia->idcontenidos) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
                             @endif
                         @endauth
-                        <p class="text-base text-black leading-8 my-5">{{ $biografia->descripcion }}
-                        </p>
+                        <p class="text-base text-black leading-8 my-5">{{ $recuperoBiografia->descripcion }}</p>
                     </div>
 
                     {{-- EN CASO DE QUE HAYA IMÁGENES --}}
-                    @if (count($biografia->imagenes) > 1)
-                        @foreach (array_slice($biografia->imagenes, 1) as $imagen)
+                    @if (count($recuperoBiografia->imagenes) > 1)
+                        @foreach (array_slice($recuperoBiografia->imagenes, 1) as $imagen)
                             <div class="p-5 sm:p-8">
                                 <div
                                     class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
@@ -38,6 +36,7 @@
                             </div>
                         @endforeach
                     @endif
+
 
 
                     <div class="mx-auto px-5 mb-10">
@@ -110,5 +109,5 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endif
 </x-AppLayout>

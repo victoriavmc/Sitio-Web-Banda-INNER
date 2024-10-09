@@ -100,7 +100,7 @@
                         <div class="flex space-x-1">
                             <div class="flex gap-2">
                                 {{-- Like --}}
-                                {{-- <div
+                                <div
                                     class="bg-green-500 shadow-lg shadow-green-600 text-white cursor-pointer px-3 text-center justify-center items-center py-1 rounded-xl flex space-x-2 flex-row">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0"
                                         viewBox="0 0 1024 1024" class="text-xl" height="1em" width="1em"
@@ -109,11 +109,11 @@
                                             d="M885.9 533.7c16.8-22.2 26.1-49.4 26.1-77.7 0-44.9-25.1-87.4-65.5-111.1a67.67 67.67 0 0 0-34.3-9.3H572.4l6-122.9c1.4-29.7-9.1-57.9-29.5-79.4A106.62 106.62 0 0 0 471 99.9c-52 0-98 35-111.8 85.1l-85.9 311H144c-17.7 0-32 14.3-32 32v364c0 17.7 14.3 32 32 32h601.3c9.2 0 18.2-1.8 26.5-5.4 47.6-20.3 78.3-66.8 78.3-118.4 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7-.2-12.6-2-25.1-5.6-37.1zM184 852V568h81v284h-81zm636.4-353l-21.9 19 13.9 25.4a56.2 56.2 0 0 1 6.9 27.3c0 16.5-7.2 32.2-19.6 43l-21.9 19 13.9 25.4a56.2 56.2 0 0 1 6.9 27.3c0 16.5-7.2 32.2-19.6 43l-21.9 19 13.9 25.4a56.2 56.2 0 0 1 6.9 27.3c0 22.4-13.2 42.6-33.6 51.8H329V564.8l99.5-360.5a44.1 44.1 0 0 1 42.2-32.3c7.6 0 15.1 2.2 21.1 6.7 9.9 7.4 15.2 18.6 14.6 30.5l-9.6 198.4h314.4C829 418.5 840 436.9 840 456c0 16.5-7.2 32.1-19.6 43z">
                                         </path>
                                     </svg><button>
-                                        <span>{{ $actividad['contadorMg'] }}</span>
+                                        <span>{{ $actividad['megusta'] }}</span>
                                     </button>
-                                </div> --}}
+                                </div>
                                 {{-- Dislike --}}
-                                {{-- <div
+                                <div
                                     class="bg-red-500 shadow-lg shadow-red-600 text-white cursor-pointer px-3 py-1 text-center justify-center items-center rounded-xl flex space-x-2 flex-row">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0"
                                         viewBox="0 0 1024 1024" class="text-xl" height="1em" width="1em"
@@ -122,10 +122,10 @@
                                             d="M885.9 490.3c3.6-12 5.4-24.4 5.4-37 0-28.3-9.3-55.5-26.1-77.7 3.6-12 5.4-24.4 5.4-37 0-28.3-9.3-55.5-26.1-77.7 3.6-12 5.4-24.4 5.4-37 0-51.6-30.7-98.1-78.3-118.4a66.1 66.1 0 0 0-26.5-5.4H144c-17.7 0-32 14.3-32 32v364c0 17.7 14.3 32 32 32h129.3l85.8 310.8C372.9 889 418.9 924 470.9 924c29.7 0 57.4-11.8 77.9-33.4 20.5-21.5 31-49.7 29.5-79.4l-6-122.9h239.9c12.1 0 23.9-3.2 34.3-9.3 40.4-23.5 65.5-66.1 65.5-111 0-28.3-9.3-55.5-26.1-77.7zM184 456V172h81v284h-81zm627.2 160.4H496.8l9.6 198.4c.6 11.9-4.7 23.1-14.6 30.5-6.1 4.5-13.6 6.8-21.1 6.7a44.28 44.28 0 0 1-42.2-32.3L329 459.2V172h415.4a56.85 56.85 0 0 1 33.6 51.8c0 9.7-2.3 18.9-6.9 27.3l-13.9 25.4 21.9 19a56.76 56.76 0 0 1 19.6 43c0 9.7-2.3 18.9-6.9 27.3l-13.9 25.4 21.9 19a56.76 56.76 0 0 1 19.6 43c0 9.7-2.3 18.9-6.9 27.3l-14 25.5 21.9 19a56.76 56.76 0 0 1 19.6 43c0 19.1-11 37.5-28.8 48.4z">
                                         </path>
                                     </svg>
-                                    <span>{{ $actividad['contadorNM'] }}</span>
-                                </div> --}}
+                                    <span>{{ $actividad['nomegusta'] }}</span>
+                                </div>
                                 {{-- Reportar --}}
-                                {{-- <div
+                                <div
                                     class="bg-black shadow-lg shadow-green-600 text-white cursor-pointer px-3 text-center justify-center items-center py-1 rounded-xl flex space-x-2 flex-row">
                                     <form action="{{ route('reportarActividad', $recuperoPublicacion->idcontenidos) }}"
                                         method="POST">
@@ -134,7 +134,7 @@
                                             Reportar
                                         </button>
                                     </form>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -173,62 +173,96 @@
                     <p>No hay comentarios aún.</p>
                 @else
                     @foreach ($comentarios as $comentario)
-                        <div class="space-y-4 mb-4">
-                            <div class="flex">
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <div class="flex items-center mb-2">
                                 <a href="{{ route('perfil-ajeno', $comentario['autor']->idusuarios) }}">
-                                    <div class="flex-shrink-0 mr-3">
-                                        <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
-                                            src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
-                                            alt="Usuario">
+                                    <img src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
+                                        alt="Usuario" class="w-10 h-10 rounded-full mr-3">
+                                    <div>
+                                        <h3 class="font-semibold">{{ $comentario['autor']->usuarioUser }}</h3>
+                                        <p class="text-sm text-gray-500">{{ $comentario['comentario']->fechaComent }}
+                                        </p>
                                     </div>
                                 </a>
-                                <div
-                                    class="flex-1 border rounded-lg text-black px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-
-                                    <div class="flex justify-between items-center mb-2">
+                            </div>
+                            <p class="text-gray-700">{{ $comentario['comentario']->descripcion }}</p>
+                            <div class="flex items-center mt-2">
+                                <button class="text-blue-500 hover:text-blue-600 mr-2">
+                                    {{-- #Like --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path fill="black"
+                                            d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
+                                    </svg>
+                                    @if (isset($comentario['interaccionComentario']))
                                         <div>
-                                            <strong>{{ $comentario['autor']->usuarioUser }}</strong>
-                                            <span
-                                                class="text-xs text-black">{{ $comentario['comentario']->fechaComent }}</span>
+                                            <p>{{ $comentario['interaccionComentario']['megusta'] }}</p>
                                         </div>
-
-                                        @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios ||
-                                                Auth::user()->rol->idrol == 1 ||
-                                                Auth::user()->rol->idrol == 2)
-                                            <!-- Botón para eliminar comentario -->
-                                            <form
-                                                action="{{ route('eliminarComentario', $comentario['comentario']->idcomentarios) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-red-500 hover:bg-red-700 text-white font-bold p-1 border border-red-700 rounded"
-                                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
-                                                    <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                                        xmlns="http://www.w3.org/2000/svg" width="24"
-                                                        height="24" fill="none" viewBox="0 0 24 24">
-                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2"
-                                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </div>
-
-                                    <p class="text-sm text-black">{{ $comentario['comentario']->descripcion }}</p>
-
-                                    <!-- Mostrar la imagen del comentario si existe -->
-                                    @if (
-                                        !empty($comentario['imagenComentario']) &&
-                                            is_array($comentario['imagenComentario']) &&
-                                            count($comentario['imagenComentario']) > 0)
-                                        <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
-                                            class="mt-2 rounded-lg max-w-xs" alt="Imagen del comentario">
                                     @endif
-                                </div>
+                                    {{-- Dislike --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path fill="black"
+                                            d="M19 15h4V3h-4m-4 0H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2a2 2 0 0 0 2 2h6.31l-.95 4.57c-.02.1-.03.2-.03.31c0 .42.17.79.44 1.06L9.83 23l6.58-6.59c.37-.36.59-.86.59-1.41V5a2 2 0 0 0-2-2" />
+                                    </svg>
+                                    @if (isset($comentario['interaccionComentario']))
+                                        <div>
+                                            <p>{{ $comentario['interaccionComentario']['nomegusta'] }}</p>
+                                        </div>
+                                    @endif
+                                    {{-- Reportar DEBE SER UN FORMULARIO POR EL REPORTAR --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <g class="flag-outline">
+                                            <g fill="#ff0000" class="Vector">
+                                                <path d="M3 3a1 1 0 0 1 2 0v18a1 1 0 1 1-2 0z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M5.757 5.481c-.34.127-.543.244-.626.312A1 1 0 1 1 3.87 4.24c.327-.266.762-.475 1.192-.635a9 9 0 0 1 1.479-.399c1.01-.185 2.237-.244 3.213.087c.337.114.68.284.987.44l.188.095c.259.132.512.261.786.385c.665.302 1.364.53 2.15.53c.784 0 1.845-.324 2.916-.718q.387-.143.747-.282l.016-.006c.23-.089.456-.175.66-.25c.208-.075.413-.146.598-.198c.163-.047.398-.105.632-.105h.016c.107 0 .373-.002.633.096c.38.144.622.431.748.75c.101.254.133.534.148.767q.024.38.022.945a1 1 0 1 1-2 0q0-.236-.003-.415l-.109.04q-.283.104-.64.241l-.007.003c-.238.09-.498.19-.77.29c-1.047.386-2.421.841-3.607.841c-1.184 0-2.18-.346-2.976-.707c-.32-.145-.624-.3-.885-.434l-.167-.085a6 6 0 0 0-.725-.329c-.502-.17-1.331-.175-2.211-.013a7 7 0 0 0-1.143.306ZM20 10.678a1 1 0 0 1 1 1v2.015c0 1.06-.804 1.909-1.699 2.153c-.206.056-.449.125-.714.2c-.554.158-1.208.344-1.849.504c-.946.235-2.002.45-2.874.45c-1.184 0-2.18-.347-2.976-.707a21 21 0 0 1-1.052-.52a6 6 0 0 0-.725-.328c-.516-.175-1.356-.194-2.233-.054a7 7 0 0 0-1.138.28c-.34.118-.534.23-.609.291a1 1 0 0 1-1.262-1.551c.335-.273.778-.477 1.21-.628c.448-.157.96-.283 1.483-.367c1.014-.162 2.23-.191 3.19.135c.338.114.68.283.988.439l.188.095c.259.133.512.262.786.386c.665.302 1.364.529 2.15.529c.61 0 1.461-.16 2.391-.391c.611-.152 1.196-.319 1.73-.471q.419-.12.79-.222a.36.36 0 0 0 .17-.117c.052-.062.055-.104.055-.106v-2.015a1 1 0 0 1 1-1"
+                                                    clip-rule="evenodd" />
+                                                <path d="M19 5a1 1 0 1 1 2 0v7.153a1 1 0 1 1-2 0z" />
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    @if (isset($comentario['interaccionComentario']))
+                                        <div>
+                                            <p>{{ $comentario['interaccionComentario']['reporte'] }}</p>
+                                        </div>
+                                    @endif
+                                </button>
+                                {{-- SANTI DEPEDEN DE VOS, LIKE DISLIKE, MODIFICAR --}}
+                                <button class="text-green-500 hover:text-green-600">Modificar</button>
                             </div>
                         </div>
+                        @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios ||
+                                Auth::user()->rol->idrol == 1 ||
+                                Auth::user()->rol->idrol == 2)
+                            <!-- Botón para eliminar comentario -->
+                            <form action="{{ route('eliminarComentario', $comentario['comentario']->idcomentarios) }}"
+                                method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold p-1 border border-red-700 rounded"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                    <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        @endif
+
+                        <!-- Mostrar la imagen del comentario si existe -->
+                        @if (
+                            !empty($comentario['imagenComentario']) &&
+                                is_array($comentario['imagenComentario']) &&
+                                count($comentario['imagenComentario']) > 0)
+                            <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
+                                class="mt-2 rounded-lg max-w-xs" alt="Imagen del comentario">
+                        @endif
 
                         {{-- MODIFICAR COMENTARIO SOLO MOSTRAR SI TOCA EL BOTON --}}
                         @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios)
