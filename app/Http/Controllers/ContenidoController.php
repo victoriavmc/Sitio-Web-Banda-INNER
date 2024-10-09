@@ -812,7 +812,31 @@ class ContenidoController extends Controller
     }
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
-    public function reportarActividadEspecifica(Request $idActividad) {}
+    public function reportarActividadEspecifica(Request $interaccionID)
+    {
+        $recuperoInteraccion = Interacciones::find($interaccionID);
+
+        #Recupero quien es el usuario que reporto
+        $usuarioReporto = $interaccionID->usuarios_idusuarios;
+
+        #Recupero que actividad reporto
+        $actividadReportada = Actividad::find($recuperoInteraccion->actividad_idActividad);
+
+        #Recupero el usuario que fue reportado (Creo la publicacion)
+        $usuarioReportado = $actividadReportada->usuarios_idusuarios;
+
+        #Envia mails ...
+        #1 Reportaste la cuenta
+        #2 Admin Reporto x a y, revisar publicacion...
+        #EN CASO QUE SEA POR UNA PUBLICACION
+        #hay que ver si es un comentario o contenido, y segun lo que sea, enviar fragmento de la publicacion o el comentario
+
+        #Debe salir un mensaje Ya has reportado esta cuenta (Si reporto la publicacion)
+
+        # Reporte
+
+        # Debe de incrementarse el reporte de la tabla reportes (Coincide el usuario)
+    }
 
     #Para los likes y dislikes solo es un usuario por actividad.
 }
