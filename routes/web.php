@@ -26,7 +26,8 @@ Route::get('/', [InicioController::class, 'index'])
 Route::view('/underConstruction', "underConstruction")
     ->name('underConstruction');
 // TERMINOS Y CONDICIONES
-Route::view('/terminos-de-servicio', 'termsService')->name('terminos-de-servicio');
+Route::view('/terminos-de-servicio', 'termsService')
+    ->name('terminos-de-servicio');
 ####################################################################################
 //----------------------- CARPETA AUTH -----------------------------------------------
 #
@@ -149,6 +150,13 @@ Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class,
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
 
+Route::get('/eventos/lugares-cargados', [eventosController::class, 'lugaresCargados'])
+    ->name('lugares-cargados');
+
+Route::get('/eventos', [eventosController::class, 'eventos'])->name('eventos');
+
+Route::delete('/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar']);
+
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
     ->name('crear-formulario');
 
@@ -167,79 +175,103 @@ Route::delete('/eventos/eliminar/{id}', [eventosController::class, 'eliminarEven
 //----------------------- CARPETA CONTENIDO -----------------------
 #
 // SUPERFAN (Descargas)
-Route::get('/superFan', [SuperFanController::class, 'indexSuperFan'])->name('superFan');
+Route::get('/superFan', [SuperFanController::class, 'indexSuperFan'])
+    ->name('superFan');
 //----------------------- CARPETA HISTORY -----------------------
 // VER BIOGRAFIA
-Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])->name('biografia');
+Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])
+    ->name('biografia');
 #
 //----------------------- CARPETA NEWS -----------------------
 // VER NOTICIAS
-Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])->name('noticias');
+Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])
+    ->name('noticias');
 
 // VER NOTICIAS POR UNIDAD
-Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])->name('noticiaUnica');
+Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])
+    ->name('noticiaUnica');
 
 // Ruta para ver el formulario de crear noticias
-Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormularioNoticia'])->name('verFormularioNoticia');
+Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormularioNoticia'])
+    ->name('verFormularioNoticia');
 
 // Ruta para crear una nueva publicación
-Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
+Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])
+    ->name('crearP');
 
 // Ruta para mostrar el formulario de modificación
-Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])
+    ->name('editarP');
 
 // Ruta para actualizar la publicación (este es el método POST)
-Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])
+    ->name('modificarP');
 
 //REPORTAR FORO PUBLICACION
-Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])->name('reportarActividad');
+Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])
+    ->name('reportarActividad');
 
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO
-Route::get('/foro', [ContenidoController::class, 'indexForo'])->name('foro');
+Route::get('/foro', [ContenidoController::class, 'indexForo'])
+    ->name('foro');
 
 // VER PUBLICACION DE FORO POR UNIDAD
-Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])->name('foroUnico');
+Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])
+    ->name('foroUnico');
 
 // Ruta para ver el formulario
-Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])->name('verFormularioForo');
+Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])
+    ->name('verFormularioForo');
 
 // Ruta para crear la publicación
-Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])->name('crearP');
+Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])
+    ->name('crearP');
 
 // Ruta para mostrar el formulario de modificación
-Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])->name('editarP');
+Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])
+    ->name('editarP');
 
 // Ruta para actualizar la publicación (este es el método POST)
-Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])->name('modificarP');
+Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])
+    ->name('modificarP');
 
 //Ruta para eliminar la publicacion especifica
-Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])->name('eliminarContenido');
+Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])
+    ->name('eliminarContenido');
 
 // CREAR Comentario
-Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])->name('crearComentario');
+Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])
+    ->name('crearComentario');
 
 // MODIFICAR COMENTARIO
-Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])->name('modificarComentario');
+Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])
+    ->name('modificarComentario');
 
 // ELIMINAR COMENTARIO
-Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])->name('eliminarComentario');
+Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])
+    ->name('eliminarComentario');
 
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
 // VER ARTISTAS
-Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])->name('artistas');
+Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])
+    ->name('artistas');
 
 // VER STAFF
-Route::get('/job/staff', [JobsController::class, 'indexStaff'])->name('staff');
+Route::get('/job/staff', [JobsController::class, 'indexStaff'])
+    ->name('staff');
 ##################################################################################################
 //------------------------ CARPETA UTILS (ALBUMS) ------------------------
 // VER ALBUM Musica
-Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])->name('discografia');
+Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])
+    ->name('discografia');
 // VER ALBUM Galera
-Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])->name('albumGaleria');
+Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])
+    ->name('albumGaleria');
 // Traer API YT
-Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])->name('actualizarYt');
+Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
+    ->name('actualizarYt');
 ##################################################################################################
 
 // Subir tipo de imagen

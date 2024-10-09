@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="flex items-center justify-center min-h-[86vh] bg-white">
+    <div class="flex items-center justify-center min-h-screen bg-white">
         <div class="flex flex-col">
             <div class="flex flex-col mt-8">
                 <div class="container max-w-7xl px-4">

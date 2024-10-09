@@ -1,5 +1,5 @@
 <x-AppLayout title="Registro">
-    <div class="wrapper min-h-[86vh] bg-center justify-center"
+    <div class="wrapper bg-center justify-center"
         style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
         <div class="inner bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->

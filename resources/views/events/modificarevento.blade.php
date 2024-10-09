@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="flex flex-col gap-7 justify-center bg-white min-h-[86vh] text-black p-4">
+    <div class="flex flex-col gap-7 justify-center bg-white min-h-screen text-black p-4">
         <h1 class="text-center text-4xl">Modificar Evento</h1>
 
         <div class="flex justify-center">
@@ -17,7 +17,7 @@
                             @foreach ($lugares as $lugar)
                                 <option value="{{ $lugar->idlugarLocal }}"
                                     {{ $lugar->idlugarLocal == $show->lugarLocal_idlugarLocal ? 'selected' : '' }}>
-                                    {{ $lugar->nombreLugar . ', ' . $lugar->calle . ' ' . $lugar->numero }}
+                                    {{ $lugar->nombreLugar . ', ' . $lugar->localidad . ', ' . $lugar->calle . ' ' . $lugar->numero }}
                                 </option>
                             @endforeach
                         </select>
@@ -35,7 +35,7 @@
                     <!-- Campos para ingresar un nuevo lugar -->
                     <div id="nuevos-lugar-container" class="hidden">
                         <!-- Lugar -->
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1 mb-2">
                             <label class="font-semibold text-lg" for="lugar-nuevo">Lugar</label>
                             <input id="lugar-nuevo" name="nuevo_lugar" type="text"
                                 value="{{ old('nuevo_lugar', $show->lugarlocal->nombreLugar) }}" class="rounded-xl"
@@ -46,7 +46,7 @@
                         </div>
 
                         <!-- Calle -->
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1 mb-2">
                             <label class="font-semibold text-lg" for="calle">Calle</label>
                             <input id="calle" name="calle" type="text"
                                 value="{{ old('calle', $show->lugarlocal->calle) }}" class="rounded-xl" disabled>
@@ -56,11 +56,21 @@
                         </div>
 
                         <!-- Numero -->
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1 mb-2">
                             <label class="font-semibold text-lg" for="numero">Número</label>
                             <input id="numero" name="numero" type="number"
                                 value="{{ old('numero', $show->lugarlocal->numero) }}" class="rounded-xl" disabled>
                             @error('numero')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Localidad -->
+                        <div class="flex flex-col gap-1">
+                            <label class="font-semibold text-lg" for="localidad">Localidad</label>
+                            <input id="localidad" name="localidad" type="text"
+                                value="{{ old('localidad', $show->lugarlocal->localidad) }}" class="rounded-xl">
+                            @error('localidad')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
