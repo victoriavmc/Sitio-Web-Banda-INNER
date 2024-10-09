@@ -61,7 +61,7 @@
                                             <circle cx="9" cy="10" r="2"></circle>
                                         </svg>
                                         <span
-                                            class="text-md text-black mx-1">{{ $comentarios[$publicacion->idcontenidos]['comentarios'] ?? 0 }}</span>
+                                            class="text-md text-black mx-1">{{ $contadorComentarios[$publicacion->idcontenidos]['cuenta'] ?? 0 }}</span>
                                     </div>
                                 </div>
                                 <!-- Recupera la visualización de estrellas para la publicación actual -->

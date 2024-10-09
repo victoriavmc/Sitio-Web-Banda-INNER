@@ -322,10 +322,9 @@ class ContenidoController extends Controller
 
             // Almaceno el conteo en el array
             $contarComentarios[$publicacion->idcontenidos] = [
-                'comentarios' => $contadorComentarios,
+                'cuenta' => $contadorComentarios,
             ];
         }
-
         return $contarComentarios;
     }
 
@@ -811,4 +810,9 @@ class ContenidoController extends Controller
 
         return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('success', 'Comentario modificado exitosamente.');
     }
+
+    #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
+    public function reportarActividadEspecifica(Request $idActividad) {}
+
+    #Para los likes y dislikes solo es un usuario por actividad.
 }
