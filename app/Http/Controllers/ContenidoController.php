@@ -751,10 +751,9 @@ class ContenidoController extends Controller
         }
     }
 
-    # Crear un nuevo comentario
     public function crearComentario(Request $request, $idContent)
     {
-        // Validar los datos
+        // Validar los datos: al menos un campo debe estar presente (contenido o imagen)
         $request->validate([
             'contenido' => 'nullable|string|max:500|required_without_all:imagen',
             'imagen' => 'nullable|image|max:2048|required_without_all:contenido',
@@ -766,16 +765,20 @@ class ContenidoController extends Controller
         // Crear un nuevo comentario
         $comentario = new Comentarios();
         $comentario->fechaComent = now();
-        $comentario->descripcion = $request->contenido; // Asegúrate de usar 'contenido'
-        $comentario->Actividad_idActividad = $actividad->idActividad; // Asociar la actividad creada
-        $comentario->contenidos_idcontenidos = $idContent; // Asociar el contenido específico
+        $comentario->descripcion = $request->contenido ?? ''; // Si no hay contenido, guarda cadena vacía
+        $comentario->Actividad_idActividad = $actividad->idActividad;
+        $comentario->contenidos_idcontenidos = $idContent;
 
         // Manejo de imagen
         if ($request->hasFile('imagen')) {
+            // Llamar a la función que maneja la imagen y la revisión
             list($imagen, $revisionImagen) = $this->manejarImagenYRevision($request->file('imagen'), 5);
+
+            // Asociar la imagen con el comentario
             $comentario->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
 
+        // Guardar el comentario
         $comentario->save();
 
         return redirect()->route('foroUnico', ['data' => $idContent])->with('success', 'Comentario agregado exitosamente.');
