@@ -604,6 +604,9 @@ class ContenidoController extends Controller
 
             // Eliminar la imagen asociada al comentario
             $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+
+            // Eliminar la actividad del comentario de la tabla actividad
+            Actividad::where('idActividad', $comentario->Actividad_idActividad)->delete();
         }
 
         // Eliminar las imágenes de contenido y sus revisiones
