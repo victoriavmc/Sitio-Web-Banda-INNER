@@ -260,6 +260,9 @@ Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentar
 Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])
     ->name('artistas');
 
+Route::put('/artistas/{id}/modificar-imagen', [JobsController::class, 'modificarImagenArtista'])
+    ->name('artistas.modificarImagen');
+
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])
     ->name('staff');

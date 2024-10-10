@@ -9,6 +9,8 @@ use App\Models\StaffExtra;
 
 # Otros
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class JobsController extends Controller
 {
@@ -107,5 +109,76 @@ class JobsController extends Controller
     }
 
     #Modificar la imagen del artista
-    public function modificarImagenArtista(Request $request) {}
+    public function modificarImagenArtista(Request $request, $id)
+    {
+        // Validar la imagen
+        $request->validate([
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Encontrar el artista por ID
+        $artista = Artistas::find($id);
+        $userId = $artista->staffExtra->usuarios_idusuarios;
+
+        // Verificar si ya existe una foto
+        $existeFoto = RevisionImagenes::where('tipoDeFoto_idtipoDeFoto', 6)
+            ->where('usuarios_idusuarios', $userId) // Cambiado a $userId
+            ->first();
+
+        if ($existeFoto != null) {
+            // Obtener el registro de la imagen anterior
+            $imagenAnterior = Imagenes::find($existeFoto->imagenes_idimagenes);
+
+            // Eliminar el registro de la revisión anterior
+            // Primero, eliminar la relación en el artista
+            $artista->revisionImagenes_idrevisionImagenescol = null;
+            $artista->save(); // Guardar los cambios en el artista
+
+            $existeFoto->delete(); // Luego, eliminar la revisión
+
+            // Ahora eliminar el archivo del almacenamiento
+            if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
+                Storage::delete($imagenAnterior->subidaImg);
+            }
+
+            // Eliminar el registro de la imagen anterior
+            if ($imagenAnterior) {
+                $imagenAnterior->delete();
+            }
+        }
+
+        // Guardar la nueva imagen
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('img', 'public');
+
+            // Crear nuevo registro de imagen
+            $imagen = new Imagenes();
+            $imagen->subidaImg = $path;
+            $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
+            $imagen->save();
+
+            // ID de la nueva imagen
+            $idFoto = $imagen->idimagenes;
+
+            // Guarda la imagen a lo que está relacionada
+            $revisionImg = new RevisionImagenes();
+            $revisionImg->usuarios_idusuarios = $userId; // Ahora se usa el ID del usuario
+            $revisionImg->imagenes_idimagenes = $idFoto;
+            $revisionImg->tipoDeFoto_idtipoDeFoto = 6;
+            $revisionImg->save();
+
+            // Actualizar el ID de la imagen en el artista
+            $artista->revisionImagenes_idrevisionImagenescol = $revisionImg->idrevisionImagenescol;
+
+            // Guardar los cambios en el artista
+            $artista->save();
+
+            // Redirigir a la ruta 'artistas'
+            return redirect()->route('artistas')->with('success', 'Imagen actualizada con éxito.');
+        }
+
+        // Si no hay archivo, redirigir de nuevo con un mensaje de error
+        return redirect()->route('artistas')->with('error', 'No se ha cargado ninguna imagen.');
+    }
 }
