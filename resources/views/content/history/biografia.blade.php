@@ -1,8 +1,8 @@
 <x-AppLayout>
-    @if ($recuperoBiografia)
-        @if (!empty($recuperoBiografia->imagenes) && isset($recuperoBiografia->imagenes[0]))
+    @if ($imagenesBiografia)
+        @if ($imagenesBiografia->isNotEmpty() && isset($imagenesBiografia[0]))
             <div class="bg-cover bg-center text-center overflow-hidden"
-                style="min-height: 600px; background-image:url('{{ asset(Storage::url($recuperoBiografia->imagenes[0])) }}')"
+                style="min-height: 600px; background-image:url('{{ asset(Storage::url($imagenesBiografia[0]->revisionImagenes->imagenes->subidaImg)) }}')"
                 title="Banda">
             </div>
         @else
@@ -26,16 +26,20 @@
                     </div>
 
                     {{-- EN CASO DE QUE HAYA IMÁGENES --}}
-                    @if (count($recuperoBiografia->imagenes) > 1)
-                        @foreach (array_slice($recuperoBiografia->imagenes, 1) as $imagen)
-                            <div class="p-5 sm:p-8">
-                                <div
-                                    class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-                                    <img src="{{ asset(Storage::url($imagen)) }}" alt="Imagen de la banda">
-                                </div>
+                    @if ($imagenesBiografia->count() > 1)
+                        <div class="p-5 sm:p-8">
+                            <div
+                                class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
+                                @foreach (array_slice($imagenesBiografia->toArray(), 1) as $imagenContenido)
+                                    @if ($imagenContenido['revisionImagenes'] && $imagenContenido['revisionImagenes']['imagenes'])
+                                        <img src="{{ asset(Storage::url($imagenContenido['revisionImagenes']['imagenes']['subidaImg'])) }}"
+                                            alt="Imagen de la banda">
+                                    @endif
+                                @endforeach
                             </div>
-                        @endforeach
+                        </div>
                     @endif
+
 
                     <div class="mx-auto">
                         <div class="flex flex-col justify-center">

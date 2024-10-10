@@ -105,12 +105,15 @@ class ContenidoController extends Controller
         $recuperoRedesSociales = $this->linksRedes();
         # Recupero solo publicaciones de Biografia
         $recuperoBiografia = Contenidos::where('tipoContenido_idtipoContenido', 3)->first();
+
         $idBio = $recuperoBiografia->idcontenidos;
 
-        # Recupero las todas las imagenes que tengan idcontendio
-        $recuperoBiografia->imagenes = $this->ImagenesContenido('contenidos_idcontenidos', $idBio);
+        // Recupero todas las imágenes que tengan ese idcontenidos
+        $imagenesBiografia = ImagenesContenido::with('revisionImagenes.imagenes')
+            ->where('contenidos_idcontenidos', $idBio)
+            ->get();
 
-        return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia'));
+        return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia', 'imagenesBiografia'));
     }
 
     #MODIFICAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
