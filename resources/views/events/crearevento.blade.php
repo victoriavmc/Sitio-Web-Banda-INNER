@@ -127,6 +127,16 @@
                         </div>
                     </div>
 
+                    <!-- Link de compra -->
+                    <div class="flex flex-col gap-1 mb-2">
+                        <label class="font-semibold text-lg" for="linkCompra">Link de compra</label>
+                        <input id="linkCompra" name="linkCompra" type="text" value="{{ old('linkCompra') }}"
+                            class="rounded-xl">
+                        @error('linkCompra')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Imagen de Portada -->
                     <div class="flex flex-col gap-1">
                         <label class="font-semibold text-lg" for="imagen">Imagen de Portada</label>

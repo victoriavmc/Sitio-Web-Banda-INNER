@@ -60,7 +60,7 @@
         </div>
 
         {{-- EVENTOS --}}
-        <div class="grid grid-cols-2 gap-5">
+        <div class="relative grid grid-cols-2 gap-5">
             @foreach ($shows as $show)
                 <div class="relative items-start text-black bg-white p-3 rounded-xl shadow-xl"
                     style="display: grid; grid-template-columns:30% 35% 35%">
@@ -86,7 +86,7 @@
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
                             @if (now() < $show->fechashow)
-                                <a href="https://www.instagram.com/direct/t/117977966259675/" target="_blank">
+                                <a href="{{ $show->linkCompraEntrada }}" target="_blank">
                                     <button
                                         class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6">
                                         <p>Adquirir Entrada</p>

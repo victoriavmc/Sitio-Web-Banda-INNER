@@ -38,11 +38,37 @@ class eventosController extends Controller
         return view('events.eventos', compact('shows'));
     }
 
-    public function lugaresCargados()
+    public function lugaresCargados(Request $request)
     {
+        // Inicializamos las queries para ambas tablas
+        $lugaresQuery = LugarLocal::query();
+        $ubicacionesQuery = UbicacionShow::query();
+
+        // Si existe un término de búsqueda, aplicamos los filtros
+        if ($request->has('search') && $search = $request->input('search')) {
+            // Filtrar en LugarLocal por nombreLugar, localidad, calle o número
+            $lugaresQuery->where(function ($q) use ($search) {
+                $q->where('nombreLugar', 'like', '%' . $search . '%')
+                    ->orWhere('localidad', 'like', '%' . $search . '%')
+                    ->orWhere('calle', 'like', '%' . $search . '%')
+                    ->orWhere('numero', 'like', '%' . $search . '%');
+            });
+
+            // Filtrar en UbicacionShow por provinciaLugar o paisLugar
+            $ubicacionesQuery->where(function ($q) use ($search) {
+                $q->where('provinciaLugar', 'like', '%' . $search . '%')
+                    ->orWhere('paisLugar', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Obtener todos los registros si no hay búsqueda
+        $lugares = $lugaresQuery->get();
+        $ubicaciones = $ubicacionesQuery->get();
+
+        // Obtener todos los shows (puedes adaptarlo si también quieres filtrar por shows)
         $shows = Show::orderBy('fechashow', 'desc')->get();
-        $lugares = LugarLocal::all();
-        $ubicaciones = UbicacionShow::all();
+
+        // Retornar la vista con los datos obtenidos
         return view('events.lugaresEventos', compact('shows', 'lugares', 'ubicaciones'));
     }
 
@@ -102,12 +128,14 @@ class eventosController extends Controller
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
+            'linkCompra' => 'required|url|min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
             'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
             'nuevo_provincia.required_without' => 'Debe agregar una nueva provincia o seleccionar una existente.',
             'pais.required_if' => 'El país es obligatorio cuando se agrega una nueva provincia.',
+            'localidal.required_if' => 'La localidad es obligatoria cuando se agrega una nueva provincia.'
         ]);
 
         if ($validator->fails()) {
@@ -149,6 +177,7 @@ class eventosController extends Controller
         $evento->fechashow = $request->input('fecha');
         $evento->ubicacionShow_idubicacionShow = $ubicacionId;
         $evento->lugarLocal_idlugarLocal = $lugarId;
+        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
@@ -194,17 +223,18 @@ class eventosController extends Controller
             'nuevo_lugar' => 'nullable|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
-            'localidad' => 'required|string|min:3|max:255',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'nullable|string|max:255',
             'numero' => 'nullable|numeric',
             'nuevo_provincia' => 'nullable|string|max:255',
             'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
+            'linkCompra' => 'required|url|min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'lugar.required_without' => 'Debe seleccionar un lugar si no está agregando uno nuevo.',
             'nuevo_provincia.required_without' => 'Debe agregar una nueva provincia o seleccionar una existente.',
             'pais.required_if' => 'El país es obligatorio cuando se agrega una nueva provincia.',
+            'localidal.required_if' => 'La localidad es obligatoria cuando se agrega una nueva provincia.'
         ]);
 
         if ($validator->fails()) {
@@ -254,6 +284,7 @@ class eventosController extends Controller
         $evento->fechashow = $request->input('fecha');
         $evento->ubicacionShow_idubicacionShow = $ubicacionId; // Asignar el ID de la ubicación
         $evento->lugarLocal_idlugarLocal = $lugarId; // Asignar el ID del lugar
+        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {

@@ -91,7 +91,7 @@
                         <label id="label-ubicacion" class="font-semibold text-lg" for="select-ubicacion">Ubicacion
                             (Provincia y Pais)</label>
                         <select id="select-ubicacion" class="rounded-xl p-2.5" name="provincia">
-                            <option value="" selected disabled>Provincias cargadas</option>
+                            <option value="" disabled>Provincias cargadas</option>
                             @foreach ($ubicaciones as $ubicacion)
                                 <option value="{{ $ubicacion->idubicacionShow }}"
                                     {{ old('provincia', $show->ubicacionShow) == $ubicacion->idubicacionShow ? 'selected' : '' }}>
@@ -132,6 +132,16 @@
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
+                    </div>
+
+                    <!-- Link de compra -->
+                    <div class="flex flex-col gap-1 mb-2">
+                        <label class="font-semibold text-lg" for="linkCompra">Link de compra</label>
+                        <input id="linkCompra" name="linkCompra" type="text"
+                            value="{{ old('linkCompra', $show->linkCompraEntrada) }}" class="rounded-xl">
+                        @error('linkCompra')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Imagen de Portada -->

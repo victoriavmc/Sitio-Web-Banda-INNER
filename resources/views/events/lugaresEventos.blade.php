@@ -10,6 +10,23 @@
             <h1 class="text-center text-4xl">Lugares y ubicaciones cargadas</h1>
         </div>
 
+
+        <form action="{{ route('lugares-cargados') }}" method="GET"
+            class="w-full mx-auto mb-10 max-w-lg bg-white rounded-lg shadow-xl">
+            <div
+                class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-red-500 focus-within:!ring-2 ring-inset focus-within:!ring-red-500 rounded-md">
+                <svg class="mr-2 h-5 w-5 text-black stroke-black" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input
+                    class="block w-full appearance-none text-base text-black placeholder:text-black focus:outline-none sm:text-sm sm:leading-6 border-none"
+                    placeholder="Buscar lugares y ubicaciones..." name="search" aria-label="Search components"
+                    type="text" aria-expanded="false" aria-autocomplete="list" value="{{ request('search') }}"
+                    style="caret-color: rgb(107, 114, 128)">
+            </div>
+        </form>
+
         <div class="grid grid-cols-2 gap-10 max-w-max mx-auto">
             <nav
                 class="flex min-w-[240px] flex-col gap-1 p-1.5 rounded-xl bg-white shadow-xl max-h-[300px] overflow-y-auto">
@@ -50,7 +67,6 @@
                     </div>
                 @endforeach
             </nav>
-
             <nav
                 class="flex min-w-[240px] flex-col gap-1 p-1.5 rounded-xl bg-white shadow-xl max-h-[300px] overflow-y-auto">
                 <h1 class="text-center text-3xl mb-2">Ubicaciones</h1>
@@ -91,6 +107,7 @@
                 @endforeach
             </nav>
         </div>
+    </div>
 
     </div>
 </x-AppLayout>
