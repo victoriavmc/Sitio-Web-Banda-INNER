@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class AppLayout extends Component
 {
@@ -23,6 +24,8 @@ class AppLayout extends Component
 
     public function __construct()
     {
+        // Ejecutar el comando para actualizar el estado
+        Artisan::call('shows:update-status');
 
         $this->isAuthenticated = Auth::check();
 
@@ -66,7 +69,7 @@ class AppLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        $links=$this->linksRedes();
+        $links = $this->linksRedes();
         return view('components.AppLayout');
     }
 }
