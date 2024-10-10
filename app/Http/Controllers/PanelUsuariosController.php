@@ -139,41 +139,8 @@ class PanelUsuariosController extends Controller
         ]);
     }
 
-    // Elimina imagen
-    public function eliminarImagen($id)
+    public function borrarImagen($id)
     {
-        // Verifica si existe la foto
-        $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $id)
-            ->where('tipoDeFoto_idtipoDeFoto', 1)
-            ->first();
-
-        if ($existeFoto) {
-            // Obtener el registro de la imagen anterior
-            $imagen = Imagenes::find($existeFoto->imagenes_idimagenes);
-
-            // Eliminar el registro de la revisión anterior
-            $existeFoto->delete(); // IMPORTANTE: Eliminar primero la revisión
-
-            // Eliminar el archivo del almacenamiento y el registro de la imagen anterior
-            if ($imagen) {
-                if (Storage::exists($imagen->subidaImg)) {
-                    Storage::delete($imagen->subidaImg);
-                }
-
-                // Ahora eliminar el registro de la imagen anterior
-                $imagen->delete();
-            }
-
-            return true; // Indica que la eliminación fue exitosa
-        }
-
-        return false; // Indica que no se encontró la foto
-    }
-
-    // Eliminar la imagen del usuario
-    public function borrarImagen(Request $id)
-    {
-        // Llama a la función de eliminar imagen
         $eliminado = $this->eliminarImagen($id);
 
         if ($eliminado) {
@@ -184,9 +151,32 @@ class PanelUsuariosController extends Controller
         } else {
             return redirect()->route('panel-de-usuarios')->with('alertEliminacion', [
                 'type' => 'Danger',
-                'message' => 'No se puede eliminar la imagen por defecto del usuario',
+                'message' => 'No se encontró la imagen o no se pudo eliminar',
             ]);
         }
+    }
+
+    public function eliminarImagen($id)
+    {
+        $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $id)
+            ->where('tipoDeFoto_idtipoDeFoto', 1)
+            ->first();
+
+        if ($existeFoto) {
+            $imagen = Imagenes::find($existeFoto->imagenes_idimagenes);
+
+            $existeFoto->delete();
+
+            if ($imagen) {
+                if (Storage::exists($imagen->subidaImg)) {
+                    Storage::delete($imagen->subidaImg);
+                }
+                $imagen->delete();
+            }
+            return true;
+        }
+
+        return false;
     }
 
     #Eliminar Revision e Imagenes

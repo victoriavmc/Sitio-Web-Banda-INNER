@@ -97,8 +97,9 @@ Route::post('/perfil/editar-correo', [perfilController::class, 'editarCorreo'])
 Route::post('/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
     ->name('cambiar-imagen')->middleware('auth');
 
-Route::post('/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
-    ->name('eliminar-imagen')->middleware('auth');
+Route::post('/borrar-imagen/{id}', [perfilController::class, 'borrarImagen'])
+    ->name('borrar-imagen')->middleware('auth');
+
 
 Route::delete('/perfil/eliminar-cuenta', [perfilController::class, 'eliminarCuenta'])
     ->name('eliminar-cuenta')->middleware('auth');
