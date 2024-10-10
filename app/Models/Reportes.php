@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Redsocial extends Model
+class Reportes extends Model
 {
-    protected $table = 'redsocial';
+    protected $table = 'reportes';
     public $timestamps = false;
-    protected $primaryKey = 'idredsocial';
+    protected $primaryKey = 'idreportes';
 
     // Asignar valores por defecto si no están establecidos
     protected static function booted()
     {
-        static::creating(function ($redsocial) {
-            $redsocial->reportes = $redsocial->reportes ?? 0;
+        static::creating(function ($reportes) {
+            $reportes->reportes = $reportes->reportes ?? 0;
         });
     }
 

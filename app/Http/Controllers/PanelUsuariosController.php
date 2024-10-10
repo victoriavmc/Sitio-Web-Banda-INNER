@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 #CLASES
+
+use App\Models\Actividad;
 use App\Models\Imagenes;
+use App\Models\Interacciones;
+use App\Models\Reportes;
 use App\Models\RevisionImagenes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
 use App\Models\Usuario;
-
 #Otros
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -164,5 +167,20 @@ class PanelUsuariosController extends Controller
         $usuario = Usuario::find($id);
 
         // Eliminar el usuario en cascada
+
+        // Elimino al usuario de la tabla reportes
+        $reportes = Reportes::where('usuarios_idusuarios', $id)->first();
+        $reportes->delete();
+
+        // Elimino todas las interacciones que realizo el usuario.
+        $interacciones = Interacciones::where('usuarios_idusuarios', $id)->get();
+        foreach ($interacciones as $interaccion) {
+            $interaccion->delete();
+        }
+
+        // Elimino Actividades realizadas Contenidos, como comentarios de dichos contenidos, y las interacciones a esos contenidos como comentarios.
+
+        // Primero accedo a todas las actividades realizadas por el usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
     }
 }
