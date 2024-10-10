@@ -72,13 +72,13 @@ class eventosController extends Controller
 
     public function crearEvento(Request $request)
     {
+
         // Validar los campos
         $validator = Validator::make($request->all(), [
             'nuevo_lugar' => 'required_without:lugar|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
             'provincia' => 'required',
-            'localidad' => 'required|string|min:3|max:255',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
@@ -86,6 +86,7 @@ class eventosController extends Controller
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
             'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
+            'localidad.required_if' => 'required|string|min:3|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -114,6 +115,7 @@ class eventosController extends Controller
         // Crear el evento (Show) utilizando el ID del lugar
         $evento = new Show();
         $evento->fechashow = $request->input('fecha');
+        $evento->estadoShow = 'pendiente';
         $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
         $evento->lugarLocal_idlugarLocal = $lugarId;
 
@@ -131,7 +133,7 @@ class eventosController extends Controller
             $revisionImagen = new RevisionImagenes();
             $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
             $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 4;
             $revisionImagen->save();
 
             // Asociar la revisión de la imagen al comentario
@@ -146,7 +148,6 @@ class eventosController extends Controller
             'message' => 'Se ha creado el evento!',
         ]);
     }
-
 
     public function formularioModificar($id)
     {
@@ -244,7 +245,7 @@ class eventosController extends Controller
             $revisionImagen = new RevisionImagenes();
             $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
             $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 4;
             $revisionImagen->save();
 
             // Asociar la nueva revisión de la imagen al evento

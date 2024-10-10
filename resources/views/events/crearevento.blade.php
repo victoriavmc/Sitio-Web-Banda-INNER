@@ -66,14 +66,13 @@
                         <div class="flex flex-col gap-1">
                             <label class="font-semibold text-lg" for="localidad">Localidad</label>
                             <input id="localidad" name="localidad" type="text" value="{{ old('localidad') }}"
-                                class="rounded-xl">
+                                class="rounded-xl" disabled>
                             @error('localidad')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Otros campos del formulario -->
                     <div class="flex flex-col gap-1">
                         <label class="font-semibold text-lg" for="fecha">Fecha y hora</label>
                         <input id="fecha" class="rounded-xl" type="datetime-local" name="fecha"
@@ -84,8 +83,8 @@
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label class="font-semibold text-lg" for="provincia">Provincia</label>
-                        <select id="provincia" class="rounded-xl p-2.5" name="provincia">
+                        <label class="font-semibold text-lg" for="select-ubicacion">Provincia y Pais</label>
+                        <select id="select-ubicacion" class="rounded-xl p-2.5" name="provincia">
                             <option value="" selected disabled>Provincias cargadas</option>
                             @foreach ($ubicaciones as $ubicacion)
                                 <option value="{{ $ubicacion->idubicacionShow }}" {{ old('provincia') }}>
@@ -96,6 +95,35 @@
                         @error('provincia')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
+                    </div>
+
+                    <!-- Botón para agregar una nueva Provincia y Pais -->
+                    <button type="button" id="crear-nuevo-paisProvincia-btn"
+                        class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                        Crear una Provincia y Pais
+                    </button>
+
+                    <!-- Campos para ingresar un nuevo Pais y Provincia -->
+                    <div id="nueva-ubicacion-container" class="hidden">
+                        <!-- Provincia -->
+                        <div class="flex flex-col gap-1 mb-2">
+                            <label class="font-semibold text-lg" for="provincia-nuevo">Provincia</label>
+                            <input id="provincia-nuevo" name="nuevo_provincia" type="text"
+                                value="{{ old('nuevo_provincia') }}" class="rounded-xl" disabled>
+                            @error('nuevo_provincia')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Pais -->
+                        <div class="flex flex-col gap-1 mb-2">
+                            <label class="font-semibold text-lg" for="pais">Pais</label>
+                            <input id="pais" name="pais" type="text" value="{{ old('pais') }}"
+                                class="rounded-xl" disabled>
+                            @error('pais')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Imagen de Portada -->
@@ -121,10 +149,11 @@
         document.getElementById('crear-nuevo-lugar-btn').addEventListener('click', function() {
             const nuevosLugarContainer = document.getElementById('nuevos-lugar-container');
             const selectLugar = document.getElementById('select-lugar');
-            const labelLugar = document.getElementById('label-lugar');
             const lugarInput = document.getElementById('lugar-nuevo');
             const calleInput = document.getElementById('calle');
             const numeroInput = document.getElementById('numero');
+            const localidadInput = document.getElementById('localidad');
+
 
             // Alternar la visibilidad de los campos
             if (nuevosLugarContainer.classList.contains('hidden')) {
@@ -132,12 +161,12 @@
                 nuevosLugarContainer.classList.remove('hidden');
                 // Ocultar el select de lugares
                 selectLugar.classList.add('hidden');
-                labelLugar.classList.add('hidden');
 
                 // Habilitar los inputs
                 lugarInput.disabled = false;
                 calleInput.disabled = false;
                 numeroInput.disabled = false;
+                localidadInput.disabled = false;
 
                 // Cambiar el texto del botón
                 this.innerText = 'Elegir lugar existente';
@@ -146,12 +175,47 @@
                 nuevosLugarContainer.classList.add('hidden');
                 // Mostrar el select de lugares
                 selectLugar.classList.remove('hidden');
-                labelLugar.classList.remove('hidden');
 
                 // Deshabilitar los inputs
                 lugarInput.disabled = true;
                 calleInput.disabled = true;
                 numeroInput.disabled = true;
+                localidadInput.disabled = true;
+
+                // Cambiar el texto del botón
+                this.innerText = 'Crear un nuevo lugar';
+            }
+        });
+
+        document.getElementById().addEventListener('click', function() {
+            const nuevaUbicacionContainer = document.getElementById('nueva-ubicacion-container');
+            const selectUbicacion = document.getElementById('select-ubicacion');
+            const provinciaInput = document.getElementById('provincia');
+            const paisInput = document.getElementById('pais');
+
+            if (nuevaUbicacionContainer.classList.contains('hidden')) {
+                // Mostrar los campos de crear un nuevo lugar
+                nuevaUbicacionContainer.classList.remove('hidden');
+                // Ocultar el select de lugares
+                selectUbicacion.classList.add('hidden');
+
+                // Habilitar los inputs
+                lugarInput.disabled = false;
+                calleInput.disabled = false;
+
+
+                // Cambiar el texto del botón
+                this.innerText = 'Elegir lugar existente';
+            } else {
+                // Ocultar los campos de crear un nuevo lugar
+                nuevaUbicacionContainer.classList.add('hidden');
+                // Mostrar el select de lugares
+                selectUbicacion.classList.remove('hidden');
+
+                // Deshabilitar los inputs
+                lugarInput.disabled = true;
+                calleInput.disabled = true;
+
 
                 // Cambiar el texto del botón
                 this.innerText = 'Crear un nuevo lugar';

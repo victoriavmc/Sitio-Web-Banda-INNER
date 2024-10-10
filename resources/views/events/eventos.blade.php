@@ -39,9 +39,6 @@
                     </div>
                 @endif
             @endauth
-
-
-
             <div class="w-full flex justify-center items-center relative z-0">
                 <form action="{{ route('eventos') }}" method="GET"
                     class="w-full max-w-lg bg-white rounded-lg shadow-xl">
