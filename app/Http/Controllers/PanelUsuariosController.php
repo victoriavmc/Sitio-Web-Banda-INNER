@@ -202,7 +202,6 @@ class PanelUsuariosController extends Controller
         }
     }
 
-
     // Eliminar el usuario en cascada
     public function eliminarUsuario($id)
     {

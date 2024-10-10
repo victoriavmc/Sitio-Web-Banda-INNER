@@ -17,8 +17,7 @@ use App\Http\Controllers\SuperFanController;
 use App\Models\Paisnacimiento;
 use Illuminate\Support\Facades\Route;
 
-//----------------------- SUELTOS ---------------------------------------------------
-#
+//----------------------- SUELTOS 
 // INICIO
 Route::get('/', [InicioController::class, 'index'])
     ->name('inicio');
@@ -28,10 +27,10 @@ Route::view('/underConstruction', "underConstruction")
 // TERMINOS Y CONDICIONES
 Route::view('/terminos-de-servicio', 'termsService')
     ->name('terminos-de-servicio');
-####################################################################################
-//----------------------- CARPETA AUTH -----------------------------------------------
+######################################
+//----------------------- CARPETA AUTH 
 #
-// ----------------------------- Reestablecer ----------------------------------------
+//----------------------- Reestablecer 
 Route::view('/solicitarPin', 'auth.SolicitarPin')
     ->name('solicitarPin')->middleware('guest');
 
@@ -40,7 +39,8 @@ Route::view('/comprobarPin', 'auth.comprobarPin')
 
 Route::view('/restablecer', 'auth.restablecer')
     ->name('restablecer')->middleware('guest');
-// ----------------------------- LOGIN -----------------------------------------------
+
+//----------------------- LOGIN 
 Route::post('/inicia-sesion', [loginController::class, 'login'])
     ->name('inicia-sesion')->middleware('guest');
 
@@ -58,7 +58,7 @@ Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
 
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
-// -------------------------------- Vistas inicio de sesion --------------------------
+//----------------------- Vistas inicio de sesion 
 Route::view('/login', "auth.login")
     ->name('login')->middleware('guest');
 
@@ -68,10 +68,10 @@ Route::get('/registro', function () {
 
     return view('auth.registro', compact('paises'));
 })->name('registro')->middleware('guest');
-#######################################################################################
-//---------------------------------- CARPETA PROFILE ----------------------------------
+###################################################
+//----------------------- CARPETA PROFILE
 #
-// ---------------------------------- Perfil ------------------------------------------
+//----------------------- Perfil 
 Route::get('/perfil', [perfilController::class, 'perfil'])
     ->name('perfil')->middleware('auth');
 
@@ -81,10 +81,11 @@ Route::get('/modificar-perfil', [perfilController::class, 'modificarPerfil'])
 // PERFIL AJENO
 Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
     ->name('perfil-ajeno');
-// -------------------------------------------- Redes ---------------------------------
+
+//----------------------- Redes
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])
     ->name('modificar-redes')->middleware('auth');
-// ---------------------------------- Perfil POST -------------------------------------
+//----------------------- Perfil POST
 Route::post('/perfil/editar-datos', [perfilController::class, 'editarInfoCuenta'])
     ->name('editar-datos')->middleware('auth');
 
@@ -94,16 +95,16 @@ Route::post('/perfil/editar-contrasenia', [perfilController::class, 'editarContr
 Route::post('/perfil/editar-correo', [perfilController::class, 'editarCorreo'])
     ->name('editar-correo')->middleware('auth');
 
-Route::post('/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
+Route::post('/perfil/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
     ->name('cambiar-imagen')->middleware('auth');
 
-Route::post('/borrar-imagen/{id}', [perfilController::class, 'borrarImagen'])
-    ->name('borrar-imagen')->middleware('auth');
+Route::post('/perfil/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
+    ->name('eliminar-imagen')->middleware('auth');
 
-
+#### VER... 
 Route::delete('/perfil/eliminar-cuenta', [perfilController::class, 'eliminarCuenta'])
     ->name('eliminar-cuenta')->middleware('auth');
-// --------------------------------- MODIFICAR REDES SOCIALES-------------------------
+//----------------------- MODIFICAR REDES SOCIALES
 Route::post('/perfil/guardar-redes', [redessocialesController::class, 'guardarRedes'])
     ->name('guardar-redes')->middleware('auth');
 
@@ -121,7 +122,7 @@ Route::post('/perfil/guardar-redes-staff', [redessocialesController::class, 'gua
 
 Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedSocialStaff'])
     ->name('eliminar-red-social-staff')->middleware('auth');
-// ---------------------------------- Panel de Usuarios ------------------------------------------
+//----------------------- Panel de Usuarios
 Route::get('/panel-de-usuarios', [panelUsuariosController::class, 'panel'])
     ->name('panel-de-usuarios')->middleware('auth');
 
@@ -133,7 +134,7 @@ Route::post('/panel-de-usuarios/borrar-imagen/{id}', [panelUsuariosController::c
 
 Route::post('/panel-de-usuarios/eliminar-usuario/{id}', [panelUsuariosController::class, 'eliminarUsuario'])
     ->name('eliminar-usuario')->middleware('auth');
-// ---------------------------------- Panel de Staff --------------------------------------------
+//----------------------- Panel de Staff
 Route::get('/panel-de-staff', [panelStaffController::class, 'panel'])
     ->name('panel-de-staff')->middleware('auth');
 

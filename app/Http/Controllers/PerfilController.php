@@ -18,7 +18,7 @@ use App\Mail\msjBajaCuenta;
 use App\Mail\msjCambios;
 use App\Mail\msjReportaron;
 use App\Mail\msjReporto;
-
+use App\Models\Reportes;
 #Aparte
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -361,7 +361,7 @@ class PerfilController extends Controller
 
         $userReportado = $request->usuarios_idusuarios;
 
-        $reporte = Redsocial::where('usuarios_idusuarios', $userReportado)->first();
+        $reporte = Reportes::where('usuarios_idusuarios', $userReportado)->first();
 
         $aumentoReporte = $reporte->reportes;
         $aumentoReporte++;
@@ -389,7 +389,7 @@ class PerfilController extends Controller
         switch ($decision) {
             case 0:
                 #En caso que el reporte sea falso, disminuyo el reporte
-                $reporte = Redsocial::where('usuarios_idusuarios', $idReportado)->first();
+                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
                 $disminuyoReporte = $reporte->reportes;
                 $disminuyoReporte--;
                 $reporte->reportes = $disminuyoReporte;
