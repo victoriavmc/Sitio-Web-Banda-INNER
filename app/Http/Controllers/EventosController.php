@@ -70,58 +70,37 @@ class eventosController extends Controller
         return view('events.crearevento', compact('ubicaciones', 'lugares'));
     }
 
-    public function crearEvento(Request $request)
+    public function formularioModificar($id)
     {
-        // Validar los campos
-        $validator = Validator::make($request->all(), [
-            'nuevo_lugar' => 'required_without:lugar|string|max:255',
-            'lugar' => 'required_without:nuevo_lugar|string|max:255',
-            'fecha' => 'required|date_format:Y-m-d\TH:i',
-            'provincia' => 'required',
-            'localidad' => 'required|string|min:3|max:255',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
-            'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
-        ], [
-            'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
-            'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
-            'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
-        ]);
+        $show = Show::findOrFail($id);
+        $lugares = LugarLocal::all();
+        $ubicaciones = UbicacionShow::all();
+        return view('events.modificarevento', compact('show', 'ubicaciones', 'lugares'));
+    }
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    protected function manejarImagen(Request $request, Show $evento, $modificar = false)
+    {
+        if ($modificar && $request->hasFile('imagen')) {
+            // Eliminar la imagen previa y su revisión, si existe
+            $revisionImagen = RevisionImagenes::find($evento->revisionImagenes_idrevisionImagenescol);
+            if ($revisionImagen) {
+                $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                if ($imagen) {
+                    if (Storage::disk('public')->exists($imagen->subidaImg)) {
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                    }
+                    $imagen->delete();
+                }
+                $revisionImagen->delete();
+                $evento->revisionImagenes_idrevisionImagenescol = null;
+            }
         }
 
-        // Inicializar la variable para el ID del lugar
-        $lugarId = null;
-
-        // Crear el lugar si se seleccionó "Agregar uno nuevo"
-        if ($request->filled('nuevo_lugar')) {
-            // Crear un nuevo lugar
-            $nuevoLugar = new LugarLocal();
-            $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
-            $nuevoLugar->calle = $request->input('calle');
-            $nuevoLugar->numero = $request->input('numero');
-            $nuevoLugar->localidad = $request->input('localidad');
-            $nuevoLugar->save();
-
-            $lugarId = $nuevoLugar->idlugarLocal;
-        } else {
-            // Usar el lugar existente
-            $lugarId = $request->input('lugar');
-        }
-
-        // Crear el evento (Show) utilizando el ID del lugar
-        $evento = new Show();
-        $evento->fechashow = $request->input('fecha');
-        $evento->estadoShow = 'pendiente';
-        $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
-        $evento->lugarLocal_idlugarLocal = $lugarId;
-
-        // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
+            // Subir la nueva imagen
             $path = $request->file('imagen')->store('img', 'public');
 
+            // Guardar la imagen en la tabla "imagenes"
             $imagen = new Imagenes();
             $imagen->subidaImg = $path;
             $imagen->fechaSubidaImg = now();
@@ -132,35 +111,34 @@ class eventosController extends Controller
             $revisionImagen = new RevisionImagenes();
             $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
             $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 4;
             $revisionImagen->save();
 
-            // Asociar la revisión de la imagen al comentario
+            // Asociar la revisión de la imagen al evento
             $evento->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
+    }
+    protected function obtenerLugarId(Request $request)
+    {
+        if ($request->filled('nuevo_lugar')) {
+            // Crear un nuevo lugar
+            $nuevoLugar = new LugarLocal();
+            $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
+            $nuevoLugar->calle = $request->input('calle');
+            $nuevoLugar->numero = $request->input('numero');
+            $nuevoLugar->localidad = $request->input('localidad');
+            $nuevoLugar->save();
 
-        $evento->save();
-
-        // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect()->route('eventos')->with('alertCrear', [
-            'type' => 'Success',
-            'message' => 'Se ha creado el evento!',
-        ]);
+            return $nuevoLugar->idlugarLocal;
+        } else {
+            // Usar el lugar existente
+            return $request->input('lugar');
+        }
     }
 
-
-    public function formularioModificar($id)
+    protected function validarEvento(Request $request)
     {
-        $show = Show::findOrFail($id);
-        $lugares = LugarLocal::all();
-        $ubicaciones = UbicacionShow::all();
-        return view('events.modificarevento', compact('show', 'ubicaciones', 'lugares'));
-    }
-
-    public function modificarEvento(Request $request, $id)
-    {
-        // Validaciones
-        $validator = Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'nuevo_lugar' => 'required_without:lugar|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
@@ -173,89 +151,58 @@ class eventosController extends Controller
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
             'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
-        ]);
+        ])->validate();
+    }
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        // Obtener el evento que se va a modificar
-        $evento = Show::findOrFail($id);
+    public function crearEvento(Request $request)
+    {
+        $this->validarEvento($request);
 
         // Inicializar la variable para el ID del lugar
-        $lugarId = null;
+        $lugarId = $this->obtenerLugarId($request);
 
-        // Si se seleccionó "Agregar un nuevo lugar"
-        if ($request->filled('nuevo_lugar')) {
-            // Crear un nuevo lugar
-            $nuevoLugar = new LugarLocal();
-            $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
-            $nuevoLugar->calle = $request->input('calle');
-            $nuevoLugar->numero = $request->input('numero');
-            $nuevoLugar->localidad = $request->input('localidad');
-            $nuevoLugar->save();
-
-            $lugarId = $nuevoLugar->idlugarLocal;
-        } else {
-            // Usar el lugar existente
-            $lugarId = $request->input('lugar');
-        }
-
-        // Actualizar los datos del evento
+        // Crear el evento (Show)
+        $evento = new Show();
         $evento->fechashow = $request->input('fecha');
-        $evento->estadoShow = 'pendiente';
+        $evento->estadoShow = 'Activo';
         $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
         $evento->lugarLocal_idlugarLocal = $lugarId;
 
         // Manejar la subida de imagen
-        if ($request->hasFile('imagen')) {
-            $revisionImagen = RevisionImagenes::find($evento->revisionImagenes_idrevisionImagenescol);
+        $this->manejarImagen($request, $evento);
 
-            if ($revisionImagen) {
-                // Obtener la imagen asociada a la revisión
-                $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
-
-                $evento->revisionImagenes_idrevisionImagenescol = null;
-                $evento->save();
-
-                // Eliminar la revisión de imagen después de eliminar el evento
-                $revisionImagen->delete();
-
-                // Eliminar la imagen del almacenamiento y de la base de datos
-                if ($imagen) {
-                    if (Storage::disk('public')->exists($imagen->subidaImg)) {
-                        Storage::disk('public')->delete($imagen->subidaImg);
-                    }
-
-                    $imagen->delete();
-                }
-            }
-
-            // Subir la nueva imagen
-            $path = $request->file('imagen')->store('img', 'public');
-
-            // Guardar la nueva imagen en la tabla "imagenes"
-            $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
-            $imagen->fechaSubidaImg = now();
-            $imagen->contenidoDescargable = 'No';
-            $imagen->save();
-
-            // Crear la nueva revisión de la imagen
-            $revisionImagen = new RevisionImagenes();
-            $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
-            $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
-            $revisionImagen->save();
-
-            // Asociar la nueva revisión de la imagen al evento
-            $evento->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
-        }
-
-        // Guardar los cambios en el evento
         $evento->save();
 
-        // Redirigir a la vista de eventos con un mensaje de éxito
+        // Redirigir con mensaje de éxito
+        return redirect()->route('eventos')->with('alertCrear', [
+            'type' => 'Success',
+            'message' => 'Se ha creado el evento!',
+        ]);
+    }
+
+    public function modificarEvento(Request $request, $id)
+    {
+        $this->validarEvento($request);
+
+        // Obtener el evento que se va a modificar
+        $evento = Show::findOrFail($id);
+
+        // Obtener el lugar (nuevo o existente)
+        $lugarId = $this->obtenerLugarId($request);
+
+        // Actualizar los datos del evento
+        $evento->fechashow = $request->input('fecha');
+        $evento->estadoShow = 'Activo';
+        $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
+        $evento->lugarLocal_idlugarLocal = $lugarId;
+
+        // Manejar la subida de imagen (si hay nueva imagen)
+        $this->manejarImagen($request, $evento, true);
+
+        // Guardar cambios en el evento
+        $evento->save();
+
+        // Redirigir con mensaje de éxito
         return redirect()->route('eventos')->with('alertModificar', [
             'type' => 'Success',
             'message' => 'Se ha modificado el evento!',
