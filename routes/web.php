@@ -153,9 +153,8 @@ Route::get('/eventos', [eventosController::class, 'eventos'])
 Route::get('/eventos/lugares-cargados', [eventosController::class, 'lugaresCargados'])
     ->name('lugares-cargados');
 
-Route::get('/eventos', [eventosController::class, 'eventos'])->name('eventos');
-
-Route::delete('/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar']);
+Route::post('/eventos/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar'])
+    ->name('eliminar-lugar');
 
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
     ->name('crear-formulario');

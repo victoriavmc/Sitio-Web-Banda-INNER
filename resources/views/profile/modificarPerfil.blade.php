@@ -13,7 +13,7 @@
             </x-alerts>
         @endif
         <div class="p-10">
-            <div class="flex bg-white bg-opacity-70 justify-center p-6 gap-6">
+            <div class="flex bg-white bg-opacity-70 rounded-xl justify-center p-6 gap-6">
                 <!-- Contenido principal: Dividido en columnas 2 y 3 -->
                 <div class="flex-1  grid grid-cols-2 gap-6">
                     <!-- Columna 2 -->

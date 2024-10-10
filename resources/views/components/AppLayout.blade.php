@@ -24,8 +24,8 @@
 @endphp
 
 
-<body class=" text-gray-300" style="background-color: #121212">
-    <header class=" bg-black bg-opacity-60 text-center w-full border-b border-gray-600 z-10">
+<body class="text-black bg-slate-100">
+    <header class=" bg-black text-center w-full border-b border-gray-600 z-10">
         <nav class="flex items-center justify-center text-gray-300 relative">
             <!-- Menú izquierdo -->
             <ul class="hidden font-amsterdam lg:flex text-xl gap-4 xl:gap-6 z-10">

@@ -45,6 +45,24 @@ class eventosController extends Controller
         return view('events.lugaresEventos', compact('shows', 'lugares'));
     }
 
+    public function eliminarLugar($id)
+    {
+        $lugar = LugarLocal::find($id);
+        try {
+            $lugar->delete();
+        } catch (\Throwable $th) {
+            return redirect()->route('lugares-cargados')->with('alertBorrar', [
+                'type' => 'Danger',
+                'message' => 'No se ha podido eliminar, el lugar esta en uso!',
+            ]);
+        }
+
+        return redirect()->route('lugares-cargados')->with('alertBorrar', [
+            'type' => 'Success',
+            'message' => 'Se ha eliminado el lugar!',
+        ]);
+    }
+
     public function formularioCrear()
     {
         $lugares = LugarLocal::all();
@@ -124,7 +142,7 @@ class eventosController extends Controller
         $evento->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect(route('eventos'))->with('alertCrear', [
+        return redirect()->route('eventos')->with('alertCrear', [
             'type' => 'Success',
             'message' => 'Se ha creado el evento!',
         ]);
@@ -238,7 +256,7 @@ class eventosController extends Controller
         $evento->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect(route('eventos'))->with('alertModificar', [
+        return redirect()->route('eventos')->with('alertModificar', [
             'type' => 'Success',
             'message' => 'Se ha modificado el evento!',
         ]);

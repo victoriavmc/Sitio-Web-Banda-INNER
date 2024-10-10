@@ -77,7 +77,7 @@
                                 <form action="{{ route('actualizarYt') }}" method="POST">
                                     @csrf <!-- Asegúrate de incluir el token CSRF -->
                                     <button type="submit"
-                                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                                        class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
                                         Actualizar Videos
                                     </button>
                                 </form>
