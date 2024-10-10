@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 #Clases
+
+use App\Models\DatosPersonales;
+use App\Models\HistorialUsuario;
 use App\Models\Usuario;
 use App\Models\RevisionImagenes;
 use App\Models\Imagenes;
+use App\Models\Reportes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
@@ -21,7 +25,11 @@ class panelStaffController extends Controller
     public function listar(Request $request)
     {
         // Cargar los usuarios con los datos personales y la imagen de perfil
-        $query = Usuario::where('rol_idrol', 2)
+        $query = Usuario::where('rol_idrol', 2) // Filtrar por el rol específico (id 2)
+            ->whereHas('datosPersonales.historialUsuario', function ($q) {
+                // Filtrar solo los que tienen el estado "Activo"
+                $q->where('estado', 'Activo');
+            })
             ->with([
                 'revisionImagenes' => function ($query) {
                     // Filtrar para traer solo la imagen de perfil (idtipodefoto = 1)
@@ -43,6 +51,7 @@ class panelStaffController extends Controller
         // Paginación de usuarios
         return $usuarios = $query->paginate(6);
     }
+
 
     #Visualiza a los miembros del Staff
     public function panel(Request $request)
@@ -172,8 +181,43 @@ class panelStaffController extends Controller
     # Eliminar miembro del Staff
     public function eliminarStaff($id)
     {
+        // Como es un miembro del staff, es decir un trabajador guardamos todo lo que realizo, y no eliminamos, solo vamos a eliminar la redsocial, la foto de perfil, pero guardamos todo lo que hizo. 
+
         // Encontrar al usuario
         $usuario = Usuario::find($id);
+
+        // Relaciono a su usuario con datos personales
+        $datospersonales = DatosPersonales::where('usuarios_idusuarios', $id)->first();
+
+        // Verificamos si existen los datos personales
+        if ($datospersonales) {
+            // Actualizo el Historial Usuario
+            $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $datospersonales->idDatosPersonales)->first();
+            if ($historial) {
+                $historial->estado = "Inactivo";
+                $historial->eliminacionLogica = 'Si';
+                $historial->save();
+            }
+
+            // Aquí deberías borrar la contraseña del usuario de manera segura
+            $usuario->contraseniaUser = null;
+            $usuario->save();
+
+            #Borro solo el atributo de redSocial enlazada en la tabla staffextra
+            $staffextra = StaffExtra::where('usuarios_idusuarios', $id)->first();
+            if ($staffextra) {
+                $staffextra->redesSociales_idredesSociales = null;
+                $staffextra->save();
+            }
+        }
+
+        // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+
+        if ($tieneReportes === 0) {
+            // Si no hay reportes, eliminamos al usuario de la tabla
+            Reportes::where('usuarios_idusuarios', $id)->delete();
+        }
 
         #Eliminar en CASCADA
         return redirect()->route('panel-de-staff')->with('alertEliminacion', [
