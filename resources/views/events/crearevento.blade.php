@@ -83,7 +83,8 @@
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label class="font-semibold text-lg" for="select-ubicacion">Provincia y Pais</label>
+                        <label id="label-ubicacion" class="font-semibold text-lg" for="select-ubicacion">Ubicacion
+                            (Provincia y Pais)</label>
                         <select id="select-ubicacion" class="rounded-xl p-2.5" name="provincia">
                             <option value="" selected disabled>Provincias cargadas</option>
                             @foreach ($ubicaciones as $ubicacion)
@@ -97,10 +98,10 @@
                         @enderror
                     </div>
 
-                    <!-- Botón para agregar una nueva Provincia y Pais -->
-                    <button type="button" id="crear-nuevo-paisProvincia-btn"
+                    <!-- Botón para agregar una nueva ubicacion -->
+                    <button type="button" id="crear-nueva-ubicacion-btn"
                         class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
-                        Crear una Provincia y Pais
+                        Crear una nueva ubicacion
                     </button>
 
                     <!-- Campos para ingresar un nuevo Pais y Provincia -->
@@ -108,7 +109,7 @@
                         <!-- Provincia -->
                         <div class="flex flex-col gap-1 mb-2">
                             <label class="font-semibold text-lg" for="provincia-nuevo">Provincia</label>
-                            <input id="provincia-nuevo" name="nuevo_provincia" type="text"
+                            <input id="provincia" name="nuevo_provincia" type="text"
                                 value="{{ old('nuevo_provincia') }}" class="rounded-xl" disabled>
                             @error('nuevo_provincia')
                                 <span class="text-red-500">{{ $message }}</span>
@@ -148,18 +149,19 @@
     <script>
         document.getElementById('crear-nuevo-lugar-btn').addEventListener('click', function() {
             const nuevosLugarContainer = document.getElementById('nuevos-lugar-container');
+            const labelLugar = document.getElementById('label-lugar');
             const selectLugar = document.getElementById('select-lugar');
             const lugarInput = document.getElementById('lugar-nuevo');
             const calleInput = document.getElementById('calle');
             const numeroInput = document.getElementById('numero');
             const localidadInput = document.getElementById('localidad');
 
-
             // Alternar la visibilidad de los campos
             if (nuevosLugarContainer.classList.contains('hidden')) {
                 // Mostrar los campos de crear un nuevo lugar
                 nuevosLugarContainer.classList.remove('hidden');
                 // Ocultar el select de lugares
+                labelLugar.classList.add('hidden');
                 selectLugar.classList.add('hidden');
 
                 // Habilitar los inputs
@@ -174,6 +176,7 @@
                 // Ocultar los campos de crear un nuevo lugar
                 nuevosLugarContainer.classList.add('hidden');
                 // Mostrar el select de lugares
+                labelLugar.classList.remove('hidden');
                 selectLugar.classList.remove('hidden');
 
                 // Deshabilitar los inputs
@@ -187,38 +190,39 @@
             }
         });
 
-        document.getElementById().addEventListener('click', function() {
+        document.getElementById('crear-nueva-ubicacion-btn').addEventListener('click', function() {
             const nuevaUbicacionContainer = document.getElementById('nueva-ubicacion-container');
+            const labelUbicacion = document.getElementById('label-ubicacion');
             const selectUbicacion = document.getElementById('select-ubicacion');
             const provinciaInput = document.getElementById('provincia');
             const paisInput = document.getElementById('pais');
 
             if (nuevaUbicacionContainer.classList.contains('hidden')) {
-                // Mostrar los campos de crear un nuevo lugar
+                // Mostrar los campos de crear una nueva ubicacion
                 nuevaUbicacionContainer.classList.remove('hidden');
-                // Ocultar el select de lugares
+                // Ocultar el select de ubicacion
+                labelUbicacion.classList.add('hidden');
                 selectUbicacion.classList.add('hidden');
 
                 // Habilitar los inputs
-                lugarInput.disabled = false;
-                calleInput.disabled = false;
-
+                provinciaInput.disabled = false;
+                paisInput.disabled = false;
 
                 // Cambiar el texto del botón
-                this.innerText = 'Elegir lugar existente';
+                this.innerText = 'Elegir ubicacion existente';
             } else {
-                // Ocultar los campos de crear un nuevo lugar
+                // Ocultar los campos de crear una nueva ubicacion
                 nuevaUbicacionContainer.classList.add('hidden');
-                // Mostrar el select de lugares
+                // Mostrar el select de ubicacion
+                labelUbicacion.classList.remove('hidden');
                 selectUbicacion.classList.remove('hidden');
 
                 // Deshabilitar los inputs
-                lugarInput.disabled = true;
-                calleInput.disabled = true;
-
+                provinciaInput.disabled = true;
+                paisInput.disabled = true;
 
                 // Cambiar el texto del botón
-                this.innerText = 'Crear un nuevo lugar';
+                this.innerText = 'Crear una nueva ubicacion';
             }
         });
     </script>

@@ -33,7 +33,7 @@
                         <div class="flex items-center gap-10">
                             <a href="{{ route('lugares-cargados') }}"
                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                Lugares cargados
+                                Lugares y ubicaciones cargadas
                             </a>
                         </div>
                     </div>
