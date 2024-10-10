@@ -97,8 +97,9 @@ Route::post('/perfil/editar-correo', [perfilController::class, 'editarCorreo'])
 Route::post('/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
     ->name('cambiar-imagen')->middleware('auth');
 
-Route::post('/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
-    ->name('eliminar-imagen')->middleware('auth');
+Route::post('/borrar-imagen/{id}', [perfilController::class, 'borrarImagen'])
+    ->name('borrar-imagen')->middleware('auth');
+
 
 Route::delete('/perfil/eliminar-cuenta', [perfilController::class, 'eliminarCuenta'])
     ->name('eliminar-cuenta')->middleware('auth');
@@ -151,26 +152,28 @@ Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
 
 Route::get('/eventos/lugares-cargados', [eventosController::class, 'lugaresCargados'])
-    ->name('lugares-cargados');
+    ->name('lugares-cargados')->middleware('auth');
 
-Route::get('/eventos', [eventosController::class, 'eventos'])->name('eventos');
+Route::delete('/eventos/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar'])
+    ->name('eliminar-lugar')->middleware('auth');
 
-Route::delete('/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar']);
+Route::delete('/eventos/eliminar-ubicacion/{id}', [eventosController::class, 'eliminarUbicacion'])
+    ->name('eliminar-ubicacion')->middleware('auth');
 
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
-    ->name('crear-formulario');
+    ->name('crear-formulario')->middleware('auth');
 
 Route::post('/eventos/crear', [eventosController::class, 'crearEvento'])
-    ->name('crear-evento');
+    ->name('crear-evento')->middleware('auth');
 
 Route::get('/eventos/modificar/{id}', [eventosController::class, 'formularioModificar'])
-    ->name('modificar-formulario');
+    ->name('modificar-formulario')->middleware('auth');
 
 Route::put('/eventos/modificar/{id}', [eventosController::class, 'modificarEvento'])
-    ->name('modificar-evento');
+    ->name('modificar-evento')->middleware('auth');
 
 Route::delete('/eventos/eliminar/{id}', [eventosController::class, 'eliminarEvento'])
-    ->name('eliminar-evento');
+    ->name('eliminar-evento')->middleware('auth');
 ##################################################################################################
 //----------------------- CARPETA CONTENIDO -----------------------
 #
@@ -197,19 +200,19 @@ Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormulari
 
 // Ruta para crear una nueva publicación
 Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])
-    ->name('crearP');
+    ->name('crearP')->middleware('auth');
 
 // Ruta para mostrar el formulario de modificación
 Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])
-    ->name('editarP');
+    ->name('editarP')->middleware('auth');
 
 // Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])
-    ->name('modificarP');
+    ->name('modificarP')->middleware('auth');
 
 //REPORTAR FORO PUBLICACION
 Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])
-    ->name('reportarActividad');
+    ->name('reportarActividad')->middleware('auth');
 
 //----------------------- CARPETA FORUM -----------------------
 // VER FORO
@@ -218,39 +221,39 @@ Route::get('/foro', [ContenidoController::class, 'indexForo'])
 
 // VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])
-    ->name('foroUnico');
+    ->name('foroUnico')->middleware('auth');
 
 // Ruta para ver el formulario
 Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])
-    ->name('verFormularioForo');
+    ->name('verFormularioForo')->middleware('auth');
 
 // Ruta para crear la publicación
 Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])
-    ->name('crearP');
+    ->name('crearP')->middleware('auth');
 
 // Ruta para mostrar el formulario de modificación
 Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])
-    ->name('editarP');
+    ->name('editarP')->middleware('auth');
 
 // Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])
-    ->name('modificarP');
+    ->name('modificarP')->middleware('auth');
 
 //Ruta para eliminar la publicacion especifica
 Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])
-    ->name('eliminarContenido');
+    ->name('eliminarContenido')->middleware('auth');
 
 // CREAR Comentario
 Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])
-    ->name('crearComentario');
+    ->name('crearComentario')->middleware('auth');
 
 // MODIFICAR COMENTARIO
 Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])
-    ->name('modificarComentario');
+    ->name('modificarComentario')->middleware('auth');
 
 // ELIMINAR COMENTARIO
 Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])
-    ->name('eliminarComentario');
+    ->name('eliminarComentario')->middleware('auth');
 
 ##################################################################################################
 //------------------------ CARPETA JOB --------------------------
@@ -271,7 +274,7 @@ Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexA
     ->name('albumGaleria');
 // Traer API YT
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
-    ->name('actualizarYt');
+    ->name('actualizarYt')->middleware('auth');
 ##################################################################################################
 
 // Subir tipo de imagen

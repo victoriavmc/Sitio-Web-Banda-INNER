@@ -11,7 +11,7 @@
             <div class="flex flex-col gap-1">
                 <label class="font-semibold text-lg" for="descripcion">Descripción</label>
                 <textarea name="descripcion"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"
                     required>{{ old('descripcion', $contenido->descripcion) }}</textarea>
             </div>
             <div class="flex flex-col gap-1">
@@ -20,7 +20,7 @@
                 <input class="rounded-xl" type="file" name="imagen[]" multiple>
             </div>
             <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">Actualizar
+                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">Actualizar
             </button>
         </div>
     </form>

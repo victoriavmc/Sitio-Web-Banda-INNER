@@ -28,7 +28,7 @@ CREATE TABLE `actividad` (
   PRIMARY KEY (`idActividad`),
   KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
   CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `actividad` (
 
 LOCK TABLES `actividad` WRITE;
 /*!40000 ALTER TABLE `actividad` DISABLE KEYS */;
-INSERT INTO `actividad` VALUES (1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,6),(9,11),(11,11),(12,11),(18,11),(10,12),(17,12),(13,13),(15,13),(16,13),(14,14);
+INSERT INTO `actividad` VALUES (36,1),(37,1),(1,5),(4,5),(6,5),(7,5),(39,5),(40,5),(41,5),(42,5),(19,6),(20,11),(21,11),(24,11),(22,12),(23,12),(25,13),(26,13),(27,13),(28,13),(29,14),(30,14),(31,14),(32,14),(33,15),(34,15),(35,15);
 /*!40000 ALTER TABLE `actividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `albumdatos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `albumdatos` (
   `idalbumDatos` int NOT NULL AUTO_INCREMENT,
-  `tituloAlbum` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tituloAlbum` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fechaSubido` date DEFAULT NULL,
   PRIMARY KEY (`idalbumDatos`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS `comentarios`;
 CREATE TABLE `comentarios` (
   `idcomentarios` int NOT NULL AUTO_INCREMENT,
   `fechaComent` date DEFAULT NULL,
-  `descripcion` longtext COLLATE utf8mb4_unicode_ci,
+  `descripcion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `Actividad_idActividad` int NOT NULL,
   `contenidos_idcontenidos` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE `comentarios` (
   CONSTRAINT `fk_comentarios_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
   CONSTRAINT `fk_table1_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
   CONSTRAINT `fk_table1_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,7 +241,7 @@ CREATE TABLE `comentarios` (
 
 LOCK TABLES `comentarios` WRITE;
 /*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
-INSERT INTO `comentarios` VALUES (1,'2024-10-09','Nooo, mortal!!! Yo dibujo en palitos jaja',9,8,NULL),(2,'2024-10-10','Asi me quedo a mi:',14,8,NULL),(3,'2024-10-10','Puede ser, a mi me cae bien el vocalista. xD',16,10,NULL),(4,'2024-11-10','SIII, yo me cruce con uno ahi, re buena ondaaaa!!!',12,9,NULL),(5,'2024-11-10','Mortal me tatuo recopado, y me quedo como a ellos...',18,9,NULL),(6,'2024-11-10','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',17,12,NULL);
+INSERT INTO `comentarios` VALUES (7,'2024-10-10','Mortaaaal, yo dibujo con palitos xd',20,13,24),(8,'2024-10-10','Flamaaaaa!!!',22,13,NULL),(9,'2024-10-10','Estaba pensando ir, vos ya fuiste a alguno de sus shows?',24,15,NULL),(10,'2024-10-10','El mio mas copado compa jsjsjs',25,13,25),(11,'2024-10-10','Todas se lucen, fue muy buena la experiencia. 100% recomendado oa',26,14,NULL),(12,'2024-10-10','Tocan todas generalmente, yo les vi la otra vez en el show *Anterior nomas*. Y pude saludarlos, unos capos, menos el negro..',27,15,NULL),(13,'2024-10-10','Ese se difumino en el show cada que apagan las luces... jsjs',28,15,NULL),(16,'2024-10-10','',31,14,27),(17,'2024-10-10','No se los nombres de los temas, pero suenan bien, no hay cambio por no estar en el estudio. God!',32,14,28),(18,'2024-10-10','NOOOO MUY BUENOOOOOO!!!',33,13,NULL),(19,'2024-10-10','Me quedo mortal <3',36,13,NULL),(20,'2024-10-10','F',37,16,NULL);
 /*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,8 +255,8 @@ DROP TABLE IF EXISTS `contenidos`;
 CREATE TABLE `contenidos` (
   `idcontenidos` int NOT NULL AUTO_INCREMENT,
   `fechaSubida` date DEFAULT NULL,
-  `titulo` longtext COLLATE utf8mb4_unicode_ci,
-  `descripcion` longtext COLLATE utf8mb4_unicode_ci,
+  `titulo` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `descripcion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `tipoContenido_idtipoContenido` int NOT NULL,
   `Actividad_idActividad` int NOT NULL,
   PRIMARY KEY (`idcontenidos`),
@@ -264,7 +264,7 @@ CREATE TABLE `contenidos` (
   KEY `fk_contenidos_Actividad1_idx` (`Actividad_idActividad`),
   CONSTRAINT `fk_contenidos_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
   CONSTRAINT `fk_contenidos_tipoContenido1` FOREIGN KEY (`tipoContenido_idtipoContenido`) REFERENCES `tipocontenido` (`idtipoContenido`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +273,7 @@ CREATE TABLE `contenidos` (
 
 LOCK TABLES `contenidos` WRITE;
 /*!40000 ALTER TABLE `contenidos` DISABLE KEYS */;
-INSERT INTO `contenidos` VALUES (1,NULL,'Historia','Inner, una banda de metal originaria de la zona norte de Buenos Aires, está generando un impacto significativo en la escena musical con su potente combinación de subgéneros que abarcan el progresivo, thrash, death y groove metal, entre otros. Actualmente, la banda se encuentra en plena promoción de su álbum debut, titulado \\\\\\\"Journey\\\\\\\". Con una enérgica presencia en las redes sociales y una sólida trayectoria de shows en vivo, Inner ha logrado captar la atención y el apoyo de una base de seguidores creciente. Durante el último año, la banda se presentó en más de 20 shows en vivo en diversos lugares de Buenos Aires y provincias de Argentina, llevando su música contundente y emocionante a audiencias entusiastas en cada presentación. Además de la promoción de \\\\\\\"Journey\\\\\\\", Inner está trabajando arduamente en la creación de su segundo álbum, que se espera lanzar a mediados de 2024. Mediante su constante actividad en la escena, la banda demuestra su compromiso de mantenerse activa y evolucionar musicalmente. El nuevo material promete superar las expectativas de los seguidores de Inner y consolidar aún más su posición en la escena del metal. Inner invita a los amantes de la música a unirse a ellos en este emocionante viaje. La banda ha logrado crear un estilo muy personal, combinando una variada mezcla de subgéneros con letras que exploran pensamientos, reflexiones y temas actuales tanto individuales como colectivos del ser humano. \\\\\\\"Journey\\\\\\\" busca ser este viaje de pensamientos y sonidos. El álbum, compuesto por 9 canciones originales, representa el fruto de años de trabajo y dedicación por parte de los miembros de Inner. Integrantes: - Agustín Casalone en el Bajo - Hernán Ramírez en la Batería - Tomás Casalone en Guitarra y Voz - David Copa en Guitarra',3,1),(2,'2022-04-19','¡INNER EN CULTURA INFERNAL TV!','¡Estamos emocionados de compartir que INNER ha sido destacado en Cultura Infernal TV! En esta publicación, se presenta a nuestra banda en el inicio de los audiogramas. INNER es una banda de Metal originaria de la provincia de Buenos Aires, Argentina, actualmente integrada por Tomás Casalone (voz/guitarra), Agustín Casalone (bajo), David Copa (guitarra) y Hernán Ramírez (batería). Comenzamos como Revealed, un proyecto formado por los hermanos Casalone, y tras el éxito de nuestro EP de 2017, evolucionamos musicalmente y adoptamos el nombre INNER en 2018. En agosto de 2021, lanzamos nuestro primer álbum de larga duración, Journey. También realizamos dos shows importantes en Vade (Morón) y Primer Piso (CABA) a lo largo de 2022. Agradecemos a Cultura Infernal TV por el apoyo y por destacar nuestro trabajo en sus audiogramas. Puedes ver la publicación completa https://www.instagram.com/p/CciE6WrLIfm/',2,2),(3,'2022-04-19','¡ENTREVISTA EN VIVO CON ESTANDARTES_METALICOS!','¡Nos complace anunciar que INNER estuvimos en una entrevista en vivo a través de Instagram Live! Este miércoles 20 de abril, tuvimos una charla increíble sobre cómo estamos trabajando, nuestros proyectos y nuestro reciente álbum Journey. ¡Gracias a todos por su apoyo y por acompañarnos en esta conversación! Estandartes Metálicos | En un par de minutos estaremos compartiendo una agradable entrevista con la banda @inner.metal de la provincia de Buenos Aires.… | Instagram',2,3),(4,'2022-05-21','¡ENTREVISTA DISPONIBLE EN YOUTUBE!','¡La entrevista que nos realizo #LaEstructuraDelInfierno desde México ?? ya está disponible en su canal de YouTube! Disfruta de la nota completa y conoce más sobre nuestra banda, nuestro trabajo y nuestras últimas novedades. Puedes ver la entrevista en el siguiente enlace: https://www.youtube.com/watch?v=dg-WV5jh4Gc&feature=youtu.be ¡Gracias por su continuo apoyo y por acompañarnos en este viaje musical!',2,4),(5,'2024-09-10','¡INNER DESTACANDO EN UN NUEVO ARTÍCULO!','¡Estamos emocionados de compartir que INNER ha sido destacado en un reciente artículo sobre nuestro primer álbum, Journey! El artículo explora a fondo nuestro disco Journey, lanzado en agosto de 2021, y cómo ha sido recibido por los fans y la crítica. También se menciona nuestra evolución desde el proyecto Revealed hasta convertirnos en INNER, y nuestros próximos pasos, incluyendo shows y nuevos proyectos. Puedes leer el artículo completo aquí: https://metal2012.blogspot.com/2022/05/inner-y-su-primer-disco-journey-un.html?m=1 ¡Gracias por su continuo apoyo y por seguirnos en esta travesía musical!',2,5),(6,'2024-10-08','¡LA BANDA INNER ANUNCIA SU PRÓXIMO ÁLBUM!','La banda INNER ha confirmado el lanzamiento de su nuevo álbum titulado \'Ritmos del Futuro\', programado para el 15 de noviembre. Este álbum incluirá colaboraciones con artistas destacados y promete una mezcla única de géneros.',2,6),(7,'2024-10-09','¡GIRA MUNDIAL DE LA BANDA INNER COMIENZA EN ENERO!','Tras el éxito de su último tour, la banda Inner ha anunciado una nueva gira mundial que comenzará en enero de 2025. Los fanáticos podrán disfrutar de sus canciones en vivo en ciudades de todo el mundo, con fechas y lugares que se anunciarán próximamente.',2,7),(8,'2024-10-08','¡Fan art y creatividad de los seguidores!','¿Alguien hace dibujos, covers o algo relacionado con Inner? ¡Me encantaría ver lo que han creado! Yo hice:',1,8),(9,'2024-11-18','Vieron los Tatuajes??!!!','Que cantidad de tatuajes que tienen los chicos, fuaaaaa mortal, tienen re buenos diseños y recomiendan mucho de Sirius Tatto!!!',1,10),(10,'2024-11-19','El guitarrista es Nword!','He sido fan de la banda por mucho tiempo, pero últimamente me ha molestado la actitud del guitarrista. Siento que no trata bien a los fans y eso afecta la imagen del grupo. Ojalá pueda cambiar su comportamiento y volver a ser un ejemplo positivo.',1,11),(11,'2024-11-19','Me quede sin ideas','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',1,13),(12,'2024-11-19','Otro mas para probar','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',1,15);
+INSERT INTO `contenidos` VALUES (1,NULL,'Historia','Inner, una banda de metal originaria de la zona norte de Buenos Aires, está generando un impacto significativo en la escena musical con su potente combinación de subgéneros que abarcan el progresivo, thrash, death y groove metal, entre otros. Actualmente, la banda se encuentra en plena promoción de su álbum debut, titulado \"Journey\". Con una enérgica presencia en las redes sociales y una sólida trayectoria de shows en vivo, Inner ha logrado captar la atención y el apoyo de una base de seguidores creciente. Durante el último año, la banda se presentó en más de 20 shows en vivo en diversos lugares de Buenos Aires y provincias de Argentina, llevando su música contundente y emocionante a audiencias entusiastas en cada presentación. Además de la promoción de \\\\\\\"Journey\\\\\\\", Inner está trabajando arduamente en la creación de su segundo álbum, que se espera lanzar a mediados de 2024. Mediante su constante actividad en la escena, la banda demuestra su compromiso de mantenerse activa y evolucionar musicalmente. El nuevo material promete superar las expectativas de los seguidores de Inner y consolidar aún más su posición en la escena del metal. Inner invita a los amantes de la música a unirse a ellos en este emocionante viaje. La banda ha logrado crear un estilo muy personal, combinando una variada mezcla de subgéneros con letras que exploran pensamientos, reflexiones y temas actuales tanto individuales como colectivos del ser humano. \\\\\\\"Journey\\\\\\\" busca ser este viaje de pensamientos y sonidos. El álbum, compuesto por 9 canciones originales, representa el fruto de años de trabajo y dedicación por parte de los miembros de Inner. Integrantes: - Agustín Casalone en el Bajo - Hernán Ramírez en la Batería - Tomás Casalone en Guitarra y Voz - David Copa en Guitarra',3,1),(4,'2022-05-21','¡ENTREVISTA DISPONIBLE EN YOUTUBE!','¡La entrevista que nos realizo #LaEstructuraDelInfierno desde México ?? ya está disponible en su canal de YouTube! Disfruta de la nota completa y conoce más sobre nuestra banda, nuestro trabajo y nuestras últimas novedades. Puedes ver la entrevista en el siguiente enlace: https://www.youtube.com/watch?v=dg-WV5jh4Gc&feature=youtu.be ¡Gracias por su continuo apoyo y por acompañarnos en este viaje musical!',2,4),(6,'2024-10-10','¡LA BANDA INNER ANUNCIA SU PRÓXIMO ÁLBUM!','La banda INNER ha confirmado el lanzamiento de su nuevo álbum titulado \'Ritmos del Futuro\', programado para el 15 de noviembre. Este álbum incluirá colaboraciones con artistas destacados y promete una mezcla única de géneros.',2,6),(7,'2024-10-11','¡GIRA MUNDIAL DE LA BANDA INNER COMIENZA EN ENERO!','Tras el éxito de su último tour, la banda Inner ha anunciado una nueva gira mundial que comenzará en enero de 2025. Los fanáticos podrán disfrutar de sus canciones en vivo en ciudades de todo el mundo, con fechas y lugares que se anunciarán próximamente.',2,7),(13,'2024-10-10','¡Fan art y creatividad de los seguidores!','¿Alguien hace dibujos, covers o algo relacionado con Inner? ¡Me encantaría ver lo que han creado! Yo hice:',1,19),(14,'2024-09-10','Conciertos y presentaciones: El álbum debut en vivo','Si has tenido la oportunidad de verlos tocar en vivo, ¿qué tal fue la experiencia? ¿Qué canciones del álbum se lucieron más en el escenario? Comparte cómo fue escucharlos en directo y si crees que las versiones en vivo aportan algo diferente a las de estudio.',1,21),(15,'2024-08-10','Próxima Gira: ¿Quién irá al concierto?','La banda acaba de anunciar su nueva gira, y estoy súper emocionado. Ya compré mis boletos para el show en *Doxeado*. ¿Alguien más va a ir? ¿Qué canciones esperan que toquen en vivo, todas?',1,23),(16,'2024-10-08','Me quede sin ideas','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',1,34),(17,'2024-09-09','El guitarrista es Nword!','He sido fan de la banda por mucho tiempo, llegue a cruzarme con todos varias veces, y últimamente me ha molestado la actitud del guitarrista. Siento que no trata bien a los fans y eso afecta la imagen del grupo. Ojalá pueda cambiar su comportamiento y volver a ser un ejemplo positivo..',1,35),(19,'2024-10-10','Virtual Meet and Greet','¡¿Quieren conocer a los artistas de la banda?!\r\nEsta es tu oportunidad de conectarte directamente con los miembros de la banda. Si tienes alguna pregunta que siempre quisiste hacerles, ¡este es el momento! Comenta en este post y los artistas responderán desde sus cuentas oficiales. Ya sea sobre su música, influencias, o sus planes a futuro, ¡no te quedes con la duda!',1,39),(20,'2024-04-08','¡MAÑANA TENEMOS UNA CITA ESPECIAL!','Estaremos haciendo una entrevista este viernes 8 de abril en el  \"El Rincon de Nuria\" donde vamos a charlar sobre todo lo que hemos estado haciendo y lo que viene. Hablaremos de nuestro álbum *Journey* (2021), el proceso detrás de él, y lo que significa para nosotros. La cita es a las 16hs ARG, en vivo por IG Live con @nuria.bn. ¡No se lo pierdan! Mientras tanto, escuchen *Imploded Sun* y prepárense para lo que viene.',2,40),(21,'2023-10-10','¡¡¡SALIMOS EN LA PORTADA!!!','¡Gran noticia! Inner ha sido destacado en la revista Rev, una de las publicaciones más influyentes de la escena musical argentina. En un apartado especial, hablamos sobre nuestro álbum Journey, un viaje sonoro que refleja nuestras experiencias y emociones a lo largo de este último tiempo.\r\nEn Journey, exploramos diversos estilos y sonidos que nos representan, y estamos emocionados de compartirlo con ustedes. No se pierdan la entrevista completa y los detalles sobre cómo este álbum ha sido una parte fundamental de nuestro crecimiento como banda.\r\n ¡Agradecemos a Rev por esta increíble oportunidad! Pueden leer el artículo completo en su sitio web o en su próxima edición impresa. ¡Gracias por el apoyo!',2,41),(22,'2024-10-10','INNER EN RIZE UP!','La banda Inner de Buenos Aires ha sido destacada por Rize UP! Prensa debido al lanzamiento de su primer álbum de larga duración, titulado \"Journey\". Este trabajo incluye nueve temas que fusionan introspección y poderosas armonías dentro de las diferentes ramas del Metal, capturando la atención de los seguidores del género con su estilo cargado de groove.\r\n\r\nEn la publicación, Rize UP! Prensa resalta la profundidad de este proyecto, que lleva al oyente en un viaje interno acompañado de riffs pesados y letras intensas. \"Journey\" ha recibido gran recepción y se espera que impulse a Inner a nuevos niveles en la escena musical metalera.\r\n\r\nEste álbum fue lanzado en agosto de 2021 y ya está disponible en plataformas como YouTube, Spotify y Apple Music, donde los fans pueden disfrutar de la propuesta sonora de Inner.',2,42);
 /*!40000 ALTER TABLE `contenidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,8 +319,8 @@ DROP TABLE IF EXISTS `historialusuario`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historialusuario` (
   `idhistorialusuario` int NOT NULL AUTO_INCREMENT,
-  `estado` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT 'Activo',
-  `eliminacionLogica` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT 'No',
+  `estado` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Activo',
+  `eliminacionLogica` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'No',
   `fechaInica` date DEFAULT NULL,
   `fechaFinaliza` date DEFAULT NULL,
   `datospersonales_idDatosPersonales` int NOT NULL,
@@ -353,7 +353,7 @@ CREATE TABLE `imagenes` (
   `fechaSubidaImg` date DEFAULT NULL,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
   PRIMARY KEY (`idimagenes`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +362,7 @@ CREATE TABLE `imagenes` (
 
 LOCK TABLES `imagenes` WRITE;
 /*!40000 ALTER TABLE `imagenes` DISABLE KEYS */;
-INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No');
+INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No'),(9,'img/Rh2514JTtsTicyYztrvBFemsdVNb0W25GUXUGI3F.png','2024-10-09','No'),(10,'img/zst5wi5VISilUXykfX5yrhtQAJTMjdigpjp1GYDj.jpg','2024-10-10','No'),(11,'img/XLmeRxjD9Z3gB2cZUeWFlMl9UEMzsn4h4vqawww7.jpg','2024-10-10','No'),(12,'img/lsqiPF9Mol8c265gcrLER0zklXo3Oz2R2woDPigx.jpg','2024-10-10','No'),(13,'img/9QBoPNZYGrx1NgHDaoFFh01J9HpuLkCw23ILoClT.jpg','2024-10-10','No'),(14,'img/rEwuOvauIPPEwS0VhR9gOXmmT4SpNbCxNuo8R7Xm.jpg','2024-10-10','No'),(23,'img/58lEH1xIbwA6o1PFuSlEbCyLCyhi0RSvpS7SHDK1.jpg','2024-10-10','No'),(24,'img/zBB2S0KVTZbEI0vg1E3c6nxz7gwFg6EHNl6uI6PI.jpg','2024-10-10','No'),(25,'img/op9ZZegaflQewhDabC0LEd0ChIRJXMchCNuCX7oc.jpg','2024-10-10','No'),(27,'img/diIX4GYQ55fngvJdsFsWEWDyUCb69oMyXs2og970.jpg','2024-10-10','No'),(28,'img/mCGVwWChpnI2jqG2tPyN2jV274enYyS6kDEPEVnk.png','2024-10-10','No'),(29,'img/zs4cjE2Fy9W5erwacDkPaWTYA8V6adSwTs9A6TGw.jpg','2024-10-10','No'),(30,'img/bX3har1yfRTP9xZYputqtiMSbkG3WBJqzRHCVjLw.jpg','2024-10-10','No'),(31,'img/inLDlAQohdL9QmYI9ld0rRLuijNUhyBf4AY1YhzK.jpg','2024-10-10','No'),(32,'img/ebhvcURRFX6zw7Oacc7pKruIEeDUa2TvGSSnj0M5.jpg','2024-10-10','No'),(33,'img/WBrz2RnRqKmyMnSHhDY2HGxVvnSlXzCYQjfSzieA.jpg','2024-10-10','No'),(34,'img/nMrZSIra5R9pWSgfvEFXGXWVXPsQS4jf9nxTbcOl.jpg','2024-10-10','No'),(35,'img/abgurPE79CVhmfs3ITNO31TDmpka1LbeSq3OdQfU.jpg','2024-10-10','No'),(36,'img/i8aSf7W4YO2zTaCAg4Hqt8HGZDLnIbgCID8hJDD4.jpg','2024-10-10','No'),(37,'img/G7TtO4hkih8R0qZPmq6xKhHZ6VMil6P6IKgllVAJ.jpg','2024-10-10','No'),(40,'img/QkUyrj4FatGTGGCVgKIe2MgFGSD2mdKBoLDLeo69.jpg','2024-10-10','No'),(41,'img/TQbPLSGY4Z05VbhGfUcijumkdmc5pmPmPd4wxQuh.jpg','2024-10-10','No'),(42,'img/kaaQBNU9QLEi6A95Bs56oRA0WhqGMa5ddbumVqwS.jpg','2024-10-10','No'),(45,'img/Np3SjIziAJ6DFziLfQniuPKhK01CSj78T8RUZ8Lq.jpg','2024-10-10','No'),(46,'img/Xg1OQZDdfwc4DEfPceDtOqfe9TadURsftEFqSzkL.jpg','2024-10-10','No'),(47,'img/fuuOuAjFzNecibYwi1w4cZDiObf0s6dDLR1eXxce.jpg','2024-10-10','No'),(48,'img/6y5yDbzdZQCiu1qF1zJjc95tBPVXQiAuoFSJcShe.jpg','2024-10-10','No'),(49,'img/asOqDLWsirZpz7ET3xDpYqFW4mvbRu051MJftZI3.jpg','2024-10-10','No');
 /*!40000 ALTER TABLE `imagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +382,7 @@ CREATE TABLE `imagenescontenido` (
   KEY `fk_revisionImagenes_has_contenidos_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -391,6 +391,7 @@ CREATE TABLE `imagenescontenido` (
 
 LOCK TABLES `imagenescontenido` WRITE;
 /*!40000 ALTER TABLE `imagenescontenido` DISABLE KEYS */;
+INSERT INTO `imagenescontenido` VALUES (8,23,13),(9,29,16),(10,30,16),(11,31,16),(12,32,16),(13,33,16),(14,34,16),(15,35,16),(16,36,17),(17,40,7),(18,41,6),(19,42,4),(22,45,19),(23,46,1),(24,47,20),(25,48,21),(26,49,22);
 /*!40000 ALTER TABLE `imagenescontenido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -422,7 +423,6 @@ CREATE TABLE `interacciones` (
 
 LOCK TABLES `interacciones` WRITE;
 /*!40000 ALTER TABLE `interacciones` DISABLE KEYS */;
-INSERT INTO `interacciones` VALUES (1,1,8,1,0,0),(2,2,8,1,0,0),(3,3,8,1,0,0),(4,4,8,1,0,0),(5,5,8,1,0,0),(6,7,8,1,0,0),(7,12,8,1,0,0),(8,13,8,1,0,0),(9,14,8,1,0,0),(10,15,8,1,0,0),(11,19,8,1,0,0),(12,17,8,1,0,0),(13,18,8,1,0,0),(14,16,8,0,1,0),(15,6,9,1,0,0),(16,1,9,1,0,0),(17,11,10,1,0,0),(18,12,10,1,0,0),(19,13,10,1,0,0),(20,15,10,0,1,0),(21,1,11,1,0,0),(22,2,11,0,1,0),(23,3,11,1,0,0),(24,4,11,0,1,0),(25,12,11,1,0,0),(26,14,11,0,1,0),(27,12,12,1,0,0),(28,13,12,1,0,0),(29,19,12,1,0,0),(30,11,14,1,0,0),(31,12,14,1,0,0),(32,13,14,0,1,0),(33,15,14,0,1,0),(34,11,16,1,0,0),(35,19,16,1,0,0),(37,1,17,0,0,1),(38,12,18,1,0,0),(39,13,18,1,0,0),(40,14,18,0,1,0),(41,15,18,0,1,0);
 /*!40000 ALTER TABLE `interacciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,12 +435,12 @@ DROP TABLE IF EXISTS `lugarlocal`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lugarlocal` (
   `idlugarLocal` int NOT NULL AUTO_INCREMENT,
-  `nombreLugar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `localidad` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `calle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombreLugar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `localidad` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `calle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `numero` int DEFAULT NULL,
   PRIMARY KEY (`idlugarLocal`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -574,7 +574,7 @@ CREATE TABLE `revisionimagenes` (
   CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `tipodefoto` (`idtipoDeFoto`),
   CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
   CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -583,7 +583,7 @@ CREATE TABLE `revisionimagenes` (
 
 LOCK TABLES `revisionimagenes` WRITE;
 /*!40000 ALTER TABLE `revisionimagenes` DISABLE KEYS */;
-INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1);
+INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1),(9,8,9,1),(10,1,10,4),(11,1,11,4),(12,1,12,4),(13,1,13,4),(14,11,14,1),(23,6,23,5),(24,11,24,5),(25,13,25,5),(27,14,27,5),(28,14,28,5),(29,15,29,5),(30,15,30,5),(31,15,31,5),(32,15,32,5),(33,15,33,5),(34,15,34,5),(35,15,35,5),(36,15,36,5),(37,15,37,1),(40,1,40,2),(41,1,41,2),(42,1,42,2),(45,5,45,5),(46,5,46,2),(47,5,47,2),(48,5,48,2),(49,5,49,2);
 /*!40000 ALTER TABLE `revisionimagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -633,7 +633,7 @@ CREATE TABLE `show` (
   CONSTRAINT `fk_show_lugarLocal1` FOREIGN KEY (`lugarLocal_idlugarLocal`) REFERENCES `lugarlocal` (`idlugarLocal`),
   CONSTRAINT `fk_show_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
   CONSTRAINT `fk_show_ubicacionShow1` FOREIGN KEY (`ubicacionShow_idubicacionShow`) REFERENCES `ubicacionshow` (`idubicacionShow`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -642,7 +642,7 @@ CREATE TABLE `show` (
 
 LOCK TABLES `show` WRITE;
 /*!40000 ALTER TABLE `show` DISABLE KEYS */;
-INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,8,NULL,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,8,NULL,2),(3,'2024-10-14 21:00:00','Activo',NULL,1,NULL,3),(4,'2024-10-21 18:00:00','Activo',NULL,8,NULL,1);
+INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','pendiente',NULL,1,13,1),(2,'2023-09-29 20:00:00','pendiente',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente',NULL,1,11,3),(4,'2024-10-21 18:00:00','pendiente',NULL,1,10,1);
 /*!40000 ALTER TABLE `show` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -690,7 +690,7 @@ DROP TABLE IF EXISTS `tipocontenido`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipocontenido` (
   `idtipoContenido` int NOT NULL AUTO_INCREMENT,
-  `tipoContenido` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tipoContenido` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`idtipoContenido`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -738,7 +738,7 @@ DROP TABLE IF EXISTS `tipostaff`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipostaff` (
   `idtipoStaff` int NOT NULL AUTO_INCREMENT,
-  `nombreStaff` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombreStaff` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`idtipoStaff`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -804,7 +804,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'victoriavmc','$2y$12$WB2VuGYA/M/gPP3YYgsK2uBg6PW3.pnegYazaVZ3IM3l17SQwAFci',NULL,'victoriavmcortitrabajos@gmail.com',1),(2,'amuquy','$2y$12$ERVNaYyUVzJpJ0C1kH5Si.9H9gReKAtTB3RAyLOiXuWWgnAo2Du5S',NULL,'victoriavmaidanacortitrabajos@hotmail.com',2),(3,'santi','$2y$12$/v3KL0NUYa9NaaLpLx09lOWmCpUKck2mr06SXSEHTo2SbxqqCn.5y',NULL,'santiago.aranda.81@gmail.com',1),(4,'arandano','$2y$12$Qr7y9VnO0duYEGQ.qY7pTOnIDV75Tj2.vI3SSpY1nBHSH3nbgYzLW',NULL,'santi.aranda@example.com',2),(5,'staffone','$2y$12$y7Pf/nwcN86.r6avPDbc5uxsiBD1c/VR/2wYHX4F6LDd5GK3ZyJzC',NULL,'staff1@example.com',2),(6,'stafftwo','$2y$12$kcqmhzRU5qqVAf/lVFPOo.OG2lpkp.OOfRGewIqfZKAAeYc8JAuFy',NULL,'staff2@example.com',2),(7,'staffthree','$2y$12$sM6bhbLaXt0JeU6ZyXPQYeVM8cGEH4WhPoKcexE/0b9/8c0uTQ9Ta',NULL,'staff3@example.com',2),(8,'fanone','$2y$12$5yBSUlq82ETXqfHtKbu3GuKKhdDDeU9Zw1kW6r9rhAB0bS77UENrW',NULL,'fan1@example.com',4),(9,'fantwo','$2y$12$.UskaHn.KogdTCSsVeJZWO3nFF/w9Af/jYHprVfQosdVMlKaaKWmq',NULL,'fan2@example.com',4),(10,'fanthree','$2y$12$E.v0O0KheWJuMi8GgGBAje8iyS.FQr083DFcz8C5L5GWzmQT0EvqS',NULL,'fan3@example.com',4),(11,'superone','$2y$12$uBBAzv/C9FdNHOHBJaUnae841.7rsAG6uOD7vnZudrqf2twwFmF7m',NULL,'superfan1@example.com',3),(12,'supertwo','$2y$12$Kgoyou1sK/6VZjGFCXuPf.binJ4MItAzi18UYs/jgTwo7wvNRGGUm',NULL,'superfan2@example.com',3),(13,'superthree','$2y$12$DTRMEovcTjIZ5iPnhv84Jezfuf9EjvRcqqseajNBTtzLwVLYlOfFS',NULL,'superfan3@example.com',3),(14,'superfourt','$2y$12$WhM1/VdUBJMtpdvru2rLBOjIfz/a2klHZgX9ZgftOa.YjdWYagTQ2',NULL,'superfan4@example.com',3),(15,'superfive','$2y$12$W5RAJFWbBHPoggSlNnItnuqmkkDqIqbflMHAr6gpE7LR7go6XznTy',NULL,'superfan5@example.com',3),(16,'artistaone','$2y$12$Z1tSBdsiLXQ21fFa7Sb3JuKKi0wBS9ypPkrYmCdNJY5ZMg5m1gwBy',NULL,'artista1@example.com',2),(17,'artistatwo','$2y$12$GGK3KdRux2f1wfvnFoRiX.T9MKiUiXkV3mNDw/oF3OzgYL6gq9XU6',NULL,'artista2@example.com',2),(18,'artistathree','$2y$12$kQl4AagKtUNmSBf2Ww8CNOUFb19hiPrDJj3ye34bBAeX4F640UpR2',NULL,'artista3@example.com',2),(19,'artistafourt','$2y$12$E9tYLkJeYXFf.Z24KMzYJOsGergJkT1qbDZFOGjp3srZ1UpLQE8Ni',NULL,'artista4@example.com',2);
+INSERT INTO `usuarios` VALUES (1,'victoriavmc','$2y$12$WB2VuGYA/M/gPP3YYgsK2uBg6PW3.pnegYazaVZ3IM3l17SQwAFci',NULL,'victoriavmcortitrabajos@gmail.com',1),(2,'amuquy','$2y$12$ERVNaYyUVzJpJ0C1kH5Si.9H9gReKAtTB3RAyLOiXuWWgnAo2Du5S',NULL,'victoriavmaidanacortitrabajos@hotmail.com',2),(3,'santi','$2y$12$/v3KL0NUYa9NaaLpLx09lOWmCpUKck2mr06SXSEHTo2SbxqqCn.5y',NULL,'santiago.aranda.81@gmail.com',1),(4,'arandano','$2y$12$Qr7y9VnO0duYEGQ.qY7pTOnIDV75Tj2.vI3SSpY1nBHSH3nbgYzLW',NULL,'santi.aranda@example.com',2),(5,'staffone','$2y$12$y7Pf/nwcN86.r6avPDbc5uxsiBD1c/VR/2wYHX4F6LDd5GK3ZyJzC',NULL,'staff1@example.com',2),(6,'stafftwo','$2y$12$kcqmhzRU5qqVAf/lVFPOo.OG2lpkp.OOfRGewIqfZKAAeYc8JAuFy',NULL,'staff2@example.com',2),(7,'staffthree','$2y$12$sM6bhbLaXt0JeU6ZyXPQYeVM8cGEH4WhPoKcexE/0b9/8c0uTQ9Ta',NULL,'staff3@example.com',2),(8,'fanone','$2y$12$5yBSUlq82ETXqfHtKbu3GuKKhdDDeU9Zw1kW6r9rhAB0bS77UENrW',NULL,'fan1@example.com',4),(9,'fantwo','$2y$12$.UskaHn.KogdTCSsVeJZWO3nFF/w9Af/jYHprVfQosdVMlKaaKWmq',NULL,'fan2@example.com',4),(10,'fanthree','$2y$12$E.v0O0KheWJuMi8GgGBAje8iyS.FQr083DFcz8C5L5GWzmQT0EvqS',NULL,'fan3@example.com',4),(11,'superone','$2y$12$uBBAzv/C9FdNHOHBJaUnae841.7rsAG6uOD7vnZudrqf2twwFmF7m',NULL,'superfan1@example.com',3),(12,'supertwo','$2y$12$Kgoyou1sK/6VZjGFCXuPf.binJ4MItAzi18UYs/jgTwo7wvNRGGUm',NULL,'superfan2@example.com',3),(13,'superthree','$2y$12$DTRMEovcTjIZ5iPnhv84Jezfuf9EjvRcqqseajNBTtzLwVLYlOfFS',NULL,'superfan3@example.com',3),(14,'superfour','$2y$12$WhM1/VdUBJMtpdvru2rLBOjIfz/a2klHZgX9ZgftOa.YjdWYagTQ2',NULL,'superfan4@example.com',3),(15,'superfive','$2y$12$W5RAJFWbBHPoggSlNnItnuqmkkDqIqbflMHAr6gpE7LR7go6XznTy',NULL,'superfan5@example.com',3),(16,'artistaone','$2y$12$Z1tSBdsiLXQ21fFa7Sb3JuKKi0wBS9ypPkrYmCdNJY5ZMg5m1gwBy',NULL,'artista1@example.com',2),(17,'artistatwo','$2y$12$GGK3KdRux2f1wfvnFoRiX.T9MKiUiXkV3mNDw/oF3OzgYL6gq9XU6',NULL,'artista2@example.com',2),(18,'artistathree','$2y$12$kQl4AagKtUNmSBf2Ww8CNOUFb19hiPrDJj3ye34bBAeX4F640UpR2',NULL,'artista3@example.com',2),(19,'artistafourt','$2y$12$E9tYLkJeYXFf.Z24KMzYJOsGergJkT1qbDZFOGjp3srZ1UpLQE8Ni',NULL,'artista4@example.com',2);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -842,9 +842,9 @@ DROP TABLE IF EXISTS `youtubeapi`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `youtubeapi` (
   `idYoutubeApi` int NOT NULL AUTO_INCREMENT,
-  `tituloYt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tituloYt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fecha` date DEFAULT NULL,
-  `linkYt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `linkYt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`idYoutubeApi`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -868,4 +868,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 12:38:51
+-- Dump completed on 2024-10-10 16:49:20

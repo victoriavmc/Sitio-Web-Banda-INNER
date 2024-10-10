@@ -38,11 +38,74 @@ class eventosController extends Controller
         return view('events.eventos', compact('shows'));
     }
 
-    public function lugaresCargados()
+    public function lugaresCargados(Request $request)
     {
+        // Inicializamos las queries para ambas tablas
+        $lugaresQuery = LugarLocal::query();
+        $ubicacionesQuery = UbicacionShow::query();
+
+        // Si existe un término de búsqueda, aplicamos los filtros
+        if ($request->has('search') && $search = $request->input('search')) {
+            // Filtrar en LugarLocal por nombreLugar, localidad, calle o número
+            $lugaresQuery->where(function ($q) use ($search) {
+                $q->where('nombreLugar', 'like', '%' . $search . '%')
+                    ->orWhere('localidad', 'like', '%' . $search . '%')
+                    ->orWhere('calle', 'like', '%' . $search . '%')
+                    ->orWhere('numero', 'like', '%' . $search . '%');
+            });
+
+            // Filtrar en UbicacionShow por provinciaLugar o paisLugar
+            $ubicacionesQuery->where(function ($q) use ($search) {
+                $q->where('provinciaLugar', 'like', '%' . $search . '%')
+                    ->orWhere('paisLugar', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Obtener todos los registros si no hay búsqueda
+        $lugares = $lugaresQuery->get();
+        $ubicaciones = $ubicacionesQuery->get();
+
+        // Obtener todos los shows (puedes adaptarlo si también quieres filtrar por shows)
         $shows = Show::orderBy('fechashow', 'desc')->get();
-        $lugares = LugarLocal::all();
-        return view('events.lugaresEventos', compact('shows', 'lugares'));
+
+        // Retornar la vista con los datos obtenidos
+        return view('events.lugaresEventos', compact('shows', 'lugares', 'ubicaciones'));
+    }
+
+    public function eliminarLugar($id)
+    {
+        $lugar = LugarLocal::find($id);
+        try {
+            $lugar->delete();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('alertBorrar', [
+                'type' => 'Danger',
+                'message' => 'No se ha podido eliminar, el lugar esta en uso!',
+            ]);
+        }
+
+        return redirect()->back()->with('alertBorrar', [
+            'type' => 'Success',
+            'message' => 'Se ha eliminado el lugar con exito!',
+        ]);
+    }
+
+    public function eliminarUbicacion($id)
+    {
+        $ubicacion = UbicacionShow::find($id);
+        try {
+            $ubicacion->delete();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('alertBorrar', [
+                'type' => 'Danger',
+                'message' => 'No se ha podido eliminar, la ubicacion esta en uso!',
+            ]);
+        }
+
+        return redirect()->back()->with('alertBorrar', [
+            'type' => 'Success',
+            'message' => 'Se ha eliminado la ubicacion con exito!',
+        ]);
     }
 
     public function formularioCrear()
@@ -59,27 +122,32 @@ class eventosController extends Controller
             'nuevo_lugar' => 'required_without:lugar|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
-            'provincia' => 'required',
-            'localidad' => 'required|string|min:3|max:255',
+            'provincia' => 'required_without:nuevo_provincia|string|max:255',
+            'nuevo_provincia' => 'required_without:provincia|string|max:255',
+            'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
+            'linkCompra' => 'required|url|min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
             'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
+            'nuevo_provincia.required_without' => 'Debe agregar una nueva provincia o seleccionar una existente.',
+            'pais.required_if' => 'El país es obligatorio cuando se agrega una nueva provincia.',
+            'localidal.required_if' => 'La localidad es obligatoria cuando se agrega una nueva provincia.'
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Inicializar la variable para el ID del lugar
+        // Inicializar la variable para el ID del lugar y la ubicación
         $lugarId = null;
+        $ubicacionId = null;
 
         // Crear el lugar si se seleccionó "Agregar uno nuevo"
         if ($request->filled('nuevo_lugar')) {
-            // Crear un nuevo lugar
             $nuevoLugar = new LugarLocal();
             $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
             $nuevoLugar->calle = $request->input('calle');
@@ -89,16 +157,27 @@ class eventosController extends Controller
 
             $lugarId = $nuevoLugar->idlugarLocal;
         } else {
-            // Usar el lugar existente
             $lugarId = $request->input('lugar');
         }
 
-        // Crear el evento (Show) utilizando el ID del lugar
+        // Crear la ubicación si se seleccionó "Agregar una nueva"
+        if ($request->filled('nuevo_provincia')) {
+            $nuevaUbicacion = new UbicacionShow();
+            $nuevaUbicacion->provinciaLugar = $request->input('nuevo_provincia');
+            $nuevaUbicacion->paisLugar = $request->input('pais');
+            $nuevaUbicacion->save();
+
+            $ubicacionId = $nuevaUbicacion->idubicacionShow;
+        } else {
+            $ubicacionId = $request->input('provincia');
+        }
+
+        // Crear el evento (Show) utilizando el ID del lugar y la ubicación
         $evento = new Show();
         $evento->fechashow = $request->input('fecha');
-        $evento->estadoShow = 'pendiente';
-        $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
+        $evento->ubicacionShow_idubicacionShow = $ubicacionId;
         $evento->lugarLocal_idlugarLocal = $lugarId;
+        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
@@ -110,21 +189,19 @@ class eventosController extends Controller
             $imagen->contenidoDescargable = 'No';
             $imagen->save();
 
-            // Crear la revisión de la imagen
             $revisionImagen = new RevisionImagenes();
             $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
             $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 4;
             $revisionImagen->save();
 
-            // Asociar la revisión de la imagen al comentario
             $evento->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
 
         $evento->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect(route('eventos'))->with('alertCrear', [
+        return redirect()->route('eventos')->with('alertCrear', [
             'type' => 'Success',
             'message' => 'Se ha creado el evento!',
         ]);
@@ -143,18 +220,21 @@ class eventosController extends Controller
     {
         // Validaciones
         $validator = Validator::make($request->all(), [
-            'nuevo_lugar' => 'required_without:lugar|string|max:255',
+            'nuevo_lugar' => 'nullable|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
-            'provincia' => 'required',
-            'localidad' => 'required|string|min:3|max:255',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
-            'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
+            'calle' => 'nullable|string|max:255',
+            'numero' => 'nullable|numeric',
+            'nuevo_provincia' => 'nullable|string|max:255',
+            'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
+            'linkCompra' => 'required|url|min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
-            'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
-            'numero.required_if' => 'El número es obligatorio cuando se agrega un nuevo lugar.',
+            'lugar.required_without' => 'Debe seleccionar un lugar si no está agregando uno nuevo.',
+            'nuevo_provincia.required_without' => 'Debe agregar una nueva provincia o seleccionar una existente.',
+            'pais.required_if' => 'El país es obligatorio cuando se agrega una nueva provincia.',
+            'localidal.required_if' => 'La localidad es obligatoria cuando se agrega una nueva provincia.'
         ]);
 
         if ($validator->fails()) {
@@ -164,20 +244,37 @@ class eventosController extends Controller
         // Obtener el evento que se va a modificar
         $evento = Show::findOrFail($id);
 
-        // Inicializar la variable para el ID del lugar
+        // Inicializar la variable para el ID del lugar y ubicación
         $lugarId = null;
+        $ubicacionId = null;
 
-        // Si se seleccionó "Agregar un nuevo lugar"
+        // Manejar la creación de una nueva ubicación
+        if ($request->filled('nuevo_provincia') && $request->filled('pais')) {
+            // Crear una nueva ubicación
+            $nuevaUbicacion = new UbicacionShow();
+            $nuevaUbicacion->provinciaLugar = $request->input('nuevo_provincia');
+            $nuevaUbicacion->paisLugar = $request->input('pais');
+            $nuevaUbicacion->save();
+
+            // Obtener el ID de la nueva ubicación
+            $ubicacionId = $nuevaUbicacion->idubicacionShow;
+        } else {
+            // Usar la ubicación existente
+            $ubicacionId = $request->input('provincia');
+        }
+
+        // Manejar la creación de un nuevo lugar
         if ($request->filled('nuevo_lugar')) {
-            // Crear un nuevo lugar
             $nuevoLugar = new LugarLocal();
             $nuevoLugar->nombreLugar = $request->input('nuevo_lugar');
             $nuevoLugar->calle = $request->input('calle');
             $nuevoLugar->numero = $request->input('numero');
             $nuevoLugar->localidad = $request->input('localidad');
-            $nuevoLugar->save();
 
-            $lugarId = $nuevoLugar->idlugarLocal;
+            // Asociar la nueva ubicación al nuevo lugar
+            $nuevoLugar->ubicacionShow_idubicacionShow = $ubicacionId;
+            $nuevoLugar->save();
+            $lugarId = $nuevoLugar->idlugarLocal; // Obtener el ID del nuevo lugar
         } else {
             // Usar el lugar existente
             $lugarId = $request->input('lugar');
@@ -185,32 +282,27 @@ class eventosController extends Controller
 
         // Actualizar los datos del evento
         $evento->fechashow = $request->input('fecha');
-        $evento->estadoShow = 'pendiente';
-        $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
-        $evento->lugarLocal_idlugarLocal = $lugarId;
+        $evento->ubicacionShow_idubicacionShow = $ubicacionId; // Asignar el ID de la ubicación
+        $evento->lugarLocal_idlugarLocal = $lugarId; // Asignar el ID del lugar
+        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
+            // Eliminar la imagen anterior, si existe
             $revisionImagen = RevisionImagenes::find($evento->revisionImagenes_idrevisionImagenescol);
 
             if ($revisionImagen) {
                 // Obtener la imagen asociada a la revisión
                 $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
-
-                $evento->revisionImagenes_idrevisionImagenescol = null;
-                $evento->save();
-
-                // Eliminar la revisión de imagen después de eliminar el evento
-                $revisionImagen->delete();
-
-                // Eliminar la imagen del almacenamiento y de la base de datos
                 if ($imagen) {
                     if (Storage::disk('public')->exists($imagen->subidaImg)) {
                         Storage::disk('public')->delete($imagen->subidaImg);
                     }
-
                     $imagen->delete();
                 }
+
+                // Eliminar la revisión de imagen
+                $revisionImagen->delete();
             }
 
             // Subir la nueva imagen
@@ -227,7 +319,7 @@ class eventosController extends Controller
             $revisionImagen = new RevisionImagenes();
             $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
             $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
-            $revisionImagen->tipodefoto_idtipoDeFoto = 5;
+            $revisionImagen->tipodefoto_idtipoDeFoto = 4;
             $revisionImagen->save();
 
             // Asociar la nueva revisión de la imagen al evento
@@ -238,7 +330,7 @@ class eventosController extends Controller
         $evento->save();
 
         // Redirigir a la vista de eventos con un mensaje de éxito
-        return redirect(route('eventos'))->with('alertModificar', [
+        return redirect()->route('eventos')->with('alertModificar', [
             'type' => 'Success',
             'message' => 'Se ha modificado el evento!',
         ]);
@@ -246,7 +338,6 @@ class eventosController extends Controller
 
     public function eliminarEvento($id)
     {
-
         $show = Show::find($id);
 
         if ($show->revisionImagenes_idrevisionImagenescol) {

@@ -68,10 +68,10 @@ class PerfilController extends Controller
         }
 
         // Establecer un valor por defecto para la imagen de perfil si no se encuentra
-        $imagenPerfil = $usuario->imagenPerfil ?? 'ruta/a/imagen/default.png'; // Cambiar por la ruta de una imagen por defecto
+        $imagenPerfil = $usuario->imagenPerfil; // Cambiar por la ruta de una imagen por defecto
 
         // Obtener el nombre y apellido
-        $nombreApellido = $usuario->nombreApellido ?? ''; // Obtener el nombre y apellido del objeto usuario
+        $nombreApellido = $usuario->nombreApellido; // Obtener el nombre y apellido del objeto usuario
 
         // Llama a la función para obtener los comentarios relacionados con publicaciones
         $comentariosConPublicacion = $this->obtenerComentariosConPublicacion($usuario->idusuarios);

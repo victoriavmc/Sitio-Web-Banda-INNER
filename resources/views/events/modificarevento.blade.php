@@ -28,7 +28,7 @@
 
                     <!-- Botón para agregar un nuevo lugar -->
                     <button type="button" id="crear-nuevo-lugar-btn"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                        class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
                         Crear un nuevo lugar
                     </button>
 
@@ -88,8 +88,10 @@
 
                     <!-- Provincia -->
                     <div class="flex flex-col gap-1">
-                        <label class="font-semibold text-lg" for="provincia">Provincia</label>
-                        <select id="provincia" class="rounded-xl p-2.5" name="provincia">
+                        <label id="label-ubicacion" class="font-semibold text-lg" for="select-ubicacion">Ubicacion
+                            (Provincia y Pais)</label>
+                        <select id="select-ubicacion" class="rounded-xl p-2.5" name="provincia">
+                            <option value="" disabled>Provincias cargadas</option>
                             @foreach ($ubicaciones as $ubicacion)
                                 <option value="{{ $ubicacion->idubicacionShow }}"
                                     {{ old('provincia', $show->ubicacionShow) == $ubicacion->idubicacionShow ? 'selected' : '' }}>
@@ -98,6 +100,46 @@
                             @endforeach
                         </select>
                         @error('provincia')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Botón para agregar una nueva ubicacion -->
+                    <button type="button" id="crear-nueva-ubicacion-btn"
+                        class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                        Crear una nueva ubicacion
+                    </button>
+
+                    <!-- Campos para ingresar un nuevo Pais y Provincia -->
+                    <div id="nueva-ubicacion-container" class="hidden">
+                        <!-- Provincia -->
+                        <div class="flex flex-col gap-1 mb-2">
+                            <label class="font-semibold text-lg" for="provincia-nuevo">Provincia</label>
+                            <input id="provincia" name="nuevo_provincia" type="text"
+                                value="{{ old('nuevo_provincia', $ubicacion->provinciaLugar) }}" class="rounded-xl"
+                                disabled>
+                            @error('nuevo_provincia')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Pais -->
+                        <div class="flex flex-col gap-1 mb-2">
+                            <label class="font-semibold text-lg" for="pais">Pais</label>
+                            <input id="pais" name="pais" type="text"
+                                value="{{ old('pais', $ubicacion->paisLugar) }}" class="rounded-xl" disabled>
+                            @error('pais')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Link de compra -->
+                    <div class="flex flex-col gap-1 mb-2">
+                        <label class="font-semibold text-lg" for="linkCompra">Link de compra</label>
+                        <input id="linkCompra" name="linkCompra" type="text"
+                            value="{{ old('linkCompra', $show->linkCompraEntrada) }}" class="rounded-xl">
+                        @error('linkCompra')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
@@ -113,7 +155,7 @@
 
                     <!-- Botón Actualizar -->
                     <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                        class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
                         Actualizar
                     </button>
                 </div>
@@ -159,6 +201,42 @@
 
                 // Cambiar el texto del botón
                 this.innerText = 'Crear un nuevo lugar';
+            }
+        });
+
+        document.getElementById('crear-nueva-ubicacion-btn').addEventListener('click', function() {
+            const nuevaUbicacionContainer = document.getElementById('nueva-ubicacion-container');
+            const labelUbicacion = document.getElementById('label-ubicacion');
+            const selectUbicacion = document.getElementById('select-ubicacion');
+            const provinciaInput = document.getElementById('provincia');
+            const paisInput = document.getElementById('pais');
+
+            if (nuevaUbicacionContainer.classList.contains('hidden')) {
+                // Mostrar los campos de crear una nueva ubicacion
+                nuevaUbicacionContainer.classList.remove('hidden');
+                // Ocultar el select de ubicacion
+                labelUbicacion.classList.add('hidden');
+                selectUbicacion.classList.add('hidden');
+
+                // Habilitar los inputs
+                provinciaInput.disabled = false;
+                paisInput.disabled = false;
+
+                // Cambiar el texto del botón
+                this.innerText = 'Elegir ubicacion existente';
+            } else {
+                // Ocultar los campos de crear una nueva ubicacion
+                nuevaUbicacionContainer.classList.add('hidden');
+                // Mostrar el select de ubicacion
+                labelUbicacion.classList.remove('hidden');
+                selectUbicacion.classList.remove('hidden');
+
+                // Deshabilitar los inputs
+                provinciaInput.disabled = true;
+                paisInput.disabled = true;
+
+                // Cambiar el texto del botón
+                this.innerText = 'Crear una nueva ubicacion';
             }
         });
     </script>

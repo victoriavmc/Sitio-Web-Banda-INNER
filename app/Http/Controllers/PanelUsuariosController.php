@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 #CLASES
+
+use App\Models\Actividad;
+use App\Models\Comentarios;
+use App\Models\Contenidos;
+use App\Models\DatosPersonales;
+use App\Models\HistorialUsuario;
 use App\Models\Imagenes;
+use App\Models\Interacciones;
+use App\Models\Reportes;
 use App\Models\RevisionImagenes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
 use App\Models\Usuario;
-
 #Otros
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +28,10 @@ class PanelUsuariosController extends Controller
     {
         // Cargar los usuarios con los datos personales y la imagen de perfil
         $query = Usuario::whereIn('rol_idrol', [3, 4])
+            ->whereHas('datosPersonales.historialUsuario', function ($q) {
+                // Filtrar solo los que tienen el estado "Activo"
+                $q->where('estado', 'Activo');
+            })
             ->with([
                 'revisionImagenes' => function ($query) {
                     // Filtrar para traer solo la imagen de perfil (idtipodefoto = 1)
@@ -39,7 +50,8 @@ class PanelUsuariosController extends Controller
         }
 
         // Paginación de usuarios
-        return $usuarios = $query->paginate(6);
+        $perPage = $request->input('per_page', 6); // 6 es el valor predeterminado
+        return $usuarios = $query->paginate($perPage);
     }
 
     #Mira la imagenes de cada usuario y pasamos ruta si existe
@@ -127,24 +139,11 @@ class PanelUsuariosController extends Controller
         ]);
     }
 
-    // Eliminar la imagen del usuario
     public function borrarImagen($id)
     {
-        $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $id)->where('tipoDeFoto_idtipoDeFoto', 1)->first();
-        if ($existeFoto != null) {
-            // Obtener el registro de la imagen anterior
-            $imagen = Imagenes::find($existeFoto->imagenes_idimagenes);
+        $eliminado = $this->eliminarImagen($id);
 
-            // Eliminar el registro de la revisión anterior
-            $existeFoto->delete(); // IMPORTANTE: Eliminar primero la revisión
-
-            // Eliminar el archivo del almacenamiento y el registro de la imagen anterior
-            if ($imagen && Storage::exists($imagen->subidaImg)) {
-                Storage::delete($imagen->subidaImg);
-            }
-
-            // Ahora eliminar el registro de la imagen anterior
-            $imagen->delete();
+        if ($eliminado) {
             return redirect()->route('panel-de-usuarios')->with('alertEliminacion', [
                 'type' => 'Success',
                 'message' => 'Imagen eliminada exitosamente',
@@ -152,10 +151,57 @@ class PanelUsuariosController extends Controller
         } else {
             return redirect()->route('panel-de-usuarios')->with('alertEliminacion', [
                 'type' => 'Danger',
-                'message' => 'No se puede eliminar la imagen por defecto del usuario',
+                'message' => 'No se encontró la imagen o no se pudo eliminar',
             ]);
         }
     }
+
+    public function eliminarImagen($id)
+    {
+        $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $id)
+            ->where('tipoDeFoto_idtipoDeFoto', 1)
+            ->first();
+
+        if ($existeFoto) {
+            $imagen = Imagenes::find($existeFoto->imagenes_idimagenes);
+
+            $existeFoto->delete();
+
+            if ($imagen) {
+                if (Storage::exists($imagen->subidaImg)) {
+                    Storage::delete($imagen->subidaImg);
+                }
+                $imagen->delete();
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    #Eliminar Revision e Imagenes
+    private function eliminarImagenYRevision($revisionImagenId)
+    {
+        if ($revisionImagenId) {
+            $revisionImagen = RevisionImagenes::find($revisionImagenId);
+            if ($revisionImagen) {
+                // Eliminar la revisión de la imagen
+                $revisionImagen->delete();
+
+                // Eliminar la imagen asociada
+                if ($revisionImagen->imagenes_idimagenes) {
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                    if ($imagen) {
+                        // Eliminar la imagen del almacenamiento
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                        // Eliminar la imagen de la base de datos
+                        $imagen->delete();
+                    }
+                }
+            }
+        }
+    }
+
 
     // Eliminar el usuario en cascada
     public function eliminarUsuario($id)
@@ -163,6 +209,88 @@ class PanelUsuariosController extends Controller
         // Encontrar al usuario
         $usuario = Usuario::find($id);
 
-        // Eliminar el usuario en cascada
+        // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+
+        // Relaciono a su usuario con datos personales
+        $datospersonales = DatosPersonales::where('usuarios_idusuarios', $id)->first();
+
+        // Verificamos si existen los datos personales
+        if ($datospersonales) {
+            // Actualizo el Historial Usuario
+            $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $datospersonales->idDatosPersonales)->first();
+            if ($historial) {
+                $historial->estado = "Inactivo";
+                $historial->eliminacionLogica = 'Si';
+                $historial->save();
+            }
+
+            // Aquí deberías borrar la contraseña del usuario de manera segura
+            $usuario->contraseniaUser = null;
+            $usuario->save();
+        }
+
+        if ($tieneReportes === 0) {
+            // Si no hay reportes, eliminamos al usuario de la tabla
+            Reportes::where('usuarios_idusuarios', $id)->delete();
+        }
+
+        // Elimino todas las interacciones que realizó el usuario
+        Interacciones::where('usuarios_idusuarios', $id)->delete();
+
+        // Accedo a todas las actividades realizadas por el usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $id)->with(['comentarios', 'contenidos'])->get();
+        foreach ($actividades as $actividad) {
+            // Eliminar las interacciones de esa actividad
+            Interacciones::where('Actividad_idActividad', $actividad->idActividad)->delete();
+
+            // Eliminar los comentarios
+            foreach ($actividad->comentarios as $comentario) {
+                // Eliminar las interacciones del comentario
+                Interacciones::where('Actividad_idActividad', $comentario->Actividad_idActividad)->delete();
+
+                // Eliminar la imagen asociada al comentario
+                if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                    // Eliminar el comentario primero
+                    $comentario->delete();
+                    // Ahora elimina la revisión de imagen asociada
+                    $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                } else {
+                    // Solo elimina el comentario si no tiene revisión
+                    $comentario->delete();
+                }
+            }
+
+            // Eliminar los contenidos
+            foreach ($actividad->contenidos as $contenido) {
+                foreach ($contenido->comentarios as $comentario) {
+                    Interacciones::where('Actividad_idActividad', $comentario->Actividad_idActividad)->delete();
+                    $comentario->delete();
+                    $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                    // Eliminar la actividad del comentario de la tabla actividad
+                    Actividad::where('idActividad', $comentario->Actividad_idActividad)->delete();
+                }
+
+                // Eliminar imágenes de contenido y sus revisiones
+                foreach ($contenido->imagenesContenido as $imagenContenido) {
+                    $imagenContenido->delete();
+                    $this->eliminarImagenYRevision($imagenContenido->revisionImagenes_idrevisionImagenescol);
+                }
+
+                // Eliminar el contenido
+                $contenido->delete();
+            }
+
+            // Después de eliminar los contenidos y comentarios, eliminar la actividad
+            $actividad->delete();
+        }
+
+        // Borramos la imagen de perfil si tiene
+        $eliminado = $this->eliminarImagen($id);
+
+        return redirect()->back()->with('alertBorrar', [
+            'type' => 'Success',
+            'message' => 'Se ha borrado al Usuario con exito!',
+        ]);
     }
 }

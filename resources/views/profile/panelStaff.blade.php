@@ -157,7 +157,7 @@
                                                         </button>
                                                     </form>
                                                 </div>
-                                                {{-- <div class="bg-gray-200">
+                                                <div class="bg-gray-200">
                                                     <form class="btnEliminarUsuario"
                                                         action="{{ route('eliminar-staff', $usuario->idusuarios) }}"
                                                         method="POST">
@@ -168,7 +168,7 @@
                                                                 alt="Eliminar Usuario">
                                                         </button>
                                                     </form>
-                                                </div> --}}
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>

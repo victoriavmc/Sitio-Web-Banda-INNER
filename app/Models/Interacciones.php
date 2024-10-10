@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Interacciones extends Model
 {
-    use HasFactory;
+    protected $table = 'interacciones';
+    protected $primaryKey = 'idinteracciones';
+    public $timestamps = false;
 
     // Relación con Usuarios
     public function usuario()
