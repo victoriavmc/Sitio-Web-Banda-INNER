@@ -24,7 +24,7 @@
         <div class="relative flex mb-5">
             @auth
                 @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                    <div class="flex gap-4 mt-4 z-30">
+                    <div class="flex gap-4 mt-4 absolute z-30">
                         <div class="flex items-center gap-10">
                             <a href="{{ route('crear-formulario') }}"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Agregar</a>
@@ -40,7 +40,7 @@
                 @endif
             @endauth
 
-            <div class="w-full flex justify-center items-center absolute z-0">
+            <div class="w-full flex justify-center items-center z-0">
                 <form action="{{ route('eventos') }}" method="GET"
                     class="w-full max-w-lg bg-gray-700 bg-opacity-70 rounded-lg shadow-xl">
                     <div
@@ -60,7 +60,7 @@
         </div>
 
         {{-- EVENTOS --}}
-        <div class="grid grid-cols-2 gap-5">
+        <div class="relative grid grid-cols-2 gap-5">
             @foreach ($shows as $show)
                 <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500"
                     style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
