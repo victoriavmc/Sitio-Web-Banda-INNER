@@ -40,6 +40,8 @@
                 @endif
             @endauth
 
+
+
             <div class="w-full flex justify-center items-center relative z-0">
                 <form action="{{ route('eventos') }}" method="GET"
                     class="w-full max-w-lg bg-white rounded-lg shadow-xl">
@@ -68,7 +70,7 @@
                     <img class="h-full rounded-xl"
                         src="{{ $show->revisionImagenes && $show->revisionImagenes->imagenes
                             ? asset(Storage::url($show->revisionImagenes->imagenes->subidaImg))
-                            : asset('img\logo_inner.png') }}"
+                            : asset('img\logo_inner_negro.png') }}"
                         alt="Imagen de {{ $show->nombreLugar }}" />
 
                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
@@ -77,7 +79,7 @@
                         <p class="text-lg">
                             {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
                         <p class="text-lg">
-                        <p class="text-4xl font-medium text-red-500 leading-none">
+                        <p class="text-4xl font-medium text-black leading-none">
                             {{ $show->lugarlocal->nombreLugar }}
                         </p>
                         <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
@@ -182,7 +184,7 @@
                             data.forEach(show => {
                                 const eventHTML = `
                                 <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500" style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
-                                    <img class="h-full" src="${show.revision_imagenes ? '/storage/' + show.revision_imagenes.imagenes.subidaImg : '/img/logo_inner.png'}" alt="Imagen de ${show.nombreLugar}">
+                                    <img class="h-full" src="${show.revision_imagenes ? '/storage/' + show.revision_imagenes.imagenes.subidaImg : '/img/logo_inner_negro.png'}" alt="Imagen de ${show.nombreLugar}">
                                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
                                         <p class="event-date text-lg">${new Date(show.fechashow).toLocaleDateString()}</p>
                                         <p class="text-lg">${show.ubicacionshow.provinciaLugar}, ${show.ubicacionshow.paisLugar}</p>

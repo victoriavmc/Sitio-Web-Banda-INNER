@@ -1,12 +1,12 @@
 <x-AppLayout>
     <!-- Container -->
-    <div class="bg-[#232125] min-h-screen px-5 py-16 md:px-10 md:py-10">
+    <div class="min-h-screen px-5 py-16 md:px-10 md:py-10">
         {{-- Botón para modificar: solo el autor puede modificar --}}
         @auth
             @if ((Auth::user()->idusuarios == Auth::user()->rol->idrol) == 1 || Auth::user()->rol->idrol == 2)
                 <div class="flex gap-5 mb-5">
                     <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
                     {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
                     <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
                         onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
@@ -18,12 +18,15 @@
                 </div>
             @endif
         @endauth
-        <!-- Title -->
-        <h2 class="text-center text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }} </h2>
-        <br>
+
         <!-- Content -->
-        <div class="mx-auto w-full h-full grid gap-10 lg:grid-cols-2 lg:auto-rows-min">
-            <div class="flex flex-col gap-4 rounded-md">
+        <div
+            class="mx-auto w-full h-full grid gap-5 lg:grid-cols-[60%_40%] lg:auto-rows-min bg-white rounded-xl p-4 shadow-xl">
+            <div class="flex flex-col gap-4 lg:border-r-2 lg:pr-5">
+                <!-- Title -->
+                <h2 class="text-center text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }}
+                </h2>
+
                 @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
                     <!-- Mostrar la primera imagen de la lista -->
                     <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
@@ -45,15 +48,15 @@
                     @endforeach
                 @endif
                 <div class="flex flex-col items-start py-4">
-                    <div class="mb-4 rounded-md bg-gray-100 px-2 py-1.5">
-                        <p class="text-sm font-semibold text-blue-600"> {{ $recuperoPublicacion->fechaSubida }} </p>
+                    <div class="mb-4 rounded-md shadow-xl bg-red-500 px-2 py-1.5">
+                        <p class="text-sm font-semibold text-white"> {{ $recuperoPublicacion->fechaSubida }} </p>
                     </div>
                     <p class="mb-4 text-base font-normal md:text-lg"> {{ $recuperoPublicacion->descripcion }} </p>
                 </div>
 
             </div>
             {{-- Apartado Noticias y eventos --}}
-            <div class="lg:flex lg:gap-4 lg:flex-col">
+            <div class="lg:flex lg:gap-4 lg:flex-col lg:pr-4">
                 {{-- NOTICIAS --}}
                 <div
                     class="center w-full mb-4 lg:mb-0 relative inline-block select-none whitespace-nowrap rounded-lg bg-red-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
@@ -63,20 +66,20 @@
                     @foreach ($mostrarAparteNoticias as $noticiaExtra)
                         <a href="{{ route('noticiaUnica', $noticiaExtra->idcontenidos) }}">
                             <li href="{{ route('noticiaUnica', $noticiaExtra->idcontenidos) }}"
-                                class="flex flex-col pb-5 lg:mb-3 lg:flex-row lg:border-b lg:border-gray-300">
+                                class="flex flex-col p-2 lg:flex-row lg:border-b lg:border-gray-300">
                                 @if (isset($noticiaExtra->imagenes) && !empty($noticiaExtra->imagenes[0]))
                                     <img src="{{ asset(Storage::url($noticiaExtra->imagenes[0])) }}"
                                         alt="Imagen de {{ $noticiaExtra->titulo }}"
-                                        class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                                        class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @else
                                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                        class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                                        class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @endif
                                 <div class="flex flex-col gap-3 items-start pt-4 lg:px-8">
                                     <div class="flex gap-2 items-center">
                                         <p class="text-sm font-semibold">Fecha de Publicacion:</p>
-                                        <div class="rounded-md bg-gray-100 px-2 py-1.5">
-                                            <p class="text-sm font-semibold text-blue-600">
+                                        <div class="rounded-md shadow-xl bg-red-500 px-2 py-1.5">
+                                            <p class="text-sm font-semibold text-white">
                                                 {{ $noticiaExtra->fechaSubida }}
                                             </p>
                                         </div>
@@ -92,24 +95,23 @@
                     class="center w-full mb-4 lg:mb-0 relative inline-block select-none whitespace-nowrap rounded-lg bg-[#000] py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
                     Eventos
                 </div>
-                <ul class="lg:overflow-y-auto lg:max-h-72 custom-scrollbar">
+                <ul class="lg:max-h-72">
                     @foreach ($mostrarAparteEventos as $eventos)
                         <a href="{{ route('eventos') }}">
-                            <li href="#"
-                                class="flex flex-col pb-5 lg:mb-3 lg:flex-row lg:border-b lg:border-gray-300">
+                            <li class="flex flex-col lg:flex-row p-2 lg:border-b lg:border-gray-300">
                                 @if (isset($eventos['imagenes']) && !empty($eventos['imagenes'][0]))
                                     <img src="{{ asset(Storage::url($eventos['imagenes'][0])) }}"
                                         alt="Imagen de {{ $eventos['nombreLugar'] }}"
-                                        class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                                        class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @else
                                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                        class="inline-block h-60 w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                                        class="inline-block h-60 rounded=xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @endif
                                 <div class="flex flex-col gap-3 items-start pt-4 lg:px-8">
                                     <div class="flex gap-2 items-center">
                                         <p class="text-sm font-semibold">Fecha del Evento:</p>
-                                        <div class="rounded-md bg-gray-100 px-2 py-1.5">
-                                            <p class="text-sm font-semibold text-blue-600"> {{ $eventos['fechashow'] }}
+                                        <div class="rounded-md shadow-xl bg-red-500 px-2 py-1.5">
+                                            <p class="text-sm font-semibold text-white"> {{ $eventos['fechashow'] }}
                                             </p>
                                         </div>
                                     </div>

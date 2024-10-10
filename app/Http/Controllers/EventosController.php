@@ -114,7 +114,6 @@ class eventosController extends Controller
         // Crear el evento (Show) utilizando el ID del lugar
         $evento = new Show();
         $evento->fechashow = $request->input('fecha');
-        $evento->estadoShow = 'pendiente';
         $evento->ubicacionShow_idubicacionShow = $request->input('provincia');
         $evento->lugarLocal_idlugarLocal = $lugarId;
 
