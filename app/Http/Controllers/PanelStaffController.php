@@ -226,4 +226,11 @@ class panelStaffController extends Controller
             'message' => 'La cuenta y la imagen fueron eliminadas con éxito',
         ]);
     }
+
+    #Redirigir a manejoreporte
+    public function manejoreporte($id)
+    {
+        $usuario = Usuario::find($id);
+        return view('profile.manejoreporte', compact('usuario'));
+    }
 }
