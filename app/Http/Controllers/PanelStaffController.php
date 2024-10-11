@@ -196,6 +196,7 @@ class panelStaffController extends Controller
             if ($historial) {
                 $historial->estado = "Inactivo";
                 $historial->eliminacionLogica = 'Si';
+                $historial->fechaFinaliza = date('Y-m-d');
                 $historial->save();
             }
 

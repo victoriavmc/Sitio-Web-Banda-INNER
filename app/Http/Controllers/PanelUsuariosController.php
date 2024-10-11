@@ -221,6 +221,8 @@ class PanelUsuariosController extends Controller
             if ($historial) {
                 $historial->estado = "Inactivo";
                 $historial->eliminacionLogica = 'Si';
+                //fechaFinaliza el dia
+                $historial->fechaFinaliza = date('Y-m-d');
                 $historial->save();
             }
 
