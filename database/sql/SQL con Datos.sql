@@ -454,6 +454,29 @@ INSERT INTO `lugarlocal` VALUES (1,'Teatro de la Ciudad','Formosa','Avenida 25 d
 UNLOCK TABLES;
 
 --
+-- Table structure for table `motivos`
+--
+
+DROP TABLE IF EXISTS `motivos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `motivos` (
+  `idmotivos` int NOT NULL AUTO_INCREMENT,
+  `descripcion` longtext,
+  PRIMARY KEY (`idmotivos`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `motivos`
+--
+
+LOCK TABLES `motivos` WRITE;
+/*!40000 ALTER TABLE `motivos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `motivos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `notificaciones`
 --
 
@@ -539,9 +562,12 @@ CREATE TABLE `reportes` (
   `idreportes` int NOT NULL AUTO_INCREMENT,
   `reportes` int DEFAULT '0',
   `usuarios_idusuarios` int NOT NULL,
+  `motivos_idmotivos` int DEFAULT NULL,
   PRIMARY KEY (`idreportes`),
   KEY `fk_redsocial_usuarios1_idx` (`usuarios_idusuarios`),
-  CONSTRAINT `fk_redsocial_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+  KEY `fk_reportes_motivos1_idx` (`motivos_idmotivos`),
+  CONSTRAINT `fk_redsocial_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`),
+  CONSTRAINT `fk_reportes_motivos1` FOREIGN KEY (`motivos_idmotivos`) REFERENCES `motivos` (`idmotivos`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -551,7 +577,6 @@ CREATE TABLE `reportes` (
 
 LOCK TABLES `reportes` WRITE;
 /*!40000 ALTER TABLE `reportes` DISABLE KEYS */;
-INSERT INTO `reportes` VALUES (1,0,1),(2,0,2),(3,0,3),(4,0,4),(5,0,5),(6,0,6),(7,0,7),(8,0,8),(9,0,9),(10,0,10),(11,0,11),(12,0,12),(13,0,13),(14,0,14),(15,0,15),(16,0,16),(17,0,17),(18,0,18),(19,0,19);
 /*!40000 ALTER TABLE `reportes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -642,7 +667,7 @@ CREATE TABLE `show` (
 
 LOCK TABLES `show` WRITE;
 /*!40000 ALTER TABLE `show` DISABLE KEYS */;
-INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente',NULL,1,11,3),(4,'2024-10-21 18:00:00','pendiente',NULL,1,10,1);
+INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente','https://mpago.la/1gTFGAq',1,11,3),(4,'2024-10-21 18:00:00','pendiente','https://mpago.la/1gTFGAq',1,10,1);
 /*!40000 ALTER TABLE `show` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -658,14 +683,14 @@ CREATE TABLE `staffextra` (
   `redesSociales_idredesSociales` int DEFAULT NULL,
   `usuarios_idusuarios` int NOT NULL,
   `tipoStaff_idtipoStaff` int NOT NULL,
-  `imagenes_idimagenes` int DEFAULT NULL,
+  `revisionimagenes_idrevisionImagenescol` int DEFAULT NULL,
   PRIMARY KEY (`idstaffExtra`),
   KEY `fk_staffExtra_redesSociales_idx` (`redesSociales_idredesSociales`),
   KEY `fk_staffExtra_usuarios1_idx` (`usuarios_idusuarios`),
   KEY `fk_staffextra_tipoStaff1_idx` (`tipoStaff_idtipoStaff`),
-  KEY `fk_staffextra_imagenes1_idx` (`imagenes_idimagenes`),
-  CONSTRAINT `fk_staffextra_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
+  KEY `fk_staffextra_revisionimagenes1_idx` (`revisionimagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_staffExtra_redesSociales` FOREIGN KEY (`redesSociales_idredesSociales`) REFERENCES `redessociales` (`idredesSociales`),
+  CONSTRAINT `fk_staffextra_revisionimagenes1` FOREIGN KEY (`revisionimagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
   CONSTRAINT `fk_staffextra_tipoStaff1` FOREIGN KEY (`tipoStaff_idtipoStaff`) REFERENCES `tipostaff` (`idtipoStaff`),
   CONSTRAINT `fk_staffExtra_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
@@ -855,7 +880,6 @@ CREATE TABLE `youtubeapi` (
 
 LOCK TABLES `youtubeapi` WRITE;
 /*!40000 ALTER TABLE `youtubeapi` DISABLE KEYS */;
-INSERT INTO `youtubeapi` VALUES (1,'INNER - Forgotten - Drum Playthrough by Hernan Ramirez','2024-07-22','https://www.youtube.com/watch?v=Zn33STtdNVo'),(2,'INNER - Black Trees - Drum Playthrough by Hernan Ramirez','2024-07-17','https://www.youtube.com/watch?v=EgAhuhtSFYk'),(3,'#shorts INNER - Resumen - Uniclub 10/02/24','2024-02-19','https://www.youtube.com/watch?v=l5jbhWafkvs'),(4,'#shorts INNER - Resumen - El teatrito 20/08/23','2023-09-01','https://www.youtube.com/watch?v=CNU3BgREl80'),(5,'#shorts INNER - Resumen - Salon Regional Leonesa 24/6/23','2023-07-09','https://www.youtube.com/watch?v=QTXad02TcSo'),(6,'INNER - Hill of the Seven Colors','2021-09-04','https://www.youtube.com/watch?v=ntev9lgyFe0'),(7,'INNER - Dying','2021-09-04','https://www.youtube.com/watch?v=JwcxshhJ9Zs'),(8,'INNER - Evolution','2021-09-04','https://www.youtube.com/watch?v=8PvPxBHzyvw'),(9,'INNER - The Journey','2021-09-04','https://www.youtube.com/watch?v=pt59HWnfaSo'),(10,'INNER - Focus','2021-09-04','https://www.youtube.com/watch?v=ynEBN2JN8tY'),(11,'INNER - Vicious Circle','2021-09-04','https://www.youtube.com/watch?v=enxO7xJIqYY'),(12,'INNER - Imploded Sun','2021-09-04','https://www.youtube.com/watch?v=7t0B85mYHxk'),(13,'INNER - Black Trees','2021-08-09','https://www.youtube.com/watch?v=BxCJKHj5b6w'),(14,'INNER - Forgotten','2021-04-27','https://www.youtube.com/watch?v=TPDVdPe3Gpo');
 /*!40000 ALTER TABLE `youtubeapi` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -868,4 +892,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-10 21:46:44
+-- Dump completed on 2024-10-11 12:47:35
