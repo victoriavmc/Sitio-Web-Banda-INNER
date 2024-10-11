@@ -203,29 +203,72 @@ class ContenidoController extends Controller
     }
 
     #DESCRIPCION REDUCIDA
-    public function contenidosReducidos($dato)
+    public function contenidosReducidos($dato, $orden = 'desc')
     {
-        // Ordenar por fechaSubida, descendente
+        // Ordenar por fechaSubida de forma descendente o ascendente según el parámetro
         return Contenidos::where('tipoContenido_idtipoContenido', $dato)
-            ->orderBy('fechaSubida', 'desc')
+            ->orderBy('fechaSubida', $orden)
             ->get()
-            // El método 'map' se utiliza para transformar cada elemento de una colección aplicando una función a cada uno de ellos, devolviendo una nueva colección con los resultados
             ->map(function ($publicacion) {
+                // Reducir la descripción a 30 palabras
                 $publicacion->descripcion = Str::words($publicacion->descripcion, 30);
                 return $publicacion;
             });
     }
 
+    #ORDENAR PARA EL INDEX NOTICIAS Y FORO
+    public function ordenarNF($tipoContenido, $tipo)
+    {
+        // Dependiendo del valor de $tipo, ordenamos de manera diferente
+        switch ($tipo) {
+            case 1: // Más reciente
+                return $this->contenidosReducidos($tipoContenido, 'desc');
+
+            case 2: // Más antiguo
+                return $this->contenidosReducidos($tipoContenido, 'asc');
+
+            case 3: // Mayor número de interacciones (punteo)
+
+                // Paso 1: Recuperar todos los contenidos
+                $contenidos = Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido)->get();
+
+                // Paso 2: Contenidos para obtener el `actividad_idActividad` y calcular las interacciones
+                foreach ($contenidos as $contenido) {
+                    // Recupero el id de la actividad asociado al contenido
+                    $actividadId = $contenido->actividad_idActividad;
+
+                    // Ahora buscamos las interacciones asociadas a esa actividad
+                    $interacciones = Interacciones::where('actividad_idActividad', $actividadId)
+                        ->selectRaw('SUM(megusta + nomegusta) as totalInteracciones')
+                        ->first();
+
+                    // Asignamos la suma de interacciones al contenido
+                    $contenido->totalInteracciones = $interacciones ? $interacciones->totalInteracciones : 0;
+
+                    // Reducimos la descripción del contenido
+                    $contenido->descripcion = Str::words($contenido->descripcion, 30);
+                }
+
+                // Paso 3: Retornar los contenidos ordenados por la mayor cantidad de interacciones
+                return $contenidos->sortByDesc('totalInteracciones');
+
+            default:
+                return $this->contenidosReducidos($tipoContenido, 'desc'); // Orden por defecto (más reciente)
+        }
+    }
+
     ## NOTICIAS
     # ENVIO A LA VISTA LAS PUBLICACIONES DE LAS NOTICIAS
-    public function indexNoticias()
+    public function indexNoticias(Request $request)
     {
-        #Recupero solo publicaciones de Noticias
-        $recuperoNoticias = $this->contenidosReducidos(2);
+        // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
+        $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
 
-        #Recorro las publicaciones
+        // Recupero solo publicaciones de Noticias y las ordeno según el parámetro
+        $recuperoNoticias = $this->ordenarNF(2, $orden); // Tipo de contenido 2 para Noticias
+
+        // Recorro las publicaciones para obtener las imágenes asociadas
         foreach ($recuperoNoticias as $noticias) {
-            # Obtengo el id de noticias
             $noticias->imagenes = $this->ImagenesContenido($noticias->idcontenidos, 1);
         }
 
@@ -396,7 +439,7 @@ class ContenidoController extends Controller
 
     ## FORO
     # ENVIO A LA VISTA LAS PUBLICACIONES DEL FORO
-    public function indexForo()
+    public function indexForo(Request $request)
     {
         // Verifico si el usuario está autenticado
         if (!Auth::check()) {
@@ -405,17 +448,19 @@ class ContenidoController extends Controller
                 'message' => 'Solo los usuarios registrados pueden acceder al foro.',
             ]);
         }
-        // Recupero solo publicaciones del foro (tipoContenido_idtipoContenido = 1)
-        $recuperoPublicaciones = $this->contenidosReducidos(1);
+
+        // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
+        $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
+
+        // Recupero solo publicaciones del foro y las ordeno según el parámetro
+        $recuperoPublicaciones = $this->ordenarNF(1, $orden); // Tipo de contenido 1 para Foro
 
         // Recupero los comentarios y las interacciones (likes y dislikes)
         $contadorComentarios = $this->contadorComentarios($recuperoPublicaciones);
         $recuperoLikes = $this->contadorInteracciones($recuperoPublicaciones);
+        $recuperoLikes = $this->contadorEstrellasVisual($recuperoLikes); // Mostrar Estrellas
 
-        // Mostrar Estrellas
-        $recuperoLikes = $this->contadorEstrellasVisual($recuperoLikes);
-
-        // Envio las publicaciones, likes, comentarios y el contador de comentarios a la vista
+        // Envío los datos necesarios a la vista
         return view('/content/forum/foro', compact('recuperoPublicaciones', 'recuperoLikes', 'contadorComentarios'));
     }
 
