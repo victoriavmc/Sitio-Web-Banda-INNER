@@ -154,10 +154,16 @@ Route::get('/eventos', [eventosController::class, 'eventos'])
 Route::get('/eventos/lugares-cargados', [eventosController::class, 'lugaresCargados'])
     ->name('lugares-cargados')->middleware('auth');
 
-Route::delete('/eventos/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar'])
+Route::delete('/eventos/lugares-cargados/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar'])
     ->name('eliminar-lugar')->middleware('auth');
 
-Route::delete('/eventos/eliminar-ubicacion/{id}', [eventosController::class, 'eliminarUbicacion'])
+Route::put('/eventos/lugares-cargados/modificar-lugar/{id}', [eventosController::class, 'modificarLugar'])
+    ->name('modificar-lugar')->middleware('auth');
+
+Route::put('/eventos/lugares-cargados/modificar-ubicacion/{id}', [eventosController::class, 'modificarUbicacion'])
+    ->name('modificar-ubicacion')->middleware('auth');
+
+Route::delete('/eventos/lugares-cargados/eliminar-ubicacion/{id}', [eventosController::class, 'eliminarUbicacion'])
     ->name('eliminar-ubicacion')->middleware('auth');
 
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])

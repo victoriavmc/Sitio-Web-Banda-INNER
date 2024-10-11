@@ -75,6 +75,7 @@ class eventosController extends Controller
     public function eliminarLugar($id)
     {
         $lugar = LugarLocal::find($id);
+
         try {
             $lugar->delete();
         } catch (\Throwable $th) {
@@ -105,6 +106,60 @@ class eventosController extends Controller
         return redirect()->back()->with('alertBorrar', [
             'type' => 'Success',
             'message' => 'Se ha eliminado la ubicacion con exito!',
+        ]);
+    }
+
+    public function modificarlugar(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombreLugar' => 'required|min:3|max:255',
+            'localidad' => 'string|max:255',
+            'calle' => 'required|min:3|max:255',
+            'numero' => 'max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertModificar', [
+                'type' => 'Danger',
+                'message' => 'Error al modificar el lugar, verifique los datos.',
+            ]);
+        }
+
+        $lugar = LugarLocal::find($id);
+        $lugar->nombreLugar = $request->input('nombreLugar');
+        $lugar->localidad = $request->input('localidad');
+        $lugar->calle = $request->input('calle');
+        $lugar->numero = $request->input('numero');
+        $lugar->save();
+
+        return redirect()->route('lugares-cargados')->with('alertModificar', [
+            'type' => 'Success',
+            'message' => 'Se ha modificado el lugar!',
+        ]);
+    }
+
+    public function modificarUbicacion(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'provinciaLugar' => 'required|min:3|max:255',
+            'paisLugar' => 'required|min:3|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertModificar', [
+                'type' => 'Danger',
+                'message' => 'Error al modificar la ubicación, verifique los datos.',
+            ]);
+        }
+
+        $ubicacion = UbicacionShow::find($id);
+        $ubicacion->provinciaLugar = $request->input('provinciaLugar');
+        $ubicacion->paisLugar = $request->input('paisLugar');
+        $ubicacion->save();
+
+        return redirect()->route('lugares-cargados')->with('alertModificar', [
+            'type' => 'Success',
+            'message' => 'Se ha modificado la ubicacion!',
         ]);
     }
 
