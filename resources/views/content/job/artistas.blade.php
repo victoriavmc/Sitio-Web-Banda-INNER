@@ -30,6 +30,28 @@
                             Confirmar Cambio
                         </button>
                     </form>
+                    <a href="{{ $artista['link'] }}" class="flex gap-2" target="_blank">
+                        <div class="rounded-lg shadow-md">
+                            <h1 class="text-lg font-bold mb-2 uppercase">
+                                @foreach (str_split($artista['nombre']) as $letra)
+                                    {{ $letra }}
+                                @endforeach
+
+                                @foreach (str_split($artista['apellido']) as $letra)
+                                    {{ $letra }}
+                                @endforeach
+                            </h1>
+                            <h1>
+                                @foreach (str_split($artista['rol']) as $letra)
+                                    <p>{{ $letra }}</p>
+                                @endforeach
+                            </h1>
+                        </div>
+
+                        {{-- Verificar si el artista tiene imagen o usar la por defecto --}}
+                        <img src="{{ $artista['imagen'] ? asset(Storage::url($artista['imagen'])) : asset('img/artistas/imagenBloqueado.jpg') }}"
+                            alt="{{ $artista['nombre'] }}" class="w-full h-[690px] object-cover" />
+                    </a>
                 @else
                     <a href="{{ $artista['link'] }}" class="flex gap-2" target="_blank">
                         <div class="rounded-lg shadow-md">
