@@ -18,11 +18,11 @@
                     <label for="simple-search" class="sr-only">Buscar</label>
                     <div class="relative w-full">
                         <input type="text" id="simple-search" name="busqueda"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full ps-10 p-2.5 "
                             placeholder="Buscar por usuario o email..." />
                     </div>
                     <button type="submit"
-                        class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        class="p-2.5 ms-2 text-sm font-medium text-white bg-red-500 rounded-lg border border-red-500 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,149 +33,212 @@
                 </form>
             </div>
             <div
-                class="rounded-lg border bg-card text-card-foreground shadow-sm h-min w-full border-zinc-200 p-0 dark:border-zinc-800 sm:overflow-auto">
+                class="rounded-lg border bg-card text-card-foreground shadow-sm h-min w-full border-zinc-200 p-0 sm:overflow-auto">
                 <div class="overflow-x-scroll xl:overflow-x-hidden">
-                    <div class="relative w-full overflow-auto">
-                        <table class="caption-bottom text-sm w-full">
-                            <thead class="[&amp;_tr]:border-b border-b-[1px] border-zinc-200 p-6 dark:border-zinc-800">
-                                <tr class="dark:border-zinc-800">
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Foto
-                                            de Perfil</p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                                            Nombre
-                                            de usuario</p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                                            Correo
-                                            electronico</p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                                            Nombre
-                                            Completo</p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">C.
-                                            Reportes
-                                        </p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Rol
-                                        </p>
-                                    </th>
-                                    <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start dark:border-zinc-800"
-                                        colspan="1">
-                                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Accion
-                                        </p>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="[&amp;_tr:last-child]:border-0">
-                                @foreach ($usuarios as $usuario)
-                                    <tr
-                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted px-6 dark:hover:bg-gray-900">
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                                <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
-                                                    src="{{ $usuario->urlImagen }}">
-                                            </a>
-                                        </td>
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                    {{ $usuario->usuarioUser }}</p>
-                                            </a>
-                                        </td>
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                    {{ $usuario->correoElectronicoUser }}</p>
-                                            </a>
-                                        </td>
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                    {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
-                                                </p>
-                                            </a>
-                                        </td>
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-
-                                            @if ($usuario->reportesUser > 0)
-                                                <p class="text-red-600 font-black">
-                                                    {{ $usuario->reportesUser }}
-                                                </p>
-                                            @else
-                                                <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                    No
-                                                </p>
-                                            @endif
-
-                                        </td>
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <p class="text-sm font-medium text-zinc-950 dark:text-white">
-                                                {{ $usuario->staffExtra->tipoStaff->nombreStaff }}
+                    <table class="caption-bottom text-sm w-full">
+                        <thead class="[&amp;_tr]:border-b border-b-[1px] border-zinc-200 p-6">
+                            <tr class="">
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">Foto
+                                        de Perfil</p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">
+                                        Nombre
+                                        de usuario</p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">
+                                        Correo
+                                        electronico</p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">
+                                        Nombre
+                                        Completo</p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">
+                                        Estado</p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">C.
+                                        Reportes
+                                    </p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">Rol
+                                    </p>
+                                </th>
+                                <th class="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 cursor-pointer border-zinc-200 pl-5 pr-4 pt-2 text-start"
+                                    colspan="1">
+                                    <p class="text-xs font-semibold text-zinc-500">Accion
+                                    </p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="[&amp;_tr:last-child]:border-0">
+                            @foreach ($usuarios as $usuario)
+                                <tr
+                                    class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted px-6">
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                            <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
+                                                src="{{ $usuario->urlImagen }}">
+                                        </a>
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                            <p class="text-sm font-medium text-zinc-950">
+                                                {{ $usuario->usuarioUser }}</p>
+                                        </a>
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                            <p class="text-sm font-medium text-zinc-950">
+                                                {{ $usuario->correoElectronicoUser }}</p>
+                                        </a>
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                            <p class="text-sm font-medium text-zinc-950">
+                                                {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
                                             </p>
-                                        </td>
+                                        </a>
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                            <p
+                                                class="text-sm font-medium {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'text-red-500' : 'text-zinc-950' }}">
+                                                {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'Ex-empleado' : 'Activo' }}
+                                            </p>
+                                        </a>
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
 
-                                        <td
-                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4 dark:border-white/10">
-                                            <div class="flex gap-2 justify-between">
-                                                <div class="bg-gray-200">
-                                                    <button type="button" data-usuario-id="{{ $usuario->idusuarios }}"
-                                                        onclick="openModal(this)">
-                                                        <img class="w-5 h-6"
-                                                            src="{{ asset('img/panel/icono_modificar.jpg') }}"
-                                                            alt="Modificar Rol">
+                                        @if ($usuario->reportesUser > 0)
+                                            <p class="text-red-600 font-black">
+                                                {{ $usuario->reportesUser }}
+                                            </p>
+                                        @else
+                                            <p class="text-sm font-medium text-zinc-950">
+                                                No
+                                            </p>
+                                        @endif
+
+                                    </td>
+                                    <td
+                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                        <p class="text-sm font-medium text-zinc-950">
+                                            {{ $usuario->staffExtra->tipoStaff->nombreStaff }}
+                                        </p>
+                                    </td>
+
+                                    <td
+                                        class=" flex p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max py-5 pl-5 pr-4">
+                                        {{-- Botón para desplegable --}}
+                                        <div class="xl:absolute inline-block">
+                                            <button onclick="toggleDropdown(event)"
+                                                data-usuario-id="{{ $usuario->idusuarios }}"
+                                                class="hover:bg-slate-200 rounded-full transition-colors duration-700 ease-in-out">
+                                                <svg class="w-7 h-7 text-gray-800" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                                        d="M6 12h.01m6 0h.01m5.99 0h.01" />
+                                                </svg>
+                                            </button>
+
+                                            {{-- Contenedor del menú desplegable --}}
+                                            <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-300"
+                                                id="dropdownMenu-{{ $usuario->idusuarios }}">
+                                                {{-- Botón para editar rol del usuario --}}
+                                                <div class="border-b-2">
+                                                    <button type="button"
+                                                        data-usuario-id="{{ $usuario->idusuarios }}"
+                                                        onclick="openModal(this)"
+                                                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                        </svg>
+                                                        <p>Editar rol</p>
                                                     </button>
                                                 </div>
-                                                <div class="bg-gray-200">
-                                                    <form
-                                                        action="{{ route('borrar-imagen-staff', $usuario->idusuarios) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit">
-                                                            <img class="w-5 h-6"
-                                                                src="{{ asset('img/panel/icono_eliminar_imagen.jpg') }}"
-                                                                alt="Eliminar Imagen">
-                                                        </button>
-                                                    </form>
+
+                                                {{-- Botón para borrar imagen del usuario --}}
+                                                <form
+                                                    action="{{ route('borrar-imagen-staff', $usuario->idusuarios) }}"
+                                                    method="POST" class="border-b-2">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24">
+                                                            <path fill="none" stroke="currentColor"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 20H8.5l-4.21-4.3a1 1 0 0 1 0-1.41l10-10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41L11.5 20m6.5-6.7L11.7 7" />
+                                                        </svg>
+                                                        <p>Borrar imagen</p>
+                                                    </button>
+                                                </form>
+
+                                                {{-- Boton para reportar usuario --}}
+                                                <div class="border-b-2">
+                                                    <a href="{{ route('reportarUsuario') }}"
+                                                        class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
+                                                        </svg>
+                                                        <p>Reportar usuario</p>
+                                                    </a>
                                                 </div>
-                                                <div class="bg-gray-200">
-                                                    <form class="btnEliminarUsuario"
-                                                        action="{{ route('eliminar-staff', $usuario->idusuarios) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit">
-                                                            <img class="w-5 h-6"
-                                                                src="{{ asset('img/panel/icono_eliminar.jpg') }}"
-                                                                alt="Eliminar Usuario">
-                                                        </button>
-                                                    </form>
-                                                </div>
+
+                                                {{-- Botón para eliminar usuario --}}
+                                                <form class="btnEliminarUsuario"
+                                                    action="{{ route('eliminar-staff', $usuario->idusuarios) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                        </svg>
+                                                        <p>Eliminar usuario</p>
+                                                    </button>
+                                                </form>
                                             </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="mt-4">
@@ -183,7 +246,6 @@
             </div>
         </div>
     </div>
-
 
     {{-- Modal --}}
     <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto">
@@ -231,7 +293,7 @@
                                 Cancelar
                             </button>
                             <button type="submit"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                 Guardar
                             </button>
                         </div>
@@ -313,7 +375,37 @@
         function closeModal() {
             document.getElementById('modal').classList.add('hidden');
         }
+
+        function toggleDropdown(event) {
+            // Obtener el botón clicado
+            const button = event.currentTarget;
+            const usuarioId = button.getAttribute('data-usuario-id'); // Asegúrate de pasar este atributo
+            const dropdown = document.getElementById('dropdownMenu-' + usuarioId);
+
+            // Verificar si el menú actual está visible
+            const isDropdownVisible = !dropdown.classList.contains('hidden');
+
+            // Cerrar todos los menús abiertos
+            document.querySelectorAll('[id^="dropdownMenu"]').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+
+            // Si el menú estaba oculto, mostrarlo, si estaba visible, ya se cerró
+            if (!isDropdownVisible) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        // Cerrar el desplegable si se hace clic fuera de él
+        document.addEventListener('click', function(event) {
+            // Busca todos los menús desplegables
+            document.querySelectorAll('[id^="dropdownMenu"]').forEach(function(dropdown) {
+                // Verifica si el clic ocurrió fuera del menú desplegable y del botón que lo abre
+                if (!dropdown.contains(event.target) && !event.target.closest(
+                        'button[onclick="toggleDropdown(event)"]')) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        });
     </script>
-
-
 </x-Opciones>

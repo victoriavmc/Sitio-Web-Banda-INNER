@@ -24,19 +24,16 @@ class panelStaffController extends Controller
     #Lista a los miembros del Staff
     public function listar(Request $request)
     {
-        // Cargar los usuarios con los datos personales y la imagen de perfil
+        // Cargar los usuarios con los datos personales, imagen de perfil y estado
         $query = Usuario::where('rol_idrol', 2) // Filtrar por el rol específico (id 2)
-            ->whereHas('datosPersonales.historialUsuario', function ($q) {
-                // Filtrar solo los que tienen el estado "Activo"
-                $q->where('estado', 'Activo');
-            })
             ->with([
                 'revisionImagenes' => function ($query) {
                     // Filtrar para traer solo la imagen de perfil (idtipodefoto = 1)
                     $query->where('tipodefoto_idtipodefoto', 1)->with('imagenes');
                 },
                 'datosPersonales',
-                'staffextra'
+                'staffextra',
+                'datosPersonales.historialUsuario' // Relación con historialUsuario para obtener el estado
             ]);
 
         // Filtro de búsqueda
@@ -48,10 +45,13 @@ class panelStaffController extends Controller
             });
         }
 
+        // Ordenar primero por estado (Activo primero, luego Inactivo)
+        $query->join('historialusuario', 'usuarios.idusuarios', '=', 'historialusuario.datospersonales_idDatosPersonales') // Join con historial_usuario
+            ->orderByRaw("CASE WHEN historialusuario.estado = 'Activo' THEN 1 ELSE 2 END");
+
         // Paginación de usuarios
         return $usuarios = $query->paginate(6);
     }
-
 
     #Visualiza a los miembros del Staff
     public function panel(Request $request)

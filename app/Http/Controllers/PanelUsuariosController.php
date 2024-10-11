@@ -29,8 +29,7 @@ class PanelUsuariosController extends Controller
         // Cargar los usuarios con los datos personales y la imagen de perfil
         $query = Usuario::whereIn('rol_idrol', [3, 4])
             ->whereHas('datosPersonales.historialUsuario', function ($q) {
-                // Filtrar solo los que tienen el estado "Activo"
-                $q->where('estado', 'Activo');
+                $q->where('estado', '!=', 'Inactivo');
             })
             ->with([
                 'revisionImagenes' => function ($query) {
@@ -96,7 +95,7 @@ class PanelUsuariosController extends Controller
             'usuarios' => $usuarios,
             'roles' => $roles,
             'rol' => $rol,
-            'especialidades' => $especialidades
+            'especialidades' => $especialidades,
         ]);
     }
 

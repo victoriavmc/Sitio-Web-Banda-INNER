@@ -11,10 +11,11 @@ use App\Http\Controllers\PanelStaffController;
 use App\Http\Controllers\PanelUsuariosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
+use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
-
 #Modelo
 use App\Models\Paisnacimiento;
+use App\Models\Reportes;
 use Illuminate\Support\Facades\Route;
 
 //----------------------- SUELTOS 
@@ -284,6 +285,11 @@ Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexA
 // Traer API YT
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
     ->name('actualizarYt')->middleware('auth');
+##################################################################################################
+//------------------------ REPORTES ------------------------
+// VER REPORTES
+Route::get('/reportes', [ReportesController::class, 'reportes'])
+    ->name('reportarUsuario');
 ##################################################################################################
 
 // Subir tipo de imagen
