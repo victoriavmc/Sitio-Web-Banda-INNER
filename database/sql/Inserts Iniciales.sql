@@ -9,3 +9,5 @@ INSERT INTO `tipocontenido` VALUES (1,'Foro'),(2,'Noticias'),(3,'Biografia');
 INSERT INTO `tipodefoto` VALUES (1,'Usuarios'),(2,'Contenido Staff'),(3,'Multimedia General'),(4,'Flyers'),(5,'Contenido Foro'),(6,'Portada'),(7,'Fijas');
 
 INSERT INTO `tipostaff` VALUES (1,'Bass Guitar'),(2,'Cameraman'),(3,'Designer'),(4,'Drummer'),(5,'Filmmaker'),(6,'Gods of the Page'),(7,'Guitar'),(8,'Lighting Technician'),(9,'Manages'),(10,'Photographer'),(11,'Press'),(12,'Sound Technician'),(13,'Stage Manager or Technician'),(14,'Vocalist and Guitar');
+
+INSERT INTO `tipoactividad` VALUES (1,'Perfil'),(2,'Comentarios'),(3,'Contenidos');

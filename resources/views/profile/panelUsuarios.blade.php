@@ -129,15 +129,19 @@
                                     <td
                                         class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
 
-                                        @if ($usuario->reportesUser > 0)
+                                        @if (isset($listaReportado[$usuario->idusuarios]) &&
+                                                $listaReportado[$usuario->idusuarios] &&
+                                                $listaReportado[$usuario->idusuarios]->reportes > 0)
                                             <p class="text-red-600 font-black">
-                                                {{ $usuario->reportesUser }}
+                                                {{ $listaReportado[$usuario->idusuarios]->reportes }}
                                             </p>
                                         @else
                                             <p class="text-sm font-medium text-zinc-950">
                                                 No
                                             </p>
                                         @endif
+
+
 
                                     </td>
                                     <td

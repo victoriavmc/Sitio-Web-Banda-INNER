@@ -25,8 +25,11 @@ DROP TABLE IF EXISTS `actividad`;
 CREATE TABLE `actividad` (
   `idActividad` int NOT NULL AUTO_INCREMENT,
   `usuarios_idusuarios` int NOT NULL,
+  `tipoActividad_idtipoActividad` int NOT NULL,
   PRIMARY KEY (`idActividad`),
   KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_actividad_tipoActividad1_idx` (`tipoActividad_idtipoActividad`),
+  CONSTRAINT `fk_actividad_tipoActividad1` FOREIGN KEY (`tipoActividad_idtipoActividad`) REFERENCES `tipoactividad` (`idtipoActividad`),
   CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +40,7 @@ CREATE TABLE `actividad` (
 
 LOCK TABLES `actividad` WRITE;
 /*!40000 ALTER TABLE `actividad` DISABLE KEYS */;
-INSERT INTO `actividad` VALUES (36,1),(37,1),(1,5),(4,5),(6,5),(7,5),(39,5),(40,5),(41,5),(42,5),(19,6),(20,11),(21,11),(24,11),(22,12),(23,12),(25,13),(26,13),(27,13),(28,13),(29,14),(30,14),(31,14),(32,14),(33,15),(34,15),(35,15);
+INSERT INTO `actividad` VALUES (1,5,3),(4,5,3),(6,5,3),(7,5,3),(19,6,3),(20,11,2),(21,11,3),(22,12,2),(23,12,3),(24,11,2),(25,13,2),(26,13,2),(27,13,2),(28,13,2),(29,14,2),(30,14,2),(31,14,2),(32,14,2),(33,15,2),(34,15,3),(35,15,3),(36,1,2),(37,1,2),(39,5,3),(40,5,3),(41,5,3),(42,5,3);
 /*!40000 ALTER TABLE `actividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -464,7 +467,7 @@ CREATE TABLE `motivos` (
   `idmotivos` int NOT NULL AUTO_INCREMENT,
   `descripcion` longtext,
   PRIMARY KEY (`idmotivos`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -473,7 +476,6 @@ CREATE TABLE `motivos` (
 
 LOCK TABLES `motivos` WRITE;
 /*!40000 ALTER TABLE `motivos` DISABLE KEYS */;
-INSERT INTO `motivos` VALUES (1,'Comportamiento ofensivo'),(2,'Spamming'),(3,'Suplantación de identidad'),(4,'Fraude'),(5,'Violaciones de privacidad'),(6,'Contenido inapropiado'),(7,'Contenido inapropiado'),(8,'Infracciones repetidas');
 /*!40000 ALTER TABLE `motivos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -668,7 +670,7 @@ CREATE TABLE `show` (
 
 LOCK TABLES `show` WRITE;
 /*!40000 ALTER TABLE `show` DISABLE KEYS */;
-INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente','https://mpago.la/1gTFGAq',1,11,3),(4,'2024-10-21 18:00:00','pendiente','https://mpago.la/1gTFGAq',1,10,1);
+INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente',NULL,1,11,3),(4,'2024-10-21 18:00:00','pendiente',NULL,1,10,1);
 /*!40000 ALTER TABLE `show` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -705,6 +707,30 @@ LOCK TABLES `staffextra` WRITE;
 /*!40000 ALTER TABLE `staffextra` DISABLE KEYS */;
 INSERT INTO `staffextra` VALUES (1,6,2,6,NULL),(2,7,4,6,NULL),(3,NULL,5,11,NULL),(4,NULL,6,3,NULL),(5,NULL,7,10,NULL),(6,NULL,16,1,NULL),(7,NULL,17,4,NULL),(8,NULL,18,7,NULL),(9,NULL,19,14,NULL);
 /*!40000 ALTER TABLE `staffextra` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tipoactividad`
+--
+
+DROP TABLE IF EXISTS `tipoactividad`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipoactividad` (
+  `idtipoActividad` int NOT NULL AUTO_INCREMENT,
+  `nombreActividad` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idtipoActividad`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipoactividad`
+--
+
+LOCK TABLES `tipoactividad` WRITE;
+/*!40000 ALTER TABLE `tipoactividad` DISABLE KEYS */;
+INSERT INTO `tipoactividad` VALUES (1,'Perfil'),(2,'Comentarios'),(3,'Contenidos');
+/*!40000 ALTER TABLE `tipoactividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -893,4 +919,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-11 13:57:44
+-- Dump completed on 2024-10-11 22:02:41

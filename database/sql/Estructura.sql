@@ -25,8 +25,11 @@ DROP TABLE IF EXISTS `actividad`;
 CREATE TABLE `actividad` (
   `idActividad` int NOT NULL AUTO_INCREMENT,
   `usuarios_idusuarios` int NOT NULL,
+  `tipoActividad_idtipoActividad` int NOT NULL,
   PRIMARY KEY (`idActividad`),
   KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_actividad_tipoActividad1_idx` (`tipoActividad_idtipoActividad`),
+  CONSTRAINT `fk_actividad_tipoActividad1` FOREIGN KEY (`tipoActividad_idtipoActividad`) REFERENCES `tipoactividad` (`idtipoActividad`),
   CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -473,6 +476,20 @@ CREATE TABLE `staffextra` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `tipoactividad`
+--
+
+DROP TABLE IF EXISTS `tipoactividad`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipoactividad` (
+  `idtipoActividad` int NOT NULL AUTO_INCREMENT,
+  `nombreActividad` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idtipoActividad`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `tipocontenido`
 --
 
@@ -590,4 +607,4 @@ CREATE TABLE `youtubeapi` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-11 11:21:47
+-- Dump completed on 2024-10-11 22:02:18
