@@ -17,8 +17,9 @@
                         <div class=" space-y-4">
                             <div class="py-4 rounded shadow-md  bg-gray-50">
                                 <div class="flex p-4 space-x-4 sm:px-8">
-                                    <div class="flex-shrink-0 w-24 h-24 bg-gray-300">
-                                        <img src="{{ asset(Storage::url($imagen)) }}" alt="Foto de perfil">
+                                    <div class="flex-shrink-0 w-24 h-24">
+                                        <img src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.png') }}"
+                                            alt="Foto de perfil">
                                     </div>
                                     <div class="flex-1 py-2 space-y-4">
                                         <div class="w-full h-3">
@@ -48,9 +49,9 @@
                 <div class="md:col-span-8 p-10">
                     <div class="m-auto mb-4">
                         <h1 class="text-3xl">
-                            @if ($reportes['totalReportes'] === 1)
+                            @if (isset($reportes['totalReportes']) && $reportes['totalReportes'] === 1)
                                 Actividad Reportada
-                            @elseif ($reportes['totalReportes'] > 1)
+                            @elseif (isset($reportes['totalReportes']) && $reportes['totalReportes'] > 1)
                                 Actividades Reportadas
                             @else
                                 No Presenta Reportes
@@ -79,162 +80,195 @@
                                                 class="text-red-500">{{ $usuario->usuarioUser }}</b>
                                         </h1>
                                         <!-- Aquí puedes listar las actividades del usuario -->
-                                        <h2 class="text-2xl mb-4"> Publicaciones</h2>
-                                        <!-- Mostrar publicaciones reportadas -->
-                                        @foreach ($listaActividadNOReportadaContenido as $contenido)
-                                            <div class="relative h-full ml-0 md:mr-10 mb-6">
-                                                <span
-                                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                                <div
-                                                    class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                                    <div class="flex items-center -mt-1">
-                                                        <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
-                                                            {{ $contenido['titulo'] }}
-                                                        </h3>
+                                        @if (count($listaActividadNOReportadaContenido) > 0)
+                                            <h2 class="text-2xl ml-4 mb-4"> Publicaciones</h2>
+                                            <!-- Mostrar publicaciones reportadas -->
+                                            @foreach ($listaActividadNOReportadaContenido as $contenido)
+                                                <div class="relative h-full md:mr-10 mb-6 ml-4">
+                                                    <span
+                                                        class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                                                    <div
+                                                        class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                                                        <div class="flex items-center -mt-1">
+                                                            <a href={{ route('foroUnico', $contenido['id']) }}>
+                                                                <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                                                                    {{ $contenido['titulo'] }}
+                                                                </h3>
+                                                            </a>
+                                                        </div>
+                                                        <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
+                                                            Fecha de la
+                                                            publicación: {{ $contenido['fechaComent'] }} </p>
+                                                        <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
+                                                        </p>
                                                     </div>
-                                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
-                                                        Fecha de la
-                                                        publicación: {{ $contenido['fechaComent'] }} </p>
-                                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
-                                                    </p>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                        <h2 class="text-2xl mb-4"> Comentarios</h2>
+                                            @endforeach
+                                        @endif
 
-                                        <!-- Mostrar comentarios reportados -->
-                                        @foreach ($listaActividadNOReportadaComentario as $contenido)
-                                            <div class="relative h-full ml-0 md:mr-10 mb-6">
-                                                <span
-                                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                                <div
-                                                    class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                                    <div class="flex items-center -mt-1">
-                                                        <h3 class="my-2 ml-3 text-lg text-gray-800">
-                                                            Realizado en la publicación: <b class="text-red-500">
-                                                                {{ $contenido['tituloContenido'] }}
-                                                            </b>
-                                                        </h3>
+                                        @if (count($listaActividadNOReportadaComentario) > 0)
+                                            <h2 class="text-2xl ml-4 mb-4"> Comentarios</h2>
+                                            <!-- Mostrar comentarios reportados -->
+                                            @foreach ($listaActividadNOReportadaComentario as $contenido)
+                                                <div class="relative h-full ml-4 md:mr-10 mb-6">
+                                                    <span
+                                                        class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                                                    <div
+                                                        class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                                                        <div class="flex items-center -mt-1">
+                                                            <h3 class="my-2 ml-3 text-lg text-gray-800">
+                                                                Realizado en la publicación:
+                                                                <a href="{{ route('foroUnico', $contenido['id']) }}""
+                                                                    class="text-red-500">
+                                                                    <b>
+                                                                        {{ $contenido['tituloContenido'] }}
+                                                                    </b>
+                                                                </a>
+                                                            </h3>
+                                                        </div>
+                                                        <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
+                                                            Fecha del
+                                                            comentario: {{ $contenido['fechaComent'] }}</p>
+                                                        <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
+                                                        </p>
                                                     </div>
-                                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
-                                                        Fecha del
-                                                        comentario: {{ $contenido['fechaComent'] }}</p>
-                                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
-                                                    </p>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <h1 class="text-3xl">
-                                            El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no
-                                            ha realizado ninguna actividad.
-                                        </h1>
-                                    @endif
+                                            @endforeach
+                                        @endif
                                 </div>
                             </div>
                         @else
-                            <h2 class="text-2xl mb-4"> Publicaciones</h2>
-                            <!-- Mostrar publicaciones reportadas -->
-                            @foreach ($listaActividadReportadaContenido as $contenido)
-                                <div class="relative h-full ml-0 md:mr-10 mb-6">
-                                    <span
-                                        class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                    <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                        <div class="flex items-center -mt-1">
-                                            <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
-                                                {{ $contenido['titulo'] }}
-                                            </h3>
-                                        </div>
-                                        <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                            publicación: {{ $contenido['fechaComent'] }} </p>
-                                        <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            <h2 class="text-2xl mb-4"> Comentarios</h2>
-
-                            <!-- Mostrar comentarios reportados -->
-                            @foreach ($listaActividadReportadaComentario as $contenido)
-                                <div class="relative h-full ml-0 md:mr-10 mb-6">
-                                    <span
-                                        class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                    <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                        <div class="flex items-center -mt-1">
-                                            <h3 class="my-2 ml-3 text-lg text-gray-800">
-                                                Realizado en la publicación: <b class="text-red-500">
-                                                    {{ $contenido['tituloContenido'] }}
-                                                </b>
-                                            </h3>
-                                        </div>
-                                        <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha del
-                                            comentario: {{ $contenido['fechaComent'] }}</p>
-                                        <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <h1 class="text-3xl">
+                                El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no
+                                ha realizado ninguna actividad.
+                            </h1>
                     </div>
                 </div>
+                @endif
             </div>
-            <div class="mt-5 mb-5 w-full">
-                @if ($totalNoReportadas > 0)
-                    <h1 class="text-3xl mb-4">
-                        Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
-                    </h1>
+        </div>
+    </div>
+@else
+    @if (count($listaActividadReportadaContenido) > 0)
+        <h2 class="text-2xl mb-4"> Publicaciones</h2>
+        <!-- Mostrar publicaciones reportadas -->
+        @foreach ($listaActividadReportadaContenido as $contenido)
+            <div class="relative h-full ml-0 md:mr-10 mb-6">
+                <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                    <div class="flex items-center -mt-1">
+                        <a href={{ route('foroUnico', $contenido['id']) }}>
+                            <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                                {{ $contenido['titulo'] }}
+                            </h3>
+                        </a>
 
-                    <!-- Publicaciones no reportadas -->
-                    <h2 class="text-2xl mb-4"> Publicaciones</h2>
-                    @foreach ($listaActividadNOReportadaContenido as $contenido)
-                        <div class="relative h-full ml-0 md:mr-10 mb-6">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                            <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                <div class="flex items-center -mt-1">
+                    </div>
+                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                        publicación: {{ $contenido['fechaComent'] }} </p>
+                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                </div>
+            </div>
+        @endforeach
+    @endif
+    @if (count($listaActividadReportadaComentario) > 0)
+        <h2 class="text-2xl mb-4"> Comentarios</h2>
+        <!-- Mostrar comentarios reportados -->
+        @foreach ($listaActividadReportadaComentario as $contenido)
+            <div class="relative h-full ml-0 md:mr-10 mb-6">
+                <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                    <div class="flex items-center -mt-1">
+                        <h3 class="my-2 ml-3 text-lg text-gray-800">
+                            Realizado en la publicación:
+                            <a href="{{ route('foroUnico', $contenido['id']) }}"" class="text-red-500">
+                                <b>
+                                    {{ $contenido['tituloContenido'] }}
+                                </b>
+                            </a>
+                        </h3>
+                    </div>
+                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha del
+                        comentario: {{ $contenido['fechaComent'] }}</p>
+                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                </div>
+            </div>
+        @endforeach
+    @endif
+    </div>
+    </div>
+    </div>
+    <div class="mt-5 mb-5 w-full">
+        @if ($totalNoReportadas > 0)
+            <h1 class="text-3xl mb-4 ml-4">
+                Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
+            </h1>
+            <!-- Aquí puedes listar las actividades del usuario -->
+            @if (count($listaActividadNOReportadaContenido) > 0)
+                <h2 class="text-2xl ml-4 mb-4"> Publicaciones</h2>
+                <!-- Mostrar publicaciones reportadas -->
+                @foreach ($listaActividadNOReportadaContenido as $contenido)
+                    <div class="relative h-full md:mr-10 mb-6 ml-4">
+                        <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                        <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                            <div class="flex items-center -mt-1">
+                                <a href={{ route('foroUnico', $contenido['id']) }}>
                                     <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
                                         {{ $contenido['titulo'] }}
                                     </h3>
-                                </div>
-                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
-                                    Fecha de la publicación: {{ $contenido['fechaComent'] }}
-                                </p>
-                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                                </a>
                             </div>
+                            <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
+                                Fecha de la
+                                publicación: {{ $contenido['fechaComent'] }} </p>
+                            <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
+                            </p>
                         </div>
-                    @endforeach
+                    </div>
+                @endforeach
+            @endif
 
-                    <!-- Comentarios no reportados -->
-                    <h2 class="text-2xl mb-4"> Comentarios</h2>
-                    @foreach ($listaActividadNOReportadaComentario as $contenido)
-                        <div class="relative h-full ml-0 md:mr-10 mb-6">
-                            <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                            <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
-                                <div class="flex items-center -mt-1">
-                                    <h3 class="my-2 ml-3 text-lg text-gray-800">
-                                        Realizado en la publicación: <b
-                                            class="text-red-500">{{ $contenido['tituloContenido'] }}</b>
-                                    </h3>
-                                </div>
-                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha del
-                                    comentario: {{ $contenido['fechaComent'] }}</p>
-                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+            @if (count($listaActividadNOReportadaComentario) > 0)
+                <h2 class="text-2xl ml-4 mb-4"> Comentarios</h2>
+                <!-- Mostrar comentarios reportados -->
+                @foreach ($listaActividadNOReportadaComentario as $contenido)
+                    <div class="relative h-full ml-4 md:mr-10 mb-6">
+                        <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
+                        <div class="relative h-full p-5 bg-white border-2 border-red-500 rounded-lg">
+                            <div class="flex items-center -mt-1">
+
+                                <h3 class="my-2 ml-3 text-lg text-gray-800">
+                                    Realizado en la publicación:
+                                    <a href="{{ route('foroUnico', $contenido['id']) }}"" class="text-red-500">
+                                        <b>
+                                            {{ $contenido['tituloContenido'] }}
+                                        </b>
+                                    </a>
+                                </h3>
+
                             </div>
+                            <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">
+                                Fecha del
+                                comentario: {{ $contenido['fechaComent'] }}</p>
+                            <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
+                            </p>
                         </div>
-                    @endforeach
-                @elseif (count($listaActividadReportadaContenido) > 0 || count($listaActividadReportadaComentario) > 0)
-                    <!-- Si no hay actividades no reportadas pero sí reportadas -->
-                    <h1 class="text-3xl text-center">
-                        Todas las publicaciones del usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
-                        fueron reportadas.
-                    </h1>
-                @else
-                    <!-- Si no hay actividades reportadas ni no reportadas -->
-                    <h1 class="text-3xl  text-center">
-                        El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no ha realizado
-                        ninguna actividad.
-                    </h1>
-                @endif
-
-            </div>
-        </div>
+                    </div>
+                @endforeach
+            @endif
+        @elseif (count($listaActividadReportadaContenido) > 0 || count($listaActividadReportadaComentario) > 0)
+            <!-- Si no hay actividades no reportadas pero sí reportadas -->
+            <h1 class="text-3xl text-center">
+                Todas las publicaciones del usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
+                fueron reportadas.
+            </h1>
+        @else
+            <!-- Si no hay actividades reportadas ni no reportadas -->
+            <h1 class="text-3xl  text-center">
+                El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no ha realizado ninguna
+                actividad.
+            </h1>
         @endif
     </div>
+    @endif
 </x-AppLayout>

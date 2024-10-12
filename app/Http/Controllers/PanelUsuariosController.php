@@ -87,11 +87,17 @@ class PanelUsuariosController extends Controller
         $usuarioAutenticado = Auth::user();
         $rol = $usuarioAutenticado->rol_idrol;
 
+        $listaReportado = [];
         // Asignar la URL de la imagen a cada usuario
         foreach ($usuarios as $usuario) {
             // Asegúrate de que el usuario tiene un método o propiedad que te permita obtener la URL de la imagen
             $id = $usuario->idusuarios;
             $usuario->urlImagen = $this->mirar($usuario->idusuarios);
+
+            $reporte = Reportes::where('usuarios_idusuarios', $usuario->idusuarios)->first();
+
+            // Asignar el reporte si existe, de lo contrario, asignar null
+            $listaReportado[$usuario->idusuarios] = $reporte ? $reporte : null;
         }
 
         // Retornar la vista con los usuarios, roles y el rol del usuario autenticado
@@ -100,7 +106,8 @@ class PanelUsuariosController extends Controller
             'roles' => $roles,
             'rol' => $rol,
             'especialidades' => $especialidades,
-            'id' => $id
+            'id' => $id,
+            'listaReportado' => $listaReportado,
         ]);
     }
 
@@ -378,6 +385,7 @@ class PanelUsuariosController extends Controller
                                 'fechaComent' => $comentario->fechaComent,
                                 'descripcion' => $comentario->descripcion,
                                 'tituloContenido' => $contenido ? $contenido->titulo : null, // Agregar título del contenido
+                                'id' => $contenido ? $contenido->idcontenidos : null,
                                 'reportado' => true, // Marcamos como reportado
                             ];
                         }
@@ -390,6 +398,7 @@ class PanelUsuariosController extends Controller
 
                         foreach ($contenidos as $contenido) {
                             $listaActividadReportadaContenido[] = [
+                                'id' => $contenido->idcontenidos,
                                 'fechaComent' => $contenido->fechaSubida,
                                 'titulo' => $contenido->titulo,
                                 'descripcion' => $contenido->descripcion,
@@ -414,6 +423,7 @@ class PanelUsuariosController extends Controller
                                 'fechaComent' => $comentario->fechaComent,
                                 'descripcion' => $comentario->descripcion,
                                 'tituloContenido' => $contenido ? $contenido->titulo : null, // Título del contenido
+                                'id' => $contenido ? $contenido->idcontenidos : null,
                                 'reportado' => false, // Marcado como no reportado
                             ];
                         }
@@ -425,6 +435,7 @@ class PanelUsuariosController extends Controller
 
                         foreach ($contenidos as $contenido) {
                             $listaActividadNOReportadaContenido[] = [
+                                'id' => $contenido->idcontenidos,
                                 'fechaComent' => $contenido->fechaSubida,
                                 'titulo' => $contenido->titulo,
                                 'descripcion' => $contenido->descripcion,
