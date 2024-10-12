@@ -515,7 +515,9 @@ class ContenidoController extends Controller
     public function obtenerComentarios($idContent)
     {
         // Recuperar los comentarios relacionados con el contenido específico
-        $comentarios = Comentarios::where('contenidos_idcontenidos', $idContent)->get();
+        $comentarios = Comentarios::where('contenidos_idcontenidos', $idContent)
+            ->orderBy('fechaComent', 'desc')
+            ->get();
 
         // Array para almacenar la información de cada comentario
         $resultadoComentarios = [];
@@ -585,6 +587,11 @@ class ContenidoController extends Controller
         // Recuperar la publicación
         $recuperoPublicacion = Contenidos::find($data);
 
+        // dd(Auth::user());
+
+        $revisionImagen = RevisionImagenes::find(Auth::user()->idusuarios);
+        $imagen = $revisionImagen->imagenes;
+
         // Obtener el autor y la imagen de perfil
         $autor = $this->usuarioAutor($data, 1);
 
@@ -603,7 +610,8 @@ class ContenidoController extends Controller
             'listaPublicacionConImg',
             'autor',
             'actividad',
-            'comentarios'
+            'comentarios',
+            'imagen'
         ));
     }
 

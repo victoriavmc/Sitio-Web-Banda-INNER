@@ -156,7 +156,7 @@
                                         <div class="xl:absolute inline-block">
                                             <button onclick="toggleDropdown(event)"
                                                 data-usuario-id="{{ $usuario->idusuarios }}"
-                                                class="hover:bg-slate-200 rounded-full transition-colors duration-700 ease-in-out">
+                                                class="hover:bg-slate-200 rounded-full transition-colors duration-600 ease-in-out">
                                                 <svg class="w-7 h-7 text-gray-800" aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     fill="none" viewBox="0 0 24 24">

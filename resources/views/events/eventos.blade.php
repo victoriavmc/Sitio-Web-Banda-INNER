@@ -27,12 +27,12 @@
                     <div class="flex gap-4 mt-4 absolute z-30">
                         <div class="flex items-center gap-10">
                             <a href="{{ route('crear-formulario') }}"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Agregar</a>
+                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Agregar</a>
                         </div>
 
                         <div class="flex items-center gap-10">
                             <a href="{{ route('lugares-cargados') }}"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                 Lugares y ubicaciones cargadas
                             </a>
                         </div>
