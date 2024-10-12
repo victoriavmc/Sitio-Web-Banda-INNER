@@ -464,7 +464,7 @@ CREATE TABLE `motivos` (
   `idmotivos` int NOT NULL AUTO_INCREMENT,
   `descripcion` longtext,
   PRIMARY KEY (`idmotivos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -473,6 +473,7 @@ CREATE TABLE `motivos` (
 
 LOCK TABLES `motivos` WRITE;
 /*!40000 ALTER TABLE `motivos` DISABLE KEYS */;
+INSERT INTO `motivos` VALUES (1,'Comportamiento ofensivo'),(2,'Spamming'),(3,'Suplantación de identidad'),(4,'Fraude'),(5,'Violaciones de privacidad'),(6,'Contenido inapropiado'),(7,'Contenido inapropiado'),(8,'Infracciones repetidas');
 /*!40000 ALTER TABLE `motivos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -892,4 +893,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-11 12:47:35
+-- Dump completed on 2024-10-11 13:57:44

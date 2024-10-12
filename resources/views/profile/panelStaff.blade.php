@@ -202,7 +202,7 @@
 
                                                 {{-- Boton para reportar usuario --}}
                                                 <div class="border-b-2">
-                                                    <a href="{{ route('reportarUsuario') }}"
+                                                    <a href="{{ route('reportarUsuario', $usuario->idusuarios) }}"
                                                         class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
                                                         <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
                                                             xmlns="http://www.w3.org/2000/svg" width="24"

@@ -293,4 +293,12 @@ class PanelUsuariosController extends Controller
             'message' => 'Se ha borrado al Usuario con exito!',
         ]);
     }
+
+
+    #Redirigir a manejoreporte
+    public function manejoreporte($id)
+    {
+        $usuario = Usuario::find($id);
+        return view('profile.manejoreporte', compact('usuario'));
+    }
 }
