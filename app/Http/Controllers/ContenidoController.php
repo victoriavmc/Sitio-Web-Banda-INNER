@@ -744,9 +744,10 @@ class ContenidoController extends Controller
     }
 
     #Crea actividad
-    private function crearActividad()
+    private function crearActividad($tipo)
     {
         $actividad = new Actividad();
+        $actividad->tipoActividad_idtipoActividad = $tipo;
         $actividad->save();
         return $actividad;
     }
@@ -762,7 +763,7 @@ class ContenidoController extends Controller
         ]);
 
         // Crear una nueva actividad
-        $actividad = $this->crearActividad();
+        $actividad = $this->crearActividad(3);
 
         // Crear nuevo contenido según el tipo
         $contenido = new Contenidos();
@@ -808,7 +809,7 @@ class ContenidoController extends Controller
         ]);
 
         // Crear una nueva actividad
-        $actividad = $this->crearActividad();
+        $actividad = $this->crearActividad(2);
 
         // Crear un nuevo comentario
         $comentario = new Comentarios();

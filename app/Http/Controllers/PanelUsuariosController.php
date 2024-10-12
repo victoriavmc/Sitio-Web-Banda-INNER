@@ -16,7 +16,10 @@ use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
 use App\Models\Usuario;
+
+
 #Otros
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -87,6 +90,7 @@ class PanelUsuariosController extends Controller
         // Asignar la URL de la imagen a cada usuario
         foreach ($usuarios as $usuario) {
             // Asegúrate de que el usuario tiene un método o propiedad que te permita obtener la URL de la imagen
+            $id = $usuario->idusuarios;
             $usuario->urlImagen = $this->mirar($usuario->idusuarios);
         }
 
@@ -96,6 +100,7 @@ class PanelUsuariosController extends Controller
             'roles' => $roles,
             'rol' => $rol,
             'especialidades' => $especialidades,
+            'id' => $id
         ]);
     }
 
@@ -295,10 +300,156 @@ class PanelUsuariosController extends Controller
     }
 
 
+    #REPORTES
+
+    #Busco Imagen de un Usuario Especifico (VER COMO USAR)
+    public function buscarImagen($idUser)
+    {
+        // Ahora busco en la tabla revisionImagenes
+        $imagenPerfil = RevisionImagenes::where('usuarios_idusuarios', $idUser)
+            ->where('tipodefoto_idtipoDeFoto', 1)
+            ->first();
+
+        if ($imagenPerfil) {
+            $idImagenP = $imagenPerfil->imagenes_idimagenes;
+
+            // Ahora busco la imagen en la tabla imagenes
+            $ubicacionImagen = Imagenes::where('idimagenes', $idImagenP)->first();
+
+            return $ubicacionImagen ? $ubicacionImagen->subidaImg : null;
+        }
+
+        return null; // Si no hay imagen
+    }
+
     #Redirigir a manejoreporte
     public function manejoreporte($id)
     {
+        // Usuario
         $usuario = Usuario::find($id);
-        return view('profile.manejoreporte', compact('usuario'));
+
+        // Datos personales
+        $datosPersonales = $usuario->datosPersonales;
+
+        // Reportes
+        $reportes = $usuario->reportes;
+
+        $imagen = $this->buscarImagen($id);
+
+
+        // Mostrar Actividades en general del usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
+
+        // Almacenar datos de las actividades reportadas y no reportadas
+        $listaActividadReportadaComentario = [];
+        $listaActividadReportadaContenido = [];
+        $listaActividadNOReportadaComentario = [];
+        $listaActividadNOReportadaContenido = [];
+
+        // Actividad x actividad
+        foreach ($actividades as $actividad) {
+            // Obtener el ID de la actividad actual
+            $actividadId = $actividad->idActividad;
+            $tipoActividad = $actividad->tipoActividad_idtipoActividad;
+
+            // Mostrar actividad específica: contar reportes
+            $reportes = Interacciones::where('actividad_idActividad', $actividadId)
+                ->where('reporte', '>', 0)
+                ->select(DB::raw('COUNT(*) as totalReportes'))
+                ->first();
+
+            // Verificamos si hay reportes
+            if ($reportes && $reportes->totalReportes > 0) {
+                switch ($tipoActividad) {
+                    case '1':
+                        // Reportaron el Perfil
+                        break;
+
+                    case '2':
+                        // Obtener comentarios relacionados a la actividad
+                        $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
+
+                        // Recorrer los comentarios y almacenarlos en la lista
+                        foreach ($comentarios as $comentario) {
+                            $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener el contenido relacionado
+
+                            $listaActividadReportadaComentario[] = [
+                                'idComentario' => $comentario->idcomentarios,
+                                'fechaComent' => $comentario->fechaComent,
+                                'descripcion' => $comentario->descripcion,
+                                'tituloContenido' => $contenido ? $contenido->titulo : null, // Agregar título del contenido
+                                'reportado' => true, // Marcamos como reportado
+                            ];
+                        }
+                        break;
+
+                    case '3':
+                        // Reportaron el contenido  
+                        // Obtener contenidos relacionados a la actividad
+                        $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get(); // Obtener todos los contenidos relacionados
+
+                        foreach ($contenidos as $contenido) {
+                            $listaActividadReportadaContenido[] = [
+                                'fechaComent' => $contenido->fechaSubida,
+                                'titulo' => $contenido->titulo,
+                                'descripcion' => $contenido->descripcion,
+                                'reportado' => true, // Marcamos como reportado
+                            ];
+                        }
+                        break;
+                }
+            } else {
+                // Si no hay reportes
+
+                switch ($tipoActividad) {
+                    case '2':
+                        // Obtener comentarios no reportados
+                        $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
+
+                        foreach ($comentarios as $comentario) {
+                            $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener contenido relacionado
+
+                            $listaActividadNOReportadaComentario[] = [
+                                'idComentario' => $comentario->idcomentarios,
+                                'fechaComent' => $comentario->fechaComent,
+                                'descripcion' => $comentario->descripcion,
+                                'tituloContenido' => $contenido ? $contenido->titulo : null, // Título del contenido
+                                'reportado' => false, // Marcado como no reportado
+                            ];
+                        }
+                        break;
+
+                    case '3':
+                        // Obtener contenidos no reportados
+                        $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get();
+
+                        foreach ($contenidos as $contenido) {
+                            $listaActividadNOReportadaContenido[] = [
+                                'fechaComent' => $contenido->fechaSubida,
+                                'titulo' => $contenido->titulo,
+                                'descripcion' => $contenido->descripcion,
+                                'reportado' => false, // Marcado como no reportado
+                            ];
+                        }
+                        break;
+                }
+            }
+        }
+
+        // Después del bucle calcular el total de actividades no reportadas
+        $totalNoReportadas = count($listaActividadNOReportadaComentario) + count($listaActividadNOReportadaContenido);
+
+        return view('profile.manejoreporte', compact(
+            'usuario',
+            'datosPersonales',
+            'imagen',
+            'actividades',
+            'reportes',
+            'listaActividadReportadaComentario',
+            'listaActividadReportadaContenido',
+            'listaActividadNOReportadaComentario',
+            'listaActividadNOReportadaContenido',
+            'totalNoReportadas' // Pasar el total correctamente
+        ));
     }
 }
