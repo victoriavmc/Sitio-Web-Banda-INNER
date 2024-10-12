@@ -3,7 +3,7 @@
     <div class="min-h-screen px-5 py-16 md:px-10 md:py-10">
         {{-- Botón para modificar: solo el autor puede modificar --}}
         @auth
-            @if ((Auth::user()->idusuarios == Auth::user()->rol->idrol) == 1 || Auth::user()->rol->idrol == 2)
+            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
                 <div class="flex gap-5 mb-5">
                     <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Modificar</a>

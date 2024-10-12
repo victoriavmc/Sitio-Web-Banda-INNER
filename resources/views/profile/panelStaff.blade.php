@@ -86,156 +86,166 @@
                         </thead>
                         <tbody class="[&amp;_tr:last-child]:border-0">
                             @foreach ($usuarios as $usuario)
-                                <tr
-                                    class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted px-6">
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                            <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
-                                                src="{{ $usuario->urlImagen }}">
-                                        </a>
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                            <p class="text-sm font-medium text-zinc-950">
-                                                {{ $usuario->usuarioUser }}</p>
-                                        </a>
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                            <p class="text-sm font-medium text-zinc-950">
-                                                {{ $usuario->correoElectronicoUser }}</p>
-                                        </a>
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                            <p class="text-sm font-medium text-zinc-950">
-                                                {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
-                                            </p>
-                                        </a>
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                                            <p
-                                                class="text-sm font-medium {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'text-red-500' : 'text-zinc-950' }}">
-                                                {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'Ex-empleado' : 'Activo' }}
-                                            </p>
-                                        </a>
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                @if ($usuario->idusuarios)
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted px-6">
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <img alt="Foto de perfil" class="h-10 w-10 rounded-full"
+                                                    src="{{ $usuario->urlImagen }}">
+                                            </a>
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950">
+                                                    {{ $usuario->usuarioUser }}</p>
+                                            </a>
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950">
+                                                    {{ $usuario->correoElectronicoUser }}</p>
+                                            </a>
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p class="text-sm font-medium text-zinc-950">
+                                                    {{ $usuario->datosPersonales->nombreDP . ' ' . $usuario->datosPersonales->apellidoDP }}
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
+                                            <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
+                                                <p
+                                                    class="text-sm font-medium {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'text-red-500' : 'text-zinc-950' }}">
+                                                    {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'Ex-empleado' : 'Activo' }}
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
 
-                                        @if ($usuario->reportesUser > 0)
-                                            <p class="text-red-600 font-black">
-                                                {{ $usuario->reportesUser }}
-                                            </p>
-                                        @else
+                                            @if ($usuario->reportesUser > 0)
+                                                <p class="text-red-600 font-black">
+                                                    {{ $usuario->reportesUser }}
+                                                </p>
+                                            @else
+                                                <p class="text-sm font-medium text-zinc-950">
+                                                    No
+                                                </p>
+                                            @endif
+
+                                        </td>
+                                        <td
+                                            class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
                                             <p class="text-sm font-medium text-zinc-950">
-                                                No
+                                                {{ $usuario->staffExtra->tipoStaff->nombreStaff }}
                                             </p>
-                                        @endif
+                                        </td>
 
-                                    </td>
-                                    <td
-                                        class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
-                                        <p class="text-sm font-medium text-zinc-950">
-                                            {{ $usuario->staffExtra->tipoStaff->nombreStaff }}
-                                        </p>
-                                    </td>
+                                        <td
+                                            class=" flex p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max py-5 pl-5 pr-4">
+                                            {{-- Botón para desplegable --}}
+                                            <div class="xl:absolute inline-block">
+                                                <button onclick="toggleDropdown(event)"
+                                                    data-usuario-id="{{ $usuario->idusuarios }}"
+                                                    class="hover:bg-slate-200 rounded-full transition-colors duration-700 ease-in-out">
+                                                    <svg class="w-7 h-7 text-gray-800" aria-hidden="true"
+                                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                            stroke-width="2" d="M6 12h.01m6 0h.01m5.99 0h.01" />
+                                                    </svg>
+                                                </button>
 
-                                    <td
-                                        class=" flex p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max py-5 pl-5 pr-4">
-                                        {{-- Botón para desplegable --}}
-                                        <div class="xl:absolute inline-block">
-                                            <button onclick="toggleDropdown(event)"
-                                                data-usuario-id="{{ $usuario->idusuarios }}"
-                                                class="hover:bg-slate-200 rounded-full transition-colors duration-700 ease-in-out">
-                                                <svg class="w-7 h-7 text-gray-800" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                                        d="M6 12h.01m6 0h.01m5.99 0h.01" />
-                                                </svg>
-                                            </button>
+                                                {{-- Contenedor del menú desplegable --}}
+                                                <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-600"
+                                                    id="dropdownMenu-{{ $usuario->idusuarios }}">
+                                                    {{-- Botón para editar rol del usuario --}}
+                                                    <div class="border-b-2">
+                                                        <button type="button"
+                                                            data-usuario-id="{{ $usuario->idusuarios }}"
+                                                            onclick="openModal(this)"
+                                                            class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                            <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                            </svg>
+                                                            <p>Editar rol</p>
+                                                        </button>
+                                                    </div>
 
-                                            {{-- Contenedor del menú desplegable --}}
-                                            <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-600"
-                                                id="dropdownMenu-{{ $usuario->idusuarios }}">
-                                                {{-- Botón para editar rol del usuario --}}
-                                                <div class="border-b-2">
-                                                    <button type="button"
-                                                        data-usuario-id="{{ $usuario->idusuarios }}"
-                                                        onclick="openModal(this)"
-                                                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
-                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                                        </svg>
-                                                        <p>Editar rol</p>
-                                                    </button>
+                                                    {{-- Botón para borrar imagen del usuario --}}
+                                                    <form
+                                                        action="{{ route('borrar-imagen-staff', $usuario->idusuarios) }}"
+                                                        method="POST" class="border-b-2">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                            <svg class="w-6 h-6 mr-2"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                viewBox="0 0 24 24">
+                                                                <path fill="none" stroke="currentColor"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M19 20H8.5l-4.21-4.3a1 1 0 0 1 0-1.41l10-10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41L11.5 20m6.5-6.7L11.7 7" />
+                                                            </svg>
+                                                            <p>Borrar imagen</p>
+                                                        </button>
+                                                    </form>
+
+                                                    {{-- Boton para reportar usuario --}}
+                                                    <div class="border-b-2">
+                                                        <a href="{{ route('reportarUsuario', $usuario->idusuarios) }}"
+                                                            class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                            <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
+                                                            </svg>
+                                                            <p>Reportar usuario</p>
+                                                        </a>
+                                                    </div>
+
+                                                    {{-- Botón para eliminar usuario --}}
+                                                    <form class="btnEliminarUsuario"
+                                                        action="{{ route('eliminar-staff', $usuario->idusuarios) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
+                                                            <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                            </svg>
+                                                            <p>Eliminar usuario</p>
+                                                        </button>
+                                                    </form>
                                                 </div>
-
-                                                {{-- Botón para borrar imagen del usuario --}}
-                                                <form
-                                                    action="{{ route('borrar-imagen-staff', $usuario->idusuarios) }}"
-                                                    method="POST" class="border-b-2">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
-                                                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                                            viewBox="0 0 24 24">
-                                                            <path fill="none" stroke="currentColor"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 20H8.5l-4.21-4.3a1 1 0 0 1 0-1.41l10-10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41L11.5 20m6.5-6.7L11.7 7" />
-                                                        </svg>
-                                                        <p>Borrar imagen</p>
-                                                    </button>
-                                                </form>
-
-                                                {{-- Boton para reportar usuario --}}
-                                                <div class="border-b-2">
-                                                    <a href="{{ route('reportarUsuario', $usuario->idusuarios) }}"
-                                                        class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
-                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
-                                                        </svg>
-                                                        <p>Reportar usuario</p>
-                                                    </a>
-                                                </div>
-
-                                                {{-- Botón para eliminar usuario --}}
-                                                <form class="btnEliminarUsuario"
-                                                    action="{{ route('eliminar-staff', $usuario->idusuarios) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
-                                                        <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                                        </svg>
-                                                        <p>Eliminar usuario</p>
-                                                    </button>
-                                                </form>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td colspan="8" class="p-4 align-middle text-center">
+                                            <p class="text-sm font-medium text-zinc-950">No se encontraron resultados
+                                            </p>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
