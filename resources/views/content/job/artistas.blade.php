@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <button type="submit"
-                            class="mt-4 rounded bg-red-500 py-2 px-4 text-white font-bold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">
+                            class="mt-4 bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                             Confirmar Cambio
                         </button>
                     </form>

@@ -163,7 +163,7 @@
                                             </button>
 
                                             {{-- Contenedor del menú desplegable --}}
-                                            <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-300"
+                                            <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-600"
                                                 id="dropdownMenu-{{ $usuario->idusuarios }}">
                                                 {{-- Botón para editar rol del usuario --}}
                                                 <div class="border-b-2">
