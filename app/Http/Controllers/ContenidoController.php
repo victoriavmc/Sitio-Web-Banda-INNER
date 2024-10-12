@@ -49,7 +49,7 @@ class ContenidoController extends Controller
                 $rutaImg = $imagen->subidaImg;
 
                 // Almaceno la ruta en el array
-                $rutasImg[] = $rutaImg; // Guardo las rutas sin clave para simplificar
+                $rutasImg[] = $rutaImg;
             }
         }
 
@@ -587,10 +587,8 @@ class ContenidoController extends Controller
         // Recuperar la publicación
         $recuperoPublicacion = Contenidos::find($data);
 
-        // dd(Auth::user());
-
-        $revisionImagen = RevisionImagenes::find(Auth::user()->idusuarios);
-        $imagen = $revisionImagen->imagenes;
+        // Imange yo
+        $imagen = $this->usuarioAutor(Auth::user()->idusuarios, 2);
 
         // Obtener el autor y la imagen de perfil
         $autor = $this->usuarioAutor($data, 1);
