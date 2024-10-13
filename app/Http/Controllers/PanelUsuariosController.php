@@ -9,6 +9,7 @@ use App\Models\Contenidos;
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
 use App\Models\Imagenes;
+use App\Models\ImagenesContenido;
 use App\Models\Interacciones;
 use App\Models\Reportes;
 use App\Models\RevisionImagenes;
@@ -16,7 +17,6 @@ use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
 use App\Models\Usuario;
-
 
 #Otros
 use Illuminate\Support\Facades\DB;
@@ -329,6 +329,63 @@ class PanelUsuariosController extends Controller
         return null; // Si no hay imagen
     }
 
+    // Función para obtener la ruta de las imágenes a partir de la revisión de imágenes
+    public function RevImagen($revisionImagenes)
+    {
+        $rutasImg = []; // Inicializo el array para almacenar las rutas
+
+        if ($revisionImagenes) {
+            // Obtengo el ID de la imagen
+            $idImagen = $revisionImagenes->imagenes_idimagenes;
+
+            // Busco la imagen en la tabla de imágenes
+            $imagen = Imagenes::where('idimagenes', $idImagen)->first();
+
+            if ($imagen) {
+                // Obtengo la ruta de la imagen
+                $rutaImg = $imagen->subidaImg;
+
+                // Almaceno la ruta en el array
+                $rutasImg[] = $rutaImg;
+            }
+        }
+
+        return $rutasImg; // Devuelvo el array de rutas
+    }
+
+    // Función para obtener las imágenes de contenido
+    public function ImagenesContenido($idContent, $opcion)
+    {
+        $rutasImg = []; // Array para almacenar las rutas de las imágenes
+
+        if ($opcion == 1) {
+            // Recupero todas las imágenes que coincidan con el idContenido
+            $imagenes = ImagenesContenido::where('contenidos_idcontenidos', $idContent)->get();
+
+            foreach ($imagenes as $imgEspecifica) {
+                // Obtengo el id de revisión de imágenes
+                $idRevImg = $imgEspecifica->revisionImagenes_idrevisionImagenescol;
+
+                // Busco la revisión de imágenes
+                $revisionImagenes = RevisionImagenes::where('idrevisionImagenescol', $idRevImg)->first();
+
+                // Si existe la revisión de imágenes, llamo a RevImagen
+                if ($revisionImagenes) {
+                    $rutasImg = array_merge($rutasImg, $this->RevImagen($revisionImagenes));
+                }
+            }
+        } elseif ($opcion == 2) {
+            // Recupero la imagen que coincida con el id de la tabla revisión imágenes
+            $revisionImagenes = RevisionImagenes::find($idContent);
+
+            // Llamo a la función RevImagen
+            $rutasImg = $this->RevImagen($revisionImagenes);
+        }
+
+        // Devuelvo las rutas de las imágenes
+        return $rutasImg;
+    }
+
     #Redirigir a manejoreporte
     public function manejoreporte($id)
     {
@@ -343,15 +400,19 @@ class PanelUsuariosController extends Controller
 
         $imagen = $this->buscarImagen($id);
 
-
         // Mostrar Actividades en general del usuario
         $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
         // Almacenar datos de las actividades reportadas y no reportadas
         $listaActividadReportadaComentario = [];
         $listaActividadReportadaContenido = [];
+
         $listaActividadNOReportadaComentario = [];
         $listaActividadNOReportadaContenido = [];
+
+        //IMAGENES
+        $listaActividadReportadaContenidoImg = [];
+        $listaActividadNOReportadaContenidoImg = [];
 
         // Actividad x actividad
         foreach ($actividades as $actividad) {
@@ -376,9 +437,13 @@ class PanelUsuariosController extends Controller
                         // Obtener comentarios relacionados a la actividad
                         $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
 
+
                         // Recorrer los comentarios y almacenarlos en la lista
                         foreach ($comentarios as $comentario) {
                             $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener el contenido relacionado
+
+                            // Recuperar la imagen asociada al comentario
+                            $rutaImagen = $this->ImagenesContenido($comentario->revisionImagenes_idrevisionImagenescol, 2);
 
                             $listaActividadReportadaComentario[] = [
                                 'idComentario' => $comentario->idcomentarios,
@@ -387,6 +452,7 @@ class PanelUsuariosController extends Controller
                                 'tituloContenido' => $contenido ? $contenido->titulo : null, // Agregar título del contenido
                                 'id' => $contenido ? $contenido->idcontenidos : null,
                                 'reportado' => true, // Marcamos como reportado
+                                'rutaImagen' => $rutaImagen,
                             ];
                         }
                         break;
@@ -397,12 +463,16 @@ class PanelUsuariosController extends Controller
                         $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get(); // Obtener todos los contenidos relacionados
 
                         foreach ($contenidos as $contenido) {
+
+                            $listaActividadReportadaContenidoImg =  $this->ImagenesContenido($contenido->idcontenidos, 1);
+
                             $listaActividadReportadaContenido[] = [
                                 'id' => $contenido->idcontenidos,
                                 'fechaComent' => $contenido->fechaSubida,
                                 'titulo' => $contenido->titulo,
                                 'descripcion' => $contenido->descripcion,
                                 'reportado' => true, // Marcamos como reportado
+                                'rutaImagen' => $listaActividadReportadaContenidoImg,
                             ];
                         }
                         break;
@@ -418,6 +488,9 @@ class PanelUsuariosController extends Controller
                         foreach ($comentarios as $comentario) {
                             $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener contenido relacionado
 
+                            // Recuperar la imagen asociada al comentario
+                            $rutaImagen = $this->ImagenesContenido($comentario->revisionImagenes_idrevisionImagenescol, 2);
+
                             $listaActividadNOReportadaComentario[] = [
                                 'idComentario' => $comentario->idcomentarios,
                                 'fechaComent' => $comentario->fechaComent,
@@ -425,8 +498,10 @@ class PanelUsuariosController extends Controller
                                 'tituloContenido' => $contenido ? $contenido->titulo : null, // Título del contenido
                                 'id' => $contenido ? $contenido->idcontenidos : null,
                                 'reportado' => false, // Marcado como no reportado
+                                'rutaImagen' => $rutaImagen,
                             ];
                         }
+
                         break;
 
                     case '3':
@@ -434,12 +509,16 @@ class PanelUsuariosController extends Controller
                         $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get();
 
                         foreach ($contenidos as $contenido) {
+
+                            $listaActividadNOReportadaContenidoImg =  $this->ImagenesContenido($contenido->idcontenidos, 1);
+
                             $listaActividadNOReportadaContenido[] = [
                                 'id' => $contenido->idcontenidos,
                                 'fechaComent' => $contenido->fechaSubida,
                                 'titulo' => $contenido->titulo,
                                 'descripcion' => $contenido->descripcion,
                                 'reportado' => false, // Marcado como no reportado
+                                'rutaImagen' => $listaActividadNOReportadaContenidoImg,
                             ];
                         }
                         break;
