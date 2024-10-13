@@ -64,19 +64,26 @@ class ReportesController extends Controller
         return $rutasImg;
     }
 
-    // Procesar Actividades por Tipo (Reportadas o No)
     public function procesarActividades($actividades, $reportado)
     {
         $resultados = [
             'comentarios' => [],
             'contenidos' => [],
+            'perfil' => [],
         ];
 
         foreach ($actividades as $actividad) {
             $actividadId = $actividad->idActividad;
             $tipoActividad = $actividad->tipoActividad_idtipoActividad;
 
-            if ($tipoActividad == 2) { // Comentarios
+            // Si la actividad es del tipo 1 (Perfil)
+            if ($tipoActividad == 1) {
+                $resultados['perfil'][] = [
+                    'id' => $actividadId,
+                    'reportado' => $reportado,
+                    'tipoActividad' => $tipoActividad,
+                ];
+            } elseif ($tipoActividad == 2) { // Comentarios
                 $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
 
                 foreach ($comentarios as $comentario) {
@@ -140,6 +147,9 @@ class ReportesController extends Controller
         $totalNoReportadas = count($actividadesNoReportadas['comentarios']) + count($actividadesNoReportadas['contenidos']);
         $totalReportadas = count($actividadesReportadas['comentarios']) + count($actividadesReportadas['contenidos']);
 
+        // Verificar si hubo reportes del perfil
+        $perfilReportado = count($actividadesReportadas['perfil']) > 0;
+
         return view('profile.manejoreporte', compact(
             'usuario',
             'datosPersonales',
@@ -148,7 +158,9 @@ class ReportesController extends Controller
             'actividadesReportadas',
             'actividadesNoReportadas',
             'totalNoReportadas',
-            'totalReportadas'
+            'totalReportadas',
+            'perfilReportado'
+
         ));
     }
 }
