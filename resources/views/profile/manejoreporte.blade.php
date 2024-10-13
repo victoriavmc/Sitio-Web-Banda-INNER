@@ -108,24 +108,6 @@
                                                             publicación: {{ $contenido['fechaComent'] }} </p>
                                                         <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                                                         </p>
-                                                        {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                                        <div
-                                                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                                            @foreach ($contenido['rutaImagen'] as $imagen)
-                                                                <div class="group cursor-pointer relative">
-                                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                                        alt="ImagenesCargadas"
-                                                                        class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                                    <div
-                                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                        <button
-                                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                                            View
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -159,24 +141,6 @@
                                                             comentario: {{ $contenido['fechaComent'] }}</p>
                                                         <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                                                         </p>
-                                                        {{-- Imagenes NO REPORTADAS COMENTARIOS --}}
-                                                        <div
-                                                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                                            @foreach ($contenido['rutaImagen'] as $imagen)
-                                                                <div class="group cursor-pointer relative">
-                                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                                        alt="ImagenesCargadas"
-                                                                        class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                                    <div
-                                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                        <button
-                                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                                            View
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -214,22 +178,6 @@
                     <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
                         publicación: {{ $contenido['fechaComent'] }} </p>
                     <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                        @foreach ($contenido['rutaImagen'] as $imagen)
-                            <div class="group cursor-pointer relative">
-                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                    class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                <div
-                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         @endforeach
@@ -255,22 +203,6 @@
                     <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha del
                         comentario: {{ $contenido['fechaComent'] }}</p>
                     <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                    {{-- Imagenes NO REPORTADAS COMENTARIOS --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                        @foreach ($contenido['rutaImagen'] as $imagen)
-                            <div class="group cursor-pointer relative">
-                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                    class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                <div
-                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         @endforeach
@@ -304,22 +236,6 @@
                                 publicación: {{ $contenido['fechaComent'] }} </p>
                             <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                             </p>
-                            {{-- Imagenes REPORTADAS CONTENIDO --}}
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                @foreach ($contenido['rutaImagen'] as $imagen)
-                                    <div class="group cursor-pointer relative">
-                                        <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                            class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                View
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -350,22 +266,6 @@
                                 comentario: {{ $contenido['fechaComent'] }}</p>
                             <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                             </p>
-                            {{-- Imagenes REPORTADAS COMENTARIOS --}}
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                @foreach ($contenido['rutaImagen'] as $imagen)
-                                    <div class="group cursor-pointer relative">
-                                        <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                            class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                View
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
                         </div>
                     </div>
                 @endforeach
