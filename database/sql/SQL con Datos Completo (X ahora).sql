@@ -356,7 +356,7 @@ CREATE TABLE `imagenes` (
   `fechaSubidaImg` date DEFAULT NULL,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
   PRIMARY KEY (`idimagenes`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,7 +365,7 @@ CREATE TABLE `imagenes` (
 
 LOCK TABLES `imagenes` WRITE;
 /*!40000 ALTER TABLE `imagenes` DISABLE KEYS */;
-INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No'),(9,'img/Rh2514JTtsTicyYztrvBFemsdVNb0W25GUXUGI3F.png','2024-10-09','No'),(10,'img/zst5wi5VISilUXykfX5yrhtQAJTMjdigpjp1GYDj.jpg','2024-10-10','No'),(11,'img/XLmeRxjD9Z3gB2cZUeWFlMl9UEMzsn4h4vqawww7.jpg','2024-10-10','No'),(12,'img/lsqiPF9Mol8c265gcrLER0zklXo3Oz2R2woDPigx.jpg','2024-10-10','No'),(13,'img/9QBoPNZYGrx1NgHDaoFFh01J9HpuLkCw23ILoClT.jpg','2024-10-10','No'),(14,'img/rEwuOvauIPPEwS0VhR9gOXmmT4SpNbCxNuo8R7Xm.jpg','2024-10-10','No'),(24,'img/zBB2S0KVTZbEI0vg1E3c6nxz7gwFg6EHNl6uI6PI.jpg','2024-10-10','No'),(25,'img/op9ZZegaflQewhDabC0LEd0ChIRJXMchCNuCX7oc.jpg','2024-10-10','No'),(27,'img/diIX4GYQ55fngvJdsFsWEWDyUCb69oMyXs2og970.jpg','2024-10-10','No'),(28,'img/mCGVwWChpnI2jqG2tPyN2jV274enYyS6kDEPEVnk.png','2024-10-10','No'),(37,'img/G7TtO4hkih8R0qZPmq6xKhHZ6VMil6P6IKgllVAJ.jpg','2024-10-10','No'),(40,'img/QkUyrj4FatGTGGCVgKIe2MgFGSD2mdKBoLDLeo69.jpg','2024-10-10','No'),(41,'img/TQbPLSGY4Z05VbhGfUcijumkdmc5pmPmPd4wxQuh.jpg','2024-10-10','No'),(42,'img/kaaQBNU9QLEi6A95Bs56oRA0WhqGMa5ddbumVqwS.jpg','2024-10-10','No'),(46,'img/Xg1OQZDdfwc4DEfPceDtOqfe9TadURsftEFqSzkL.jpg','2024-10-10','No'),(47,'img/fuuOuAjFzNecibYwi1w4cZDiObf0s6dDLR1eXxce.jpg','2024-10-10','No'),(48,'img/6y5yDbzdZQCiu1qF1zJjc95tBPVXQiAuoFSJcShe.jpg','2024-10-10','No'),(49,'img/asOqDLWsirZpz7ET3xDpYqFW4mvbRu051MJftZI3.jpg','2024-10-10','No'),(53,'img/ebnkuFPUVip2acw6wJb6x7xN2gBTYATLH84GXEvM.jpg','2024-10-10','No'),(54,'img/UA65XXn3OxGZc47BkQFGUJXOgnHi1EYyhZxCQIoK.png','2024-10-10','No'),(55,'img/g2SvLJbBwAi4UhU8ms4EEfBeXL8Zbpz797a0TKat.jpg','2024-10-10','No'),(57,'img/1LiQOreUV1aNDBQZZliEcAFcXjPlQwyCAS2jKGOt.png','2024-10-10','No'),(58,'img/X1XCpWmiUCUwzbgFCRRmJlqiEOJyPcE4afPMtLy3.jpg','2024-10-12','No'),(59,'img/ng0EYA6EJy2zS5W98oqdO6fxCFl0gSmD19cXDgRZ.jpg','2024-10-12','No'),(60,'img/PFSymQuQbM14DqUerpkp7ow5FOz9OauKatReYw5s.jpg','2024-10-12','No'),(61,'img/ckoV8Fl1DZApPTnIbJyXlhHrGovJMFE3OqZMKZea.jpg','2024-10-12','No'),(62,'img/ea1fEKu4ydC7VZk0PqYyacDrIEt5S8Fxx4bEzJp2.jpg','2024-10-12','No'),(63,'img/J9HwHMYdyVOF9BsAndp8l1WwFoIoXHARbb5nQ6JA.jpg','2024-10-12','No'),(64,'img/jhh3awECWsc2rhjb1YhVpIpOm3tIS1jeiSohAWW1.jpg','2024-10-12','No');
+INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No'),(9,'img/Rh2514JTtsTicyYztrvBFemsdVNb0W25GUXUGI3F.png','2024-10-09','No'),(10,'img/zst5wi5VISilUXykfX5yrhtQAJTMjdigpjp1GYDj.jpg','2024-10-10','No'),(11,'img/XLmeRxjD9Z3gB2cZUeWFlMl9UEMzsn4h4vqawww7.jpg','2024-10-10','No'),(12,'img/lsqiPF9Mol8c265gcrLER0zklXo3Oz2R2woDPigx.jpg','2024-10-10','No'),(13,'img/9QBoPNZYGrx1NgHDaoFFh01J9HpuLkCw23ILoClT.jpg','2024-10-10','No'),(14,'img/rEwuOvauIPPEwS0VhR9gOXmmT4SpNbCxNuo8R7Xm.jpg','2024-10-10','No'),(24,'img/zBB2S0KVTZbEI0vg1E3c6nxz7gwFg6EHNl6uI6PI.jpg','2024-10-10','No'),(25,'img/op9ZZegaflQewhDabC0LEd0ChIRJXMchCNuCX7oc.jpg','2024-10-10','No'),(27,'img/diIX4GYQ55fngvJdsFsWEWDyUCb69oMyXs2og970.jpg','2024-10-10','No'),(28,'img/mCGVwWChpnI2jqG2tPyN2jV274enYyS6kDEPEVnk.png','2024-10-10','No'),(40,'img/QkUyrj4FatGTGGCVgKIe2MgFGSD2mdKBoLDLeo69.jpg','2024-10-10','No'),(41,'img/TQbPLSGY4Z05VbhGfUcijumkdmc5pmPmPd4wxQuh.jpg','2024-10-10','No'),(42,'img/kaaQBNU9QLEi6A95Bs56oRA0WhqGMa5ddbumVqwS.jpg','2024-10-10','No'),(46,'img/Xg1OQZDdfwc4DEfPceDtOqfe9TadURsftEFqSzkL.jpg','2024-10-10','No'),(47,'img/fuuOuAjFzNecibYwi1w4cZDiObf0s6dDLR1eXxce.jpg','2024-10-10','No'),(48,'img/6y5yDbzdZQCiu1qF1zJjc95tBPVXQiAuoFSJcShe.jpg','2024-10-10','No'),(49,'img/asOqDLWsirZpz7ET3xDpYqFW4mvbRu051MJftZI3.jpg','2024-10-10','No'),(53,'img/ebnkuFPUVip2acw6wJb6x7xN2gBTYATLH84GXEvM.jpg','2024-10-10','No'),(54,'img/UA65XXn3OxGZc47BkQFGUJXOgnHi1EYyhZxCQIoK.png','2024-10-10','No'),(55,'img/g2SvLJbBwAi4UhU8ms4EEfBeXL8Zbpz797a0TKat.jpg','2024-10-10','No'),(57,'img/1LiQOreUV1aNDBQZZliEcAFcXjPlQwyCAS2jKGOt.png','2024-10-10','No'),(58,'img/X1XCpWmiUCUwzbgFCRRmJlqiEOJyPcE4afPMtLy3.jpg','2024-10-12','No'),(59,'img/ng0EYA6EJy2zS5W98oqdO6fxCFl0gSmD19cXDgRZ.jpg','2024-10-12','No'),(60,'img/PFSymQuQbM14DqUerpkp7ow5FOz9OauKatReYw5s.jpg','2024-10-12','No'),(61,'img/ckoV8Fl1DZApPTnIbJyXlhHrGovJMFE3OqZMKZea.jpg','2024-10-12','No'),(62,'img/ea1fEKu4ydC7VZk0PqYyacDrIEt5S8Fxx4bEzJp2.jpg','2024-10-12','No'),(63,'img/J9HwHMYdyVOF9BsAndp8l1WwFoIoXHARbb5nQ6JA.jpg','2024-10-12','No'),(64,'img/jhh3awECWsc2rhjb1YhVpIpOm3tIS1jeiSohAWW1.jpg','2024-10-12','No'),(65,'img/jTVI9O1hu4JAmcJ3cOsrSR94r9JgTe83stKubRza.png','2024-10-12','No'),(66,'img/RNYirQRcay4GxZiQXmcDS3Ri9lvSOKNBEhsyc134.png','2024-10-12','No'),(67,'img/JcdiPyKxQsE21HEbnvEsGl72j3h146X4GPhgzb3I.png','2024-10-12','No');
 /*!40000 ALTER TABLE `imagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,7 +385,7 @@ CREATE TABLE `imagenescontenido` (
   KEY `fk_revisionImagenes_has_contenidos_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +394,7 @@ CREATE TABLE `imagenescontenido` (
 
 LOCK TABLES `imagenescontenido` WRITE;
 /*!40000 ALTER TABLE `imagenescontenido` DISABLE KEYS */;
-INSERT INTO `imagenescontenido` VALUES (17,40,7),(18,41,6),(19,42,4),(23,46,1),(24,47,20),(25,48,21),(26,49,22),(27,58,17),(28,59,17),(29,60,17),(30,61,17),(31,62,17),(32,63,17),(33,64,16);
+INSERT INTO `imagenescontenido` VALUES (17,40,7),(18,41,6),(19,42,4),(23,46,1),(24,47,20),(25,48,21),(26,49,22),(27,58,17),(28,59,17),(29,60,17),(30,61,17),(31,62,17),(32,63,17),(33,64,16),(34,65,6),(35,66,6),(36,67,6);
 /*!40000 ALTER TABLE `imagenescontenido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -602,7 +602,7 @@ CREATE TABLE `revisionimagenes` (
   CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `tipodefoto` (`idtipoDeFoto`),
   CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
   CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -611,7 +611,7 @@ CREATE TABLE `revisionimagenes` (
 
 LOCK TABLES `revisionimagenes` WRITE;
 /*!40000 ALTER TABLE `revisionimagenes` DISABLE KEYS */;
-INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1),(9,8,9,1),(10,1,10,4),(11,1,11,4),(12,1,12,4),(13,1,13,4),(14,11,14,1),(24,11,24,5),(25,13,25,5),(27,14,27,5),(28,14,28,5),(37,15,37,1),(40,1,40,2),(41,1,41,2),(42,1,42,2),(46,5,46,2),(47,5,47,2),(48,5,48,2),(49,5,49,2),(53,17,53,6),(54,18,54,6),(55,19,55,6),(57,16,57,6),(58,15,58,5),(59,15,59,5),(60,15,60,5),(61,15,61,5),(62,15,62,5),(63,15,63,5),(64,15,64,5);
+INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1),(9,8,9,1),(10,1,10,4),(11,1,11,4),(12,1,12,4),(13,1,13,4),(14,11,14,1),(24,11,24,5),(25,13,25,5),(27,14,27,5),(28,14,28,5),(40,1,40,2),(41,1,41,2),(42,1,42,2),(46,5,46,2),(47,5,47,2),(48,5,48,2),(49,5,49,2),(53,17,53,6),(54,18,54,6),(55,19,55,6),(57,16,57,6),(58,15,58,5),(59,15,59,5),(60,15,60,5),(61,15,61,5),(62,15,62,5),(63,15,63,5),(64,15,64,5),(65,1,65,2),(66,1,66,2),(67,1,67,2);
 /*!40000 ALTER TABLE `revisionimagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -919,4 +919,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-12 15:59:07
+-- Dump completed on 2024-10-13  1:37:30
