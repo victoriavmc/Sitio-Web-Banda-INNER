@@ -165,6 +165,25 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Botón para eliminar publicacion -->
+                            @if (Auth::user()->rol->idrol == 1)
+                                <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        </svg>
+                                        <p class="text-base font-semibold">Eliminar</p>
+                                    </button>
+                                </form>
+                            @endif
                         @endforeach
                     @endif
 
@@ -207,6 +226,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Botón para eliminar comentario -->
+                            @if (Auth::user()->rol->idrol == 1)
+                                <form class=""
+                                    action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        </svg>
+                                        <p class="text-base font-semibold">Eliminar</p>
+                                    </button>
+                                </form>
+                            @endif
                         @endforeach
                     @endif
                 @endif
@@ -229,7 +268,8 @@
                     </h1>
                     {{-- SI NO REPORTARON LA PUBLICACION --}}
                     @if (count($actividadesNoReportadas['contenidos']) > 0)
-                        <h2 class="text-2xl mb-4"> Publicaciones <b class=" text-base font-thin italic text-red-500 ">*
+                        <h2 class="text-2xl mb-4"> Publicaciones <b
+                                class=" text-base font-thin italic text-red-500 ">*
                                 Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                         <!-- Mostrar publicaciones  -->
                         @foreach ($actividadesNoReportadas['contenidos'] as $contenido)
@@ -265,6 +305,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Botón para eliminar publicacion -->
+                            @if (Auth::user()->rol->idrol == 1)
+                                <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        </svg>
+                                        <p class="text-base font-semibold">Eliminar</p>
+                                    </button>
+                                </form>
+                            @endif
                         @endforeach
                     @endif
                     {{-- SI NO REPORTARON EL COMENTARIO --}}
@@ -307,6 +367,27 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Botón para eliminar comentario -->
+                            @if (Auth::user()->rol->idrol == 1)
+                                <form class=""
+                                    action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        </svg>
+                                        <p class="text-base font-semibold">Eliminar</p>
+                                    </button>
+                                </form>
+                            @endif
                         @endforeach
                     @endif
                 @endif
@@ -366,6 +447,25 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Botón para eliminar publicacion -->
+                        @if (Auth::user()->rol->idrol == 1)
+                            <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                method="POST"
+                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    </svg>
+                                    <p class="text-base font-semibold">Eliminar</p>
+                                </button>
+                            </form>
+                        @endif
                     @endforeach
                 @endif
                 {{-- SI NO REPORTARON EL COMENTARIO --}}
@@ -408,6 +508,25 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Botón para eliminar publicacion -->
+                        @if (Auth::user()->rol->idrol == 1)
+                            <form class=""
+                                action="{{ route('eliminarContenido', $contenido['idComentario']) }}" method="POST"
+                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    </svg>
+                                    <p class="text-base font-semibold">Eliminar</p>
+                                </button>
+                            </form>
+                        @endif
                     @endforeach
                 @endif
             </div>
