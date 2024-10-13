@@ -62,23 +62,24 @@
                 {{-- ENCABEZADO DE REPORTES --}}
                 <div class="m-auto mb-4">
                     <h1 class="text-3xl">
-                        @if ($perfilReportado >= 1)
-                            Fue Reportado el Perfil
+                        @if ($perfilReportado < 1)
+                            No Presenta Reportes
                         @elseif ($totalReportadas === 1)
                             Actividad Reportada
-                        @elseif (isset($totalReportadas) && $totalReportadas > 1)
+                        @elseif ($totalReportadas > 1)
                             Actividades Reportadas
                         @else
-                            No Presenta Reportes
+                            Fue Reportado el Perfil
                         @endif
                     </h1>
+
                 </div>
                 {{-- Si es que le reportaron entonces que muestre en especifico que le reportaron --}}
                 {{-- 1-Perfil 2-Comentarios 3-Contenido --}}
                 @if ($perfilReportado >= 1)
                     {{-- SI LE REPORTARON EL PERFIL --}}
                     <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
-                        <h1 class=" text-2xl">Revisa el perfil de <b
+                        <h1 class=" mb-4 text-2xl">Revisa el perfil de <b
                                 class="text-red-500">{{ $usuario->usuarioUser }}</b>
                         </h1>
                     </a>
