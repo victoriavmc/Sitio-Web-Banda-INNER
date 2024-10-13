@@ -63,7 +63,7 @@
                 <!-- Caso segun reporte -->
                 <div class="m-auto mb-4">
                     <h1 class="text-3xl">
-                        @if (isset($reportes['totalReportes']) && $reportes['totalReportes'] === 1)
+                        @if (isset($reportes['totalReportes']) && $reportes['totalReportes'] == 1)
                             Actividad Reportada
                         @elseif (isset($reportes['totalReportes']) && $reportes['totalReportes'] > 1)
                             Actividades Reportadas
