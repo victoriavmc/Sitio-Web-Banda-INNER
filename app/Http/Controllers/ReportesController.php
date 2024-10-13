@@ -22,234 +22,133 @@ class ReportesController extends Controller
     #Busco Imagen de un Usuario Especifico (VER COMO USAR)
     public function buscarImagen($idUser)
     {
-        // Ahora busco en la tabla revisionImagenes
         $imagenPerfil = RevisionImagenes::where('usuarios_idusuarios', $idUser)
             ->where('tipodefoto_idtipoDeFoto', 1)
             ->first();
 
-        if ($imagenPerfil) {
-            $idImagenP = $imagenPerfil->imagenes_idimagenes;
-
-            // Ahora busco la imagen en la tabla imagenes
-            $ubicacionImagen = Imagenes::where('idimagenes', $idImagenP)->first();
-
-            return $ubicacionImagen ? $ubicacionImagen->subidaImg : null;
-        }
-
-        return null; // Si no hay imagen
+        return $imagenPerfil ? Imagenes::find($imagenPerfil->imagenes_idimagenes)->subidaImg : null;
     }
 
-    // Función para obtener la ruta de las imágenes a partir de la revisión de imágenes
-    public function RevImagen($revisionImagenes)
+    // Obtener la Ruta de Imágenes desde Revisión de Imágenes
+    public function obtenerRutaImagen($idRevision)
     {
-        $rutasImg = []; // Inicializo el array para almacenar las rutas
+        // Primero verifica si existe la revisión de imágenes
+        $revision = RevisionImagenes::find($idRevision);
 
-        if ($revisionImagenes) {
-            // Obtengo el ID de la imagen
-            $idImagen = $revisionImagenes->imagenes_idimagenes;
-
-            // Busco la imagen en la tabla de imágenes
-            $imagen = Imagenes::where('idimagenes', $idImagen)->first();
-
-            if ($imagen) {
-                // Obtengo la ruta de la imagen
-                $rutaImg = $imagen->subidaImg;
-
-                // Almaceno la ruta en el array
-                $rutasImg[] = $rutaImg;
-            }
+        if ($revision) {
+            // Luego verifica si se encuentra la imagen relacionada
+            $imagen = Imagenes::find($revision->imagenes_idimagenes);
+            return $imagen ? [$imagen->subidaImg] : [];
         }
 
-        return $rutasImg; // Devuelvo el array de rutas
+        // Si no se encuentra la revisión o la imagen, devolver un array vacío
+        return [];
     }
 
-    // Función para obtener las imágenes de contenido
-    public function ImagenesContenido($idContent, $opcion)
+
+    // Obtener Imágenes de Contenido según Opción
+    public function obtenerImagenesContenido($idContent, $opcion)
     {
-        $rutasImg = []; // Array para almacenar las rutas de las imágenes
+        $rutasImg = [];
 
         if ($opcion == 1) {
-            // Recupero todas las imágenes que coincidan con el idContenido
             $imagenes = ImagenesContenido::where('contenidos_idcontenidos', $idContent)->get();
 
             foreach ($imagenes as $imgEspecifica) {
-                // Obtengo el id de revisión de imágenes
-                $idRevImg = $imgEspecifica->revisionImagenes_idrevisionImagenescol;
-
-                // Busco la revisión de imágenes
-                $revisionImagenes = RevisionImagenes::where('idrevisionImagenescol', $idRevImg)->first();
-
-                // Si existe la revisión de imágenes, llamo a RevImagen
-                if ($revisionImagenes) {
-                    $rutasImg = array_merge($rutasImg, $this->RevImagen($revisionImagenes));
-                }
+                $rutasImg = array_merge($rutasImg, $this->obtenerRutaImagen($imgEspecifica->revisionImagenes_idrevisionImagenescol));
             }
         } elseif ($opcion == 2) {
-            // Recupero la imagen que coincida con el id de la tabla revisión imágenes
-            $revisionImagenes = RevisionImagenes::find($idContent);
-
-            // Llamo a la función RevImagen
-            $rutasImg = $this->RevImagen($revisionImagenes);
+            $rutasImg = $this->obtenerRutaImagen($idContent);
         }
 
-        // Devuelvo las rutas de las imágenes
         return $rutasImg;
     }
 
-    #Redirigir a manejoreporte
-    public function manejoreporte($id)
+    // Procesar Actividades por Tipo (Reportadas o No)
+    public function procesarActividades($actividades, $reportado)
     {
-        // Usuario
-        $usuario = Usuario::find($id);
+        $resultados = [
+            'comentarios' => [],
+            'contenidos' => [],
+        ];
 
-        // Datos personales
-        $datosPersonales = $usuario->datosPersonales;
-
-        // Reportes
-        $reportes = $usuario->reportes;
-
-        $imagen = $this->buscarImagen($id);
-
-        // Mostrar Actividades en general del usuario
-        $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
-
-        // Almacenar datos de las actividades reportadas y no reportadas
-        $listaActividadReportadaComentario = [];
-        $listaActividadReportadaContenido = [];
-
-        $listaActividadNOReportadaComentario = [];
-        $listaActividadNOReportadaContenido = [];
-
-        //IMAGENES
-        $listaActividadReportadaContenidoImg = [];
-        $listaActividadNOReportadaContenidoImg = [];
-
-        // Actividad x actividad
         foreach ($actividades as $actividad) {
-            // Obtener el ID de la actividad actual
             $actividadId = $actividad->idActividad;
             $tipoActividad = $actividad->tipoActividad_idtipoActividad;
 
-            // Mostrar actividad específica: contar reportes
-            $reportes = Interacciones::where('actividad_idActividad', $actividadId)
-                ->where('reporte', '>', 0)
-                ->select(DB::raw('COUNT(*) as totalReportes'))
-                ->first();
+            if ($tipoActividad == 2) { // Comentarios
+                $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
 
-            // Verificamos si hay reportes
-            if ($reportes && $reportes->totalReportes > 0) {
-                switch ($tipoActividad) {
-                    case '1':
-                        // Reportaron el Perfil
-                        break;
+                foreach ($comentarios as $comentario) {
+                    $contenido = Contenidos::find($comentario->contenidos_idcontenidos);
+                    $rutaImagen = $this->obtenerImagenesContenido($comentario->revisionImagenes_idrevisionImagenescol, 2);
 
-                    case '2':
-                        // Obtener comentarios relacionados a la actividad
-                        $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
-
-
-                        // Recorrer los comentarios y almacenarlos en la lista
-                        foreach ($comentarios as $comentario) {
-                            $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener el contenido relacionado
-
-                            // Recuperar la imagen asociada al comentario
-                            $rutaImagen = $this->ImagenesContenido($comentario->revisionImagenes_idrevisionImagenescol, 2);
-
-                            $listaActividadReportadaComentario[] = [
-                                'idComentario' => $comentario->idcomentarios,
-                                'fechaComent' => $comentario->fechaComent,
-                                'descripcion' => $comentario->descripcion,
-                                'tituloContenido' => $contenido ? $contenido->titulo : null, // Agregar título del contenido
-                                'id' => $contenido ? $contenido->idcontenidos : null,
-                                'reportado' => true, // Marcamos como reportado
-                                'rutaImagen' => $rutaImagen,
-                            ];
-                        }
-                        break;
-
-                    case '3':
-                        // Reportaron el contenido  
-                        // Obtener contenidos relacionados a la actividad
-                        $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get(); // Obtener todos los contenidos relacionados
-
-                        foreach ($contenidos as $contenido) {
-
-                            $listaActividadReportadaContenidoImg =  $this->ImagenesContenido($contenido->idcontenidos, 1);
-
-                            $listaActividadReportadaContenido[] = [
-                                'id' => $contenido->idcontenidos,
-                                'fechaComent' => $contenido->fechaSubida,
-                                'titulo' => $contenido->titulo,
-                                'descripcion' => $contenido->descripcion,
-                                'reportado' => true, // Marcamos como reportado
-                                'rutaImagen' => $listaActividadReportadaContenidoImg,
-                            ];
-                        }
-                        break;
+                    $resultados['comentarios'][] = [
+                        'idComentario' => $comentario->idcomentarios,
+                        'fechaComent' => $comentario->fechaComent,
+                        'descripcion' => $comentario->descripcion,
+                        'tituloContenido' => $contenido ? $contenido->titulo : null,
+                        'id' => $contenido ? $contenido->idcontenidos : null,
+                        'reportado' => $reportado,
+                        'rutaImagen' => $rutaImagen,
+                        'tipoActividad' => $tipoActividad,
+                    ];
                 }
-            } else {
-                // Si no hay reportes
+            } elseif ($tipoActividad == 3) { // Contenidos
+                $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get();
 
-                switch ($tipoActividad) {
-                    case '2':
-                        // Obtener comentarios no reportados
-                        $comentarios = Comentarios::where('Actividad_idActividad', $actividadId)->get();
+                foreach ($contenidos as $contenido) {
+                    $rutaImagen = $this->obtenerImagenesContenido($contenido->idcontenidos, 1);
 
-                        foreach ($comentarios as $comentario) {
-                            $contenido = Contenidos::find($comentario->contenidos_idcontenidos); // Obtener contenido relacionado
-
-                            // Recuperar la imagen asociada al comentario
-                            $rutaImagen = $this->ImagenesContenido($comentario->revisionImagenes_idrevisionImagenescol, 2);
-
-                            $listaActividadNOReportadaComentario[] = [
-                                'idComentario' => $comentario->idcomentarios,
-                                'fechaComent' => $comentario->fechaComent,
-                                'descripcion' => $comentario->descripcion,
-                                'tituloContenido' => $contenido ? $contenido->titulo : null, // Título del contenido
-                                'id' => $contenido ? $contenido->idcontenidos : null,
-                                'reportado' => false, // Marcado como no reportado
-                                'rutaImagen' => $rutaImagen,
-                            ];
-                        }
-
-                        break;
-
-                    case '3':
-                        // Obtener contenidos no reportados
-                        $contenidos = Contenidos::where('Actividad_idActividad', $actividadId)->get();
-
-                        foreach ($contenidos as $contenido) {
-
-                            $listaActividadNOReportadaContenidoImg =  $this->ImagenesContenido($contenido->idcontenidos, 1);
-
-                            $listaActividadNOReportadaContenido[] = [
-                                'id' => $contenido->idcontenidos,
-                                'fechaComent' => $contenido->fechaSubida,
-                                'titulo' => $contenido->titulo,
-                                'descripcion' => $contenido->descripcion,
-                                'reportado' => false, // Marcado como no reportado
-                                'rutaImagen' => $listaActividadNOReportadaContenidoImg,
-                            ];
-                        }
-                        break;
+                    $resultados['contenidos'][] = [
+                        'id' => $contenido->idcontenidos,
+                        'fechaComent' => $contenido->fechaSubida,
+                        'titulo' => $contenido->titulo,
+                        'descripcion' => $contenido->descripcion,
+                        'reportado' => $reportado,
+                        'rutaImagen' => $rutaImagen,
+                        'tipoActividad' => $tipoActividad,
+                    ];
                 }
             }
         }
 
-        // Después del bucle calcular el total de actividades no reportadas
-        $totalNoReportadas = count($listaActividadNOReportadaComentario) + count($listaActividadNOReportadaContenido);
+        return $resultados;
+    }
+
+    // Redirigir a manejoReporte
+    public function manejoreporte($id)
+    {
+        $usuario = Usuario::find($id);
+        $datosPersonales = $usuario->datosPersonales;
+        $imagen = $this->buscarImagen($id);
+
+        // Obtener todas las actividades del usuario
+        $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
+
+        // Separar actividades reportadas y no reportadas
+        #Filter con fn: Filtra elementos de una colección que cumplan con una condición específica definida por una función.
+        #Diff: Devuelve los elementos que están en una colección pero no en otra, ayudando a identificar diferencias entre dos conjuntos de datos.
+        $reportadas = $actividades->filter(fn($act) => Interacciones::where('actividad_idActividad', $act->idActividad)->where('reporte', '>', 0)->exists());
+        $noReportadas = $actividades->diff($reportadas);
+
+        // Procesar y organizar actividades
+        $actividadesReportadas = $this->procesarActividades($reportadas, true);
+        $actividadesNoReportadas = $this->procesarActividades($noReportadas, false);
+
+        // Calcular totales
+        $totalNoReportadas = count($actividadesNoReportadas['comentarios']) + count($actividadesNoReportadas['contenidos']);
+        $totalReportadas = count($actividadesReportadas['comentarios']) + count($actividadesReportadas['contenidos']);
 
         return view('profile.manejoreporte', compact(
             'usuario',
             'datosPersonales',
             'imagen',
             'actividades',
-            'reportes',
-            'listaActividadReportadaComentario',
-            'listaActividadReportadaContenido',
-            'listaActividadNOReportadaComentario',
-            'listaActividadNOReportadaContenido',
-            'totalNoReportadas' // Pasar el total correctamente
+            'actividadesReportadas',
+            'actividadesNoReportadas',
+            'totalNoReportadas',
+            'totalReportadas'
         ));
     }
 }
