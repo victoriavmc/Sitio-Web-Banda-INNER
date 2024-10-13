@@ -1,4 +1,11 @@
 <x-AppLayout>
+    @if (session('alertForo'))
+        {{-- Componente de alerta para el foro exitoso o fallido --}}
+        <x-alerts :type="session('alertForo')['type']">
+            {{ session('alertForo')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="bg-cover min-h-screen bg-center w-full p-10"
         style="background-image: url('{{ asset('img/foro_fondo.jpg') }}')">
         <div class="grid gap-5 justify-center">

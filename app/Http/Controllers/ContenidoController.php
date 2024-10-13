@@ -171,11 +171,20 @@ class ContenidoController extends Controller
         // Redirigir según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
-                return redirect()->route('foro')->with('success', 'Publicación actualizada con éxito.');
+                return redirect()->route('foro')->with('alertPublicacion', [
+                    'type' => 'Success',
+                    'message' => 'Publicación actualizada con éxito.',
+                ]);
             case 2:
-                return redirect()->route('noticias')->with('success', 'Noticia actualizada con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Noticia actualizada con éxito.',
+                ]);
             case 3:
-                return redirect()->route('biografia')->with('success', 'Biografía actualizada con éxito.');
+                return redirect()->route('biografia')->with('alertBiografia', [
+                    'type' => 'Success',
+                    'message' => 'Biografia actualizada con éxito.',
+                ]);
         }
     }
 
@@ -686,9 +695,15 @@ class ContenidoController extends Controller
         // Redirigir según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
-                return redirect()->route('foro')->with('success', 'Contenidos con sus respectivos comentarios y imágenes eliminados con éxito.');
+                return redirect()->route('foro')->with('alertForo', [
+                    'type' => 'Success',
+                    'message' => 'Contenido del Foto con sus respecticos comentarios e imágenes eliminados con éxito.',
+                ]);
             case 2:
-                return redirect()->route('noticias')->with('success', 'Contenido de la Noticias y sus imágenes eliminados con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Contenido de la Noticias y sus imágenes eliminados con éxito.',
+                ]);
         }
     }
 
@@ -707,7 +722,10 @@ class ContenidoController extends Controller
         // Eliminar la imagen y la revisión asociada
         $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
 
-        return redirect()->back()->with('success', 'Comentario eliminado exitosamente.');
+        return redirect()->back()->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario eliminado exitosamente.',
+        ]);
     }
 
     #VER FORMULARIO CREAR PUBLICACIONES
@@ -797,11 +815,17 @@ class ContenidoController extends Controller
         switch ($type) {
             case 1:
                 #Si es foro
-                return redirect()->route('foro')->with('success', 'Publicación creada con éxito.');
+                return redirect()->route('foro')->with('alertForo', [
+                    'type' => 'Success',
+                    'message' => 'Publicacion creada con éxito.',
+                ]);
                 break;
             case 2:
                 #Si es noticias
-                return redirect()->route('noticias')->with('success', 'Noticia creada con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Noticia creada con éxito.',
+                ]);
                 break;
         }
     }
@@ -836,7 +860,10 @@ class ContenidoController extends Controller
         // Guardar el comentario
         $comentario->save();
 
-        return redirect()->route('foroUnico', ['data' => $idContent])->with('success', 'Comentario agregado exitosamente.');
+        return redirect()->route('foroUnico', ['data' => $idContent])->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario agregado exitosamente.',
+        ]);
     }
 
     #Modificar un comentario especifico
@@ -869,7 +896,10 @@ class ContenidoController extends Controller
         // Si no se subió una nueva imagen, se mantendrá la imagen existente
         $comentario->save();
 
-        return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('success', 'Comentario modificado exitosamente.');
+        return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario modificado exitosamente.',
+        ]);
     }
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)

@@ -1,4 +1,11 @@
 <x-AppLayout>
+    @if (session('alertPublicacion'))
+        {{-- Componente de alerta para el exitoso o fallido --}}
+        <x-alerts :type="session('alertPublicacion')['type']">
+            {{ session('alertPublicacion')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="flex justify-center items-center min-h-screen p-10 flex-col">
         <div>
             <div

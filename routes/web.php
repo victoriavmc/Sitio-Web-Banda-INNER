@@ -13,6 +13,8 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
+use App\Http\Controllers\cancionController;
+
 #Modelo
 use App\Models\Paisnacimiento;
 use App\Models\Reportes;
@@ -279,9 +281,44 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])
 // VER ALBUM Musica
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])
     ->name('discografia');
+
+// CRUD ALBUM
+Route::get('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'formularioCrearAlbum'])
+    ->name('formulario-crear-album')->middleware('auth');
+
+Route::post('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'crearAlbum'])
+    ->name('crear-album')->middleware('auth');
+
+Route::get('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'formularioModificarAlbum'])
+    ->name('formulario-modificar-album')->middleware('auth');
+
+Route::put('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'modificarAlbum'])
+    ->name('modificar-album')->middleware('auth');
+
+Route::delete('/albumMusica/discografia/eliminar-album/{id}', [AlbumMusicaController::class, 'eliminarAlbum'])
+    ->name('eliminar-album')->middleware('auth');
+
+// CRUD CANCIONES
+
+Route::get('/albumMusica/discografia/crear-cancion', [CancionController::class, 'formularioCrearCancion'])
+    ->name('formulario-crear-cancion')->middleware('auth');
+
+Route::post('/albumMusica/discografia/crear-cancion', [CancionController::class, 'crearCancion'])
+    ->name('crear-cancion')->middleware('auth');
+
+Route::get('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'formularioModificarCancion'])
+    ->name('formulario-modificar-cancion')->middleware('auth');
+
+Route::put('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'modificarCancion'])
+    ->name('modificar-cancion')->middleware('auth');
+
+Route::delete('/albumMusica/discografia/eliminar-cancion/{id}', [CancionController::class, 'eliminarCancion'])
+    ->name('eliminar-cancion')->middleware('auth');
+
 // VER ALBUM Galera
 Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])
     ->name('albumGaleria');
+
 // Traer API YT
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
     ->name('actualizarYt')->middleware('auth');
@@ -294,6 +331,15 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 ##################################################################################################
+//------------------------ Discografia ------------------------
+// VER REPORTES
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarStaff');
+
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarUsuario');
+##################################################################################################
+
 
 // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])

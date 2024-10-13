@@ -1,4 +1,11 @@
 <x-AppLayout>
+    @if (session('alertNoticia'))
+        {{-- Componente de alerta para la noticia exitoso o fallido --}}
+        <x-alerts :type="session('alertNoticia')['type']">
+            {{ session('alertNoticia')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="min-h-screen bg-cover bg-center w-full p-10"
         style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
         <div class="flex flex-col gap-4 px-8 pb-8">
