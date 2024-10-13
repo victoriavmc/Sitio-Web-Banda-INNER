@@ -13,6 +13,7 @@
             {{-- IZQUIERDO --}}
             <div class="bg-red-500  md:col-span-4 p-10 ">
                 {{-- ENCABEZADO DEL USUARIO --}}
+
                 <h1 class='text-2xl font-semibold text-center uppercase'>
                     @if (isset($totalReportadas) && $totalReportadas > 0)
                         Usuario Reportado
@@ -20,6 +21,7 @@
                         Historial del Usuario
                     @endif
                 </h1>
+
                 {{-- DATOS DEL USUARIO --}}
                 <div class="max-w-4xl mx-auto px-4 py-8">
                     <div class=" space-y-4">
@@ -56,6 +58,45 @@
                         </div>
                     </div>
                 </div>
+
+                @php
+                    function formatReportes($reportes)
+                    {
+                        if (count($reportes) > 1) {
+                            $lastReporte = array_pop($reportes);
+                            return implode(', ', $reportes) . ' y ' . $lastReporte;
+                        }
+                        return implode('', $reportes);
+                    }
+                @endphp
+
+
+                @if (isset($totalReportadas) && $totalReportadas > 0)
+                    <div class="flex space-x-2 items-center animate-out zoom-in duration-200 delay-300">
+                        <div class="font-semibold text-center md:text-left">
+                            Reportado por {{ count($quienesReportaron) === 1 ? 'el usuario:' : 'los usuarios:' }}
+
+                            <div class="flex space-x-2 items-center flex-col md:flex-row">
+                                <div class="flex space-x-2 ml-10">
+                                    @foreach ($quienesReportaron as $usuarioReporto)
+                                        <a href="{{ route('perfil-ajeno', $usuarioReporto['id']) }}"
+                                            class="relative tooltip">
+                                            <img title=""
+                                                class="inline-block h-10 w-10 rounded-full ring-2 ring-gray-200 hover:scale-105 transform duration-100"
+                                                src="{{ $usuarioReporto['imagen'] ? asset(Storage::url($usuarioReporto['imagen'])) : asset('img/logo_usuario.png') }}"
+                                                alt="{{ $usuarioReporto['nombre'] }}">
+                                            <span class="tooltip-text">
+                                                {{ $usuarioReporto['nombre'] }}<br>
+                                                {!! formatReportes($usuarioReporto['reportes']) !!}
+                                            </span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
             </div>
             {{-- DERECHO --}}
             <div class="md:col-span-8 p-10">

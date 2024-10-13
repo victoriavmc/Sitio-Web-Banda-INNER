@@ -1650,6 +1650,48 @@ button.swiper-pagination-bullet {
 .icon-button:hover .icon-twitter {
   color: white;
 }
+/* REPORTES TOOLTIP */
+.tooltip {
+  position: relative;
+  display: inline-block; /* Asegúrate de que el contenedor sea de tipo inline */
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: #000; /* Cambiar color si es necesario */
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Ajusta esto si es necesario */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: max-content;
+  max-width: 200px; /* Limita el ancho máximo del tooltip */
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #000 transparent transparent transparent; /* Cambiar color si es necesario */
+}
+
+a:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

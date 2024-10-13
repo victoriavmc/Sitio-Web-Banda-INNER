@@ -64,6 +64,7 @@ class ReportesController extends Controller
         return $rutasImg;
     }
 
+    // Actividades Obtencion
     public function procesarActividades($actividades, $reportado)
     {
         $resultados = [
@@ -99,6 +100,7 @@ class ReportesController extends Controller
                         'reportado' => $reportado,
                         'rutaImagen' => $rutaImagen,
                         'tipoActividad' => $tipoActividad,
+
                     ];
                 }
             } elseif ($tipoActividad == 3) { // Contenidos
@@ -115,7 +117,58 @@ class ReportesController extends Controller
                         'reportado' => $reportado,
                         'rutaImagen' => $rutaImagen,
                         'tipoActividad' => $tipoActividad,
+
                     ];
+                }
+            }
+        }
+
+        return $resultados;
+    }
+
+    //Obtener que reportaron
+    public function procesarReportes($actividades)
+    {
+        $resultados = []; // Almacenar resultados agrupados por usuario
+
+        foreach ($actividades as $actividad) {
+            $actividadId = $actividad->idActividad;
+            $tipoActividad = $actividad->tipoActividad_idtipoActividad;
+
+            // Obtener los usuarios que reportaron esta actividad
+            $usuariosReportaron = Interacciones::where('actividad_idActividad', $actividadId)
+                ->where('reporte', '>', 0)
+                ->with('usuario') // Cargar el usuario que hizo el reporte
+                ->get();
+
+            foreach ($usuariosReportaron as $usuario) {
+
+                $reporto = $usuario->usuarios_idusuarios;
+                $imagen = $this->buscarImagen($reporto);
+                $nombreUsuario = $usuario->usuario->usuarioUser;
+
+                if (!isset($resultados[$reporto])) {
+                    $resultados[$reporto] = [
+                        'id' => $reporto,
+                        'nombre' => $nombreUsuario,
+                        'imagen' => $imagen,
+                        'reportes' => [],
+                    ];
+                }
+
+                // Añadir reporte a la lista del usuario
+                if ($tipoActividad == 1) { // Perfil
+                    $resultados[$reporto]['reportes'][] = 'El Perfil';
+                } elseif ($tipoActividad == 2) { // Comentarios
+                    $contenido = Comentarios::where('Actividad_idActividad', $actividadId)->first();
+                    $idContenido = $contenido->contenidos_idcontenidos;
+                    $tituloComentario = Contenidos::where('idcontenidos', $idContenido)->first();
+                    $tituloPublicacion = $tituloComentario->titulo;
+                    $resultados[$reporto]['reportes'][] = "El Comentario de la publicación \"$tituloPublicacion\"";
+                } elseif ($tipoActividad == 3) { // Contenidos
+                    $contenido = Contenidos::where('Actividad_idActividad', $actividadId)->first();
+                    $tituloPublicacion = $contenido ? $contenido->titulo : 'Publicación desconocida';
+                    $resultados[$reporto]['reportes'][] = "La Publicación \"$tituloPublicacion\"";
                 }
             }
         }
@@ -143,6 +196,9 @@ class ReportesController extends Controller
         $actividadesReportadas = $this->procesarActividades($reportadas, true);
         $actividadesNoReportadas = $this->procesarActividades($noReportadas, false);
 
+        // Datos de quienes reportaron
+        $quienesReportaron = $this->procesarReportes($reportadas);
+
         // Calcular totales
         $totalNoReportadas = count($actividadesNoReportadas['comentarios']) + count($actividadesNoReportadas['contenidos']);
         $totalReportadas = count($actividadesReportadas['comentarios']) + count($actividadesReportadas['contenidos']);
@@ -159,7 +215,8 @@ class ReportesController extends Controller
             'actividadesNoReportadas',
             'totalNoReportadas',
             'totalReportadas',
-            'perfilReportado'
+            'perfilReportado',
+            'quienesReportaron'
 
         ));
     }
