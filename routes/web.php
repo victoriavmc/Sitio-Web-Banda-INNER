@@ -288,10 +288,10 @@ Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'boton
 ##################################################################################################
 //------------------------ REPORTES ------------------------
 // VER REPORTES
-Route::get('/reportes/{id}', [PanelStaffController::class, 'manejoreporte'])
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarStaff');
 
-Route::get('/reportes/{id}', [PanelUsuariosController::class, 'manejoreporte'])
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 ##################################################################################################
 
