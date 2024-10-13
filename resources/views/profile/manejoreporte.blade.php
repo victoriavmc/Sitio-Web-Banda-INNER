@@ -11,8 +11,13 @@
             {{-- #DIVS  --}}
             <div class="grid grid-cols-1 md:grid-cols-12 border">
                 {{-- #IZQUIERDO --}}
-                <div class="bg-gray-900 md:col-span-4 p-10">
-                    <h1 class='text-2xl text-red-600 text-center'> USUARIO REPORTADO </h1>
+                <div class="bg-red-500  md:col-span-4 p-10 ">
+                    @if (isset($reportes['totalReportes']) && $reportes['totalReportes'] > 0)
+                        <h1 class='text-2xl font-semibold text-center'> USUARIO REPORTADO </h1>
+                    @else
+                        <h1 class='text-2xl font-semibold text-center uppercase'> Historial del Usuario
+                        </h1>
+                    @endif
                     <div class="max-w-4xl mx-auto px-4 py-8">
                         <div class=" space-y-4">
                             <div class="py-4 rounded shadow-md  bg-gray-50">
@@ -62,8 +67,8 @@
                         @if (empty($listaActividadReportadaContenido) && empty($listaActividadReportadaComentario))
                             <div class="relative h-full ml-0 md:mr-10">
                                 <span
-                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-gray-400 rounded-lg"></span>
-                                <div class="relative h-full p-5 bg-white border-2 border-gray-400 rounded-lg">
+                                    class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-blue-400 rounded-lg"></span>
+                                <div class="relative h-full p-5 bg-white border-2 border-blue-400 rounded-lg">
                                     <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
                                         No se presentan reportes de publicaciones ni comentarios.
                                     </h3>
@@ -81,7 +86,9 @@
                                         </h1>
                                         <!-- Aquí puedes listar las actividades del usuario -->
                                         @if (count($listaActividadNOReportadaContenido) > 0)
-                                            <h2 class="text-2xl ml-4 mb-4"> Publicaciones</h2>
+                                            <h2 class="text-2xl ml-4 mb-4"> Publicaciones <b
+                                                    class=" text-base font-thin italic">*
+                                                    Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                                             <!-- Mostrar publicaciones reportadas -->
                                             @foreach ($listaActividadNOReportadaContenido as $contenido)
                                                 <div class="relative h-full md:mr-10 mb-6 ml-4">
@@ -101,13 +108,34 @@
                                                             publicación: {{ $contenido['fechaComent'] }} </p>
                                                         <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                                                         </p>
+                                                        {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                                                        <div
+                                                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                                            @foreach ($contenido['rutaImagen'] as $imagen)
+                                                                <div class="group cursor-pointer relative">
+                                                                    <img src="{{ asset(Storage::url($imagen)) }}"
+                                                                        alt="ImagenesCargadas"
+                                                                        class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                                                    <div
+                                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                        <button
+                                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                                            View
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         @endif
 
                                         @if (count($listaActividadNOReportadaComentario) > 0)
-                                            <h2 class="text-2xl ml-4 mb-4"> Comentarios</h2>
+                                            <h2 class="text-2xl ml-4 mb-4"> Comentarios <b
+                                                    class=" text-base font-thin italic">*
+                                                    Podes visualizar el comentario desde la publicación haciendo clic en
+                                                    el titulo</b></h2>
                                             <!-- Mostrar comentarios reportados -->
                                             @foreach ($listaActividadNOReportadaComentario as $contenido)
                                                 <div class="relative h-full ml-4 md:mr-10 mb-6">
@@ -131,6 +159,24 @@
                                                             comentario: {{ $contenido['fechaComent'] }}</p>
                                                         <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                                                         </p>
+                                                        {{-- Imagenes NO REPORTADAS COMENTARIOS --}}
+                                                        <div
+                                                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                                            @foreach ($contenido['rutaImagen'] as $imagen)
+                                                                <div class="group cursor-pointer relative">
+                                                                    <img src="{{ asset(Storage::url($imagen)) }}"
+                                                                        alt="ImagenesCargadas"
+                                                                        class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                                                    <div
+                                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                        <button
+                                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                                            View
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -150,7 +196,8 @@
     </div>
 @else
     @if (count($listaActividadReportadaContenido) > 0)
-        <h2 class="text-2xl mb-4"> Publicaciones</h2>
+        <h2 class="text-2xl mb-4"> Publicaciones <b class=" text-base font-thin italic">*
+                Podes acceder a la publicación haciendo clic en el titulo</b></h2>
         <!-- Mostrar publicaciones reportadas -->
         @foreach ($listaActividadReportadaContenido as $contenido)
             <div class="relative h-full ml-0 md:mr-10 mb-6">
@@ -167,12 +214,29 @@
                     <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
                         publicación: {{ $contenido['fechaComent'] }} </p>
                     <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                        @foreach ($contenido['rutaImagen'] as $imagen)
+                            <div class="group cursor-pointer relative">
+                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                    class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         @endforeach
     @endif
     @if (count($listaActividadReportadaComentario) > 0)
-        <h2 class="text-2xl mb-4"> Comentarios</h2>
+        <h2 class="text-2xl mb-4"> Comentarios <b class=" text-base font-thin italic">*
+                Podes visualizar el comentario desde la publicación haciendo clic en el titulo</b> </h2>
         <!-- Mostrar comentarios reportados -->
         @foreach ($listaActividadReportadaComentario as $contenido)
             <div class="relative h-full ml-0 md:mr-10 mb-6">
@@ -191,6 +255,22 @@
                     <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha del
                         comentario: {{ $contenido['fechaComent'] }}</p>
                     <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                    {{-- Imagenes NO REPORTADAS COMENTARIOS --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                        @foreach ($contenido['rutaImagen'] as $imagen)
+                            <div class="group cursor-pointer relative">
+                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                    class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         @endforeach
@@ -205,7 +285,8 @@
             </h1>
             <!-- Aquí puedes listar las actividades del usuario -->
             @if (count($listaActividadNOReportadaContenido) > 0)
-                <h2 class="text-2xl ml-4 mb-4"> Publicaciones</h2>
+                <h2 class="text-2xl ml-4 mb-4"> Publicaciones <b class=" text-base font-thin italic">*
+                        Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                 <!-- Mostrar publicaciones reportadas -->
                 @foreach ($listaActividadNOReportadaContenido as $contenido)
                     <div class="relative h-full md:mr-10 mb-6 ml-4">
@@ -223,13 +304,30 @@
                                 publicación: {{ $contenido['fechaComent'] }} </p>
                             <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                             </p>
+                            {{-- Imagenes REPORTADAS CONTENIDO --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                @foreach ($contenido['rutaImagen'] as $imagen)
+                                    <div class="group cursor-pointer relative">
+                                        <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                            class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                        <div
+                                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                                class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                View
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 @endforeach
             @endif
 
             @if (count($listaActividadNOReportadaComentario) > 0)
-                <h2 class="text-2xl ml-4 mb-4"> Comentarios</h2>
+                <h2 class="text-2xl ml-4 mb-4"> Comentarios <b class=" text-base font-thin italic">*
+                        Podes visualizar el comentario desde la publicación haciendo clic en el titulo</b></h2>
                 <!-- Mostrar comentarios reportados -->
                 @foreach ($listaActividadNOReportadaComentario as $contenido)
                     <div class="relative h-full ml-4 md:mr-10 mb-6">
@@ -252,6 +350,22 @@
                                 comentario: {{ $contenido['fechaComent'] }}</p>
                             <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}
                             </p>
+                            {{-- Imagenes REPORTADAS COMENTARIOS --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                @foreach ($contenido['rutaImagen'] as $imagen)
+                                    <div class="group cursor-pointer relative">
+                                        <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                            class="w-full h-48 object-cover rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                        <div
+                                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                                class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                View
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 @endforeach
