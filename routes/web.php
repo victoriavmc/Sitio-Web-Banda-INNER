@@ -11,14 +11,16 @@ use App\Http\Controllers\PanelStaffController;
 use App\Http\Controllers\PanelUsuariosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
+use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
+use App\Http\Controllers\cancionController;
 
 #Modelo
 use App\Models\Paisnacimiento;
+use App\Models\Reportes;
 use Illuminate\Support\Facades\Route;
 
-//----------------------- SUELTOS ---------------------------------------------------
-#
+//----------------------- SUELTOS 
 // INICIO
 Route::get('/', [InicioController::class, 'index'])
     ->name('inicio');
@@ -28,10 +30,10 @@ Route::view('/underConstruction', "underConstruction")
 // TERMINOS Y CONDICIONES
 Route::view('/terminos-de-servicio', 'termsService')
     ->name('terminos-de-servicio');
-####################################################################################
-//----------------------- CARPETA AUTH -----------------------------------------------
+######################################
+//----------------------- CARPETA AUTH 
 #
-// ----------------------------- Reestablecer ----------------------------------------
+//----------------------- Reestablecer 
 Route::view('/solicitarPin', 'auth.SolicitarPin')
     ->name('solicitarPin')->middleware('guest');
 
@@ -40,7 +42,8 @@ Route::view('/comprobarPin', 'auth.comprobarPin')
 
 Route::view('/restablecer', 'auth.restablecer')
     ->name('restablecer')->middleware('guest');
-// ----------------------------- LOGIN -----------------------------------------------
+
+//----------------------- LOGIN 
 Route::post('/inicia-sesion', [loginController::class, 'login'])
     ->name('inicia-sesion')->middleware('guest');
 
@@ -58,7 +61,7 @@ Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
 
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
-// -------------------------------- Vistas inicio de sesion --------------------------
+//----------------------- Vistas inicio de sesion 
 Route::view('/login', "auth.login")
     ->name('login')->middleware('guest');
 
@@ -68,10 +71,10 @@ Route::get('/registro', function () {
 
     return view('auth.registro', compact('paises'));
 })->name('registro')->middleware('guest');
-#######################################################################################
-//---------------------------------- CARPETA PROFILE ----------------------------------
+###################################################
+//----------------------- CARPETA PROFILE
 #
-// ---------------------------------- Perfil ------------------------------------------
+//----------------------- Perfil 
 Route::get('/perfil', [perfilController::class, 'perfil'])
     ->name('perfil')->middleware('auth');
 
@@ -81,10 +84,11 @@ Route::get('/modificar-perfil', [perfilController::class, 'modificarPerfil'])
 // PERFIL AJENO
 Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
     ->name('perfil-ajeno');
-// -------------------------------------------- Redes ---------------------------------
+
+//----------------------- Redes
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])
     ->name('modificar-redes')->middleware('auth');
-// ---------------------------------- Perfil POST -------------------------------------
+//----------------------- Perfil POST
 Route::post('/perfil/editar-datos', [perfilController::class, 'editarInfoCuenta'])
     ->name('editar-datos')->middleware('auth');
 
@@ -94,15 +98,16 @@ Route::post('/perfil/editar-contrasenia', [perfilController::class, 'editarContr
 Route::post('/perfil/editar-correo', [perfilController::class, 'editarCorreo'])
     ->name('editar-correo')->middleware('auth');
 
-Route::post('/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
+Route::post('/perfil/cambiar-imagen', [perfilController::class, 'cambiarImagen'])
     ->name('cambiar-imagen')->middleware('auth');
 
-Route::post('/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
+Route::post('/perfil/eliminar-imagen', [perfilController::class, 'eliminarImagen'])
     ->name('eliminar-imagen')->middleware('auth');
 
+#### VER... 
 Route::delete('/perfil/eliminar-cuenta', [perfilController::class, 'eliminarCuenta'])
     ->name('eliminar-cuenta')->middleware('auth');
-// --------------------------------- MODIFICAR REDES SOCIALES-------------------------
+//----------------------- MODIFICAR REDES SOCIALES
 Route::post('/perfil/guardar-redes', [redessocialesController::class, 'guardarRedes'])
     ->name('guardar-redes')->middleware('auth');
 
@@ -120,7 +125,7 @@ Route::post('/perfil/guardar-redes-staff', [redessocialesController::class, 'gua
 
 Route::post('/perfil/eliminar-red-social-staff', [redessocialesController::class, 'eliminarRedSocialStaff'])
     ->name('eliminar-red-social-staff')->middleware('auth');
-// ---------------------------------- Panel de Usuarios ------------------------------------------
+//----------------------- Panel de Usuarios
 Route::get('/panel-de-usuarios', [panelUsuariosController::class, 'panel'])
     ->name('panel-de-usuarios')->middleware('auth');
 
@@ -132,7 +137,7 @@ Route::post('/panel-de-usuarios/borrar-imagen/{id}', [panelUsuariosController::c
 
 Route::post('/panel-de-usuarios/eliminar-usuario/{id}', [panelUsuariosController::class, 'eliminarUsuario'])
     ->name('eliminar-usuario')->middleware('auth');
-// ---------------------------------- Panel de Staff --------------------------------------------
+//----------------------- Panel de Staff
 Route::get('/panel-de-staff', [panelStaffController::class, 'panel'])
     ->name('panel-de-staff')->middleware('auth');
 
@@ -144,119 +149,129 @@ Route::post('/panel-de-staff/borrar-imagen/{id}', [panelStaffController::class, 
 
 Route::post('/panel-de-staff/eliminar-staff/{id}', [panelStaffController::class, 'eliminarStaff'])
     ->name('eliminar-staff')->middleware('auth');
-##################################################################################################
-//--------------------------------------------- CARPETA EVENTOS ----------------------------------
-// ------------------------------------------------- Eventos -------------------------------------
+##############################################
+//----------------------- Eventos 
 Route::get('/eventos', [eventosController::class, 'eventos'])
     ->name('eventos');
 
 Route::get('/eventos/lugares-cargados', [eventosController::class, 'lugaresCargados'])
-    ->name('lugares-cargados');
+    ->name('lugares-cargados')->middleware('auth');
 
-Route::get('/eventos', [eventosController::class, 'eventos'])->name('eventos');
+Route::delete('/eventos/lugares-cargados/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar'])
+    ->name('eliminar-lugar')->middleware('auth');
 
-Route::delete('/eliminar-lugar/{id}', [eventosController::class, 'eliminarLugar']);
+Route::put('/eventos/lugares-cargados/modificar-lugar/{id}', [eventosController::class, 'modificarLugar'])
+    ->name('modificar-lugar')->middleware('auth');
+
+Route::put('/eventos/lugares-cargados/modificar-ubicacion/{id}', [eventosController::class, 'modificarUbicacion'])
+    ->name('modificar-ubicacion')->middleware('auth');
+
+Route::delete('/eventos/lugares-cargados/eliminar-ubicacion/{id}', [eventosController::class, 'eliminarUbicacion'])
+    ->name('eliminar-ubicacion')->middleware('auth');
 
 Route::get('/eventos/crear', [eventosController::class, 'formularioCrear'])
-    ->name('crear-formulario');
+    ->name('crear-formulario')->middleware('auth');
 
 Route::post('/eventos/crear', [eventosController::class, 'crearEvento'])
-    ->name('crear-evento');
+    ->name('crear-evento')->middleware('auth');
 
 Route::get('/eventos/modificar/{id}', [eventosController::class, 'formularioModificar'])
-    ->name('modificar-formulario');
+    ->name('modificar-formulario')->middleware('auth');
 
 Route::put('/eventos/modificar/{id}', [eventosController::class, 'modificarEvento'])
-    ->name('modificar-evento');
+    ->name('modificar-evento')->middleware('auth');
 
 Route::delete('/eventos/eliminar/{id}', [eventosController::class, 'eliminarEvento'])
-    ->name('eliminar-evento');
+    ->name('eliminar-evento')->middleware('auth');
 ##################################################################################################
 //----------------------- CARPETA CONTENIDO -----------------------
 #
 // SUPERFAN (Descargas)
 Route::get('/superFan', [SuperFanController::class, 'indexSuperFan'])
     ->name('superFan');
-//----------------------- CARPETA HISTORY -----------------------
-// VER BIOGRAFIA
+//----------------------- CARPETA HISTORY 
+//----------------------- VER BIOGRAFIA
 Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])
     ->name('biografia');
 #
-//----------------------- CARPETA NEWS -----------------------
-// VER NOTICIAS
+//----------------------- CARPETA NEWS 
+//----------------------- VER NOTICIAS
 Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])
     ->name('noticias');
 
-// VER NOTICIAS POR UNIDAD
+//----------------------- VER NOTICIAS POR UNIDAD
 Route::get('/noticias/noticiaUnica/{data}', [ContenidoController::class, 'publicacionUnicaNoticias'])
     ->name('noticiaUnica');
 
-// Ruta para ver el formulario de crear noticias
+//----------------------- Ruta para ver el formulario de crear noticias
 Route::get('/noticias/crearnoticias', [ContenidoController::class, 'verFormularioNoticia'])
     ->name('verFormularioNoticia');
 
-// Ruta para crear una nueva publicación
+//----------------------- Ruta para crear una nueva publicación
 Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP'])
-    ->name('crearP');
+    ->name('crearP')->middleware('auth');
 
-// Ruta para mostrar el formulario de modificación
+//----------------------- Ruta para mostrar el formulario de modificación
 Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])
-    ->name('editarP');
+    ->name('editarP')->middleware('auth');
 
-// Ruta para actualizar la publicación (este es el método POST)
+//----------------------- Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])
-    ->name('modificarP');
+    ->name('modificarP')->middleware('auth');
 
-//REPORTAR FORO PUBLICACION
+//----------------------- REPORTAR FORO PUBLICACION
 Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])
-    ->name('reportarActividad');
+    ->name('reportarActividad')->middleware('auth');
 
-//----------------------- CARPETA FORUM -----------------------
-// VER FORO
+//----------------------- CARPETA FORUM
+//----------------------- VER FORO
 Route::get('/foro', [ContenidoController::class, 'indexForo'])
     ->name('foro');
 
-// VER PUBLICACION DE FORO POR UNIDAD
+//----------------------- VER PUBLICACION DE FORO POR UNIDAD
 Route::get('/foro/foroUnico/{data}', [ContenidoController::class, 'publicacionUnicaForo'])
-    ->name('foroUnico');
+    ->name('foroUnico')->middleware('auth');
 
-// Ruta para ver el formulario
+//----------------------- Ruta para ver el formulario
 Route::get('/foro/foropublicaciones', [ContenidoController::class, 'verFormularioForo'])
-    ->name('verFormularioForo');
+    ->name('verFormularioForo')->middleware('auth');
 
-// Ruta para crear la publicación
+//----------------------- Ruta para crear la publicación
 Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crearP'])
-    ->name('crearP');
+    ->name('crearP')->middleware('auth');
 
-// Ruta para mostrar el formulario de modificación
+//----------------------- Ruta para mostrar el formulario de modificación
 Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])
-    ->name('editarP');
+    ->name('editarP')->middleware('auth');
 
-// Ruta para actualizar la publicación (este es el método POST)
+//----------------------- Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])
-    ->name('modificarP');
+    ->name('modificarP')->middleware('auth');
 
-//Ruta para eliminar la publicacion especifica
+//----------------------- Ruta para eliminar la publicacion especifica
 Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])
-    ->name('eliminarContenido');
+    ->name('eliminarContenido')->middleware('auth');
 
-// CREAR Comentario
+//----------------------- CREAR Comentario
 Route::post('/comentarios/{idContent}', [ContenidoController::class, 'crearComentario'])
-    ->name('crearComentario');
+    ->name('crearComentario')->middleware('auth');
 
-// MODIFICAR COMENTARIO
+//----------------------- MODIFICAR COMENTARIO
 Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modificarComentario'])
-    ->name('modificarComentario');
+    ->name('modificarComentario')->middleware('auth');
 
-// ELIMINAR COMENTARIO
+//----------------------- ELIMINAR COMENTARIO
 Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])
-    ->name('eliminarComentario');
+    ->name('eliminarComentario')->middleware('auth');
 
-##################################################################################################
-//------------------------ CARPETA JOB --------------------------
-// VER ARTISTAS
+###############################################
+//----------------------- CARPETA JOB 
+//----------------------- VER ARTISTAS
 Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])
     ->name('artistas');
+
+Route::put('/artistas/{id}/modificar-imagen', [JobsController::class, 'modificarImagenArtista'])
+    ->name('artistas.modificarImagen');
 
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])
@@ -266,13 +281,65 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])
 // VER ALBUM Musica
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])
     ->name('discografia');
+
+// CRUD ALBUM
+Route::get('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'formularioCrearAlbum'])
+    ->name('formulario-crear-album')->middleware('auth');
+
+Route::post('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'crearAlbum'])
+    ->name('crear-album')->middleware('auth');
+
+Route::get('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'formularioModificarAlbum'])
+    ->name('formulario-modificar-album')->middleware('auth');
+
+Route::put('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'modificarAlbum'])
+    ->name('modificar-album')->middleware('auth');
+
+Route::delete('/albumMusica/discografia/eliminar-album/{id}', [AlbumMusicaController::class, 'eliminarAlbum'])
+    ->name('eliminar-album')->middleware('auth');
+
+// CRUD CANCIONES
+
+Route::get('/albumMusica/discografia/crear-cancion', [CancionController::class, 'formularioCrearCancion'])
+    ->name('formulario-crear-cancion')->middleware('auth');
+
+Route::post('/albumMusica/discografia/crear-cancion', [CancionController::class, 'crearCancion'])
+    ->name('crear-cancion')->middleware('auth');
+
+Route::get('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'formularioModificarCancion'])
+    ->name('formulario-modificar-cancion')->middleware('auth');
+
+Route::put('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'modificarCancion'])
+    ->name('modificar-cancion')->middleware('auth');
+
+Route::delete('/albumMusica/discografia/eliminar-cancion/{id}', [CancionController::class, 'eliminarCancion'])
+    ->name('eliminar-cancion')->middleware('auth');
+
 // VER ALBUM Galera
 Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])
     ->name('albumGaleria');
+
 // Traer API YT
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
-    ->name('actualizarYt');
+    ->name('actualizarYt')->middleware('auth');
 ##################################################################################################
+//------------------------ REPORTES ------------------------
+// VER REPORTES
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarStaff');
+
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarUsuario');
+##################################################################################################
+//------------------------ Discografia ------------------------
+// VER REPORTES
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarStaff');
+
+Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+    ->name('reportarUsuario');
+##################################################################################################
+
 
 // Subir tipo de imagen
 // Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])

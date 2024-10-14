@@ -42,6 +42,7 @@ class AlbumMusicaController extends Controller
                 foreach ($canciones as $cancion) {
                     // Añadir los detalles de la canción: nombre, letra en español y letra en inglés
                     $listacanciones[] = [
+                        'id' => $cancion->idcancion,
                         'titulo' => $cancion->tituloCancion,
                         'letra_en_espanol' => $cancion->letraEspCancion ?? 'Letra en español no disponible',
                         'letra_en_ingles' => $cancion->letraInglesCancion ?? 'Letra en inglés no disponible',
@@ -51,6 +52,7 @@ class AlbumMusicaController extends Controller
 
             // Agregar los datos del álbum junto con las canciones
             $listaAlbum[] = [
+                'id' => $album->idAlbumMusical,
                 'titulo' => $albumTitulo,
                 'fecha' => $albumFecha,
                 'imagen' => $albumImagen,
@@ -59,5 +61,55 @@ class AlbumMusicaController extends Controller
         }
 
         return $listaAlbum;
+    }
+
+    // ------------------ CRUD DE ÁLBUMES ------------------
+
+    // Formulario Crear Album
+    public function formularioCrearAlbum()
+    {
+        return view('utils.albumMusica.formularioCrearAlbum');
+    }
+
+    // Guardar Album
+    public function crearAlbum(Request $request)
+    {
+        $album = new AlbumMusical();
+        $album->save();
+        return redirect()->route('discografia')->with('alertAlbum', [
+            'type' => 'Success',
+            'message' => 'Álbum creado correctamente.',
+        ]);
+    }
+
+    // Formulario Editar Album
+    public function formularioModificarAlbum($id)
+    {
+        $album = AlbumMusical::findOrFail($id);
+        return view('utils.albumMusica.formularioModificarAlbum', compact('album'));
+    }
+
+    // Actualizar Album
+    public function modificarAlbum(Request $request, $id)
+    {
+        $album = AlbumMusical::findOrFail($id);
+        $album->idAlbumDatos = $request->idAlbumDatos;
+        $album->idRevisionImagenes = $request->idRevisionImagenes;
+        $album->save();
+        return redirect()->route('discografia')->with('alertAlbum', [
+            'type' => 'Success',
+            'message' => 'Álbum modificado correctamente.',
+        ]);
+    }
+
+    // Eliminar Album
+    public function eliminarAlbum($id)
+    {
+        $album = AlbumMusical::findOrFail($id);
+        $album->delete();
+        return redirect()->back()->with('alertAlbum', [
+            'type' => 'Success',
+            'message' => 'Álbum eliminado correctamente.',
+        ]);
     }
 }

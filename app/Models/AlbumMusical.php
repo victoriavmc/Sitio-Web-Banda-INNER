@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AlbumMusical extends Model
 {
     protected $table = 'albummusical';
-    protected $primaryKey = 'albumMusicalcol';
+    protected $primaryKey = 'idAlbumMusical';
     public $timestamps = false;
 
     public function albumDatos()
@@ -23,6 +23,6 @@ class AlbumMusical extends Model
 
     public function canciones()
     {
-        return $this->hasMany(Cancion::class, 'albumMusical_albumMusicalcol', 'albumMusicalcol');
+        return $this->hasMany(Cancion::class, 'albumMusical_idAlbumMusical', 'idAlbumMusical');
     }
 }

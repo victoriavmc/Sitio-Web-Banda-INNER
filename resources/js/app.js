@@ -17,6 +17,25 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
+const menuToggle = document.getElementById('menu-toggle');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    // Mostrar/ocultar el menú al hacer clic en el botón
+    menuToggle.addEventListener('click', function(event) {
+        dropdownMenu.classList.toggle('hidden');
+        event.stopPropagation(); // Prevenir que el clic se propague al documento
+    });
+
+    // Cerrar el menú si se hace clic fuera de él
+    document.addEventListener('click', function(event) {
+        const isClickInsideMenu = dropdownMenu.contains(event.target) || menuToggle.contains(event
+            .target);
+
+        if (!isClickInsideMenu) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
 document.getElementById('perfil-toggle').addEventListener('click', function() {
     const dropdownPerfil = document.getElementById('dropdown-perfil');
     dropdownPerfil.classList.toggle('hidden');

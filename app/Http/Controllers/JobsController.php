@@ -9,6 +9,8 @@ use App\Models\StaffExtra;
 
 # Otros
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class JobsController extends Controller
 {
@@ -41,76 +43,142 @@ class JobsController extends Controller
         return !empty($rutasImg) ? $rutasImg[0] : ''; // O devolver todo el array si esperas varias imágenes
     }
 
-    #Mostrar indexArtistas
-    public function indexArtistas()
+    // Método privado para generar la lista con informacion del Staff o Artista
+    private function generarLista($entidades, $tipo)
     {
-        // Recupero los artistas
-        $artistas = Artistas::all();
-        $listaArtistas = [];
+        $lista = [];
+        // Recorro las entidades
+        foreach ($entidades as $entidad) {
+            if ($tipo === 'artista') {
+                $nombre = $entidad->staffExtra->usuario->datosPersonales->nombreDP;
+                $apellido = $entidad->staffExtra->usuario->datosPersonales->apellidoDP;
+                $rol = $entidad->staffExtra->tipoStaff->nombreStaff;
+                $redSocial = $entidad->staffExtra->redessociales->linkRedSocial ?? '#';
+                $imagen = $this->ImagenesContenido($entidad->revisionImagenes_idrevisionImagenescol);
+            } else {
+                $nombre = $entidad->usuario->datosPersonales->nombreDP ?? 'Nombre no disponible';
+                $apellido = $entidad->usuario->datosPersonales->apellidoDP ?? 'Apellido no disponible';
+                $rol = $entidad->tipoStaff->nombreStaff ?? 'Rol no disponible';
+                $redSocial = $entidad->redessociales->linkRedSocial ?? 'Sin enlace';
 
-        // Recorro los artistas
-        foreach ($artistas as $artista) {
-            // Recupero los detalles del artista
-            $idArtista = $artista->idartistas;
-            $nombreArtista = $artista->staffExtra->usuario->datosPersonales->nombreDP;
-            $apellidoArtista = $artista->staffExtra->usuario->datosPersonales->apellidoDP;
-            $rol = $artista->staffExtra->tipoStaff->nombreStaff;
-            $redSocial = $artista->staffExtra->redessociales->linkRedSocial ?? '#';
-
-            // Recupero la imagen del artista (esto será una cadena de una sola imagen)
-            $imagenArtista = $this->ImagenesContenido($artista->revisionImagenes_idrevisionImagenescol);
-
-            // Construyo un array con los detalles del artista
-            $listaArtistas[] = [
-                'id' => $idArtista,
-                'nombre' => $nombreArtista,
-                'apellido' => $apellidoArtista,
+                // Recupero la imagen del staff
+                $revisionImagen = RevisionImagenes::where('usuarios_idusuarios', $entidad->usuarios_idusuarios)->first();
+                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg ?? null : null; // Imagen por defecto si no se encuentra
+            }
+            // Construyo un array con los detalles
+            $lista[] = [
+                'id' => $entidad->idartistas ?? $entidad->usuarios_idusuarios,
+                'nombre' => $nombre,
+                'apellido' => $apellido,
                 'rol' => $rol,
-                'imagen' => $imagenArtista, // Asegúrate de que esto sea una cadena
-                'link' => $redSocial
+                'imagen' => $imagen,
+                'link' => $redSocial,
             ];
         }
+        return $lista;
+    }
+
+    # Vista Staff
+    public function indexStaff()
+    {
+        // Recupero los Staff activos
+        $staffs = StaffExtra::whereHas('usuario.datosPersonales.historialUsuario', function ($query) {
+            $query->where('estado', 'Activo');
+        })->get();
+
+        // Generar la lista de staff
+        $listaStaff = $this->generarLista($staffs, 'staff');
+
+        // Retornar a la vista
+        return view('content.job.staff', compact('listaStaff'));
+    }
+
+    // Vista Artistas
+    public function indexArtistas()
+    {
+        // Recupero los artistas activos
+        $artistas = Artistas::whereHas('staffExtra.usuario.datosPersonales.historialUsuario', function ($query) {
+            $query->where('estado', 'Activo');
+        })->get();
+
+        // Generar la lista de artistas
+        $listaArtistas = $this->generarLista($artistas, 'artista');
+
         // Retornar a la vista
         return view('content.job.artistas', compact('listaArtistas'));
     }
 
-    #Mostrar indexStaff
-    public function indexStaff()
+    #Modificar la imagen del artista
+    public function modificarImagenArtista(Request $request, $id)
     {
-        // Recupero los Staff
-        $staffs = StaffExtra::all();
-        $listaStaff = [];
+        // Validar la imagen
+        $request->validate([
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-        // Recorro los Staff
-        foreach ($staffs as $staff) {
-            // Recupero los detalles del staff
-            $idStaffUsuario = $staff->usuarios_idusuarios;
-            $nombrestaff = $staff->usuario->datosPersonales->nombreDP ?? 'Nombre no disponible';
-            $apellidostaff = $staff->usuario->datosPersonales->apellidoDP ?? 'Apellido no disponible';
-            $rol = $staff->tipoStaff->nombreStaff ?? 'Rol no disponible';
-            $redSocial = $staff->redessociales->linkRedSocial ?? 'Sin enlace';
+        // Encontrar el artista por ID
+        $artista = Artistas::find($id);
+        $userId = $artista->staffExtra->usuarios_idusuarios;
 
-            // Recupero la imagen del staff
-            $revisionImagen = RevisionImagenes::where('usuarios_idusuarios', $idStaffUsuario)->first();
+        // Verificar si ya existe una foto
+        $existeFoto = RevisionImagenes::where('tipoDeFoto_idtipoDeFoto', 6)
+            ->where('usuarios_idusuarios', $userId) // Cambiado a $userId
+            ->first();
 
-            // Verificar si se encontró la revisión de imagen
-            if ($revisionImagen) {
-                $imagenstaff = $revisionImagen->imagenes->subidaImg ?? null; // Imagen por defecto si no se encuentra
-            } else {
-                $imagenstaff = null; // También será null si no hay revisión
+        if ($existeFoto != null) {
+            // Obtener el registro de la imagen anterior
+            $imagenAnterior = Imagenes::find($existeFoto->imagenes_idimagenes);
+
+            // Eliminar el registro de la revisión anterior
+            // Primero, eliminar la relación en el artista
+            $artista->revisionImagenes_idrevisionImagenescol = null;
+            $artista->save(); // Guardar los cambios en el artista
+
+            $existeFoto->delete(); // Luego, eliminar la revisión
+
+            // Ahora eliminar el archivo del almacenamiento
+            if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
+                Storage::delete($imagenAnterior->subidaImg);
             }
 
-            // Construyo un array con los detalles del staff
-            $listaStaff[] = [
-                'id' => $idStaffUsuario,
-                'nombre' => $nombrestaff,
-                'apellido' => $apellidostaff,
-                'rol' => $rol,
-                'imagen' => $imagenstaff,
-                'link' => $redSocial
-            ];
+            // Eliminar el registro de la imagen anterior
+            if ($imagenAnterior) {
+                $imagenAnterior->delete();
+            }
         }
-        // Retornar a la vista después de procesar todos los staffs
-        return view('content.job.staff', compact('listaStaff'));
+
+        // Guardar la nueva imagen
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('img', 'public');
+
+            // Crear nuevo registro de imagen
+            $imagen = new Imagenes();
+            $imagen->subidaImg = $path;
+            $imagen->fechaSubidaImg = now();
+            $imagen->contenidoDescargable = 'No';
+            $imagen->save();
+
+            // ID de la nueva imagen
+            $idFoto = $imagen->idimagenes;
+
+            // Guarda la imagen a lo que está relacionada
+            $revisionImg = new RevisionImagenes();
+            $revisionImg->usuarios_idusuarios = $userId; // Ahora se usa el ID del usuario
+            $revisionImg->imagenes_idimagenes = $idFoto;
+            $revisionImg->tipoDeFoto_idtipoDeFoto = 6;
+            $revisionImg->save();
+
+            // Actualizar el ID de la imagen en el artista
+            $artista->revisionImagenes_idrevisionImagenescol = $revisionImg->idrevisionImagenescol;
+
+            // Guardar los cambios en el artista
+            $artista->save();
+
+            // Redirigir a la ruta 'artistas'
+            return redirect()->route('artistas')->with('success', 'Imagen actualizada con éxito.');
+        }
+
+        // Si no hay archivo, redirigir de nuevo con un mensaje de error
+        return redirect()->route('artistas')->with('error', 'No se ha cargado ninguna imagen.');
     }
 }

@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="bg-white p-10 bg-cover">
+    <div class="bg-white p-10 min-h-screen bg-cover">
         <div class="text-center">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Columna 1 -->
@@ -77,7 +77,7 @@
                                 <form action="{{ route('actualizarYt') }}" method="POST">
                                     @csrf <!-- Asegúrate de incluir el token CSRF -->
                                     <button type="submit"
-                                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                         Actualizar Videos
                                     </button>
                                 </form>

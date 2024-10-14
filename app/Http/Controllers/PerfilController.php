@@ -10,15 +10,16 @@ use App\Models\Imagenes;
 use App\Models\Paisnacimiento;
 use App\Models\RevisionImagenes;
 use App\Models\Usuario;
-use App\Models\Redsocial;
+use App\Models\Reportes;
 use App\Models\Comentarios;
+use App\Models\HistorialUsuario;
+use App\Models\Interacciones;
 
 #Mails
 use App\Mail\msjBajaCuenta;
 use App\Mail\msjCambios;
 use App\Mail\msjReportaron;
 use App\Mail\msjReporto;
-
 #Aparte
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,10 +69,10 @@ class PerfilController extends Controller
         }
 
         // Establecer un valor por defecto para la imagen de perfil si no se encuentra
-        $imagenPerfil = $usuario->imagenPerfil ?? 'ruta/a/imagen/default.png'; // Cambiar por la ruta de una imagen por defecto
+        $imagenPerfil = $usuario->imagenPerfil; // Cambiar por la ruta de una imagen por defecto
 
         // Obtener el nombre y apellido
-        $nombreApellido = $usuario->nombreApellido ?? ''; // Obtener el nombre y apellido del objeto usuario
+        $nombreApellido = $usuario->nombreApellido; // Obtener el nombre y apellido del objeto usuario
 
         // Llama a la función para obtener los comentarios relacionados con publicaciones
         $comentariosConPublicacion = $this->obtenerComentariosConPublicacion($usuario->idusuarios);
@@ -296,13 +297,9 @@ class PerfilController extends Controller
         ]);
     }
 
-    #Eliminar Imagen
-    public function eliminarImagen(Request $request)
+    #ELiminiar Imagen Logica
+    public function eliminarImagenLogica($userId)
     {
-        // Identificar al usuario actual
-        $usuarioBD = $this->identificaUsername();
-        $userId = $usuarioBD->idusuarios;
-
         // Verificar si existe una foto asociada al usuario
         $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $userId)
             ->where('tipoDeFoto_idtipoDeFoto', 1)
@@ -322,7 +319,22 @@ class PerfilController extends Controller
 
             // Eliminar la entrada de la imagen
             $imagenAnterior->delete();
+            return True;
+        } else {
+            return False;
+        }
+    }
 
+    #Eliminar Imagen
+    public function eliminarImagen()
+    {
+        // Identificar al usuario actual
+        $usuarioBD = $this->identificaUsername();
+        $userId = $usuarioBD->idusuarios;
+
+        $modelo = $this->eliminarImagenLogica($userId);
+
+        if ($modelo) {
             // Redirigir con un mensaje de éxito
             return redirect()->back()->with([
                 'alertCambios' => [
@@ -361,7 +373,7 @@ class PerfilController extends Controller
 
         $userReportado = $request->usuarios_idusuarios;
 
-        $reporte = Redsocial::where('usuarios_idusuarios', $userReportado)->first();
+        $reporte = Reportes::where('usuarios_idusuarios', $userReportado)->first();
 
         $aumentoReporte = $reporte->reportes;
         $aumentoReporte++;
@@ -376,37 +388,6 @@ class PerfilController extends Controller
         // OTRO ENVIANDO AL ADMIN, QUIEN HIZO UN REPORTE A LA CUENTA Y.
         Mail::to($request->email)->send(new msjReportaron(ucwords($request->nombre), $request->genero));
     }
-
-    #Admin decide que hacer con el reportado
-    public function reportar(Request $request)
-    {
-        // Obtengo el usuario que fue reportado
-        $idReportado = $request->idusuario;
-
-        // Obtengo decision del admin
-        $decision = $request->decision;
-
-        switch ($decision) {
-            case 0:
-                #En caso que el reporte sea falso, disminuyo el reporte
-                $reporte = Redsocial::where('usuarios_idusuarios', $idReportado)->first();
-                $disminuyoReporte = $reporte->reportes;
-                $disminuyoReporte--;
-                $reporte->reportes = $disminuyoReporte;
-                break;
-            case 1:
-                #En caso que el reporte sea necesario pero zzz, entro a la tabla historialUsuario y desactivamos por tiempo definido
-                break;
-            case 2:
-                #En caso que el reporte sea necesario pero hard, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
-                break;
-        }
-    }
-
-    #ELIMINAR CUENTA EN CASCADA
-    #CUANDO ELIMINA LA CUENTA, DEBE ELIMINAR TODO LO RELACIONADO AL USUARIO MENOS LA PARTE LOGICA QUE ES USUARIO, DATOS PERSONALES Y ANOTARLO EN HISTORIALUSUARIOS 
-    public function eliminarCuenta(Request $request) {}
-
 
     #Mostramos Los comentarios si tiene el usuario
     public function obtenerComentariosConPublicacion($data)
@@ -533,6 +514,164 @@ class PerfilController extends Controller
         } else {
             // Manejo de error si el usuario no se encuentra
             return redirect()->route('some.route')->with('error', 'Usuario no encontrado.');
+        }
+    }
+
+    #Admin decide que hacer con el reportado
+    public function reportar(Request $request)
+    {
+        // Obtengo el usuario que fue reportado
+        $idReportado = $request->idusuario;
+
+        // Obtengo decision del admin
+        $decision = $request->decision;
+
+        switch ($decision) {
+            case 0:
+                #En caso que el reporte sea falso, disminuyo el reporte
+                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
+                $disminuyoReporte = $reporte->reportes;
+                $disminuyoReporte--;
+                $reporte->reportes = $disminuyoReporte;
+                break;
+            case 1:
+                #En caso que el reporte sea necesario pero zzz, entro a la tabla historialUsuario y desactivamos por tiempo definido
+                break;
+            case 2:
+                #En caso que el reporte sea necesario pero hard, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
+                break;
+        }
+    }
+
+    #Eliminar Revision e Imagenes
+    private function eliminarImagenYRevision($revisionImagenId)
+    {
+        if ($revisionImagenId) {
+            $revisionImagen = RevisionImagenes::find($revisionImagenId);
+            if ($revisionImagen) {
+                // Eliminar la revisión de la imagen
+                $revisionImagen->delete();
+
+                // Eliminar la imagen asociada
+                if ($revisionImagen->imagenes_idimagenes) {
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                    if ($imagen) {
+                        // Eliminar la imagen del almacenamiento
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                        // Eliminar la imagen de la base de datos
+                        $imagen->delete();
+                    }
+                }
+            }
+        }
+    }
+    #ELIMINAR CUENTA EN CASCADA
+    #CUANDO ELIMINA LA CUENTA, DEBE ELIMINAR TODO LO RELACIONADO AL USUARIO MENOS LA PARTE LOGICA QUE ES USUARIO, DATOS PERSONALES Y ANOTARLO EN HISTORIALUSUARIOS 
+    public function eliminarCuenta()
+    {
+        // Identifica al usuario
+        $usuario = $this->identificaUsername();
+
+        $id = $usuario->idusuarios;
+
+        // Encontrar al usuario
+        $usuario = Usuario::find($id);
+
+        // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+
+        // Relaciono a su usuario con datos personales
+        $datospersonales = DatosPersonales::where('usuarios_idusuarios', $id)->first();
+
+        if ($tieneReportes === 0) {
+            // Verificamos si existen los datos personales
+            if ($datospersonales) {
+                // Actualizo el Historial Usuario
+                $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $datospersonales->idDatosPersonales)->first();
+                if ($historial) {
+                    $historial->estado = "Inactivo";
+                    $historial->eliminacionLogica = 'Si';
+                    $historial->fechaFinaliza = date('Y-m-d');
+                    $historial->save();
+                }
+
+                // Aquí deberías borrar la contraseña del usuario de manera segura
+                $usuario->contraseniaUser = null;
+                $usuario->save();
+            }
+
+            // Si no hay reportes, eliminamos al usuario de la tabla
+            Reportes::where('usuarios_idusuarios', $id)->delete();
+
+
+            // Elimino todas las interacciones que realizó el usuario
+            Interacciones::where('usuarios_idusuarios', $id)->delete();
+
+            // Accedo a todas las actividades realizadas por el usuario
+            $actividades = Actividad::where('usuarios_idusuarios', $id)->with(['comentarios', 'contenidos'])->get();
+            foreach ($actividades as $actividad) {
+                // Eliminar las interacciones de esa actividad
+                Interacciones::where('Actividad_idActividad', $actividad->idActividad)->delete();
+
+                // Eliminar los comentarios
+                foreach ($actividad->comentarios as $comentario) {
+                    // Eliminar las interacciones del comentario
+                    Interacciones::where('Actividad_idActividad', $comentario->Actividad_idActividad)->delete();
+
+                    // Eliminar la imagen asociada al comentario
+                    if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                        // Eliminar el comentario primero
+                        $comentario->delete();
+                        // Ahora elimina la revisión de imagen asociada
+                        $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                    } else {
+                        // Solo elimina el comentario si no tiene revisión
+                        $comentario->delete();
+                    }
+                }
+
+                // Eliminar los contenidos
+                foreach ($actividad->contenidos as $contenido) {
+                    foreach ($contenido->comentarios as $comentario) {
+                        Interacciones::where('Actividad_idActividad', $comentario->Actividad_idActividad)->delete();
+                        $comentario->delete();
+                        $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                        // Eliminar la actividad del comentario de la tabla actividad
+                        Actividad::where('idActividad', $comentario->Actividad_idActividad)->delete();
+                    }
+
+                    // Eliminar imágenes de contenido y sus revisiones
+                    foreach ($contenido->imagenesContenido as $imagenContenido) {
+                        $imagenContenido->delete();
+                        $this->eliminarImagenYRevision($imagenContenido->revisionImagenes_idrevisionImagenescol);
+                    }
+
+                    // Eliminar el contenido
+                    $contenido->delete();
+                }
+
+                // Después de eliminar los contenidos y comentarios, eliminar la actividad
+                $actividad->delete();
+            }
+
+            // Borramos la imagen de perfil si tiene
+            $eliminado = $this->eliminarImagenLogica($id);
+
+            // Cerrar la sesión del usuario
+            Auth::logout();
+
+            // Redirigir a la página de inicio
+            return redirect('inicio')->with('alertBorrar', [
+                'type' => 'Success',
+                'message' => 'Se ha borrado la cuenta con éxito!',
+            ]);
+        } else {
+            ## En caso que presente reportes, debe enviar al administrador una notificacion que revise la cuenta de este
+            return redirect()->back()->with('alertBorrar', [
+                'type' => 'Error',
+                'message' => 'No se puede borrar la cuenta, ya que presenta reportes.
+            Se ha enviado una notificación al administrador para que revise la cuenta.',
+            ]);
         }
     }
 }

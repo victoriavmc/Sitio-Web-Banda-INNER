@@ -12,7 +12,7 @@
             <div class="flex flex-col gap-1 font-urbanist">
                 <label for="descripcion" class="font-semibold text-lg">Descripción</label>
                 <textarea type="text" name="descripcion" placeholder="descripcion"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"></textarea>
             </div>
             <!-- Imagen/es -->
             <div class="flex flex-col gap-1">
@@ -22,7 +22,7 @@
             </div>
             <!-- Botón de Crear Publicación -->
             <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">Enviar
+                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">Enviar
             </button>
         </div>
     </form>

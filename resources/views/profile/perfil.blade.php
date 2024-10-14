@@ -12,7 +12,7 @@
             </x-alerts>
         @endif
         <div class="flex justify-center items-center min-h-screen">
-            <div class="flex bg-white bg-opacity-70 justify-center p-6 gap-6">
+            <div class="flex bg-white bg-opacity-70 rounded-xl justify-center p-6 gap-6">
                 <div class="container mx-auto py-8">
                     <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
                         <div class="col-span-4 sm:col-span-3">

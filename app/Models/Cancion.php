@@ -13,6 +13,6 @@ class Cancion extends Model
 
     public function albumMusical()
     {
-        return $this->belongsTo(AlbumMusical::class, 'albumMusical_albumMusicalcol', 'albumMusicalcol');
+        return $this->belongsTo(AlbumMusical::class, 'albumMusical_idAlbumMusical', 'idAlbumMusical');
     }
 }

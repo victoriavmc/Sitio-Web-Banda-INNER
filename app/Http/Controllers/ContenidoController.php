@@ -49,7 +49,7 @@ class ContenidoController extends Controller
                 $rutaImg = $imagen->subidaImg;
 
                 // Almaceno la ruta en el array
-                $rutasImg[] = $rutaImg; // Guardo las rutas sin clave para simplificar
+                $rutasImg[] = $rutaImg;
             }
         }
 
@@ -105,12 +105,15 @@ class ContenidoController extends Controller
         $recuperoRedesSociales = $this->linksRedes();
         # Recupero solo publicaciones de Biografia
         $recuperoBiografia = Contenidos::where('tipoContenido_idtipoContenido', 3)->first();
+
         $idBio = $recuperoBiografia->idcontenidos;
 
-        # Recupero las todas las imagenes que tengan idcontendio
-        $recuperoBiografia->imagenes = $this->ImagenesContenido('contenidos_idcontenidos', $idBio);
+        // Recupero todas las imágenes que tengan ese idcontenidos
+        $imagenesBiografia = ImagenesContenido::with('revisionImagenes.imagenes')
+            ->where('contenidos_idcontenidos', $idBio)
+            ->get();
 
-        return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia'));
+        return view('/content/history/biografia', compact('recuperoRedesSociales', 'recuperoBiografia', 'imagenesBiografia'));
     }
 
     #MODIFICAR PUBLICACION (FORO-NOTICIAS-BIOGRAFIA)
@@ -168,11 +171,20 @@ class ContenidoController extends Controller
         // Redirigir según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
-                return redirect()->route('foro')->with('success', 'Publicación actualizada con éxito.');
+                return redirect()->route('foro')->with('alertPublicacion', [
+                    'type' => 'Success',
+                    'message' => 'Publicación actualizada con éxito.',
+                ]);
             case 2:
-                return redirect()->route('noticias')->with('success', 'Noticia actualizada con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Noticia actualizada con éxito.',
+                ]);
             case 3:
-                return redirect()->route('biografia')->with('success', 'Biografía actualizada con éxito.');
+                return redirect()->route('biografia')->with('alertBiografia', [
+                    'type' => 'Success',
+                    'message' => 'Biografia actualizada con éxito.',
+                ]);
         }
     }
 
@@ -200,29 +212,72 @@ class ContenidoController extends Controller
     }
 
     #DESCRIPCION REDUCIDA
-    public function contenidosReducidos($dato)
+    public function contenidosReducidos($dato, $orden = 'desc')
     {
-        // Ordenar por fechaSubida, descendente
+        // Ordenar por fechaSubida de forma descendente o ascendente según el parámetro
         return Contenidos::where('tipoContenido_idtipoContenido', $dato)
-            ->orderBy('fechaSubida', 'desc')
+            ->orderBy('fechaSubida', $orden)
             ->get()
-            // El método 'map' se utiliza para transformar cada elemento de una colección aplicando una función a cada uno de ellos, devolviendo una nueva colección con los resultados
             ->map(function ($publicacion) {
+                // Reducir la descripción a 30 palabras
                 $publicacion->descripcion = Str::words($publicacion->descripcion, 30);
                 return $publicacion;
             });
     }
 
+    #ORDENAR PARA EL INDEX NOTICIAS Y FORO
+    public function ordenarNF($tipoContenido, $tipo)
+    {
+        // Dependiendo del valor de $tipo, ordenamos de manera diferente
+        switch ($tipo) {
+            case 1: // Más reciente
+                return $this->contenidosReducidos($tipoContenido, 'desc');
+
+            case 2: // Más antiguo
+                return $this->contenidosReducidos($tipoContenido, 'asc');
+
+            case 3: // Mayor número de interacciones (punteo)
+
+                // Paso 1: Recuperar todos los contenidos
+                $contenidos = Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido)->get();
+
+                // Paso 2: Contenidos para obtener el `actividad_idActividad` y calcular las interacciones
+                foreach ($contenidos as $contenido) {
+                    // Recupero el id de la actividad asociado al contenido
+                    $actividadId = $contenido->actividad_idActividad;
+
+                    // Ahora buscamos las interacciones asociadas a esa actividad
+                    $interacciones = Interacciones::where('actividad_idActividad', $actividadId)
+                        ->selectRaw('SUM(megusta + nomegusta) as totalInteracciones')
+                        ->first();
+
+                    // Asignamos la suma de interacciones al contenido
+                    $contenido->totalInteracciones = $interacciones ? $interacciones->totalInteracciones : 0;
+
+                    // Reducimos la descripción del contenido
+                    $contenido->descripcion = Str::words($contenido->descripcion, 30);
+                }
+
+                // Paso 3: Retornar los contenidos ordenados por la mayor cantidad de interacciones
+                return $contenidos->sortByDesc('totalInteracciones');
+
+            default:
+                return $this->contenidosReducidos($tipoContenido, 'desc'); // Orden por defecto (más reciente)
+        }
+    }
+
     ## NOTICIAS
     # ENVIO A LA VISTA LAS PUBLICACIONES DE LAS NOTICIAS
-    public function indexNoticias()
+    public function indexNoticias(Request $request)
     {
-        #Recupero solo publicaciones de Noticias
-        $recuperoNoticias = $this->contenidosReducidos(2);
+        // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
+        $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
 
-        #Recorro las publicaciones
+        // Recupero solo publicaciones de Noticias y las ordeno según el parámetro
+        $recuperoNoticias = $this->ordenarNF(2, $orden); // Tipo de contenido 2 para Noticias
+
+        // Recorro las publicaciones para obtener las imágenes asociadas
         foreach ($recuperoNoticias as $noticias) {
-            # Obtengo el id de noticias
             $noticias->imagenes = $this->ImagenesContenido($noticias->idcontenidos, 1);
         }
 
@@ -393,7 +448,7 @@ class ContenidoController extends Controller
 
     ## FORO
     # ENVIO A LA VISTA LAS PUBLICACIONES DEL FORO
-    public function indexForo()
+    public function indexForo(Request $request)
     {
         // Verifico si el usuario está autenticado
         if (!Auth::check()) {
@@ -402,17 +457,19 @@ class ContenidoController extends Controller
                 'message' => 'Solo los usuarios registrados pueden acceder al foro.',
             ]);
         }
-        // Recupero solo publicaciones del foro (tipoContenido_idtipoContenido = 1)
-        $recuperoPublicaciones = $this->contenidosReducidos(1);
+
+        // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
+        $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
+
+        // Recupero solo publicaciones del foro y las ordeno según el parámetro
+        $recuperoPublicaciones = $this->ordenarNF(1, $orden); // Tipo de contenido 1 para Foro
 
         // Recupero los comentarios y las interacciones (likes y dislikes)
         $contadorComentarios = $this->contadorComentarios($recuperoPublicaciones);
         $recuperoLikes = $this->contadorInteracciones($recuperoPublicaciones);
+        $recuperoLikes = $this->contadorEstrellasVisual($recuperoLikes); // Mostrar Estrellas
 
-        // Mostrar Estrellas
-        $recuperoLikes = $this->contadorEstrellasVisual($recuperoLikes);
-
-        // Envio las publicaciones, likes, comentarios y el contador de comentarios a la vista
+        // Envío los datos necesarios a la vista
         return view('/content/forum/foro', compact('recuperoPublicaciones', 'recuperoLikes', 'contadorComentarios'));
     }
 
@@ -467,7 +524,9 @@ class ContenidoController extends Controller
     public function obtenerComentarios($idContent)
     {
         // Recuperar los comentarios relacionados con el contenido específico
-        $comentarios = Comentarios::where('contenidos_idcontenidos', $idContent)->get();
+        $comentarios = Comentarios::where('contenidos_idcontenidos', $idContent)
+            ->orderBy('fechaComent', 'desc')
+            ->get();
 
         // Array para almacenar la información de cada comentario
         $resultadoComentarios = [];
@@ -537,6 +596,9 @@ class ContenidoController extends Controller
         // Recuperar la publicación
         $recuperoPublicacion = Contenidos::find($data);
 
+        // Imange yo
+        $imagen = $this->usuarioAutor(Auth::user()->idusuarios, 2);
+
         // Obtener el autor y la imagen de perfil
         $autor = $this->usuarioAutor($data, 1);
 
@@ -555,7 +617,8 @@ class ContenidoController extends Controller
             'listaPublicacionConImg',
             'autor',
             'actividad',
-            'comentarios'
+            'comentarios',
+            'imagen'
         ));
     }
 
@@ -604,6 +667,9 @@ class ContenidoController extends Controller
 
             // Eliminar la imagen asociada al comentario
             $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+
+            // Eliminar la actividad del comentario de la tabla actividad
+            Actividad::where('idActividad', $comentario->Actividad_idActividad)->delete();
         }
 
         // Eliminar las imágenes de contenido y sus revisiones
@@ -629,9 +695,15 @@ class ContenidoController extends Controller
         // Redirigir según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
-                return redirect()->route('foro')->with('success', 'Contenidos con sus respectivos comentarios y imágenes eliminados con éxito.');
+                return redirect()->route('foro')->with('alertForo', [
+                    'type' => 'Success',
+                    'message' => 'Contenido del Foto con sus respecticos comentarios e imágenes eliminados con éxito.',
+                ]);
             case 2:
-                return redirect()->route('noticias')->with('success', 'Contenido de la Noticias y sus imágenes eliminados con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Contenido de la Noticias y sus imágenes eliminados con éxito.',
+                ]);
         }
     }
 
@@ -650,7 +722,10 @@ class ContenidoController extends Controller
         // Eliminar la imagen y la revisión asociada
         $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
 
-        return redirect()->back()->with('success', 'Comentario eliminado exitosamente.');
+        return redirect()->back()->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario eliminado exitosamente.',
+        ]);
     }
 
     #VER FORMULARIO CREAR PUBLICACIONES
@@ -693,9 +768,10 @@ class ContenidoController extends Controller
     }
 
     #Crea actividad
-    private function crearActividad()
+    private function crearActividad($tipo)
     {
         $actividad = new Actividad();
+        $actividad->tipoActividad_idtipoActividad = $tipo;
         $actividad->save();
         return $actividad;
     }
@@ -711,7 +787,7 @@ class ContenidoController extends Controller
         ]);
 
         // Crear una nueva actividad
-        $actividad = $this->crearActividad();
+        $actividad = $this->crearActividad(3);
 
         // Crear nuevo contenido según el tipo
         $contenido = new Contenidos();
@@ -739,43 +815,55 @@ class ContenidoController extends Controller
         switch ($type) {
             case 1:
                 #Si es foro
-                return redirect()->route('foro')->with('success', 'Publicación creada con éxito.');
+                return redirect()->route('foro')->with('alertForo', [
+                    'type' => 'Success',
+                    'message' => 'Publicacion creada con éxito.',
+                ]);
                 break;
             case 2:
                 #Si es noticias
-                return redirect()->route('noticias')->with('success', 'Noticia creada con éxito.');
+                return redirect()->route('noticias')->with('alertNoticia', [
+                    'type' => 'Success',
+                    'message' => 'Noticia creada con éxito.',
+                ]);
                 break;
         }
     }
 
-    # Crear un nuevo comentario
     public function crearComentario(Request $request, $idContent)
     {
-        // Validar los datos
+        // Validar los datos: al menos un campo debe estar presente (contenido o imagen)
         $request->validate([
             'contenido' => 'nullable|string|max:500|required_without_all:imagen',
             'imagen' => 'nullable|image|max:2048|required_without_all:contenido',
         ]);
 
         // Crear una nueva actividad
-        $actividad = $this->crearActividad();
+        $actividad = $this->crearActividad(2);
 
         // Crear un nuevo comentario
         $comentario = new Comentarios();
         $comentario->fechaComent = now();
-        $comentario->descripcion = $request->contenido; // Asegúrate de usar 'contenido'
-        $comentario->Actividad_idActividad = $actividad->idActividad; // Asociar la actividad creada
-        $comentario->contenidos_idcontenidos = $idContent; // Asociar el contenido específico
+        $comentario->descripcion = $request->contenido ?? ''; // Si no hay contenido, guarda cadena vacía
+        $comentario->Actividad_idActividad = $actividad->idActividad;
+        $comentario->contenidos_idcontenidos = $idContent;
 
         // Manejo de imagen
         if ($request->hasFile('imagen')) {
+            // Llamar a la función que maneja la imagen y la revisión
             list($imagen, $revisionImagen) = $this->manejarImagenYRevision($request->file('imagen'), 5);
+
+            // Asociar la imagen con el comentario
             $comentario->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
 
+        // Guardar el comentario
         $comentario->save();
 
-        return redirect()->route('foroUnico', ['data' => $idContent])->with('success', 'Comentario agregado exitosamente.');
+        return redirect()->route('foroUnico', ['data' => $idContent])->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario agregado exitosamente.',
+        ]);
     }
 
     #Modificar un comentario especifico
@@ -808,7 +896,10 @@ class ContenidoController extends Controller
         // Si no se subió una nueva imagen, se mantendrá la imagen existente
         $comentario->save();
 
-        return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('success', 'Comentario modificado exitosamente.');
+        return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Comentario modificado exitosamente.',
+        ]);
     }
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)

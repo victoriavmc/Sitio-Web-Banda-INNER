@@ -24,8 +24,8 @@
 @endphp
 
 
-<body class=" text-gray-300" style="background-color: #121212">
-    <header class=" bg-black bg-opacity-60 text-center w-full border-b border-gray-600 z-10">
+<body class="text-black bg-slate-100">
+    <header class=" bg-black text-center w-full border-b border-gray-600 z-10">
         <nav class="flex items-center justify-center text-gray-300 relative">
             <!-- Menú izquierdo -->
             <ul class="hidden font-amsterdam lg:flex text-xl gap-4 xl:gap-6 z-10">
@@ -263,25 +263,5 @@
 <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-<script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-
-    // Mostrar/ocultar el menú al hacer clic en el botón
-    menuToggle.addEventListener('click', function(event) {
-        dropdownMenu.classList.toggle('hidden');
-        event.stopPropagation(); // Prevenir que el clic se propague al documento
-    });
-
-    // Cerrar el menú si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-        const isClickInsideMenu = dropdownMenu.contains(event.target) || menuToggle.contains(event
-            .target);
-
-        if (!isClickInsideMenu) {
-            dropdownMenu.classList.add('hidden');
-        }
-    });
-</script>
 
 </html>

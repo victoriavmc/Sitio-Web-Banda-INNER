@@ -17,40 +17,40 @@
         </x-alerts>
     @endif
 
-    <div class="p-10 min-h-screen" style="background-color: #121212">
+    <div class="p-10 min-h-screen">
         <h3 class="text-8xl font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos
         </h3>
-        <div class="relative flex mb-5">
+        <div class="flex mb-5">
             @auth
                 @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                    <div class="flex gap-4 mt-4 z-30">
+                    <div class="flex gap-4 mt-4 absolute z-30">
                         <div class="flex items-center gap-10">
                             <a href="{{ route('crear-formulario') }}"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Agregar</a>
+                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Agregar</a>
                         </div>
 
                         <div class="flex items-center gap-10">
                             <a href="{{ route('lugares-cargados') }}"
-                                class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                                Lugares cargados
+                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                Lugares y ubicaciones cargadas
                             </a>
                         </div>
                     </div>
                 @endif
             @endauth
-
-            <div class="w-full flex justify-center items-center absolute z-0">
+            <div class="w-full flex justify-center items-center relative z-0">
                 <form action="{{ route('eventos') }}" method="GET"
-                    class="w-full max-w-lg bg-gray-700 bg-opacity-70 rounded-lg shadow-xl">
+                    class="w-full max-w-lg bg-white rounded-lg shadow-xl">
                     <div
-                        class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-blue-500 focus-within:!ring-2 ring-inset focus-within:!ring-blue-500 rounded-md">
-                        <svg class="mr-2 h-5 w-5 stroke-white" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-red-500 focus-within:!ring-2 ring-inset focus-within:!ring-red-500 rounded-md">
+                        <svg class="mr-2 h-5 w-5 text-black stroke-black" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                         <input
-                            class="block w-full appearance-none bg-transparent text-base text-white placeholder:text-white focus:outline-none sm:text-sm sm:leading-6"
+                            class="block w-full appearance-none text-base text-black placeholder:text-black focus:outline-none sm:text-sm sm:leading-6 border-none"
                             placeholder="Buscar publicacion..." name="search" aria-label="Search components"
                             type="text" aria-expanded="false" aria-autocomplete="list"
                             value="{{ request('search') }}" style="caret-color: rgb(107, 114, 128)">
@@ -60,14 +60,14 @@
         </div>
 
         {{-- EVENTOS --}}
-        <div class="grid grid-cols-2 gap-5">
+        <div class="relative grid grid-cols-2 gap-5">
             @foreach ($shows as $show)
-                <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500"
-                    style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
-                    <img class="h-full"
+                <div class="relative items-start text-black bg-white p-3 rounded-xl shadow-xl"
+                    style="display: grid; grid-template-columns:30% 35% 35%">
+                    <img class="h-full rounded-xl"
                         src="{{ $show->revisionImagenes && $show->revisionImagenes->imagenes
                             ? asset(Storage::url($show->revisionImagenes->imagenes->subidaImg))
-                            : asset('img\logo_inner.png') }}"
+                            : asset('img\logo_inner_negro.png') }}"
                         alt="Imagen de {{ $show->nombreLugar }}" />
 
                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
@@ -76,7 +76,7 @@
                         <p class="text-lg">
                             {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
                         <p class="text-lg">
-                        <p class="text-4xl font-medium hover:text-[#e60b0b] leading-none">
+                        <p class="text-4xl font-medium text-black leading-none">
                             {{ $show->lugarlocal->nombreLugar }}
                         </p>
                         <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
@@ -86,8 +86,9 @@
                             {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                         <div class="flex flex-col gap-3">
                             @if (now() < $show->fechashow)
-                                <a href="https://www.instagram.com/direct/t/117977966259675/" target="_blank">
-                                    <button class="boton-vermas">
+                                <a href="{{ $show->linkCompraEntrada }}" target="_blank">
+                                    <button
+                                        class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6">
                                         <p>Adquirir Entrada</p>
                                     </button>
                                 </a>
@@ -105,7 +106,7 @@
                     {{-- CRUD EVENTOS --}}
                     @auth
                         @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                            <div class="z-30 absolute flex gap-3 w-full p-2 justify-end">
+                            <div class="z-30 absolute flex gap-3 w-full p-4 justify-end">
                                 <a href="{{ route('modificar-formulario', $show->idshow) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded">
                                     <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +181,7 @@
                             data.forEach(show => {
                                 const eventHTML = `
                                 <div class="relative items-start text-white p-3 rounded-xl border-2 border-red-500" style="background-color:#323232; display: grid; grid-template-columns:30% 35% 35%">
-                                    <img class="h-full" src="${show.revision_imagenes ? '/storage/' + show.revision_imagenes.imagenes.subidaImg : '/img/logo_inner.png'}" alt="Imagen de ${show.nombreLugar}">
+                                    <img class="h-full" src="${show.revision_imagenes ? '/storage/' + show.revision_imagenes.imagenes.subidaImg : '/img/logo_inner_negro.png'}" alt="Imagen de ${show.nombreLugar}">
                                     <div class="text-sm h-full flex flex-col justify-between ml-4 gap-2">
                                         <p class="event-date text-lg">${new Date(show.fechashow).toLocaleDateString()}</p>
                                         <p class="text-lg">${show.ubicacionshow.provinciaLugar}, ${show.ubicacionshow.paisLugar}</p>

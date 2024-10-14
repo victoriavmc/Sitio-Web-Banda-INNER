@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 #Clases
+
+use App\Models\DatosPersonales;
+use App\Models\HistorialUsuario;
 use App\Models\Usuario;
 use App\Models\RevisionImagenes;
 use App\Models\Imagenes;
+use App\Models\Reportes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
 use App\Models\TipodeStaff;
@@ -20,15 +24,16 @@ class panelStaffController extends Controller
     #Lista a los miembros del Staff
     public function listar(Request $request)
     {
-        // Cargar los usuarios con los datos personales y la imagen de perfil
-        $query = Usuario::where('rol_idrol', 2)
+        // Cargar los usuarios con los datos personales, imagen de perfil y estado
+        $query = Usuario::where('rol_idrol', 2) // Filtrar por el rol específico (id 2)
             ->with([
                 'revisionImagenes' => function ($query) {
                     // Filtrar para traer solo la imagen de perfil (idtipodefoto = 1)
                     $query->where('tipodefoto_idtipodefoto', 1)->with('imagenes');
                 },
                 'datosPersonales',
-                'staffextra'
+                'staffextra',
+                'datosPersonales.historialUsuario' // Relación con historialUsuario para obtener el estado
             ]);
 
         // Filtro de búsqueda
@@ -39,6 +44,10 @@ class panelStaffController extends Controller
                     ->orWhere('correoElectronicoUser', 'like', '%' . $busqueda . '%');
             });
         }
+
+        // Ordenar primero por estado (Activo primero, luego Inactivo)
+        $query->join('historialusuario', 'usuarios.idusuarios', '=', 'historialusuario.datospersonales_idDatosPersonales') // Join con historial_usuario
+            ->orderByRaw("CASE WHEN historialusuario.estado = 'Activo' THEN 1 ELSE 2 END");
 
         // Paginación de usuarios
         return $usuarios = $query->paginate(6);
@@ -172,13 +181,56 @@ class panelStaffController extends Controller
     # Eliminar miembro del Staff
     public function eliminarStaff($id)
     {
+        // Como es un miembro del staff, es decir un trabajador guardamos todo lo que realizo, y no eliminamos, solo vamos a eliminar la redsocial, la foto de perfil, pero guardamos todo lo que hizo. 
+
         // Encontrar al usuario
         $usuario = Usuario::find($id);
+
+        // Relaciono a su usuario con datos personales
+        $datospersonales = DatosPersonales::where('usuarios_idusuarios', $id)->first();
+
+        // Verificamos si existen los datos personales
+        if ($datospersonales) {
+            // Actualizo el Historial Usuario
+            $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $datospersonales->idDatosPersonales)->first();
+            if ($historial) {
+                $historial->estado = "Inactivo";
+                $historial->eliminacionLogica = 'Si';
+                $historial->fechaFinaliza = date('Y-m-d');
+                $historial->save();
+            }
+
+            // Aquí deberías borrar la contraseña del usuario de manera segura
+            $usuario->contraseniaUser = null;
+            $usuario->save();
+
+            #Borro solo el atributo de redSocial enlazada en la tabla staffextra
+            $staffextra = StaffExtra::where('usuarios_idusuarios', $id)->first();
+            if ($staffextra) {
+                $staffextra->redesSociales_idredesSociales = null;
+                $staffextra->save();
+            }
+        }
+
+        // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+
+        if ($tieneReportes === 0) {
+            // Si no hay reportes, eliminamos al usuario de la tabla
+            Reportes::where('usuarios_idusuarios', $id)->delete();
+        }
 
         #Eliminar en CASCADA
         return redirect()->route('panel-de-staff')->with('alertEliminacion', [
             'type' => 'Success',
             'message' => 'La cuenta y la imagen fueron eliminadas con éxito',
         ]);
+    }
+
+    #Redirigir a manejoreporte
+    public function manejoreporte($id)
+    {
+        $usuario = Usuario::find($id);
+        return view('profile.manejoreporte', compact('usuario'));
     }
 }
