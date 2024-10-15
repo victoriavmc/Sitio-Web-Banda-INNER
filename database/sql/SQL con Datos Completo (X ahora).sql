@@ -79,10 +79,10 @@ DROP TABLE IF EXISTS `albumimagenes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `albumimagenes` (
-  `albumImagenescol` int NOT NULL AUTO_INCREMENT,
+  `idAlbumImagenes` int NOT NULL AUTO_INCREMENT,
   `albumDatos_idalbumDatos` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int NOT NULL,
-  PRIMARY KEY (`albumImagenescol`),
+  PRIMARY KEY (`idAlbumImagenes`),
   KEY `fk_table1_albumDatos1_idx` (`albumDatos_idalbumDatos`),
   KEY `fk_albumImagenes_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_albumImagenes_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
@@ -107,10 +107,10 @@ DROP TABLE IF EXISTS `albummusical`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `albummusical` (
-  `albumMusicalcol` int NOT NULL AUTO_INCREMENT,
+  `idAlbumMusical` int NOT NULL AUTO_INCREMENT,
   `albumDatos_idalbumDatos` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
-  PRIMARY KEY (`albumMusicalcol`),
+  PRIMARY KEY (`idAlbumMusical`),
   KEY `fk_albumMusical_albumDatos1_idx` (`albumDatos_idalbumDatos`),
   KEY `fk_albumMusical_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_albumMusical_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `albumdatos` (`idalbumDatos`),
@@ -199,10 +199,9 @@ CREATE TABLE `cancion` (
   `letraInglesCancion` longtext,
   `archivoDsCancion` longtext,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
-  `albumMusical_albumMusicalcol` int NOT NULL,
+  `AlbumMusical_idAlbumMusical` int NOT NULL,
   PRIMARY KEY (`idcancion`),
-  KEY `fk_cancion_albumMusical1_idx` (`albumMusical_albumMusicalcol`),
-  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_albumMusicalcol`) REFERENCES `albummusical` (`albumMusicalcol`)
+  KEY `fk_cancion_albumMusical1_idx` (`AlbumMusical_idAlbumMusical`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -674,7 +673,7 @@ CREATE TABLE `show` (
 
 LOCK TABLES `show` WRITE;
 /*!40000 ALTER TABLE `show` DISABLE KEYS */;
-INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','pendiente',NULL,1,11,3),(4,'2024-10-21 18:00:00','pendiente',NULL,1,10,1);
+INSERT INTO `show` VALUES (1,'2023-09-16 19:00:00','Inactivo',NULL,1,13,1),(2,'2023-09-29 20:00:00','Inactivo',NULL,1,12,2),(3,'2024-10-14 21:00:00','Inactivo',NULL,1,11,3),(4,'2024-10-21 18:00:00','pendiente',NULL,1,10,1);
 /*!40000 ALTER TABLE `show` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -923,4 +922,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-14 23:18:29
+-- Dump completed on 2024-10-14 23:30:04
