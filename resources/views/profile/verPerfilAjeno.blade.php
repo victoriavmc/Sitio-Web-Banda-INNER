@@ -21,8 +21,8 @@
                             <div class="bg-white shadow rounded-lg p-6">
                                 <div class="flex flex-col items-center">
                                     @if ($imagen)
-                                        <img src='{{ asset(Storage::url($imagen)) }}'
-                                            class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                                        <img id="imagen" src='{{ asset(Storage::url($imagen)) }}'
+                                            class="imagen-modal cursor-pointer w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
                                     @else
                                         <img src='{{ asset('img/logo_usuario.png') }}'
                                             class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
@@ -101,6 +101,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Contenedor del modal -->
+    <div id="modal" class="hidden imagenG">
+        <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
 </x-AppLayout>
