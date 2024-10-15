@@ -1,4 +1,19 @@
 <x-AppLayout>
+    <style>
+        #modal {
+            z-index: 999; /* Asegura que el modal esté al frente */
+        }
+
+        .imagen {
+            transition: transform 0.3s ease;
+        }
+
+        #modalImage {
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Añade un cursor pointer para cerrar el modal al hacer clic */
+        }
+    </style>
+
     <!-- Container -->
     <div class="min-h-screen px-5 py-16 md:px-10 md:py-10">
         {{-- Botón para modificar: solo el autor puede modificar --}}
@@ -24,13 +39,13 @@
             class="mx-auto w-full h-full grid gap-5 lg:grid-cols-[60%_40%] lg:auto-rows-min bg-white rounded-xl p-4 shadow-xl">
             <div class="flex flex-col gap-4 lg:border-r-2 lg:pr-5">
                 <!-- Title -->
-                <h2 class="text-center text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }}
+                <h2 class="mb-3 text-3xl font-bold md:text-5xl lg:text-left"> {{ $recuperoPublicacion->titulo }}
                 </h2>
 
                 @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
                     <!-- Mostrar la primera imagen de la lista -->
-                    <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
-                        class="w-full h-full inline-block object-cover">
+                    <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal" id="imagen"
+                        class="cursor-pointer imagen-modal w-full h-full inline-block object-cover">
                 @else
                     <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
@@ -38,14 +53,13 @@
                 @endif
                 {{-- EN CASO DE QUE HAYA IMÁGENES --}}
                 @if (count($listaPublicacionConImg) > 1)
-                    @foreach (array_slice($listaPublicacionConImg, 1) as $imagen)
-                        <div class="p-5 sm:p-8">
-                            <div
-                                class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-                                <img src="{{ asset(Storage::url($imagen)) }}" alt="Imagen de la banda">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                        @foreach (array_slice($listaPublicacionConImg, 1) as $imagen)
+                            <div class="">
+                                <img id="imagen" class="cursor-pointer imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg" src="{{ asset(Storage::url($imagen)) }}" alt="Imagen de la banda">
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @endif
                 <div class="flex flex-col items-start py-4">
                     <div class="mb-4 rounded-md shadow-xl bg-red-500 px-2 py-1.5">
@@ -70,7 +84,7 @@
                                 @if (isset($noticiaExtra->imagenes) && !empty($noticiaExtra->imagenes[0]))
                                     <img src="{{ asset(Storage::url($noticiaExtra->imagenes[0])) }}"
                                         alt="Imagen de {{ $noticiaExtra->titulo }}"
-                                        class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
+                                        class=" inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @else
                                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
                                         class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
@@ -124,4 +138,32 @@
             </div>
         </div>
     </div>
+
+    <!-- Contenedor del modal -->
+    <div id="modal" class="hidden imagenG">
+        <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
+        </div>
+    </div>
+
+
+    <script>
+        // Seleccionar todas las imágenes con la clase `imagen-modal`
+        const imagenes = document.querySelectorAll('.imagen-modal');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+
+        // Añadir evento de click a cada imagen
+        imagenes.forEach(imagen => {
+            imagen.addEventListener('click', function() {
+                modal.classList.remove('hidden'); // Mostrar el modal
+                modalImage.src = imagen.src; // Establecer la imagen en el modal
+            });
+        });
+
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+        });
+    </script>
 </x-AppLayout>

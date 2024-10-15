@@ -12,7 +12,19 @@
         </x-alerts>
     @endif
 
-    <div class="flex justify-center">
+    <style>
+        .imagen {
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.4); /* Sombra suave en la parte inferior */
+    margin-bottom: 20px; /* Espacio entre las imágenes */
+    transition: transform 0.3s ease; /* Para animación opcional */
+}
+
+.imagen:hover {
+    transform: translateY(-5px); /* Levanta un poco la imagen al pasar el ratón por encima */
+}
+    </style>
+
+    <div class="flex justify-center bg-black">
         <img class="h-[91vh]" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
     </div>
 
@@ -73,7 +85,7 @@
                                         @endif
                                     </div>
                                     <div class="flex justify-end">
-                                        <img class="w-24 pr-1 pb-6" src="{{ asset('img/logo_inner_negro.png') }}"
+                                        <img class="imagen w-24 pr-1 pb-6" src="{{ asset('img/logo_inner_negro.png') }}"
                                             alt="">
                                     </div>
                                 </div>
@@ -149,10 +161,10 @@
                                         @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
                                             <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
                                                 alt="Imagen de {{ $noticia->titulo }}"
-                                                class="object-cover w-48 h-48 object-center" />
+                                                class="imagen object-cover w-48 h-48 object-center" />
                                         @else
                                             <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                                class="object-cover w-full h-48 object-center" />
+                                                class="imagen object-cover w-full h-48 object-center" />
                                         @endif
                                     </a>
                                 </div>
@@ -184,7 +196,7 @@
 
                     <div class="flex flex-col justify-around h-full">
                         <div class="flex justify-center">
-                            <img class="w-3/4" src="{{ asset('img/nosotros_foro.png') }}" alt="Foro de la comunidad">
+                            <img class="imagen w-3/4" src="{{ asset('img/nosotros_foro.png') }}" alt="Foro de la comunidad">
                         </div>
                         <h3 class="font-bold text-center mt-3 text-3xl">¡Para la Comunidad Apasionada!</h3>
                         <p class="text-2xl mt-2 text-center">Únete a las conversaciones en nuestro foro y comparte tus
@@ -223,72 +235,72 @@
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_agus2.jpg') }}" alt="Imagen 1"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_agus.jpg') }}" alt="Imagen2"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                         </div>
                     </div>
                     <!-- Columnas normales 1 -->
                     <div class="col-span-1 flex items-center justify-center">
                         <img src="{{ asset('img/multimedia/vertical_agus2.jpg') }}" alt="Imagen3"
-                            class="h-[25rem] w-full object-cover rounded-lg">
+                            class="imagen h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Segunda columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_herni.jpg') }}" alt="Imagen4"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_herni2.jpg') }}" alt="Imagen5"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                         </div>
                     </div>
                     <!-- Columnas normales 2 -->
                     <div class="col-span-1 flex items-center justify-center">
                         <img src="{{ asset('img/multimedia/vertical_herni.jpg') }}" alt="Imagen6"
-                            class="h-[25rem] w-full object-cover rounded-lg">
+                            class="imagen h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Tercera columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_tomi.jpg') }}" alt="Imagen7"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_tomi2.jpg') }}" alt="Imagen8"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                         </div>
                     </div>
                     <!-- Columnas normales 3 -->
                     <div class="col-span-1 flex items-center justify-center">
                         <img src="{{ asset('img/multimedia/vertical_tomi.jpg') }}" alt="Imagen9"
-                            class="h-[25rem] w-full object-cover rounded-lg">
+                            class="imagen h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Cuarta columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_david.jpg') }}" alt="Imagen10"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
                                 <img src="{{ asset('img/multimedia/horizontal_david2.jpg') }}" alt="Imagen11"
-                                    class="h-48 w-full object-cover rounded-lg">
+                                    class="imagen h-48 w-full object-cover rounded-lg">
                             </div>
                         </div>
                     </div>
                     <!-- Columnas normales 4 -->
                     <div class="col-span-1 flex items-center justify-center">
                         <img src="{{ asset('img/multimedia/vertical_david.jpg') }}" alt="Imagen12"
-                            class="h-[25rem] w-full object-cover object-center rounded-lg">
+                            class="imagen h-[25rem] w-full object-cover object-center rounded-lg">
                     </div>
                 </div>
             </div>
