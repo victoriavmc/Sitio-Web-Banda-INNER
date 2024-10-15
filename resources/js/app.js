@@ -17,56 +17,31 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
-// Seleccionar todas las imágenes con la clase `imagen-modal`
-const imagenes = document.querySelectorAll('.imagen-modal');
-const modal = document.getElementById('modal');
-const modalImage = document.getElementById('modalImage');
+        // Seleccionar todas las imágenes con la clase `imagen-modal`
+        const imagenes = document.querySelectorAll('.imagen-modal');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
 
-// Añadir evento de click a cada imagen
-imagenes.forEach(imagen => {
-    imagen.addEventListener('click', function() {
-        modal.classList.remove('hidden'); // Mostrar el modal
-        modalImage.src = imagen.src; // Establecer la imagen en el modal
-        modalImage.classList.add('imagenG'); // Añadir la clase de transición suave
-        modalImage.style.transform = "scale(1)"; // Ampliar la imagen al tamaño original
-    });
-});
+        // Añadir evento de click a cada imagen
+        imagenes.forEach(imagen => {
+            imagen.addEventListener('click', function() {
+                modal.classList.remove('hidden'); // Mostrar el modal
+                modalImage.src = imagen.src; // Establecer la imagen en el modal
+                modalImage.classList.add('imagenG'); // Añadir la clase de transición suave
+                modalImage.style.transform = "scale(1)"; // Ampliar la imagen al tamaño original
+            });
+        });
 
-// Cerrar el modal al hacer clic en cualquier parte del mismo
-modal.addEventListener('click', function() {
-    modal.classList.add('hidden'); // Ocultar el modal
-    modalImage.style.transform = "scale(0.9)"; // Restablecer el tamaño
-});
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+            modalImage.style.transform = "scale(0.9)"; // Restablecer el tamaño
+        });
 
-// Cerrar el modal al hacer clic en cualquier parte del mismo
-modal.addEventListener('click', function() {
-    modal.classList.add('hidden'); // Ocultar el modal
-});
-
-
-const menuToggle = document.getElementById('menu-toggle');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-
-    // Mostrar/ocultar el menú al hacer clic en el botón
-    menuToggle.addEventListener('click', function(event) {
-        dropdownMenu.classList.toggle('hidden');
-        event.stopPropagation(); // Prevenir que el clic se propague al documento
-    });
-
-    // Cerrar el menú si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-        const isClickInsideMenu = dropdownMenu.contains(event.target) || menuToggle.contains(event
-            .target);
-
-        if (!isClickInsideMenu) {
-            dropdownMenu.classList.add('hidden');
-        }
-    });
-
-document.getElementById('perfil-toggle').addEventListener('click', function() {
-    const dropdownPerfil = document.getElementById('dropdown-perfil');
-    dropdownPerfil.classList.toggle('hidden');
-});
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+        });
 
 document.addEventListener('DOMContentLoaded', function () {
     const alerts = document.querySelectorAll('.alert-fixed');

@@ -524,6 +524,9 @@ class ContenidoController extends Controller
         // Array para almacenar la información de cada comentario
         $resultadoComentarios = [];
 
+        // Obtener el ID del usuario autenticado
+        $idUsuarioAuth = Auth::user()->idusuarios;
+
         // Recorrer cada comentario
         foreach ($comentarios as $comentario) {
             // Recuperar el id de la actividad asociada al comentario
@@ -541,13 +544,19 @@ class ContenidoController extends Controller
                 // Recuperar like y dislike del comentario específico
                 $likeDislike = $this->likeDislike($comentario->Actividad_idActividad, 2);
 
+                // Recuperar la interacción del usuario autenticado en este comentario
+                $interaccionUsuario = Interacciones::where('actividad_idActividad', $comentario->Actividad_idActividad)
+                    ->where('usuarios_idusuarios', $idUsuarioAuth)
+                    ->first();
+
                 // Formar el array con la información completa del comentario
                 $resultadoComentarios[] = [
                     'comentario' => $comentario,
                     'autor' => $autorComentario['usuario'],
                     'imagenAutor' => $autorComentario['ruta_imagen'],
                     'imagenComentario' => $rutaImagen,
-                    'interaccionComentario' => $likeDislike
+                    'interaccionComentario' => $likeDislike,
+                    'interaccionUsuario' => $interaccionUsuario, // Agregamos aquí la interacción
                 ];
             }
         }
@@ -583,35 +592,42 @@ class ContenidoController extends Controller
         return $this->likeDislikeGeneral($idContent);
     }
 
-    # Recuperar publicación única para el foro
+    // Recuperar publicación única para el foro
     public function publicacionUnicaForo($data)
     {
         // Recuperar la publicación
         $recuperoPublicacion = Contenidos::find($data);
+        $idActividad = $recuperoPublicacion->Actividad_idActividad;
 
-        // Imange yo
+        // Imagen del usuario autenticado
         $imagen = $this->usuarioAutor(Auth::user()->idusuarios, 2);
 
-        // Obtener el autor y la imagen de perfil
+        // Autor de la publicación y su imagen de perfil
         $autor = $this->usuarioAutor($data, 1);
 
-        // Obtener todas las imágenes asociadas al contenido
+        // Todas las imágenes asociadas al contenido
         $listaPublicacionConImg = $this->ImagenesContenido($data, 1);
 
-        // Obtener la actividad (likes/dislikes)
+        // Total de actividad (likes y dislikes)
         $actividad = $this->likeDislike($data, 1);
+
+        // Recuperar la interacción del usuario autenticado
+        $interaccionUsuario = Interacciones::where('actividad_idActividad', $idActividad)
+            ->where('usuarios_idusuarios', Auth::user()->idusuarios)
+            ->first();
 
         // Obtener comentarios
         $comentarios = $this->obtenerComentarios($data);
 
-        // Retornar a la vista
-        return view('/content/forum/foroUnico', compact(
+        // Retornar a la vista con los datos necesarios
+        return view('content.forum.foroUnico', compact(
             'recuperoPublicacion',
             'listaPublicacionConImg',
             'autor',
             'actividad',
             'comentarios',
-            'imagen'
+            'imagen',
+            'interaccionUsuario'
         ));
     }
 
@@ -933,36 +949,33 @@ class ContenidoController extends Controller
 
     public function likeDislikeActividad($tipo, $id)
     {
+        $userId = Auth::user()->idusuarios;
+
         // Recuperar la interacción existente
         $interaccion = Interacciones::where('actividad_idActividad', $id)
-            ->where('usuarios_idusuarios', Auth::user()->idusuarios)
+            ->where('usuarios_idusuarios', $userId)
             ->first();
 
-        // Si la interaccion no existe crea una nueva
+        // Crear nueva interacción si no existe
         if (!$interaccion) {
             $interaccion = new Interacciones();
-            $interaccion->usuarios_idusuarios = Auth::user()->idusuarios;
+            $interaccion->usuarios_idusuarios = $userId;
             $interaccion->actividad_idActividad = $id;
         }
 
-        // Si le da click al boton que presiono antes devuelte la interaccion como si no hubiera pasado nada
+        // Actualizar la interacción según el tipo
         if ($tipo === 'Like' && $interaccion->megusta === 1) {
             $interaccion->megusta = 0;
         } elseif ($tipo === 'Dislike' && $interaccion->nomegusta === 1) {
             $interaccion->nomegusta = 0;
         } else {
-            // Modifica el tipo de interacción
-            if ($tipo === 'Like') {
-                $interaccion->megusta = 1;
-                $interaccion->nomegusta = 0;
-            } elseif ($tipo === 'Dislike') {
-                $interaccion->megusta = 0;
-                $interaccion->nomegusta = 1;
-            }
+            $interaccion->megusta = $tipo === 'Like' ? 1 : 0;
+            $interaccion->nomegusta = $tipo === 'Dislike' ? 1 : 0;
         }
 
-        // Save the interaction
+        // Guardar la interacción
         $interaccion->save();
+
         return redirect()->back();
     }
 }
