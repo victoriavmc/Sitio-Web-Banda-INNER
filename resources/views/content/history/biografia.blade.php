@@ -31,14 +31,17 @@
                             <div
                                 class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
                                 @foreach (array_slice($imagenesBiografia->toArray(), 1) as $imagenContenido)
-                                    @if ($imagenContenido['revisionImagenes'] && $imagenContenido['revisionImagenes']['imagenes'])
-                                        <img src="{{ asset(Storage::url($imagenContenido['revisionImagenes']['imagenes']['subidaImg'])) }}"
+                                    @if (isset($imagenContenido['revision_imagenes']['imagenes']))
+                                        <img id="imagen"
+                                            class="cursor-pointer imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg"
+                                            src="{{ asset(Storage::url($imagenContenido['revision_imagenes']['imagenes']['subidaImg'])) }}"
                                             alt="Imagen de la banda">
                                     @endif
                                 @endforeach
                             </div>
                         </div>
                     @endif
+
 
 
                     <div class="mx-auto">
@@ -112,4 +115,31 @@
             </div>
         </div>
     @endif
+    <!-- Contenedor del modal -->
+    <div id="modal" class="hidden imagenG">
+        <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
+        </div>
+    </div>
+
+
+    <script>
+        // Seleccionar todas las imágenes con la clase `imagen-modal`
+        const imagenes = document.querySelectorAll('.imagen-modal');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+
+        // Añadir evento de click a cada imagen
+        imagenes.forEach(imagen => {
+            imagen.addEventListener('click', function() {
+                modal.classList.remove('hidden'); // Mostrar el modal
+                modalImage.src = imagen.src; // Establecer la imagen en el modal
+            });
+        });
+
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+        });
+    </script>
 </x-AppLayout>
