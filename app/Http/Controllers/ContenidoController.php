@@ -14,13 +14,19 @@ use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
 use App\Models\Show;
 use App\Models\Usuario;
+use App\Models\Reportes;
+
+use App\Mail\msjReporto;
+use App\Mail\msjReportaron;
 
 #OTROS
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use PhpParser\Node\Stmt\Switch_;
+use Illuminate\Support\Facades\DB;
 
 class ContenidoController extends Controller
 {
@@ -228,7 +234,6 @@ class ContenidoController extends Controller
     #ORDENAR PARA EL INDEX NOTICIAS Y FORO
     public function ordenarNF($tipoContenido, $tipo)
     {
-        // Dependiendo del valor de $tipo, ordenamos de manera diferente
         switch ($tipo) {
             case 1: // Más reciente
                 return $this->contenidosReducidos($tipoContenido, 'desc');
@@ -237,32 +242,21 @@ class ContenidoController extends Controller
                 return $this->contenidosReducidos($tipoContenido, 'asc');
 
             case 3: // Mayor número de interacciones (punteo)
+                return Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido)
+                    ->leftJoin('interacciones', 'contenidos.actividad_idActividad', '=', 'interacciones.actividad_idActividad')
+                    ->select(
+                        'contenidos.*',
+                        DB::raw('COALESCE(SUM(interacciones.megusta + interacciones.nomegusta), 0) as totalInteracciones')
+                    )
+                    ->groupBy('contenidos.idcontenidos') // Agrupar por ID del contenido
+                    ->orderByDesc('totalInteracciones') // Ordenar por interacciones
+                    ->get()
+                    ->each(function ($contenido) {
+                        $contenido->descripcion = Str::words($contenido->descripcion, 30); // Reducir descripción
+                    });
 
-                // Paso 1: Recuperar todos los contenidos
-                $contenidos = Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido)->get();
-
-                // Paso 2: Contenidos para obtener el `actividad_idActividad` y calcular las interacciones
-                foreach ($contenidos as $contenido) {
-                    // Recupero el id de la actividad asociado al contenido
-                    $actividadId = $contenido->actividad_idActividad;
-
-                    // Ahora buscamos las interacciones asociadas a esa actividad
-                    $interacciones = Interacciones::where('actividad_idActividad', $actividadId)
-                        ->selectRaw('SUM(megusta + nomegusta) as totalInteracciones')
-                        ->first();
-
-                    // Asignamos la suma de interacciones al contenido
-                    $contenido->totalInteracciones = $interacciones ? $interacciones->totalInteracciones : 0;
-
-                    // Reducimos la descripción del contenido
-                    $contenido->descripcion = Str::words($contenido->descripcion, 30);
-                }
-
-                // Paso 3: Retornar los contenidos ordenados por la mayor cantidad de interacciones
-                return $contenidos->sortByDesc('totalInteracciones');
-
-            default:
-                return $this->contenidosReducidos($tipoContenido, 'desc'); // Orden por defecto (más reciente)
+            default: // Orden por defecto (más reciente)
+                return $this->contenidosReducidos($tipoContenido, 'desc');
         }
     }
 
@@ -393,14 +387,13 @@ class ContenidoController extends Controller
         foreach ($recuperoPublicaciones as $publicacion) {
             // Recupero las interacciones asociadas a la publicación
             $interacciones = Interacciones::where('Actividad_idActividad', $publicacion->Actividad_idActividad)
-                ->select('megusta', 'nomegusta', 'reporte')
+                ->select('megusta', 'nomegusta')
                 ->get();
 
             // Almaceno los likes, dislikes y reportes en el array
             $contarInteracciones[$publicacion->idcontenidos] = [
                 'megusta' => $interacciones->sum('megusta'),
                 'nomegusta' => $interacciones->sum('nomegusta'),
-                'reporte' => $interacciones->sum('reporte'),
             ];
         }
         return $contarInteracciones;
@@ -903,8 +896,11 @@ class ContenidoController extends Controller
     }
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
-    public function reportarActividadEspecifica(Request $interaccionID)
+    public function reportarActividadEspecifica($interaccionID)
     {
+        $reporte = new Reportes();
+
+        #Recupero la interaccion
         $recuperoInteraccion = Interacciones::find($interaccionID);
 
         #Recupero quien es el usuario que reporto
@@ -917,8 +913,14 @@ class ContenidoController extends Controller
         $usuarioReportado = $actividadReportada->usuarios_idusuarios;
 
         #Envia mails ...
+
         #1 Reportaste la cuenta
+        // Mail::to($request->email)->send(new msjReporto(ucwords($request->nombre), $request->genero));
+
         #2 Admin Reporto x a y, revisar publicacion...
+        // Mail:to($request->email)->send(new msjReportaron(ucwords($request->nombre), $request->genero));
+
+        // Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));
         #EN CASO QUE SEA POR UNA PUBLICACION
         #hay que ver si es un comentario o contenido, y segun lo que sea, enviar fragmento de la publicacion o el comentario
 
@@ -929,5 +931,38 @@ class ContenidoController extends Controller
         # Debe de incrementarse el reporte de la tabla reportes (Coincide el usuario)
     }
 
-    #Para los likes y dislikes solo es un usuario por actividad.
+    public function likeDislikeActividad($tipo, $id)
+    {
+        // Recuperar la interacción existente
+        $interaccion = Interacciones::where('actividad_idActividad', $id)
+            ->where('usuarios_idusuarios', Auth::user()->idusuarios)
+            ->first();
+
+        // Si la interaccion no existe crea una nueva
+        if (!$interaccion) {
+            $interaccion = new Interacciones();
+            $interaccion->usuarios_idusuarios = Auth::user()->idusuarios;
+            $interaccion->actividad_idActividad = $id;
+        }
+
+        // Si le da click al boton que presiono antes devuelte la interaccion como si no hubiera pasado nada
+        if ($tipo === 'Like' && $interaccion->megusta === 1) {
+            $interaccion->megusta = 0;
+        } elseif ($tipo === 'Dislike' && $interaccion->nomegusta === 1) {
+            $interaccion->nomegusta = 0;
+        } else {
+            // Modifica el tipo de interacción
+            if ($tipo === 'Like') {
+                $interaccion->megusta = 1;
+                $interaccion->nomegusta = 0;
+            } elseif ($tipo === 'Dislike') {
+                $interaccion->megusta = 0;
+                $interaccion->nomegusta = 1;
+            }
+        }
+
+        // Save the interaction
+        $interaccion->save();
+        return redirect()->back();
+    }
 }

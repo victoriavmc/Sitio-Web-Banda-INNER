@@ -61,9 +61,9 @@ class LoginController extends Controller
         $historial->save();
 
         // Registrar en Redsocial
-        $redsocial = new Redsocial();
-        $redsocial->usuarios_idusuarios = $usuario->idusuarios;
-        $redsocial->save(); // Esto establecerá automáticamente 0 en 'seguidores', 'reportes' y 'seguidos' gracias al método booted.
+        // $redsocial = new Redsocial();
+        // $redsocial->usuarios_idusuarios = $usuario->idusuarios;
+        // $redsocial->save(); // Esto establecerá automáticamente 0 en 'seguidores', 'reportes' y 'seguidos' gracias al método booted.
 
 
         Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));

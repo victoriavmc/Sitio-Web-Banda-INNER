@@ -220,7 +220,7 @@ Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::clas
     ->name('modificarP')->middleware('auth');
 
 //----------------------- REPORTAR FORO PUBLICACION
-Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividad'])
+Route::post('/actividad/{id}/reportar', [ContenidoController::class, 'reportarActividadEspecifica'])
     ->name('reportarActividad')->middleware('auth');
 
 //----------------------- CARPETA FORUM
@@ -263,6 +263,11 @@ Route::put('/comentarios/{idComentario}', [ContenidoController::class, 'modifica
 //----------------------- ELIMINAR COMENTARIO
 Route::delete('/comentario/{id}', [ContenidoController::class, 'eliminarComentario'])
     ->name('eliminarComentario')->middleware('auth');
+
+//----------------------- LIKE O DISLIKE PUBLICACION
+Route::post('/puntuacion/{tipo}/{id}', [ContenidoController::class, 'likeDislikeActividad'])
+    ->name('puntuacion')
+    ->middleware('auth');
 
 ###############################################
 //----------------------- CARPETA JOB 
@@ -331,13 +336,13 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 ##################################################################################################
-//------------------------ Discografia ------------------------
+//------------------------ REPORTES FORO ------------------------
 // VER REPORTES
-Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-    ->name('reportarStaff');
+// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+//     ->name('reportarStaff');
 
-Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-    ->name('reportarUsuario');
+// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
+//     ->name('reportarUsuario');
 ##################################################################################################
 
 
