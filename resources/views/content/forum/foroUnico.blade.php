@@ -125,7 +125,7 @@
                         <div class="flex justify-center">
                             @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
                                 <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}"
-                                    class="w-full mb-4 rounded-xl" alt="ImagenForo">
+                                    class="cursor-pointer imagenG imagen-modal w-full mb-4 rounded-xl" alt="ImagenForo">
                             @endif
                         </div>
 
@@ -135,7 +135,7 @@
                             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                                 @foreach (array_slice($listaPublicacionConImg, 1) as $img)
                                     <div>
-                                        <img class="object-cover object-center w-full h-40 max-w-full rounded-lg"
+                                        <img class="cursor-pointer imagenG imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg"
                                             src="{{ asset(Storage::url($img)) }}" alt="Galería">
                                     </div>
                                 @endforeach
@@ -357,7 +357,7 @@
                                                 count($comentario['imagenComentario']) > 0)
                                             <div class="flex justify-center mb-2 border border-gray-200 rounded-lg">
                                                 <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
-                                                    class="rounded-lg max-w-xs" alt="Imagen del comentario">
+                                                    class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl" alt="Imagen del comentario">
                                             </div>
                                         @endif
                                     </div>
@@ -435,7 +435,40 @@
         </div>
     </div>
 
+    <!-- Contenedor del modal -->
+    <div id="modal" class="hidden">
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
+        </div>
+    </div>
+
     <script>
+        // Seleccionar todas las imágenes con la clase `imagen-modal`
+        const imagenes = document.querySelectorAll('.imagen-modal');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+
+        // Añadir evento de click a cada imagen
+        imagenes.forEach(imagen => {
+            imagen.addEventListener('click', function() {
+                modal.classList.remove('hidden'); // Mostrar el modal
+                modalImage.src = imagen.src; // Establecer la imagen en el modal
+                modalImage.classList.add('imagenG'); // Añadir la clase de transición suave
+                modalImage.style.transform = "scale(1)"; // Ampliar la imagen al tamaño original
+            });
+        });
+
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+            modalImage.style.transform = "scale(0.9)"; // Restablecer el tamaño
+        });
+
+        // Cerrar el modal al hacer clic en cualquier parte del mismo
+        modal.addEventListener('click', function() {
+            modal.classList.add('hidden'); // Ocultar el modal
+        });
+
         function mostrarBotones() {
             document.getElementById('botones').classList.remove('hidden');
             document.addEventListener('click', ocultarBotonesAlClickFuera);
