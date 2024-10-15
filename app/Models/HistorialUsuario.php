@@ -20,7 +20,7 @@ class HistorialUsuario extends Model
     protected static function booted()
     {
         static::creating(function ($historialUsuario) {
-            $historialUsuario->estado = $historialUsuario->estado ?? 'activo';
+            $historialUsuario->estado = $historialUsuario->estado ?? 'Activo';
             $historialUsuario->eliminacionLogica = $historialUsuario->eliminacionLogica ?? 'No';
             $historialUsuario->fechaInicial = $historialUsuario->fechaInicial ?? now();
         });

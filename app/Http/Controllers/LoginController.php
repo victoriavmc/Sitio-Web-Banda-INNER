@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 #Clases
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
-use App\Models\Redsocial;
 use App\Models\Usuario;
 
 #MAILS
@@ -25,19 +24,53 @@ class LoginController extends Controller
     #REGISTRO
     public function register(Request $request)
     {
-        $usuario = new Usuario();
-        $dato = new DatosPersonales();
-
         $request->validate([
-            'email' => 'required|email|unique:usuarios,correoElectronicoUser',
+            'email' => 'required|email',
             'password' => 'required|min:8|max:16',
             'nombre' => 'required|string|min:3|max:64',
             'apellido' => 'required|string|min:3|max:64',
             'fechaNacimiento' => 'required|date',
             'paisDeNacimiento' => 'required|string',
             'genero' => 'required|string',
-            'usuario' => 'required|string|max:255|unique:usuarios,usuarioUser|regex:/^[^@]+$/',
+            'usuario' => 'required|string|max:255|regex:/^[^@]+$/',
         ]);
+
+        // Buscar si el usuario ya existe por correo electrónico o nombre de usuario
+        $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)
+            ->orWhere('usuarioUser', $request->usuario)
+            ->first();
+
+        if ($usuarioExistente) {
+            // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
+            $datosPersonales = $usuarioExistente->datospersonales;
+            $historialUsuario = $datosPersonales ? $datosPersonales->historialusuario : null;
+
+            if ($historialUsuario == 'Inactivo') {
+                // Redirigir a la página de reactivación de cuenta
+                return redirect(route('reactivar-cuenta'))->with('alert', [
+                    'type' => 'warning',
+                    'message' => 'Tu cuenta está inactiva. Por favor, sigue los pasos para reactivarla.'
+                ]);
+            }
+
+            // Opción 3: Usuario baneado
+            if ($historialUsuario == 'Baneado') {
+                return redirect(route('registro'))->with('alert', [
+                    'type' => 'error',
+                    'message' => 'No puedes registrarte de nuevo ya que tu cuenta fue baneada.'
+                ]);
+            }
+
+            // El usuario existe pero no está inactivo ni baneado (no permitir registro)
+            return redirect(route('registro'))->with('alert', [
+                'type' => 'error',
+                'message' => 'El correo electrónico o el nombre de usuario ya están en uso.'
+            ]);
+        }
+
+        // Opción 1: Registro normal de un nuevo usuario
+        $usuario = new Usuario();
+        $dato = new DatosPersonales();
 
         // Guardar usuario
         $usuario->usuarioUser = $request->usuario;
@@ -60,19 +93,15 @@ class LoginController extends Controller
         $historial->datospersonales_idDatosPersonales = $dato->idDatosPersonales;
         $historial->save();
 
-        // Registrar en Redsocial
-        // $redsocial = new Redsocial();
-        // $redsocial->usuarios_idusuarios = $usuario->idusuarios;
-        // $redsocial->save(); // Esto establecerá automáticamente 0 en 'seguidores', 'reportes' y 'seguidos' gracias al método booted.
-
-
+        // Enviar correo de bienvenida
         Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));
 
         return redirect(route('login'))->with('alertRegistro', [
             'type' => 'Success',
-            'message' => 'Tu registro ha sido compleado con éxito! Por favor, revisa tu correo electrónico. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar tambíen la carpeta de spam o correo no deseado.',
+            'message' => 'Tu registro ha sido completado con éxito! Por favor, revisa tu correo electrónico. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
         ]);
     }
+
 
     #VERIFICAR CORREO O USUARIO INGRESADO
     public function verificarCorreoUsuario(Request $request)
