@@ -887,29 +887,44 @@ class ContenidoController extends Controller
         // Recuperar el comentario existente
         $comentario = Comentarios::find($idComentario);
 
-        // Actualizar el contenido del comentario
-        $comentario->descripcion = $request->contenido;
+        // Verificar si el comentario existe
+        if (!$comentario) {
+            return redirect()->back()->with('alertPublicacion', [
+                'type' => 'Error',
+                'message' => 'El comentario no fue encontrado.',
+            ]);
+        }
+
+        // Actualizar el contenido del comentario solo si se proporciona
+        if ($request->filled('contenido')) {
+            $comentario->descripcion = $request->contenido;
+        }
 
         // Manejo de imagen
         if ($request->hasFile('imagen')) {
-            // Solo eliminar la imagen anterior si se ha seleccionado una nueva
+            // Eliminar la imagen anterior si ya existía una asociada
             if ($comentario->revisionImagenes_idrevisionImagenescol) {
                 $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
             }
+
             list($imagen, $revisionImagen) = $this->manejarImagenYRevision($request->file('imagen'), 5);
 
             // Asociar la nueva revisión de la imagen al comentario
             $comentario->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
         }
 
-        // Si no se subió una nueva imagen, se mantendrá la imagen existente
-        $comentario->save();
+        // Guardar solo si hubo algún cambio
+        if ($comentario->isDirty()) {
+            $comentario->save();
+        }
 
+        // Redirigir con mensaje de éxito
         return redirect()->route('foroUnico', ['data' => $comentario->contenidos_idcontenidos])->with('alertPublicacion', [
             'type' => 'Success',
             'message' => 'Comentario modificado exitosamente.',
         ]);
     }
+
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
     public function reportarActividadEspecifica($interaccionID)

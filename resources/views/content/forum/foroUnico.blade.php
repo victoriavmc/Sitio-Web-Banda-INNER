@@ -411,11 +411,43 @@
                                                     </div>
 
                                                     @if (!empty($comentario['imagenComentario']) && is_array($comentario['imagenComentario']))
-                                                        <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
-                                                            class="mt-2 rounded-lg max-w-xs" alt="Imagen actual">
+                                                        <div class="mb-2 border border-gray-200 rounded-lg relative">
+                                                            <div class="max-w-max mx-auto relative">
+                                                                <!-- Botón para eliminar la imagen -->
+                                                                <div class="">
+                                                                    <button type="button"
+                                                                        class="top-2 right-2 absolute bg-red-500 text-white rounded-full hover:bg-red-700 z-20"
+                                                                        onclick="eliminarImagenComentario({{ $comentario['comentario']->idcomentarios }})">
+                                                                        <svg class="w-5 h-5 text-white"
+                                                                            aria-hidden="true"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            fill="none" viewBox="0 0 24 24">
+                                                                            <path stroke="currentColor"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2"
+                                                                                d="M6 18 17.94 6M18 18 6.06 6" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                                <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
+                                                                    class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl"
+                                                                    alt="Imagen del comentario">
+
+                                                            </div>
+
+
+
+                                                        </div>
                                                     @endif
 
-                                                    <div class="flex justify-between">
+                                                    <!-- Campo oculto para controlar la eliminación de imagen -->
+                                                    <input type="hidden" name="imagen_eliminada"
+                                                        id="imagenEliminada-{{ $comentario['comentario']->idcomentarios }}"
+                                                        value="0">
+
+                                                    <div class="flex justify-between mt-2">
                                                         <input type="file" name="imagen" accept="image/*">
                                                         <button type="submit"
                                                             class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
@@ -506,6 +538,15 @@
     </div>
 
     <script>
+        function eliminarImagenComentario(idComentario) {
+            const campoImagenEliminada = document.getElementById(`imagenEliminada-${idComentario}`);
+            campoImagenEliminada.value = 1;
+
+            // Opcional: Ocultar la imagen inmediatamente
+            const contenedorImagen = campoImagenEliminada.closest('div');
+            contenedorImagen.style.display = 'none';
+        }
+
         function mostrarBotones() {
             document.getElementById('botones').classList.remove('hidden');
             document.addEventListener('click', ocultarBotonesAlClickFuera);
