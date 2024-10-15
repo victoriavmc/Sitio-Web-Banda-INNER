@@ -880,8 +880,8 @@ class ContenidoController extends Controller
     {
         // Validar los datos
         $request->validate([
-            'contenido' => 'nullable|string|max:500|required_without_all:imagen',
-            'imagen' => 'nullable|image|max:2048|required_without_all:contenido',
+            'contenido' => 'nullable|string|max:500|',
+            'imagen' => 'nullable|image|max:2048|',
         ]);
 
         // Recuperar el comentario existente
@@ -900,7 +900,30 @@ class ContenidoController extends Controller
             $comentario->descripcion = $request->contenido;
         }
 
-        // Manejo de imagen
+        // Manejo de eliminación de la imagen
+        if ($request->input('imagen_eliminada') == 1) {
+            // Si hay una imagen asociada, eliminarla
+            if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                // Desvincular la imagen del comentario y guardar el cambio antes de eliminar la imagen
+                $revisionImagenId = $comentario->revisionImagenes_idrevisionImagenescol;
+                $comentario->revisionImagenes_idrevisionImagenescol = null;
+                $comentario->save(); // Guardar antes de proceder a la eliminación
+
+                // Ahora que el comentario ya no está vinculado a la imagen, eliminar la revisión
+                $this->eliminarImagenYRevision($revisionImagenId);
+            }
+        }
+
+        if(!$request->contenido &&  !$request->hasFile('imagen')) {
+            // Eliminar  el comentario si no se proporciona contenido ni imagen
+            $comentario->delete();
+            return redirect()->back()->with('alertPublicacion', [
+                'type' => 'Success',
+                'message' => 'Comentario eliminado exitosamente.',
+            ]);
+        }
+
+        // Manejo de nueva imagen subida
         if ($request->hasFile('imagen')) {
             // Eliminar la imagen anterior si ya existía una asociada
             if ($comentario->revisionImagenes_idrevisionImagenescol) {
@@ -924,7 +947,6 @@ class ContenidoController extends Controller
             'message' => 'Comentario modificado exitosamente.',
         ]);
     }
-
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
     public function reportarActividadEspecifica($interaccionID)

@@ -157,11 +157,13 @@
     </div>
     <script>
         // Mostrar/ocultar el menú desplegable
-        const sortButton = document.getElementById('sortButton');
-        const dropdownMenu = document.getElementById('dropdownMenu');
+        document.addEventListener("DOMContentLoaded", function () {
+            const sortButton = document.getElementById('sortButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
 
-        sortButton.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('hidden');
+            sortButton.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
         });
     </script>
 </x-AppLayout>

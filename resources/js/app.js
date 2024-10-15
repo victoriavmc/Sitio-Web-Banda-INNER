@@ -1,68 +1,68 @@
-import './bootstrap';
+import "./bootstrap";
 
 var swiper = new Swiper(".slide-content", {
     slidesPerView: 3,
     centeredSlides: true,
     spaceBetween: 25,
-    centerSlide: 'true',
-    fade: 'true',
-    grabCursor: 'true',
+    centerSlide: "true",
+    fade: "true",
+    grabCursor: "true",
     pagination: {
-      el: ".swiper-pagination",
-      type: "fraction",
+        el: ".swiper-pagination",
+        type: "fraction",
     },
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
     },
 });
 
-        // Seleccionar todas las imágenes con la clase `imagen-modal`
-        const imagenes = document.querySelectorAll('.imagen-modal');
-        const modal = document.getElementById('modal');
-        const modalImage = document.getElementById('modalImage');
+// Seleccionar todas las imágenes con la clase `imagen-modal`
+const imagenes = document.querySelectorAll(".imagen-modal");
+const modal = document.getElementById("modal");
+const modalImage = document.getElementById("modalImage");
 
-        // Añadir evento de click a cada imagen
-        imagenes.forEach(imagen => {
-            imagen.addEventListener('click', function() {
-                modal.classList.remove('hidden'); // Mostrar el modal
-                modalImage.src = imagen.src; // Establecer la imagen en el modal
-                modalImage.classList.add('imagenG'); // Añadir la clase de transición suave
-                modalImage.style.transform = "scale(1)"; // Ampliar la imagen al tamaño original
-            });
-        });
+// Añadir evento de click a cada imagen
+imagenes.forEach((imagen) => {
+    imagen.addEventListener("click", function () {
+        modal.classList.remove("hidden"); // Mostrar el modal
+        modalImage.src = imagen.src; // Establecer la imagen en el modal
+        modalImage.classList.add("imagenG"); // Añadir la clase de transición suave
+        modalImage.style.transform = "scale(1)"; // Ampliar la imagen al tamaño original
+    });
+});
 
-        // Cerrar el modal al hacer clic en cualquier parte del mismo
-        modal.addEventListener('click', function() {
-            modal.classList.add('hidden'); // Ocultar el modal
-            modalImage.style.transform = "scale(0.9)"; // Restablecer el tamaño
-        });
+// Cerrar el modal al hacer clic en cualquier parte del mismo
+modal.addEventListener("click", function () {
+    modal.classList.add("hidden"); // Ocultar el modal
+    modalImage.style.transform = "scale(0.9)"; // Restablecer el tamaño
+});
 
-        // Cerrar el modal al hacer clic en cualquier parte del mismo
-        modal.addEventListener('click', function() {
-            modal.classList.add('hidden'); // Ocultar el modal
-        });
+// Cerrar el modal al hacer clic en cualquier parte del mismo
+modal.addEventListener("click", function () {
+    modal.classList.add("hidden"); // Ocultar el modal
+});
 
-document.addEventListener('DOMContentLoaded', function () {
-    const alerts = document.querySelectorAll('.alert-fixed');
+document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll(".alert-fixed");
 
-    alerts.forEach(alert => {
-        const closeButton = alert.querySelector('[data-dismiss-target]');
+    alerts.forEach((alert) => {
+        const closeButton = alert.querySelector("[data-dismiss-target]");
 
         // Cerrar automáticamente después de 5 segundos
         setTimeout(() => {
-            alert.style.opacity = '0';
+            alert.style.opacity = "0";
             setTimeout(() => {
                 alert.remove();
             }, 500);
         }, 5000);
 
         // Cerrar al hacer clic en el botón de cerrar
-        closeButton.addEventListener('click', function () {
-            const targetId = closeButton.getAttribute('data-dismiss-target');
+        closeButton.addEventListener("click", function () {
+            const targetId = closeButton.getAttribute("data-dismiss-target");
             const target = document.querySelector(targetId);
             if (target) {
-                target.style.opacity = '0';
+                target.style.opacity = "0";
                 setTimeout(() => {
                     target.remove();
                 }, 500);
@@ -71,36 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Alerta para eliminar tu cuenta
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnEliminarCuenta').addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const { value: password } = await Swal.fire({
-            title: "Ingrese su contraseña",
-            input: "password",
-            inputLabel: "Contraseña",
-            inputPlaceholder: "Ingrese su contraseña",
-            inputAttributes: {
-                maxlength: "10",
-                autocapitalize: "off",
-                autocorrect: "off"
-            }
-        });
-
-        const passwordInput = document.createElement('input');
-        passwordInput.type = 'hidden';
-        passwordInput.name = 'password';
-        passwordInput.value = password || '';
-        this.appendChild(passwordInput);
-
-        this.submit();
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.btnEliminarUsuario').forEach(element => {
-        element.addEventListener('submit', async function(event) {
+// Alerta para borrar comentario
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btnEliminarComentario").forEach((element) => {
+        element.addEventListener("submit", async function (event) {
             event.preventDefault();
             Swal.fire({
                 title: "¿Estás seguro?",
@@ -109,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Sí, borrarlo!"
+                confirmButtonText: "Sí, borrarlo!",
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.submit();
@@ -119,42 +93,128 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
-        button.addEventListener('click', function () {
-            const menuId = this.getAttribute('id').replace('menu-button-', 'menu-');
-            const menu = document.getElementById(menuId);
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+// Alerta para borrar contenido
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btnEliminarContenido").forEach((element) => {
+        element.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No puedes revertir los cambios!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, borrarlo!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+});
 
-            document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+// Alerta para eliminar tu cuenta
+document.addEventListener("DOMContentLoaded", () => {
+    document
+        .getElementById("btnEliminarCuenta")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const { value: password } = await Swal.fire({
+                title: "Ingrese su contraseña",
+                input: "password",
+                inputLabel: "Contraseña",
+                inputPlaceholder: "Ingrese su contraseña",
+                inputAttributes: {
+                    maxlength: "10",
+                    autocapitalize: "off",
+                    autocorrect: "off",
+                },
+            });
+
+            const passwordInput = document.createElement("input");
+            passwordInput.type = "hidden";
+            passwordInput.name = "password";
+            passwordInput.value = password || "";
+            this.appendChild(passwordInput);
+
+            this.submit();
+        });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".btnEliminarUsuario").forEach((element) => {
+        element.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No puedes revertir los cambios!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, borrarlo!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('[id^="menu-button-"]').forEach((button) => {
+        button.addEventListener("click", function () {
+            const menuId = this.getAttribute("id").replace(
+                "menu-button-",
+                "menu-"
+            );
+            const menu = document.getElementById(menuId);
+            const isExpanded = this.getAttribute("aria-expanded") === "true";
+
+            document
+                .querySelectorAll('[id^="menu-"]')
+                .forEach((m) => m.classList.add("hidden"));
 
             if (isExpanded) {
-                this.setAttribute('aria-expanded', 'false');
-                menu.classList.add('hidden');
+                this.setAttribute("aria-expanded", "false");
+                menu.classList.add("hidden");
             } else {
-                this.setAttribute('aria-expanded', 'true');
-                menu.classList.remove('hidden');
+                this.setAttribute("aria-expanded", "true");
+                menu.classList.remove("hidden");
             }
         });
     });
 
-    document.addEventListener('click', function (e) {
+    document.addEventListener("click", function (e) {
         if (!e.target.closest('[id^="menu-button-"]')) {
-            document.querySelectorAll('[id^="menu-"]').forEach(menu => menu.classList.add('hidden'));
-            document.querySelectorAll('[id^="menu-button-"]').forEach(button => button.setAttribute('aria-expanded', 'false'));
+            document
+                .querySelectorAll('[id^="menu-"]')
+                .forEach((menu) => menu.classList.add("hidden"));
+            document
+                .querySelectorAll('[id^="menu-button-"]')
+                .forEach((button) =>
+                    button.setAttribute("aria-expanded", "false")
+                );
         }
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const rolSelect = document.getElementById('rol');
-    const especialidadContainer = document.getElementById('especialidad-container');
+document.addEventListener("DOMContentLoaded", function () {
+    const rolSelect = document.getElementById("rol");
+    const especialidadContainer = document.getElementById(
+        "especialidad-container"
+    );
 
-    rolSelect.addEventListener('change', function() {
-        if (rolSelect.value == 2) { // Asume que '2' es el id del rol Staff
-            especialidadContainer.classList.remove('hidden');
+    rolSelect.addEventListener("change", function () {
+        if (rolSelect.value == 2) {
+            // Asume que '2' es el id del rol Staff
+            especialidadContainer.classList.remove("hidden");
         } else {
-            especialidadContainer.classList.add('hidden');
+            especialidadContainer.classList.add("hidden");
         }
     });
 });
@@ -162,12 +222,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Inicializar el mapa solo una vez
 let map = L.map("mapa").setView([40.712776, -74.005974], 16);
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-L.marker([40.712776, -74.005974]).addTo(map)
-    .bindPopup('Ubicaciòn Del Evento')
+L.marker([40.712776, -74.005974])
+    .addTo(map)
+    .bindPopup("Ubicaciòn Del Evento")
     .openPopup();
 
 // YOUTUBE PASA VIDEO
@@ -194,6 +256,3 @@ L.marker([40.712776, -74.005974]).addTo(map)
 
 // Mostrar el primer slide
 // showSlide(currentSlide);
-
-
-

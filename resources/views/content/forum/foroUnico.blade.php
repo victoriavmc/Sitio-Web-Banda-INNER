@@ -89,10 +89,9 @@
                                         @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios ||
                                                 Auth::user()->rol->idrol == 1 ||
                                                 Auth::user()->rol->idrol == 2)
-                                            <form
+                                            <form class="btnEliminarContenido"
                                                 action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                                method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -350,14 +349,13 @@
                                                     @if (Auth::user()->idusuarios == $comentario['autor']->idusuarios ||
                                                             Auth::user()->rol->idrol == 1 ||
                                                             Auth::user()->rol->idrol == 2)
-                                                        <form class=""
+                                                        <form class="btnEliminarComentario"
                                                             action="{{ route('eliminarComentario', $comentario['comentario']->idcomentarios) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
-                                                                class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
-                                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                                                class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
                                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white"
                                                                     aria-hidden="true"
                                                                     xmlns="http://www.w3.org/2000/svg" width="24"
@@ -386,7 +384,7 @@
                                             !empty($comentario['imagenComentario']) &&
                                                 is_array($comentario['imagenComentario']) &&
                                                 count($comentario['imagenComentario']) > 0)
-                                            <div class="flex justify-center mb-2 border border-gray-200 rounded-lg">
+                                            <div class="flex justify-center mb-2 border border-gray-200 bg-gray-100 rounded-lg">
                                                 <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
                                                     class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl"
                                                     alt="Imagen del comentario">
@@ -411,8 +409,8 @@
                                                     </div>
 
                                                     @if (!empty($comentario['imagenComentario']) && is_array($comentario['imagenComentario']))
-                                                        <div class="mb-2 border border-gray-200 rounded-lg relative">
-                                                            <div class="max-w-max mx-auto relative">
+                                                        <div class="mb-2 border border-gray-200 bg-gray-100 rounded-lg relative">
+                                                            <div class="visualizacion-imagen max-w-max mx-auto relative">
                                                                 <!-- Botón para eliminar la imagen -->
                                                                 <div class="">
                                                                     <button type="button"
@@ -436,9 +434,6 @@
                                                                     alt="Imagen del comentario">
 
                                                             </div>
-
-
-
                                                         </div>
                                                     @endif
 
@@ -542,9 +537,13 @@
             const campoImagenEliminada = document.getElementById(`imagenEliminada-${idComentario}`);
             campoImagenEliminada.value = 1;
 
-            // Opcional: Ocultar la imagen inmediatamente
-            const contenedorImagen = campoImagenEliminada.closest('div');
-            contenedorImagen.style.display = 'none';
+            // Ocultar la imagen inmediatamente
+            const contenedorImagen = document.querySelector(`#formularioModificar-${idComentario} .visualizacion-imagen`);
+            if (contenedorImagen) {
+                contenedorImagen.style.display = 'none';
+            } else {
+                console.log("No se pudo encontrar el contenedor de la imagen.");
+            }
         }
 
         function mostrarBotones() {

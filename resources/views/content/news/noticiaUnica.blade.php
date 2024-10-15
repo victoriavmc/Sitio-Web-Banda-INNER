@@ -25,8 +25,7 @@
                     <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
                     {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
-                    <form action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST"
-                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                    <form class="btnEliminarContenido" action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
@@ -52,8 +51,10 @@
                     </div>
                 @else
                     <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
-                    <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                        class="w-full h-full inline-block object-cover">
+                    <div class="w-full flex justify-center">
+                        <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                            class="w-80 h-full inline-block object-cover">
+                    </div>
                 @endif
                 {{-- EN CASO DE QUE HAYA IMÁGENES --}}
                 @if (count($listaPublicacionConImg) > 1)
