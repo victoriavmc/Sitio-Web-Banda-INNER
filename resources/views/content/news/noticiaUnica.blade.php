@@ -151,25 +151,4 @@
             <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
-
-
-    <script>
-        // Seleccionar todas las imágenes con la clase `imagen-modal`
-        const imagenes = document.querySelectorAll('.imagen-modal');
-        const modal = document.getElementById('modal');
-        const modalImage = document.getElementById('modalImage');
-
-        // Añadir evento de click a cada imagen
-        imagenes.forEach(imagen => {
-            imagen.addEventListener('click', function() {
-                modal.classList.remove('hidden'); // Mostrar el modal
-                modalImage.src = imagen.src; // Establecer la imagen en el modal
-            });
-        });
-
-        // Cerrar el modal al hacer clic en cualquier parte del mismo
-        modal.addEventListener('click', function() {
-            modal.classList.add('hidden'); // Ocultar el modal
-        });
-    </script>
 </x-AppLayout>
