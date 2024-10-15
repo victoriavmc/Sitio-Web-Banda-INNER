@@ -357,7 +357,8 @@
                                                 count($comentario['imagenComentario']) > 0)
                                             <div class="flex justify-center mb-2 border border-gray-200 rounded-lg">
                                                 <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
-                                                    class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl" alt="Imagen del comentario">
+                                                    class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl"
+                                                    alt="Imagen del comentario">
                                             </div>
                                         @endif
                                     </div>

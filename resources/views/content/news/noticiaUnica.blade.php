@@ -1,7 +1,8 @@
 <x-AppLayout>
     <style>
         #modal {
-            z-index: 999; /* Asegura que el modal esté al frente */
+            z-index: 999;
+            /* Asegura que el modal esté al frente */
         }
 
         .imagen {
@@ -10,7 +11,8 @@
 
         #modalImage {
             transition: transform 0.3s ease;
-            cursor: pointer; /* Añade un cursor pointer para cerrar el modal al hacer clic */
+            cursor: pointer;
+            /* Añade un cursor pointer para cerrar el modal al hacer clic */
         }
     </style>
 
@@ -44,8 +46,10 @@
 
                 @if ($listaPublicacionConImg && count($listaPublicacionConImg) > 0)
                     <!-- Mostrar la primera imagen de la lista -->
-                    <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal" id="imagen"
-                        class="cursor-pointer imagen-modal w-full h-full inline-block object-cover">
+                    <div class="w-full flex justify-center">
+                        <img src="{{ asset(Storage::url($listaPublicacionConImg[0])) }}" alt="Imagen Principal"
+                            id="imagen" class="cursor-pointer imagen-modal w-80 h-full inline-block object-cover">
+                    </div>
                 @else
                     <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
                     <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
@@ -56,7 +60,9 @@
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                         @foreach (array_slice($listaPublicacionConImg, 1) as $imagen)
                             <div class="">
-                                <img id="imagen" class="cursor-pointer imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg" src="{{ asset(Storage::url($imagen)) }}" alt="Imagen de la banda">
+                                <img id="imagen"
+                                    class="cursor-pointer imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg"
+                                    src="{{ asset(Storage::url($imagen)) }}" alt="Imagen de la banda">
                             </div>
                         @endforeach
                     </div>
