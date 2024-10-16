@@ -7,8 +7,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\Redsocial;
-
 
 class Usuario extends Authenticatable
 {
@@ -22,9 +20,9 @@ class Usuario extends Authenticatable
         return $this->hasOne(DatosPersonales::class, 'usuarios_idusuarios');
     }
 
-    public function redsocial()
+    public function reportes()
     {
-        return $this->hasOne(Redsocial::class, 'usuarios_idusuarios');
+        return $this->hasOne(Reportes::class, 'usuarios_idusuarios');
     }
 
     public function rol()
@@ -60,5 +58,10 @@ class Usuario extends Authenticatable
         // Este método le indica a Laravel qué campo de la base de datos debe usar para obtener la contraseña del usuario.
         // En lugar de utilizar el campo predeterminado 'password', se utiliza 'contraseniaUser', que es el campo personalizado.
         return $this->contraseniaUser;
+    }
+
+    public function suscripcion()
+    {
+        return $this->hasOne(Suscripcion::class, 'usuarios_idusuarios', 'idusuarios');
     }
 }
