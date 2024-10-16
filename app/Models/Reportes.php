@@ -15,4 +15,9 @@ class Reportes extends Model
     {
         return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
     }
+
+    public function motivos()
+    {
+        return $this->belongsTo(Motivos::class, 'motivos_idmotivos', 'idmotivos');
+    }
 }

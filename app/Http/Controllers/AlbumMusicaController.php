@@ -27,6 +27,7 @@ class AlbumMusicaController extends Controller
         // Recorrer cada álbum y extraer los datos
         foreach ($albumes as $album) {
             // Verificar si las relaciones existen para evitar errores
+            $idalbum = $album->idAlbumMusical ?? 'ID No disponible';
             $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
             $albumFecha = $album->albumdatos->fechaSubido ?? 'Fecha no disponible';
             $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
@@ -36,6 +37,7 @@ class AlbumMusicaController extends Controller
 
             // Obtener las canciones relacionadas con el álbum
             $canciones = $album->canciones;
+            dd($album->canciones);
 
             // Verificar si hay canciones antes de recorrer
             if ($canciones) {
@@ -52,7 +54,7 @@ class AlbumMusicaController extends Controller
 
             // Agregar los datos del álbum junto con las canciones
             $listaAlbum[] = [
-                'id' => $album->idAlbumMusical,
+                'id' => $idalbum,
                 'titulo' => $albumTitulo,
                 'fecha' => $albumFecha,
                 'imagen' => $albumImagen,

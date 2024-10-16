@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 #Clases
 
+use App\Models\Actividad;
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
 use App\Models\Usuario;
 use App\Models\RevisionImagenes;
 use App\Models\Imagenes;
+use App\Models\Interacciones;
 use App\Models\Reportes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
@@ -82,6 +84,26 @@ class panelStaffController extends Controller
             } else {
                 $usuario->especialidad = 'Sin especialidad';
             }
+
+            # REPORETE
+            // Obtener todas las actividades del usuario
+            $actividades = Actividad::where('usuarios_idusuarios', $usuario->idusuarios)->get();
+
+            // Contabilizar el número total de reportes en las actividades del usuario
+            $totalReportes = 0;
+
+            foreach ($actividades as $actividad) {
+                // Contar las interacciones de tipo reporte para cada actividad
+                $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
+                    ->where('reporte', '>', 0)
+                    ->count();
+
+                // Sumar al total de reportes del usuario
+                $totalReportes += $reporteCount;
+            }
+
+            // Guardar el número total de reportes en la lista
+            $listaReportado[$usuario->idusuarios] = $totalReportes;
         }
 
         return view('profile.panelStaff', [
@@ -90,6 +112,7 @@ class panelStaffController extends Controller
             'rol' => $rol,
             'especialidadModal' => $especialidadModal,
             'usuariostabla' => $usuariostabla,
+            'listaReportado' => $listaReportado,
         ]);
     }
 

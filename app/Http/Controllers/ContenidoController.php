@@ -914,7 +914,7 @@ class ContenidoController extends Controller
             }
         }
 
-        if(!$request->contenido &&  !$request->hasFile('imagen')) {
+        if (!$request->contenido &&  !$request->hasFile('imagen')) {
             // Eliminar  el comentario si no se proporciona contenido ni imagen
             $comentario->delete();
             return redirect()->back()->with('alertPublicacion', [
@@ -949,39 +949,58 @@ class ContenidoController extends Controller
     }
 
     #Para reporte cuando toque el boton debe de hacer el pasaje a la tabla de reportes (Pueden reportar en forounico tanto comentarios como la misma publicacion.)
-    public function reportarActividadEspecifica($interaccionID)
+    public function reportarActividadEspecifica($id)
     {
-        $reporte = new Reportes();
-
-        #Recupero la interaccion
-        $recuperoInteraccion = Interacciones::find($interaccionID);
-
         #Recupero quien es el usuario que reporto
-        $usuarioReporto = $interaccionID->usuarios_idusuarios;
+        $usuarioReporte = Auth::user();
 
-        #Recupero que actividad reporto
-        $actividadReportada = Actividad::find($recuperoInteraccion->actividad_idActividad);
+        // Recuperar la interacción existente
+        $interaccion = Interacciones::where('actividad_idActividad', $id)
+            ->where('usuarios_idusuarios', $usuarioReporte->idusuarios)
+            ->first();
 
-        #Recupero el usuario que fue reportado (Creo la publicacion)
-        $usuarioReportado = $actividadReportada->usuarios_idusuarios;
+        // Crear nueva interacción si no existe
+        if (!$interaccion) {
+            $interaccion = new Interacciones();
+            $interaccion->usuarios_idusuarios = $usuarioReporte->idusuarios;
+            $interaccion->actividad_idActividad = $id;
+        } else {
+            return redirect()->back()->with('alertPublicacion', [
+                'type' => 'Warning',
+                'message' => 'Ya has reportado esta actividad.',
+            ]);
+        }
+
+        // Actualizar la interacción de repote
+        $interaccion->reporte = 1;
+
+        // Guardar la interacción
+        $interaccion->save();
+
+        // Recupero que actividad reporto
+        $actividad = Actividad::find($id);
+
+        // Recupero el usuario que fue reportado (Creo la publicacion)
+        $usuarioReportado = $actividad->usuarios_idusuarios;
+
+        $usuarioReportado = Usuario::find($usuarioReportado);
+
+        // Crear Reporte
+        $reporte = new Reportes();
+        $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
 
         #Envia mails ...
 
-        #1 Reportaste la cuenta
-        // Mail::to($request->email)->send(new msjReporto(ucwords($request->nombre), $request->genero));
+        #1 Reportaste la cuenta...
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReporto($usuarioReportado->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
 
         #2 Admin Reporto x a y, revisar publicacion...
-        // Mail:to($request->email)->send(new msjReportaron(ucwords($request->nombre), $request->genero));
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
 
-        // Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));
-        #EN CASO QUE SEA POR UNA PUBLICACION
-        #hay que ver si es un comentario o contenido, y segun lo que sea, enviar fragmento de la publicacion o el comentario
-
-        #Debe salir un mensaje Ya has reportado esta cuenta (Si reporto la publicacion)
-
-        # Reporte
-
-        # Debe de incrementarse el reporte de la tabla reportes (Coincide el usuario)
+        return redirect()->back()->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Actividad reportada exitosamente.',
+        ]);
     }
 
     public function likeDislikeActividad($tipo, $id)
@@ -1012,6 +1031,11 @@ class ContenidoController extends Controller
 
         // Guardar la interacción
         $interaccion->save();
+
+        // Si la interaccion tiene 0 me gustas y 0 no me gustas se elimina
+        if ($interaccion->megusta === 0 && $interaccion->nomegusta === 0 && $interaccion->reporte === 0) {
+            $interaccion->delete();
+        }
 
         return redirect()->back();
     }

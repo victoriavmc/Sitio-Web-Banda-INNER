@@ -13,26 +13,42 @@ class msjReportaron extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $nombre;
+    public $usuarioQueReporta;
     public $genero;
+    public $usuarioReportado;
+    public $tipoActividad;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($nombre, $genero)
+    public function __construct($usuarioQueReporta, $genero, $usuarioReportado, $tipoActividad)
     {
-        $this->nombre = $nombre;
+        $this->usuarioQueReporta = $usuarioQueReporta;
         $this->genero = $genero;
+        $this->usuarioReportado = $usuarioReportado;
+        $this->tipoActividad = $tipoActividad;
 
         switch ($this->genero) {
             case 'Femenino':
-                $this->genero = 'a';
+                $this->genero = 'La usuaria';
                 break;
             case 'Masculino':
-                $this->genero = 'o';
+                $this->genero = 'El usuario';
                 break;
             default:
-                $this->genero = '@';
+                $this->genero = 'La persona';
+                break;
+        }
+
+        switch ($this->tipoActividad) {
+            case '1':
+                $this->tipoActividad = 'El perfil';
+                break;
+            case '2':
+                $this->tipoActividad = 'El comentario';
+                break;
+            default:
+                $this->tipoActividad = 'La publicacion';
                 break;
         }
     }
