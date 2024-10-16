@@ -14,6 +14,7 @@ use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
 use App\Http\Controllers\cancionController;
+use App\Http\Controllers\MercadoPagoController;
 
 #Modelo
 use App\Models\Paisnacimiento;
@@ -336,23 +337,8 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 ##################################################################################################
-//------------------------ REPORTES FORO ------------------------
-// VER REPORTES
-// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-//     ->name('reportarStaff');
-
-// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-//     ->name('reportarUsuario');
+//mercado pago
+Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'success'])->name('mercadopago.success');
+Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])->name('mercadopago.failed');
 ##################################################################################################
-
-
-// Subir tipo de imagen
-// Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])
-//     ->name('subirImagen')->middleware('auth');
-
-// Route::post('/imagenes', [subirImagenController::class, 'subirImagenPost'])
-//     ->name('subir-imagen')->middleware('auth');
-
-// // REDES SOCIALES
-// Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name("auth.redirect");
-// Route::get('/auth/callback', [AuthController::class, 'callback'])->name("auth.callback");

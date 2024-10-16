@@ -38,6 +38,14 @@ return [
         'key' => env('YOUTUBE_API_KEY'),
         'search_endpoint' => env('SEARCH_ENPOINT'),
         'userId' => env('ID_YOUTUBE')
-    ]
+    ],
+
+    'mercadopago' => [
+
+        'token' => env('MERCADO_PAGO_ACCESS_TOKEN'),
+
+        'public_key' => env('MERCADO_PAGO_PUBLIC_KEY'),
+
+    ],
 
 ];
