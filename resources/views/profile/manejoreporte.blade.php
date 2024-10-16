@@ -95,6 +95,7 @@
                                     @endforeach
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 @endif
@@ -154,18 +155,10 @@
                                         @foreach ($contenido['rutaImagen'] as $imagen)
                                             <div class="group cursor-pointer relative">
                                                 <div class="group relative cursor-pointer">
-                                                    <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
+                                                    <img src="{{ asset(Storage::url($imagen)) }}"
                                                         alt="ImagenesCargadas"
                                                         class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                    <div
-                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button
-                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                            Ampliar
-                                                        </button>
-                                                    </div>
                                                 </div>
-
                                             </div>
                                         @endforeach
                                     </div>
@@ -219,21 +212,14 @@
                                         @foreach ($contenido['rutaImagen'] as $imagen)
                                             <div class="group cursor-pointer relative">
                                                 <div class="group relative cursor-pointer">
-                                                    <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
+                                                    <img src="{{ asset(Storage::url($imagen)) }}"
                                                         alt="ImagenesCargadas"
                                                         class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                    <div
-                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button
-                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                            Ampliar
-                                                        </button>
-                                                    </div>
                                                 </div>
-
                                             </div>
                                         @endforeach
                                     </div>
+
                                 </div>
                             </div>
                             <!-- Botón para eliminar comentario -->
@@ -243,8 +229,7 @@
                                     method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
+                                    <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -303,21 +288,14 @@
                                         @foreach ($contenido['rutaImagen'] as $imagen)
                                             <div class="group cursor-pointer relative">
                                                 <div class="group relative cursor-pointer">
-                                                    <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
+                                                    <img src="{{ asset(Storage::url($imagen)) }}"
                                                         alt="ImagenesCargadas"
                                                         class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                    <div
-                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button
-                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                            Ampliar
-                                                        </button>
-                                                    </div>
                                                 </div>
-
                                             </div>
                                         @endforeach
                                     </div>
+
                                 </div>
                             </div>
                             <!-- Botón para eliminar publicacion -->
@@ -369,21 +347,14 @@
                                         @foreach ($contenido['rutaImagen'] as $imagen)
                                             <div class="group cursor-pointer relative">
                                                 <div class="group relative cursor-pointer">
-                                                    <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
+                                                    <img src="{{ asset(Storage::url($imagen)) }}"
                                                         alt="ImagenesCargadas"
                                                         class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                    <div
-                                                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button
-                                                            class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                            Ampliar
-                                                        </button>
-                                                    </div>
                                                 </div>
-
                                             </div>
                                         @endforeach
                                     </div>
+
                                 </div>
                             </div>
                             <!-- Botón para eliminar comentario -->
@@ -453,18 +424,16 @@
                                     @foreach ($contenido['rutaImagen'] as $imagen)
                                         <div class="group cursor-pointer relative">
                                             <div class="group relative cursor-pointer">
-                                                <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
-                                                    alt="ImagenesCargadas"
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
                                                     class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
                                                 <div
                                                     class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button
-                                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                        class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
                                                         Ampliar
                                                     </button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     @endforeach
                                 </div>
@@ -518,21 +487,20 @@
                                     @foreach ($contenido['rutaImagen'] as $imagen)
                                         <div class="group cursor-pointer relative">
                                             <div class="group relative cursor-pointer">
-                                                <img id="imagen" src="{{ asset(Storage::url($imagen)) }}"
-                                                    alt="ImagenesCargadas"
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
                                                     class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
                                                 <div
                                                     class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button
-                                                        class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                        class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
                                                         Ampliar
                                                     </button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     @endforeach
                                 </div>
+
                             </div>
                         </div>
                         <!-- Botón para eliminar publicacion -->
