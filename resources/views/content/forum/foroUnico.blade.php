@@ -51,7 +51,7 @@
                                         {{-- Modificar --}}
                                         @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios)
                                             <!-- Botón Modificar -->
-                                            <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
+                                            <a href="{{ route('editarP', ['id' => $recuperoPublicacion->idcontenidos, 'tipo' => 3]) }}"
                                                 class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -67,7 +67,7 @@
                                         {{-- Reportar solo visible si no es tu propia publicacion --}}
                                         @if (Auth::user()->idusuarios != $autor['usuario']->idusuarios)
                                             <form
-                                                action="{{ route('reportarActividad', $recuperoPublicacion->idcontenidos) }}"
+                                                action="{{ route('reportarActividad', $recuperoPublicacion->Actividad_idActividad) }}"
                                                 method="POST">
                                                 @csrf
                                                 <button class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
@@ -325,7 +325,7 @@
                                                     {{-- Reportar solo visible si no es tu propio comentario --}}
                                                     @if (Auth::user()->idusuarios != $comentario['autor']->idusuarios)
                                                         <form
-                                                            action="{{ route('reportarActividad', $comentario['comentario']->idcomentarios) }}"
+                                                            action="{{ route('reportarActividad', $comentario['comentario']->Actividad_idActividad) }}"
                                                             method="POST">
                                                             @csrf
                                                             <button
@@ -384,7 +384,8 @@
                                             !empty($comentario['imagenComentario']) &&
                                                 is_array($comentario['imagenComentario']) &&
                                                 count($comentario['imagenComentario']) > 0)
-                                            <div class="flex justify-center mb-2 border border-gray-200 bg-gray-100 rounded-lg">
+                                            <div
+                                                class="flex justify-center mb-2 border border-gray-200 bg-gray-100 rounded-lg">
                                                 <img src="{{ asset(Storage::url($comentario['imagenComentario'][0])) }}"
                                                     class="cursor-pointer imagen-modal rounded-lg h-56 max-w-xl"
                                                     alt="Imagen del comentario">
@@ -409,8 +410,10 @@
                                                     </div>
 
                                                     @if (!empty($comentario['imagenComentario']) && is_array($comentario['imagenComentario']))
-                                                        <div class="mb-2 border border-gray-200 bg-gray-100 rounded-lg relative">
-                                                            <div class="visualizacion-imagen max-w-max mx-auto relative">
+                                                        <div
+                                                            class="mb-2 border border-gray-200 bg-gray-100 rounded-lg relative">
+                                                            <div
+                                                                class="visualizacion-imagen max-w-max mx-auto relative">
                                                                 <!-- Botón para eliminar la imagen -->
                                                                 <div class="">
                                                                     <button type="button"

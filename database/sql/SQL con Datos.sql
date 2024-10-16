@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `inner` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `inner`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: inner
@@ -27,7 +25,7 @@ DROP TABLE IF EXISTS `actividad`;
 CREATE TABLE `actividad` (
   `idActividad` int NOT NULL AUTO_INCREMENT,
   `usuarios_idusuarios` int NOT NULL,
-  `tipoActividad_idtipoActividad` int NOT NULL,
+  `tipoActividad_idtipoActividad` int DEFAULT NULL,
   PRIMARY KEY (`idActividad`),
   KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
   KEY `fk_actividad_tipoActividad1_idx` (`tipoActividad_idtipoActividad`),
@@ -79,10 +77,10 @@ DROP TABLE IF EXISTS `albumimagenes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `albumimagenes` (
-  `idAlbumImagenes` int NOT NULL AUTO_INCREMENT,
+  `albumImagenescol` int NOT NULL AUTO_INCREMENT,
   `albumDatos_idalbumDatos` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int NOT NULL,
-  PRIMARY KEY (`idAlbumImagenes`),
+  PRIMARY KEY (`albumImagenescol`),
   KEY `fk_table1_albumDatos1_idx` (`albumDatos_idalbumDatos`),
   KEY `fk_albumImagenes_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_albumImagenes_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
@@ -107,10 +105,10 @@ DROP TABLE IF EXISTS `albummusical`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `albummusical` (
-  `idAlbumMusical` int NOT NULL AUTO_INCREMENT,
+  `albumMusicalcol` int NOT NULL AUTO_INCREMENT,
   `albumDatos_idalbumDatos` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
-  PRIMARY KEY (`idAlbumMusical`),
+  PRIMARY KEY (`albumMusicalcol`),
   KEY `fk_albumMusical_albumDatos1_idx` (`albumDatos_idalbumDatos`),
   KEY `fk_albumMusical_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_albumMusical_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `albumdatos` (`idalbumDatos`),
@@ -199,9 +197,10 @@ CREATE TABLE `cancion` (
   `letraInglesCancion` longtext,
   `archivoDsCancion` longtext,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
-  `AlbumMusical_idAlbumMusical` int NOT NULL,
+  `albumMusical_albumMusicalcol` int NOT NULL,
   PRIMARY KEY (`idcancion`),
-  KEY `fk_cancion_albumMusical1_idx` (`AlbumMusical_idAlbumMusical`)
+  KEY `fk_cancion_albumMusical1_idx` (`albumMusical_albumMusicalcol`),
+  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_albumMusicalcol`) REFERENCES `albummusical` (`albumMusicalcol`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -357,7 +356,7 @@ CREATE TABLE `imagenes` (
   `fechaSubidaImg` date DEFAULT NULL,
   `contenidoDescargable` varchar(45) DEFAULT 'No',
   PRIMARY KEY (`idimagenes`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +365,7 @@ CREATE TABLE `imagenes` (
 
 LOCK TABLES `imagenes` WRITE;
 /*!40000 ALTER TABLE `imagenes` DISABLE KEYS */;
-INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No'),(9,'img/Rh2514JTtsTicyYztrvBFemsdVNb0W25GUXUGI3F.png','2024-10-09','No'),(10,'img/zst5wi5VISilUXykfX5yrhtQAJTMjdigpjp1GYDj.jpg','2024-10-10','No'),(11,'img/XLmeRxjD9Z3gB2cZUeWFlMl9UEMzsn4h4vqawww7.jpg','2024-10-10','No'),(12,'img/lsqiPF9Mol8c265gcrLER0zklXo3Oz2R2woDPigx.jpg','2024-10-10','No'),(13,'img/9QBoPNZYGrx1NgHDaoFFh01J9HpuLkCw23ILoClT.jpg','2024-10-10','No'),(14,'img/rEwuOvauIPPEwS0VhR9gOXmmT4SpNbCxNuo8R7Xm.jpg','2024-10-10','No'),(25,'img/op9ZZegaflQewhDabC0LEd0ChIRJXMchCNuCX7oc.jpg','2024-10-10','No'),(37,'img/G7TtO4hkih8R0qZPmq6xKhHZ6VMil6P6IKgllVAJ.jpg','2024-10-10','No'),(40,'img/QkUyrj4FatGTGGCVgKIe2MgFGSD2mdKBoLDLeo69.jpg','2024-10-10','No'),(41,'img/TQbPLSGY4Z05VbhGfUcijumkdmc5pmPmPd4wxQuh.jpg','2024-10-10','No'),(42,'img/kaaQBNU9QLEi6A95Bs56oRA0WhqGMa5ddbumVqwS.jpg','2024-10-10','No'),(46,'img/Xg1OQZDdfwc4DEfPceDtOqfe9TadURsftEFqSzkL.jpg','2024-10-10','No'),(47,'img/fuuOuAjFzNecibYwi1w4cZDiObf0s6dDLR1eXxce.jpg','2024-10-10','No'),(48,'img/6y5yDbzdZQCiu1qF1zJjc95tBPVXQiAuoFSJcShe.jpg','2024-10-10','No'),(49,'img/asOqDLWsirZpz7ET3xDpYqFW4mvbRu051MJftZI3.jpg','2024-10-10','No'),(53,'img/ebnkuFPUVip2acw6wJb6x7xN2gBTYATLH84GXEvM.jpg','2024-10-10','No'),(54,'img/UA65XXn3OxGZc47BkQFGUJXOgnHi1EYyhZxCQIoK.png','2024-10-10','No'),(55,'img/g2SvLJbBwAi4UhU8ms4EEfBeXL8Zbpz797a0TKat.jpg','2024-10-10','No'),(57,'img/1LiQOreUV1aNDBQZZliEcAFcXjPlQwyCAS2jKGOt.png','2024-10-10','No'),(58,'img/X1XCpWmiUCUwzbgFCRRmJlqiEOJyPcE4afPMtLy3.jpg','2024-10-12','No'),(59,'img/ng0EYA6EJy2zS5W98oqdO6fxCFl0gSmD19cXDgRZ.jpg','2024-10-12','No'),(60,'img/PFSymQuQbM14DqUerpkp7ow5FOz9OauKatReYw5s.jpg','2024-10-12','No'),(61,'img/ckoV8Fl1DZApPTnIbJyXlhHrGovJMFE3OqZMKZea.jpg','2024-10-12','No'),(62,'img/ea1fEKu4ydC7VZk0PqYyacDrIEt5S8Fxx4bEzJp2.jpg','2024-10-12','No'),(63,'img/J9HwHMYdyVOF9BsAndp8l1WwFoIoXHARbb5nQ6JA.jpg','2024-10-12','No'),(64,'img/jhh3awECWsc2rhjb1YhVpIpOm3tIS1jeiSohAWW1.jpg','2024-10-12','No'),(65,'img/YRROhImPEEjQRCHxm5AVnAq7Kv0bYSwNNM0E4xM0.jpg','2024-10-13','No'),(66,'img/sN22JBGeJi0Ylmt73QLsqez8AUolpqx9mD09ZMkZ.jpg','2024-10-13','No'),(67,'img/5UhCvWX825mdhhMYlE2BptxGzjKPDrVet04scvK9.jpg','2024-10-13','No'),(68,'img/pJYDFqibjjrNNfPcwF1ayKelLYKeXaVZoTURT8Gz.jpg','2024-10-13','No'),(69,'img/ya72FszRlVRZnVH7NwVnJo7ckUvc4BGao4XRMSpK.jpg','2024-10-13','No'),(70,'img/EUrDcYjcUlWyTH7Gd0rNxneppOgd9ChkKj70aK1d.jpg','2024-10-13','No'),(71,'img/d9lCpmBrjzY9T2iDzw43g6UuxsUvXmmS7Ava4vSv.jpg','2024-10-13','No'),(72,'img/YZ8gR6SVJPgmG3nQ5KhCdaHitKzOCLT780hPDRWs.jpg','2024-10-13','No');
+INSERT INTO `imagenes` VALUES (1,'img/rEilSSDCWmJ5mJw9PbJTAZ8VwPrprQ7JtkyWM8Dm.jpg','2024-10-08','No'),(2,'img/Vx5Vup6j7O2634SNLCEV8YwtAew4cwHMvGOvvsET.jpg','2024-10-08','No'),(3,'img/Sn4BplVT3g99yH9Mq7klNjzXdcwulCBffEttN45T.png','2024-10-08','No'),(4,'img/qgHACDepdbtFJbY8pnaw1kM9uimch296bRvVJa6m.jpg','2024-10-08','No'),(5,'img/CncyJjlW0KzT5wb71KeRQw3lVBmtNCy9anpktB9x.jpg','2024-10-08','No'),(7,'img/uDfTfKZaOPSKb6hZGU9q8jmewxNF40ccq6ECYXxr.jpg','2024-10-08','No'),(8,'img/C9m0iYCPN7gCKTwyktnYIeVECpS0yZxDOn9PpHie.jpg','2024-10-08','No'),(9,'img/Rh2514JTtsTicyYztrvBFemsdVNb0W25GUXUGI3F.png','2024-10-09','No'),(10,'img/zst5wi5VISilUXykfX5yrhtQAJTMjdigpjp1GYDj.jpg','2024-10-10','No'),(11,'img/XLmeRxjD9Z3gB2cZUeWFlMl9UEMzsn4h4vqawww7.jpg','2024-10-10','No'),(12,'img/lsqiPF9Mol8c265gcrLER0zklXo3Oz2R2woDPigx.jpg','2024-10-10','No'),(13,'img/9QBoPNZYGrx1NgHDaoFFh01J9HpuLkCw23ILoClT.jpg','2024-10-10','No'),(14,'img/rEwuOvauIPPEwS0VhR9gOXmmT4SpNbCxNuo8R7Xm.jpg','2024-10-10','No'),(25,'img/op9ZZegaflQewhDabC0LEd0ChIRJXMchCNuCX7oc.jpg','2024-10-10','No'),(37,'img/G7TtO4hkih8R0qZPmq6xKhHZ6VMil6P6IKgllVAJ.jpg','2024-10-10','No'),(40,'img/QkUyrj4FatGTGGCVgKIe2MgFGSD2mdKBoLDLeo69.jpg','2024-10-10','No'),(41,'img/TQbPLSGY4Z05VbhGfUcijumkdmc5pmPmPd4wxQuh.jpg','2024-10-10','No'),(42,'img/kaaQBNU9QLEi6A95Bs56oRA0WhqGMa5ddbumVqwS.jpg','2024-10-10','No'),(46,'img/Xg1OQZDdfwc4DEfPceDtOqfe9TadURsftEFqSzkL.jpg','2024-10-10','No'),(47,'img/fuuOuAjFzNecibYwi1w4cZDiObf0s6dDLR1eXxce.jpg','2024-10-10','No'),(48,'img/6y5yDbzdZQCiu1qF1zJjc95tBPVXQiAuoFSJcShe.jpg','2024-10-10','No'),(49,'img/asOqDLWsirZpz7ET3xDpYqFW4mvbRu051MJftZI3.jpg','2024-10-10','No'),(53,'img/ebnkuFPUVip2acw6wJb6x7xN2gBTYATLH84GXEvM.jpg','2024-10-10','No'),(54,'img/UA65XXn3OxGZc47BkQFGUJXOgnHi1EYyhZxCQIoK.png','2024-10-10','No'),(55,'img/g2SvLJbBwAi4UhU8ms4EEfBeXL8Zbpz797a0TKat.jpg','2024-10-10','No'),(57,'img/1LiQOreUV1aNDBQZZliEcAFcXjPlQwyCAS2jKGOt.png','2024-10-10','No'),(58,'img/X1XCpWmiUCUwzbgFCRRmJlqiEOJyPcE4afPMtLy3.jpg','2024-10-12','No'),(59,'img/ng0EYA6EJy2zS5W98oqdO6fxCFl0gSmD19cXDgRZ.jpg','2024-10-12','No'),(60,'img/PFSymQuQbM14DqUerpkp7ow5FOz9OauKatReYw5s.jpg','2024-10-12','No'),(61,'img/ckoV8Fl1DZApPTnIbJyXlhHrGovJMFE3OqZMKZea.jpg','2024-10-12','No'),(62,'img/ea1fEKu4ydC7VZk0PqYyacDrIEt5S8Fxx4bEzJp2.jpg','2024-10-12','No'),(63,'img/J9HwHMYdyVOF9BsAndp8l1WwFoIoXHARbb5nQ6JA.jpg','2024-10-12','No'),(64,'img/jhh3awECWsc2rhjb1YhVpIpOm3tIS1jeiSohAWW1.jpg','2024-10-12','No'),(65,'img/YRROhImPEEjQRCHxm5AVnAq7Kv0bYSwNNM0E4xM0.jpg','2024-10-13','No'),(66,'img/sN22JBGeJi0Ylmt73QLsqez8AUolpqx9mD09ZMkZ.jpg','2024-10-13','No'),(67,'img/5UhCvWX825mdhhMYlE2BptxGzjKPDrVet04scvK9.jpg','2024-10-13','No'),(68,'img/pJYDFqibjjrNNfPcwF1ayKelLYKeXaVZoTURT8Gz.jpg','2024-10-13','No'),(69,'img/ya72FszRlVRZnVH7NwVnJo7ckUvc4BGao4XRMSpK.jpg','2024-10-13','No'),(70,'img/EUrDcYjcUlWyTH7Gd0rNxneppOgd9ChkKj70aK1d.jpg','2024-10-13','No'),(71,'img/d9lCpmBrjzY9T2iDzw43g6UuxsUvXmmS7Ava4vSv.jpg','2024-10-13','No'),(72,'img/YZ8gR6SVJPgmG3nQ5KhCdaHitKzOCLT780hPDRWs.jpg','2024-10-13','No'),(73,'img/3nC47IiZPDhdYlfdwAipwGRwsS8librI14AzqGfZ.png','2024-10-15','No'),(74,'img/PkhJLzVy5XqFgdObigJuKk99ybQNY9vWb7AKfxhW.png','2024-10-15','No'),(75,'img/C7MEvAF6KuJOiT1peE5DIGaKOjmlFgKWDm6Q69aS.png','2024-10-15','No'),(76,'img/skAFMxUu5eoqRrtyId9W7OAGsLLTDJ1Y9D9C2erK.png','2024-10-15','No'),(77,'img/CFJc1Sl9K7Lyf394HZBfPPBc4tEwUD3fRrzffMDt.png','2024-10-15','No'),(78,'img/DviV11Rtl40nhuKp5gmvEUpE7e2Kok5DldI74WTY.png','2024-10-15','No');
 /*!40000 ALTER TABLE `imagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,7 +385,7 @@ CREATE TABLE `imagenescontenido` (
   KEY `fk_revisionImagenes_has_contenidos_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`),
   CONSTRAINT `fk_revisionImagenes_has_contenidos_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,7 +394,7 @@ CREATE TABLE `imagenescontenido` (
 
 LOCK TABLES `imagenescontenido` WRITE;
 /*!40000 ALTER TABLE `imagenescontenido` DISABLE KEYS */;
-INSERT INTO `imagenescontenido` VALUES (17,40,7),(18,41,6),(19,42,4),(23,46,1),(24,47,20),(25,48,21),(26,49,22),(27,58,17),(28,59,17),(29,60,17),(30,61,17),(31,62,17),(32,63,17),(33,64,16),(34,65,13),(35,66,19),(36,67,23),(37,68,23),(38,69,23),(39,70,23),(40,71,23),(41,72,23);
+INSERT INTO `imagenescontenido` VALUES (17,40,7),(18,41,6),(19,42,4),(23,46,1),(24,47,20),(25,48,21),(26,49,22),(27,58,17),(28,59,17),(29,60,17),(30,61,17),(31,62,17),(32,63,17),(33,64,16),(34,65,13),(35,66,19),(36,67,23),(37,68,23),(38,69,23),(39,70,23),(40,71,23),(41,72,23),(42,73,1),(43,74,1),(44,75,1),(45,76,1),(46,77,1),(47,78,1);
 /*!40000 ALTER TABLE `imagenescontenido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -427,7 +426,7 @@ CREATE TABLE `interacciones` (
 
 LOCK TABLES `interacciones` WRITE;
 /*!40000 ALTER TABLE `interacciones` DISABLE KEYS */;
-INSERT INTO `interacciones` VALUES (42,1,35,0,0,1),(52,1,34,0,0,1),(53,1,33,0,0,1),(54,1,44,0,0,1);
+INSERT INTO `interacciones` VALUES (42,1,35,0,0,1),(52,1,34,0,1,1),(53,1,33,0,0,1),(54,1,44,0,0,1);
 /*!40000 ALTER TABLE `interacciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -565,7 +564,6 @@ DROP TABLE IF EXISTS `reportes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reportes` (
   `idreportes` int NOT NULL AUTO_INCREMENT,
-  `reportes` int DEFAULT '0',
   `usuarios_idusuarios` int NOT NULL,
   `motivos_idmotivos` int DEFAULT NULL,
   PRIMARY KEY (`idreportes`),
@@ -582,7 +580,7 @@ CREATE TABLE `reportes` (
 
 LOCK TABLES `reportes` WRITE;
 /*!40000 ALTER TABLE `reportes` DISABLE KEYS */;
-INSERT INTO `reportes` VALUES (20,5,15,NULL),(21,1,10,NULL);
+INSERT INTO `reportes` VALUES (20,15,NULL),(21,10,NULL);
 /*!40000 ALTER TABLE `reportes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -605,7 +603,7 @@ CREATE TABLE `revisionimagenes` (
   CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `tipodefoto` (`idtipoDeFoto`),
   CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
   CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -614,7 +612,7 @@ CREATE TABLE `revisionimagenes` (
 
 LOCK TABLES `revisionimagenes` WRITE;
 /*!40000 ALTER TABLE `revisionimagenes` DISABLE KEYS */;
-INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1),(9,8,9,1),(10,1,10,4),(11,1,11,4),(12,1,12,4),(13,1,13,4),(14,11,14,1),(25,13,25,5),(37,15,37,1),(40,1,40,2),(41,1,41,2),(42,1,42,2),(46,5,46,2),(47,5,47,2),(48,5,48,2),(49,5,49,2),(53,17,53,6),(54,18,54,6),(55,19,55,6),(57,16,57,6),(58,15,58,5),(59,15,59,5),(60,15,60,5),(61,15,61,5),(62,15,62,5),(63,15,63,5),(64,15,64,5),(65,6,65,5),(66,5,66,5),(67,5,67,2),(68,5,68,2),(69,5,69,2),(70,5,70,2),(71,5,71,2),(72,5,72,2);
+INSERT INTO `revisionimagenes` VALUES (1,1,1,1),(2,2,2,1),(3,3,3,1),(4,4,4,1),(5,5,5,1),(7,6,7,1),(8,7,8,1),(9,8,9,1),(10,1,10,4),(11,1,11,4),(12,1,12,4),(13,1,13,4),(14,11,14,1),(25,13,25,5),(37,15,37,1),(40,1,40,2),(41,1,41,2),(42,1,42,2),(46,5,46,2),(47,5,47,2),(48,5,48,2),(49,5,49,2),(53,17,53,6),(54,18,54,6),(55,19,55,6),(57,16,57,6),(58,15,58,5),(59,15,59,5),(60,15,60,5),(61,15,61,5),(62,15,62,5),(63,15,63,5),(64,15,64,5),(65,6,65,5),(66,5,66,5),(67,5,67,2),(68,5,68,2),(69,5,69,2),(70,5,70,2),(71,5,71,2),(72,5,72,2),(73,1,73,2),(74,1,74,2),(75,1,75,2),(76,1,76,2),(77,1,77,2),(78,1,78,2);
 /*!40000 ALTER TABLE `revisionimagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -710,6 +708,35 @@ LOCK TABLES `staffextra` WRITE;
 /*!40000 ALTER TABLE `staffextra` DISABLE KEYS */;
 INSERT INTO `staffextra` VALUES (1,6,2,6,NULL),(2,7,4,6,NULL),(3,NULL,5,11,NULL),(4,NULL,6,3,NULL),(5,NULL,7,10,NULL),(6,NULL,16,1,NULL),(7,NULL,17,4,NULL),(8,NULL,18,7,NULL),(9,NULL,19,14,NULL);
 /*!40000 ALTER TABLE `staffextra` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `suscripcion`
+--
+
+DROP TABLE IF EXISTS `suscripcion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `suscripcion` (
+  `idsuscripcion` int NOT NULL AUTO_INCREMENT,
+  `preference_id` varchar(45) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `usuarios_idusuarios` int NOT NULL,
+  PRIMARY KEY (`idsuscripcion`),
+  KEY `fk_suscripcion_usuarios1_idx` (`usuarios_idusuarios`),
+  CONSTRAINT `fk_suscripcion_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `suscripcion`
+--
+
+LOCK TABLES `suscripcion` WRITE;
+/*!40000 ALTER TABLE `suscripcion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `suscripcion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -910,6 +937,7 @@ CREATE TABLE `youtubeapi` (
 
 LOCK TABLES `youtubeapi` WRITE;
 /*!40000 ALTER TABLE `youtubeapi` DISABLE KEYS */;
+INSERT INTO `youtubeapi` VALUES (1,'INNER - Forgotten - Drum Playthrough by Hernan Ramirez','2024-07-22','https://www.youtube.com/watch?v=Zn33STtdNVo'),(2,'INNER - Black Trees - Drum Playthrough by Hernan Ramirez','2024-07-17','https://www.youtube.com/watch?v=EgAhuhtSFYk'),(3,'#shorts INNER - Resumen - Uniclub 10/02/24','2024-02-19','https://www.youtube.com/watch?v=l5jbhWafkvs'),(4,'#shorts INNER - Resumen - El teatrito 20/08/23','2023-09-01','https://www.youtube.com/watch?v=CNU3BgREl80'),(5,'#shorts INNER - Resumen - Salon Regional Leonesa 24/6/23','2023-07-09','https://www.youtube.com/watch?v=QTXad02TcSo'),(6,'INNER - Hill of the Seven Colors','2021-09-04','https://www.youtube.com/watch?v=ntev9lgyFe0'),(7,'INNER - Dying','2021-09-04','https://www.youtube.com/watch?v=JwcxshhJ9Zs'),(8,'INNER - Evolution','2021-09-04','https://www.youtube.com/watch?v=8PvPxBHzyvw'),(9,'INNER - The Journey','2021-09-04','https://www.youtube.com/watch?v=pt59HWnfaSo'),(10,'INNER - Focus','2021-09-04','https://www.youtube.com/watch?v=ynEBN2JN8tY'),(11,'INNER - Vicious Circle','2021-09-04','https://www.youtube.com/watch?v=enxO7xJIqYY'),(12,'INNER - Imploded Sun','2021-09-04','https://www.youtube.com/watch?v=7t0B85mYHxk'),(13,'INNER - Black Trees','2021-08-09','https://www.youtube.com/watch?v=BxCJKHj5b6w'),(14,'INNER - Forgotten','2021-04-27','https://www.youtube.com/watch?v=TPDVdPe3Gpo');
 /*!40000 ALTER TABLE `youtubeapi` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -922,4 +950,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-14 23:30:04
+-- Dump completed on 2024-10-16  0:41:43

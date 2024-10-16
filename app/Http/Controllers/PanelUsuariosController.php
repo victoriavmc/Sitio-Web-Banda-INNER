@@ -90,14 +90,31 @@ class PanelUsuariosController extends Controller
         $listaReportado = [];
         // Asignar la URL de la imagen a cada usuario
         foreach ($usuarios as $usuario) {
-            // Asegúrate de que el usuario tiene un método o propiedad que te permita obtener la URL de la imagen
+            // Obtener el ID del usuario
             $id = $usuario->idusuarios;
+
+            // Asignar la URL de la imagen
             $usuario->urlImagen = $this->mirar($usuario->idusuarios);
 
-            $reporte = Reportes::where('usuarios_idusuarios', $usuario->idusuarios)->first();
+            # REPORETE
+            // Obtener todas las actividades del usuario
+            $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
-            // Asignar el reporte si existe, de lo contrario, asignar null
-            $listaReportado[$usuario->idusuarios] = $reporte ? $reporte : null;
+            // Contabilizar el número total de reportes en las actividades del usuario
+            $totalReportes = 0;
+
+            foreach ($actividades as $actividad) {
+                // Contar las interacciones de tipo reporte para cada actividad
+                $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
+                    ->where('reporte', '>', 0)
+                    ->count();
+
+                // Sumar al total de reportes del usuario
+                $totalReportes += $reporteCount;
+            }
+
+            // Guardar el número total de reportes en la lista
+            $listaReportado[$usuario->idusuarios] = $totalReportes;
         }
 
         // Retornar la vista con los usuarios, roles y el rol del usuario autenticado

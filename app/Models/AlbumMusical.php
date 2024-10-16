@@ -21,7 +21,7 @@ class AlbumMusical extends Model
         return $this->belongsTo(RevisionImagenes::class, 'revisionImagenes_idrevisionImagenescol', 'idrevisionImagenescol');
     }
 
-    public function canciones()
+    public function cancion()
     {
         return $this->hasMany(Cancion::class, 'albumMusical_idAlbumMusical', 'idAlbumMusical');
     }

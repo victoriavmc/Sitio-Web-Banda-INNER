@@ -14,6 +14,7 @@ use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
 use App\Http\Controllers\cancionController;
+use App\Http\Controllers\MercadoPagoController;
 
 #Modelo
 use App\Models\Paisnacimiento;
@@ -193,7 +194,12 @@ Route::get('/superFan', [SuperFanController::class, 'indexSuperFan'])
 //----------------------- VER BIOGRAFIA
 Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])
     ->name('biografia');
-#
+
+Route::get('/biografia/modificar/{id}/{tipo}', [ContenidoController::class, 'editarP'])
+    ->name('editarP')->middleware('auth');
+
+Route::post('/biografia/modificarP/{id}', [ContenidoController::class, 'modificarP'])
+    ->name('modificarP')->middleware('auth');
 //----------------------- CARPETA NEWS 
 //----------------------- VER NOTICIAS
 Route::get('/noticias', [ContenidoController::class, 'indexNoticias'])
@@ -212,11 +218,11 @@ Route::post('/news/crearnoticias/{type}', [ContenidoController::class, 'crearP']
     ->name('crearP')->middleware('auth');
 
 //----------------------- Ruta para mostrar el formulario de modificación
-Route::get('/news/noticiaUnica/modificar/{id}', [ContenidoController::class, 'editarP'])
+Route::get('/news/noticiaUnica/modificar/{id}/{tipo}', [ContenidoController::class, 'editarP'])
     ->name('editarP')->middleware('auth');
 
 //----------------------- Ruta para actualizar la publicación (este es el método POST)
-Route::post('/foro/noticiasmodificar/modificar/{id}', [ContenidoController::class, 'modificarP'])
+Route::post('/foro/noticiasmodificar/modificarP/{id}', [ContenidoController::class, 'modificarP'])
     ->name('modificarP')->middleware('auth');
 
 //----------------------- REPORTAR FORO PUBLICACION
@@ -241,12 +247,12 @@ Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crea
     ->name('crearP')->middleware('auth');
 
 //----------------------- Ruta para mostrar el formulario de modificación
-Route::get('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'editarP'])
-    ->name('editarP')->middleware('auth');
+Route::get('/foro/foropublicaciones/modificar/{id}/{tipo}', [ContenidoController::class, 'editarP'])
+->name('editarP')->middleware('auth');
 
 //----------------------- Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])
-    ->name('modificarP')->middleware('auth');
+->name('modificarP')->middleware('auth');
 
 //----------------------- Ruta para eliminar la publicacion especifica
 Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])
@@ -336,23 +342,7 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 ##################################################################################################
-//------------------------ REPORTES FORO ------------------------
-// VER REPORTES
-// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-//     ->name('reportarStaff');
-
-// Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-//     ->name('reportarUsuario');
-##################################################################################################
-
-
-// Subir tipo de imagen
-// Route::get('/imagenes', [subirImagenController::class, 'subirImagen'])
-//     ->name('subirImagen')->middleware('auth');
-
-// Route::post('/imagenes', [subirImagenController::class, 'subirImagenPost'])
-//     ->name('subir-imagen')->middleware('auth');
-
-// // REDES SOCIALES
-// Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name("auth.redirect");
-// Route::get('/auth/callback', [AuthController::class, 'callback'])->name("auth.callback");
+// Rutas para Mercado Pago
+Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'success'])->name('mercadopago.success');
+Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])->name('mercadopago.failed');
