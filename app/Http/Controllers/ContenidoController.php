@@ -89,6 +89,22 @@ class ContenidoController extends Controller
 
             // Llamo a la función RevImagen
             $rutasImg = $this->RevImagen($revisionImagenes);
+        } elseif ($opcion == 3) {
+            // Recupero todas las imágenes que coincidan con el idContenido
+            $imagenes = ImagenesContenido::where('contenidos_idcontenidos', $idContent)->get();
+
+            foreach ($imagenes as $imgEspecifica) {
+                // Obtengo el id de revisión de imágenes
+                $idRevImg = $imgEspecifica->revisionImagenes_idrevisionImagenescol;
+
+                // Busco la revisión de imágenes
+                $revisionImagenes = RevisionImagenes::where('idrevisionImagenescol', $idRevImg)->first();
+
+                // Si existe la revisión de imágenes, llamo a RevImagen
+                if ($revisionImagenes) {
+                    $rutasImg = array_merge($rutasImg, $this->RevImagen($revisionImagenes));
+                }
+            }
         }
 
         // Devuelvo las rutas de las imágenes
@@ -138,35 +154,46 @@ class ContenidoController extends Controller
         // Actualizar el contenido
         $contenido->titulo = $request->titulo;
         $contenido->descripcion = $request->descripcion;
-        $contenido->save(); // Guarda los cambios en el contenido
+        $contenido->save();
 
-        // Manejar la carga de las nuevas imágenes, si se proporcionan
+        // Eliminar imágenes marcadas
+        if ($request->has('imagenesEliminadas')) {
+            foreach ($request->imagenesEliminadas as $idImagen) {
+                if ($idImagen) {
+                    $imagen = Imagenes::findOrFail($idImagen);
+
+                    // Eliminar del almacenamiento
+                    if (Storage::exists($imagen->subidaImg)) {
+                        Storage::delete($imagen->subidaImg);
+                    }
+
+                    // Eliminar de la base de datos
+                    $imagen->delete();
+                }
+            }
+        }
+
+        // Manejar nuevas imágenes subidas
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
-                // Almacenar la imagen en public/storage/img
-                $path = $imageFile->store('img', 'public'); // Guardar en public/storage/img
+                $path = $imageFile->store('img', 'public');
 
-                // Guardar la ruta correcta en la base de datos
+                // Guardar la imagen en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = $path; // Solo guardar la ruta relativa
+                $imagen->subidaImg = $path;
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
 
-                // Relacionar con RevisionImagenes y con ImagenesContenido
+                // Relacionar con RevisionImagenes e ImagenesContenido
                 $revisionImagen = new RevisionImagenes();
-                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios; // Relacionar con el usuario
+                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
                 $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
 
-                // Determinar el tipo de foto
-                if ($contenido->tipoContenido_idtipoContenido == 1) {
-                    $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Foro
-                } else {
-                    $revisionImagen->tipodefoto_idtipoDeFoto = 2; // Noticias o Biografía
-                }
+                $revisionImagen->tipodefoto_idtipoDeFoto =
+                    $contenido->tipoContenido_idtipoContenido == 1 ? 5 : 2;
                 $revisionImagen->save();
 
-                // Relacionar la imagen con el contenido
                 $imagenContenido = new ImagenesContenido();
                 $imagenContenido->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
                 $imagenContenido->contenidos_idcontenidos = $contenido->idcontenidos;
@@ -174,7 +201,7 @@ class ContenidoController extends Controller
             }
         }
 
-        // Redirigir según el tipo de contenido
+        // Redireccionar según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
                 return redirect()->route('foro')->with('alertPublicacion', [
@@ -189,7 +216,7 @@ class ContenidoController extends Controller
             case 3:
                 return redirect()->route('biografia')->with('alertBiografia', [
                     'type' => 'Success',
-                    'message' => 'Biografia actualizada con éxito.',
+                    'message' => 'Biografía actualizada con éxito.',
                 ]);
         }
     }
@@ -200,8 +227,8 @@ class ContenidoController extends Controller
         // Obtener el contenido a editar por ID
         $contenido = Contenidos::findOrFail($id);
 
-        // Obtener las imágenes asociadas
-        $imagenes = $contenido->imagenesContenido; // Esta es la relación que debes haber definido en tu modelo
+        // Obtener las imágenes asociadas al contenido
+        $imagenes = $this->ImagenesContenido($id, 3);
 
         // Obtener el tipo de contenido
         $tipoContenido = $contenido->tipoContenido_idtipoContenido; // 1: Foro, 2: Noticias, 3: Biografía
