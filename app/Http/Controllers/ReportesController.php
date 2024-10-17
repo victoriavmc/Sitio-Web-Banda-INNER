@@ -490,7 +490,7 @@ class ReportesController extends Controller
                 // Redirigir a la página de panel de usuarios
                 return redirect('///')->with('alertBorrar', [
                     'type' => 'Success',
-                    'message' => 'Se ha borrado la cuenta con éxito!',
+                    'message' => 'Se ha vetado la cuenta con éxito!',
                 ]);
         }
     }
