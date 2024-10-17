@@ -18,7 +18,7 @@
                         <h1 class="text-black font-bold text-center text-8xl mb-2">{{ $recuperoBiografia->titulo }}</h1>
                         @auth
                             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                                <a href="{{ route('editarP', $recuperoBiografia->idcontenidos) }}"
+                                <a href="{{ route('editarP', ['id' => $recuperoBiografia->idcontenidos, 'tipo' => 3]) }}"
                                     class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Modificar</a>
                             @endif
                         @endauth

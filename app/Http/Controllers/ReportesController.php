@@ -10,10 +10,9 @@ use App\Models\Actividad;
 use App\Models\Comentarios;
 use App\Models\Interacciones;
 use App\Models\ImagenesContenido;
+use App\Models\Reportes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-
-
 
 class ReportesController extends Controller
 {
@@ -219,5 +218,45 @@ class ReportesController extends Controller
             'quienesReportaron'
 
         ));
+    }
+
+
+    #Admin decide que hacer con el reportado
+    public function reportar(Request $request)
+    {
+        // Obtengo el usuario que fue reportado
+        $idReportado = $request->idusuario;
+
+        // Obtengo decision del admin
+        $decision = $request->decision;
+
+        switch ($decision) {
+            case 0:
+                // En caso de que el reporte sea falso, eliminar el reporte
+                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
+                if ($reporte) {
+                    $reporte->delete();
+                }
+
+                // Obtener todas las actividades creadas por el usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+
+                foreach ($actividades as $actividad) {
+                    $idact = $actividad->idActividad;
+                }
+
+
+                return redirect()->back()->with('alertReporte', [
+                    'type' => 'Success',
+                    'message' => 'El reporte ha sido eliminado correctamente.',
+                ]);
+                break;
+            case 1:
+                #En caso que el reporte sea necesario pero lo suspendemos la cuenta segun un tiempo que defina el administardor, entro a la tabla historialUsuario y desactivamos por tiempo definido
+                break;
+            case 2:
+                #En caso que el reporte sea necesario pero pesado, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
+                break;
+        }
     }
 }

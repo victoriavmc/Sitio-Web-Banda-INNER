@@ -51,7 +51,7 @@
                                         {{-- Modificar --}}
                                         @if (Auth::user()->idusuarios == $autor['usuario']->idusuarios)
                                             <!-- Botón Modificar -->
-                                            <a href="{{ route('editarP', $recuperoPublicacion->idcontenidos) }}"
+                                            <a href="{{ route('editarP', ['id' => $recuperoPublicacion->idcontenidos, 'tipo' => 3]) }}"
                                                 class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"

@@ -54,6 +54,7 @@ class ContenidoController extends Controller
                 // Obtengo la ruta de la imagen
                 $rutaImg = $imagen->subidaImg;
 
+
                 // Almaceno la ruta en el array
                 $rutasImg[] = $rutaImg;
             }
@@ -89,6 +90,30 @@ class ContenidoController extends Controller
 
             // Llamo a la función RevImagen
             $rutasImg = $this->RevImagen($revisionImagenes);
+        } elseif ($opcion == 3) {
+            // Recupero todas las imágenes que coincidan con el idContenido
+            $imagenes = ImagenesContenido::where('contenidos_idcontenidos', $idContent)->get();
+
+            foreach ($imagenes as $imgEspecifica) {
+                $idimagenes = $imgEspecifica->idimagenescontenido;
+
+                // Obtengo el id de revisión de imágenes
+                $idRevImg = $imgEspecifica->revisionImagenes_idrevisionImagenescol;
+
+                // Busco la revisión de imágenes
+                $revisionImagenes = RevisionImagenes::where('idrevisionImagenescol', $idRevImg)->first();
+
+                // Si existe la revisión de imágenes, llamo a RevImagen para que nos de la ruta, y enlazo la ruta con el id
+                if ($revisionImagenes) {
+                    // Obtener la ruta usando RevImagen
+                    $ruta = $this->RevImagen($revisionImagenes);
+
+                    // Si es opción 3, asocio la primera ruta obtenida con el ID necesario
+                    if (!empty($ruta)) {
+                        $rutasImg[$idimagenes] = $ruta[0]; // Asocia la primera (y única) ruta obtenida con el ID
+                    }
+                }
+            }
         }
 
         // Devuelvo las rutas de las imágenes
@@ -138,35 +163,63 @@ class ContenidoController extends Controller
         // Actualizar el contenido
         $contenido->titulo = $request->titulo;
         $contenido->descripcion = $request->descripcion;
-        $contenido->save(); // Guarda los cambios en el contenido
+        $contenido->save();
 
-        // Manejar la carga de las nuevas imágenes, si se proporcionan
+        // Eliminar imágenes marcadas
+        if ($request->has('imagenesEliminadas')) {
+            foreach ($request->imagenesEliminadas as $idImagen) {
+                if ($idImagen) {
+                    // dd($idImagen);
+                    // $imagenContenido = $idImagen->idimagenescontenido;
+
+                    $imagen = ImagenesContenido::find($idImagen);
+
+                    $revImg = $imagen->revisionImagenes_idrevisionImagenescol;
+
+                    $imagen->delete();
+
+                    $revImg = RevisionImagenes::find($revImg);
+
+                    $idImagen = $revImg->imagenes_idimagenes;
+
+                    $imagen = Imagenes::find($idImagen);
+
+                    $revImg->delete();
+
+                    // Eliminar del almacenamiento
+                    if (Storage::exists($imagen->subidaImg)) {
+                        Storage::delete($imagen->subidaImg);
+                    }
+
+                    // Eliminar de la base de datos
+                    $imagen->delete();
+                }
+            }
+        }
+
+
+
+        // Manejar nuevas imágenes subidas
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
-                // Almacenar la imagen en public/storage/img
-                $path = $imageFile->store('img', 'public'); // Guardar en public/storage/img
+                $path = $imageFile->store('img', 'public');
 
-                // Guardar la ruta correcta en la base de datos
+                // Guardar la imagen en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = $path; // Solo guardar la ruta relativa
+                $imagen->subidaImg = $path;
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
 
-                // Relacionar con RevisionImagenes y con ImagenesContenido
+                // Relacionar con RevisionImagenes e ImagenesContenido
                 $revisionImagen = new RevisionImagenes();
-                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios; // Relacionar con el usuario
+                $revisionImagen->usuarios_idusuarios = Auth::user()->idusuarios;
                 $revisionImagen->imagenes_idimagenes = $imagen->idimagenes;
 
-                // Determinar el tipo de foto
-                if ($contenido->tipoContenido_idtipoContenido == 1) {
-                    $revisionImagen->tipodefoto_idtipoDeFoto = 5; // Foro
-                } else {
-                    $revisionImagen->tipodefoto_idtipoDeFoto = 2; // Noticias o Biografía
-                }
+                $revisionImagen->tipodefoto_idtipoDeFoto =
+                    $contenido->tipoContenido_idtipoContenido == 1 ? 5 : 2;
                 $revisionImagen->save();
 
-                // Relacionar la imagen con el contenido
                 $imagenContenido = new ImagenesContenido();
                 $imagenContenido->revisionImagenes_idrevisionImagenescol = $revisionImagen->idrevisionImagenescol;
                 $imagenContenido->contenidos_idcontenidos = $contenido->idcontenidos;
@@ -174,7 +227,7 @@ class ContenidoController extends Controller
             }
         }
 
-        // Redirigir según el tipo de contenido
+        // Redireccionar según el tipo de contenido
         switch ($contenido->tipoContenido_idtipoContenido) {
             case 1:
                 return redirect()->route('foro')->with('alertPublicacion', [
@@ -189,19 +242,19 @@ class ContenidoController extends Controller
             case 3:
                 return redirect()->route('biografia')->with('alertBiografia', [
                     'type' => 'Success',
-                    'message' => 'Biografia actualizada con éxito.',
+                    'message' => 'Biografía actualizada con éxito.',
                 ]);
         }
     }
 
     #VER FORMULARIO MODIFICAR PUBLICACIONES(FORO-NOTICIAS-BIOGRAFIA)
-    public function editarP($id)
+    public function editarP($id, $tipo)
     {
         // Obtener el contenido a editar por ID
         $contenido = Contenidos::findOrFail($id);
 
-        // Obtener las imágenes asociadas
-        $imagenes = $contenido->imagenesContenido; // Esta es la relación que debes haber definido en tu modelo
+        // Obtener las imágenes asociadas al contenido
+        $imagenes = $this->ImagenesContenido($id, $tipo);
 
         // Obtener el tipo de contenido
         $tipoContenido = $contenido->tipoContenido_idtipoContenido; // 1: Foro, 2: Noticias, 3: Biografía
@@ -839,6 +892,7 @@ class ContenidoController extends Controller
         }
     }
 
+    #Crea comentario
     public function crearComentario(Request $request, $idContent)
     {
         // Validar los datos: al menos un campo debe estar presente (contenido o imagen)
@@ -959,50 +1013,76 @@ class ContenidoController extends Controller
             ->where('usuarios_idusuarios', $usuarioReporte->idusuarios)
             ->first();
 
-        // Crear nueva interacción si no existe
+        // Si no existe la interacción, crear una nueva
         if (!$interaccion) {
             $interaccion = new Interacciones();
             $interaccion->usuarios_idusuarios = $usuarioReporte->idusuarios;
             $interaccion->actividad_idActividad = $id;
-        } else {
+            $interaccion->reporte = 1; // Marcar como reportado
+            $interaccion->save();
+
+            // Recupero la actividad que se reportó
+            $actividad = Actividad::find($id);
+
+            // Recupero el usuario que fue reportado
+            $usuarioReportado = Usuario::find($actividad->usuarios_idusuarios);
+
+            // Verificar si ya existe un reporte para el usuario reportado
+            $reporteExistente = Reportes::where('usuarios_idusuarios', $usuarioReportado->idusuarios)->first();
+
+            // Crear el reporte solo si no existe
+            if (!$reporteExistente) {
+                $reporte = new Reportes();
+                $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
+                $reporte->save();
+            }
+
+            // Enviar mails
+            Mail::to($usuarioReporte->correoElectronicoUser)->send(
+                new msjReporto($usuarioReportado->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad)
+            );
+
+            Mail::to($usuarioReporte->correoElectronicoUser)->send(
+                new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad)
+            );
+
             return redirect()->back()->with('alertPublicacion', [
-                'type' => 'Warning',
-                'message' => 'Ya has reportado esta actividad.',
+                'type' => 'Success',
+                'message' => 'Actividad reportada exitosamente.',
+            ]);
+        } else {
+            // Si ya existe la interacción y el usuario ya ha reportado, devolver alerta
+            if ($interaccion->reporte === 1) {
+                return redirect()->back()->with('alertPublicacion', [
+                    'type' => 'Warning',
+                    'message' => 'Ya has reportado esta actividad.',
+                ]);
+            }
+
+            // Si la interacción existe pero no ha sido reportada, actualizar el reporte a 1
+            $interaccion->reporte = 1;
+            $interaccion->save();
+
+            // Enviar mails en caso de actualización
+            $actividad = Actividad::find($id);
+            $usuarioReportado = Usuario::find($actividad->usuarios_idusuarios);
+
+            Mail::to($usuarioReporte->correoElectronicoUser)->send(
+                new msjReporto($usuarioReportado->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad)
+            );
+
+            Mail::to($usuarioReporte->correoElectronicoUser)->send(
+                new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad)
+            );
+
+            return redirect()->back()->with('alertPublicacion', [
+                'type' => 'Success',
+                'message' => 'Actividad reportada exitosamente.',
             ]);
         }
-
-        // Actualizar la interacción de repote
-        $interaccion->reporte = 1;
-
-        // Guardar la interacción
-        $interaccion->save();
-
-        // Recupero que actividad reporto
-        $actividad = Actividad::find($id);
-
-        // Recupero el usuario que fue reportado (Creo la publicacion)
-        $usuarioReportado = $actividad->usuarios_idusuarios;
-
-        $usuarioReportado = Usuario::find($usuarioReportado);
-
-        // Crear Reporte
-        $reporte = new Reportes();
-        $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
-
-        #Envia mails ...
-
-        #1 Reportaste la cuenta...
-        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReporto($usuarioReportado->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
-
-        #2 Admin Reporto x a y, revisar publicacion...
-        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
-
-        return redirect()->back()->with('alertPublicacion', [
-            'type' => 'Success',
-            'message' => 'Actividad reportada exitosamente.',
-        ]);
     }
 
+    #config like, dislike
     public function likeDislikeActividad($tipo, $id)
     {
         $userId = Auth::user()->idusuarios;

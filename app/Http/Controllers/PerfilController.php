@@ -365,30 +365,6 @@ class PerfilController extends Controller
         return null; // Si no hay imagen
     }
 
-    #Si alguien reporta una cuenta
-    public function reportarCuenta(Request $request)
-    {
-        // Guardo el id del usuario que reporta, para enviar al admin quien reporto.
-        $idUser = $request->idusuarios;
-
-        $userReportado = $request->usuarios_idusuarios;
-
-        $reporte = Reportes::where('usuarios_idusuarios', $userReportado)->first();
-
-        $aumentoReporte = $reporte->reportes;
-        $aumentoReporte++;
-        $reporte->reportes = $aumentoReporte;
-        $reporte->save();
-
-        // ACA HAY QUE HACER LOGICA PARA ENVIAR 2 MAILS.
-
-        // UNO DONDE HIZO EL REPORTE A LA CUENTA X.
-        Mail::to($request->email)->send(new msjReporto(ucwords($request->nombre), $request->genero));
-
-        // OTRO ENVIANDO AL ADMIN, QUIEN HIZO UN REPORTE A LA CUENTA Y.
-        Mail::to($request->email)->send(new msjReportaron(ucwords($request->nombre), $request->genero));
-    }
-
     #Mostramos Los comentarios si tiene el usuario
     public function obtenerComentariosConPublicacion($data)
     {
@@ -517,32 +493,6 @@ class PerfilController extends Controller
         }
     }
 
-    #Admin decide que hacer con el reportado
-    public function reportar(Request $request)
-    {
-        // Obtengo el usuario que fue reportado
-        $idReportado = $request->idusuario;
-
-        // Obtengo decision del admin
-        $decision = $request->decision;
-
-        switch ($decision) {
-            case 0:
-                #En caso que el reporte sea falso, disminuyo el reporte
-                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
-                $disminuyoReporte = $reporte->reportes;
-                $disminuyoReporte--;
-                $reporte->reportes = $disminuyoReporte;
-                break;
-            case 1:
-                #En caso que el reporte sea necesario pero zzz, entro a la tabla historialUsuario y desactivamos por tiempo definido
-                break;
-            case 2:
-                #En caso que el reporte sea necesario pero hard, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
-                break;
-        }
-    }
-
     #Eliminar Revision e Imagenes
     private function eliminarImagenYRevision($revisionImagenId)
     {
@@ -565,6 +515,7 @@ class PerfilController extends Controller
             }
         }
     }
+
     #ELIMINAR CUENTA EN CASCADA
     #CUANDO ELIMINA LA CUENTA, DEBE ELIMINAR TODO LO RELACIONADO AL USUARIO MENOS LA PARTE LOGICA QUE ES USUARIO, DATOS PERSONALES Y ANOTARLO EN HISTORIALUSUARIOS 
     public function eliminarCuenta()
@@ -670,8 +621,69 @@ class PerfilController extends Controller
             return redirect()->back()->with('alertBorrar', [
                 'type' => 'Error',
                 'message' => 'No se puede borrar la cuenta, ya que presenta reportes.
-            Se ha enviado una notificación al administrador para que revise la cuenta.',
+                Se ha enviado una notificación al administrador para que revise la cuenta.',
             ]);
         }
+    }
+
+    #Si alguien reporta una cuenta
+    public function reportarCuenta(Request $request)
+    {
+        // Recupero quien es el usuario que reportó
+        $usuarioReporte = Auth::user();
+        $userReportado = $request->usuarios_idusuarios;
+
+        // Verificar si ya existe una actividad con tipoActividad_idtipoActividad === 1
+        $actividadExistente = Actividad::where('tipoActividad_idtipoActividad', 1)
+            ->where('usuarios_idusuarios', $userReportado)
+            ->first();
+
+        // Si no existe, crear una nueva actividad de tipo 1
+        if (!$actividadExistente) {
+            $actividad = new Actividad();
+            $actividad->tipoActividad_idtipoActividad = 1;
+            $actividad->usuarios_idusuarios = $userReportado;
+            $actividad->save();
+
+            #Enlazo con el reporte (si y solo si se crea la actividad)
+            $reporte = new Reportes();
+            $reporte->usuarios_idusuarios = $userReportado->idusuarios;
+            $reporte->save();
+        } else {
+            $actividad = $actividadExistente;
+        }
+
+        // Verificar si el usuario ya ha reportado la actividad
+        $interaccionExistente = Interacciones::where('usuarios_idusuarios', $usuarioReporte->idusuarios)
+            ->where('actividad_idActividad', $actividad->idActividad)
+            ->where('reporte', 1)
+            ->first();
+
+        if ($interaccionExistente) {
+            // Si ya existe una interacción con reporte, mostrar un mensaje de advertencia
+            return redirect()->back()->with('alertInteraccion', [
+                'type' => 'Warning',
+                'message' => 'Ya has reportado esta actividad.',
+            ]);
+        }
+
+        // Crear la nueva interacción
+        $interaccion = new Interacciones();
+        $interaccion->usuarios_idusuarios = $usuarioReporte->idusuarios;
+        $interaccion->actividad_idActividad = $actividad->idActividad;
+        $interaccion->reporte = 1;
+        $interaccion->save();
+
+        #Envia mails ...
+        #1 Reportaste la cuenta...
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReporto($userReportado->genero, $userReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
+
+        #2 Admin Reporto x a y, revisar publicacion...
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $userReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
+
+        return redirect()->back()->with('alertPublicacion', [
+            'type' => 'Success',
+            'message' => 'Actividad reportada exitosamente.',
+        ]);
     }
 }
