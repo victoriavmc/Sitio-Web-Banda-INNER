@@ -645,10 +645,15 @@ class PerfilController extends Controller
             $actividad->usuarios_idusuarios = $userReportado;
             $actividad->save();
 
-            #Enlazo con el reporte (si y solo si se crea la actividad)
-            $reporte = new Reportes();
-            $reporte->usuarios_idusuarios = $userReportado->idusuarios;
-            $reporte->save();
+            // Verificar si el usuario no tenía reportes previos
+            $reporteExistente = Reportes::where('usuarios_idusuarios', $userReportado->idusuarios)->first();
+
+            if (!$reporteExistente) {
+                // Enlazo con el reporte solo si no tenía reportes previos
+                $reporte = new Reportes();
+                $reporte->usuarios_idusuarios = $userReportado->idusuarios;
+                $reporte->save();
+            }
         } else {
             $actividad = $actividadExistente;
         }
