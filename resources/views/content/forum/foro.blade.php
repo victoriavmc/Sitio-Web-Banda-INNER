@@ -6,6 +6,13 @@
         </x-alerts>
     @endif
 
+    @if (session('alertPublicacion'))
+        {{-- Componente de alerta para el exitoso o fallido --}}
+        <x-alerts :type="session('alertPublicacion')['type']">
+            {{ session('alertPublicacion')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="bg-cover min-h-screen bg-center w-full p-10"
         style="background-image: url('{{ asset('img/foro_fondo.jpg') }}')">
         <div class="grid gap-5 justify-center">
@@ -34,7 +41,7 @@
                 <!-- Botón para abrir el menú desplegable -->
                 <div class="relative">
                     <button id="sortButton"
-                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 pl-4 pr-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center ">
+                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 pl-4 pr-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
                         <p class="mr-1">Ordenar</p>
                         <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -81,7 +88,8 @@
                     <article>
                         <div class="max-w-4xl px-10 py-5 bg-white rounded-lg shadow-xl">
                             <div class="flex justify-end items-center">
-                                <span class="text-base text-gray-900 font-normal">{{ $publicacion->fechaSubida }}</span>
+                                <span
+                                    class="text-base text-gray-900 font-normal">{{ $publicacion->fechaSubida }}</span>
                             </div>
                             <div class="">
                                 <a class="text-2xl text-gray-900 font-bold hover:text-gray-600"
@@ -157,7 +165,7 @@
     </div>
     <script>
         // Mostrar/ocultar el menú desplegable
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const sortButton = document.getElementById('sortButton');
             const dropdownMenu = document.getElementById('dropdownMenu');
 

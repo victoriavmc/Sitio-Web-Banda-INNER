@@ -23,13 +23,14 @@
             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
                 <div class="flex gap-5 mb-5">
                     <a href="{{ route('editarP', ['id' => $recuperoPublicacion->idcontenidos, 'tipo' => 3]) }}"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Modificar</a>
+                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">Modificar</a>
                     {{-- Botón para eliminar: el autor o los usuarios con rol 1 o 2 pueden eliminar --}}
-                    <form class="btnEliminarContenido" action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST">
+                    <form class="btnEliminarContenido"
+                        action="{{ route('eliminarContenido', $recuperoPublicacion->idcontenidos) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+                            class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">Eliminar</button>
                     </form>
                 </div>
             @endif

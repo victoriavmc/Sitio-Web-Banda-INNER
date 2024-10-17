@@ -1,4 +1,11 @@
 <x-AppLayout>
+    @if (session('alertBiografia'))
+        {{-- Componente de alerta para el exitoso o fallido --}}
+        <x-alerts :type="session('alertBiografia')['type']">
+            {{ session('alertBiografia')['message'] }}
+        </x-alerts>
+    @endif
+
     @if ($imagenesBiografia)
         @if ($imagenesBiografia->isNotEmpty() && isset($imagenesBiografia[0]))
             <div class="bg-cover bg-center text-center overflow-hidden"

@@ -86,6 +86,10 @@ Route::get('/modificar-perfil', [perfilController::class, 'modificarPerfil'])
 Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
     ->name('perfil-ajeno');
 
+// Reportar perfil ajeno
+Route::post('/perfil-ajeno/reportar/{$usuarioReportado}', [perfilController::class, 'reportarPerfilAjeno'])
+    ->name('reportarPerfilAjeno')->middleware('auth');
+
 //----------------------- Redes
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])
     ->name('modificar-redes')->middleware('auth');
@@ -248,11 +252,11 @@ Route::post('/foro/foropublicaciones/{type}', [ContenidoController::class, 'crea
 
 //----------------------- Ruta para mostrar el formulario de modificación
 Route::get('/foro/foropublicaciones/modificar/{id}/{tipo}', [ContenidoController::class, 'editarP'])
-->name('editarP')->middleware('auth');
+    ->name('editarP')->middleware('auth');
 
 //----------------------- Ruta para actualizar la publicación (este es el método POST)
 Route::post('/foro/foropublicaciones/modificar/{id}', [ContenidoController::class, 'modificarP'])
-->name('modificarP')->middleware('auth');
+    ->name('modificarP')->middleware('auth');
 
 //----------------------- Ruta para eliminar la publicacion especifica
 Route::delete('/foro/foropublicaciones/eliminar/{id}', [ContenidoController::class, 'eliminarContenido'])

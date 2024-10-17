@@ -20,10 +20,10 @@
                                 <div class="flex flex-col items-center">
                                     @if ($imagenPerfil)
                                         <img src='{{ asset(Storage::url($imagenPerfil)) }}'
-                                            class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                                            class="w-32 h-32 cursor-pointer imagen-modal bg-gray-300 rounded-full mb-4 shrink-0">
                                     @else
                                         <img src='{{ asset('img/logo_usuario.png') }}'
-                                            class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                                            class="w-32 h-32 cursor-pointer imagen-modal bg-gray-300 rounded-full mb-4 shrink-0">
                                     @endif
 
                                     <h1 class="text-gray-700 text-xl font-bold">
@@ -102,6 +102,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del modal -->
+    <div id="modal" class="hidden imagenG">
+        <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
 </x-Opciones>

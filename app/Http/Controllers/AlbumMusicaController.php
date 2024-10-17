@@ -37,7 +37,7 @@ class AlbumMusicaController extends Controller
 
             // Obtener las canciones relacionadas con el álbum
             $canciones = $album->canciones;
-            dd($album->canciones);
+            // dd($album->canciones);
 
             // Verificar si hay canciones antes de recorrer
             if ($canciones) {

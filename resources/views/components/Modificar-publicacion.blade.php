@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    <form action="{{  route('modificarP', $contenido->idcontenidos)  }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('modificarP', $contenido->idcontenidos) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="border-2 border-black p-4 rounded-xl mb-5">
             <div class="flex flex-col gap-4">
@@ -43,7 +43,8 @@
                                     </button>
 
                                     <!-- Campo oculto para imágenes eliminadas -->
-                                    <input type="hidden" name="imagenesEliminadas[]" value="" class="input-eliminar-imagen">
+                                    <input type="hidden" name="imagenesEliminadas[]" value=""
+                                        class="input-eliminar-imagen">
                                 </div>
                             @endforeach
                         </div>
@@ -74,13 +75,16 @@
     </div>
 
     <script>
-        document.querySelectorAll('.eliminar-imagen').forEach(boton => {
-            boton.addEventListener('click', function() {
-                const contenedor = this.closest('[data-imagen-id]');
-                const inputEliminar = contenedor.querySelector('.input-eliminar-imagen');
-                // Establecer el ID de la imagen para eliminar
-                inputEliminar.value = contenedor.getAttribute('data-imagen-id');
-                contenedor.style.display = 'none'; // Ocultar la imagen
+        // Mostrar el modal con la imagen seleccionada
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.eliminar-imagen').forEach(boton => {
+                boton.addEventListener('click', function() {
+                    const contenedor = this.closest('[data-imagen-id]');
+                    const inputEliminar = contenedor.querySelector('.input-eliminar-imagen');
+                    // Establecer el ID de la imagen para eliminar
+                    inputEliminar.value = contenedor.getAttribute('data-imagen-id');
+                    contenedor.style.display = 'none'; // Ocultar la imagen
+                });
             });
         });
     </script>

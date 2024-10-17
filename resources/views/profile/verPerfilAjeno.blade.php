@@ -1,4 +1,11 @@
-<x-AppLayout>
+<x-Opciones>
+    @if (session('alertReporte'))
+        {{-- Componente de alerta para el exitoso o fallido --}}
+        <x-alerts :type="session('alertReporte')['type']">
+            {{ session('alertReporte')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="bg-cover p-10 min-h-screen" style="background-image: url('{{ asset('img/perfil_fondo.jpg') }}')">
         @if (session('alertInicioSesion'))
             <x-alerts :type="session('alertInicioSesion')['type']">
@@ -32,10 +39,16 @@
                                         {{ $nombreApellido }}
                                     </h1>
                                     <p class="text-gray-700">{{ $usuarioUser }}</p>
-                                    {{-- <div class="mt-6 flex flex-wrap gap-4 justify-center">
-                                            <a href="#"
-                                                class="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded">Reportar</a>
-                                        </div> --}}
+                                    <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                                        {{-- boton reportar usuario --}}
+                                        <form action="{{ route('reportarPerfilAjeno', $idUsuario) }}" method="post">
+                                            @csrf
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">Reportar
+                                            </button>
+                                        </form>
+
+                                    </div>
                                 </div>
                                 <hr class="my-6 border-t border-gray-300">
                                 <div class='flex text-black flex-col items-center'>
@@ -109,4 +122,4 @@
             <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
-</x-AppLayout>
+</x-Opciones>

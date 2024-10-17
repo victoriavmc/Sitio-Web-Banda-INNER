@@ -515,7 +515,6 @@ class PerfilController extends Controller
             }
         }
     }
-
     #ELIMINAR CUENTA EN CASCADA
     #CUANDO ELIMINA LA CUENTA, DEBE ELIMINAR TODO LO RELACIONADO AL USUARIO MENOS LA PARTE LOGICA QUE ES USUARIO, DATOS PERSONALES Y ANOTARLO EN HISTORIALUSUARIOS 
     public function eliminarCuenta()
@@ -621,33 +620,32 @@ class PerfilController extends Controller
             return redirect()->back()->with('alertBorrar', [
                 'type' => 'Error',
                 'message' => 'No se puede borrar la cuenta, ya que presenta reportes.
-                Se ha enviado una notificación al administrador para que revise la cuenta.',
+            Se ha enviado una notificación al administrador para que revise la cuenta.',
             ]);
         }
     }
 
     #Si alguien reporta una cuenta
-    public function reportarCuenta(Request $request)
+    public function reportarCuenta(Request $request, $usuarioReportado)
     {
         // Recupero quien es el usuario que reportó
         $usuarioReporte = Auth::user();
-        $userReportado = $request->usuarios_idusuarios;
 
         // Verificar si ya existe una actividad con tipoActividad_idtipoActividad === 1
         $actividadExistente = Actividad::where('tipoActividad_idtipoActividad', 1)
-            ->where('usuarios_idusuarios', $userReportado)
+            ->where('usuarios_idusuarios', $usuarioReportado)
             ->first();
 
         // Si no existe, crear una nueva actividad de tipo 1
         if (!$actividadExistente) {
             $actividad = new Actividad();
             $actividad->tipoActividad_idtipoActividad = 1;
-            $actividad->usuarios_idusuarios = $userReportado;
+            $actividad->usuarios_idusuarios = $usuarioReportado;
             $actividad->save();
 
             #Enlazo con el reporte (si y solo si se crea la actividad)
             $reporte = new Reportes();
-            $reporte->usuarios_idusuarios = $userReportado->idusuarios;
+            $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
             $reporte->save();
         } else {
             $actividad = $actividadExistente;
