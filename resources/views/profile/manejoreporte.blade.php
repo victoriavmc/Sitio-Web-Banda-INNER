@@ -14,25 +14,12 @@
             <div class="bg-red-500  md:col-span-4 p-10 ">
                 {{-- ENCABEZADO DEL USUARIO --}}
 
-<<<<<<< HEAD
-                <h1 class='text-2xl font-semibold text-center uppercase'>
-                    @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
-                        Usuario Reportado
-                    @else
-                        Historial del Usuario
-                    @endif
-                </h1>
-=======
                 <div class="flex justify-evenly">
                     <h1 class='text-2xl font-semibold text-center uppercase'>
-                        @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
-                            No Presenta Reportes
-                        @elseif ($totalReportadas === 1)
-                            Actividad Reportada
-                        @elseif ($totalReportadas > 1)
-                            Actividades Reportadas
+                        @if ($totalReportadas && $perfilReportado > 0)
+                            Usuario Reportado
                         @else
-                            Fue Reportado el Perfil
+                            Historial del Usuario
                         @endif
                     </h1>
 
@@ -42,7 +29,6 @@
                     </a>
                 </div>
 
->>>>>>> f96241de0508f8742e896a4f12bfcdd95bcc9f96
 
                 {{-- DATOS DEL USUARIO --}}
                 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -92,10 +78,6 @@
                     }
                 @endphp
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f96241de0508f8742e896a4f12bfcdd95bcc9f96
                 @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
                     <div class="flex space-x-2 items-center animate-out zoom-in duration-200 delay-300">
                         <div class="font-semibold text-center md:text-left">
@@ -123,14 +105,13 @@
                         </div>
                     </div>
                 @endif
-
             </div>
             {{-- DERECHO --}}
             <div class="md:col-span-8 p-10">
                 {{-- ENCABEZADO DE REPORTES --}}
                 <div class="m-auto mb-4">
                     <h1 class="text-3xl">
-                        @if ($totalReportadas && $perfilReportado === 0)
+                        @if ((isset($totalReportadas) && $totalReportadas < 0) || (isset($perfilReportado) && $perfilReportado < 0))
                             No Presenta Reportes
                         @elseif ($totalReportadas === 1)
                             Actividad Reportada
@@ -422,13 +403,8 @@
             {{-- SI TIENE ACTIVIDADES REPORTADAS Y NO REPORTADAS --}}
         @elseif ($totalReportadas > 0 && $totalNoReportadas > 0)
             <div class="py-8 flex flex-col ml-4">
-<<<<<<< HEAD
-                <h1 class="text-3xl mb-4 ml-4 flex justify-center">
-                    Otras Actividades realizadas por <b class="text-red-500"> {{ $usuario->usuarioUser }}</b>
-=======
                 <h1 class="text-3xl mb-4 ml-4 text-center">
                     Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
->>>>>>> f96241de0508f8742e896a4f12bfcdd95bcc9f96
                 </h1>
                 {{-- SI NO REPORTARON LA PUBLICACION --}}
                 @if (count($actividadesNoReportadas['contenidos']) > 0)
