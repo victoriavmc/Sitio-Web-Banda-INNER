@@ -180,6 +180,7 @@ class ReportesController extends Controller
     {
         $usuario = Usuario::find($id);
         $datosPersonales = $usuario->datosPersonales;
+
         $imagen = $this->buscarImagen($id);
 
         // Obtener todas las actividades del usuario
@@ -193,6 +194,7 @@ class ReportesController extends Controller
 
         // Procesar y organizar actividades
         $actividadesReportadas = $this->procesarActividades($reportadas, true);
+
         $actividadesNoReportadas = $this->procesarActividades($noReportadas, false);
 
         // Datos de quienes reportaron

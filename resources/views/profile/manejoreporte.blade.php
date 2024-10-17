@@ -15,7 +15,7 @@
                 {{-- ENCABEZADO DEL USUARIO --}}
 
                 <h1 class='text-2xl font-semibold text-center uppercase'>
-                    @if (isset($totalReportadas) && $totalReportadas > 0)
+                    @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
                         Usuario Reportado
                     @else
                         Historial del Usuario
@@ -73,7 +73,7 @@
                 @endphp
 
 
-                @if (isset($totalReportadas) && $totalReportadas > 0)
+                @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
                     <div class="flex space-x-2 items-center animate-out zoom-in duration-200 delay-300">
                         <div class="font-semibold text-center md:text-left">
                             Reportado por {{ count($quienesReportaron) === 1 ? 'el usuario:' : 'los usuarios:' }}
@@ -106,7 +106,7 @@
                 {{-- ENCABEZADO DE REPORTES --}}
                 <div class="m-auto mb-4">
                     <h1 class="text-3xl">
-                        @if ($perfilReportado < 1)
+                        @if ($totalReportadas && $perfilReportado === 0)
                             No Presenta Reportes
                         @elseif ($totalReportadas === 1)
                             Actividad Reportada
@@ -397,7 +397,7 @@
         @elseif ($totalReportadas > 0 && $totalNoReportadas > 0)
             <div class="py-8 flex flex-col ml-4">
                 <h1 class="text-3xl mb-4 ml-4 flex justify-center">
-                    Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
+                    Otras Actividades realizadas por <b class="text-red-500"> {{ $usuario->usuarioUser }}</b>
                 </h1>
                 {{-- SI NO REPORTARON LA PUBLICACION --}}
                 @if (count($actividadesNoReportadas['contenidos']) > 0)
