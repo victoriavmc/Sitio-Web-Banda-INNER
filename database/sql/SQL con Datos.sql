@@ -531,6 +531,30 @@ INSERT INTO `paisnacimiento` VALUES (1,'Afganistán'),(2,'Albania'),(3,'Alemania
 UNLOCK TABLES;
 
 --
+-- Table structure for table `precio`
+--
+
+DROP TABLE IF EXISTS `precio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `precio` (
+  `idprecio` int NOT NULL AUTO_INCREMENT,
+  `valor` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`idprecio`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `precio`
+--
+
+LOCK TABLES `precio` WRITE;
+/*!40000 ALTER TABLE `precio` DISABLE KEYS */;
+INSERT INTO `precio` VALUES (1,1000);
+/*!40000 ALTER TABLE `precio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `redessociales`
 --
 
@@ -719,13 +743,16 @@ DROP TABLE IF EXISTS `suscripcion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `suscripcion` (
   `idsuscripcion` int NOT NULL AUTO_INCREMENT,
-  `preference_id` varchar(45) NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `payment_method` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL,
+  `factura` longtext NOT NULL,
+  `metodoPago` longtext NOT NULL,
+  `diaPago` datetime NOT NULL,
+  `estadoPago` varchar(255) NOT NULL,
   `usuarios_idusuarios` int NOT NULL,
+  `precio_idprecio` int NOT NULL,
   PRIMARY KEY (`idsuscripcion`),
   KEY `fk_suscripcion_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_suscripcion_precio1_idx` (`precio_idprecio`),
+  CONSTRAINT `fk_suscripcion_precio1` FOREIGN KEY (`precio_idprecio`) REFERENCES `precio` (`idprecio`),
   CONSTRAINT `fk_suscripcion_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -950,4 +977,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-16  0:41:43
+-- Dump completed on 2024-10-16 15:19:23
