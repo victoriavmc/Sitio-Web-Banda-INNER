@@ -222,7 +222,7 @@ class ReportesController extends Controller
 
 
     #Admin decide que hacer con el reportado
-    public function reportar(Request $request)
+    public function decideReportes(Request $request)
     {
         // Obtengo el usuario que fue reportado
         $idReportado = $request->idusuario;
@@ -243,12 +243,25 @@ class ReportesController extends Controller
 
                 foreach ($actividades as $actividad) {
                     $idact = $actividad->idActividad;
-                }
 
+                    // Interacciones de la gente ante esa actividad
+                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    foreach ($interacciones as $interaccion) {
+                        // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
+                        if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
+                            // Eliminar la interacción
+                            $interaccion->delete();
+                        } else {
+                            // Actualizar el reporte a 0
+                            $interaccion->reporte = 0;
+                            $interaccion->save();
+                        }
+                    }
+                }
 
                 return redirect()->back()->with('alertReporte', [
                     'type' => 'Success',
-                    'message' => 'El reporte ha sido eliminado correctamente.',
+                    'message' => 'El reporte y las actividades han sido eliminados correctamente.',
                 ]);
                 break;
             case 1:
