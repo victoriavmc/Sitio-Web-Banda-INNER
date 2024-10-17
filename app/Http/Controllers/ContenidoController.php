@@ -834,6 +834,7 @@ class ContenidoController extends Controller
     {
         $actividad = new Actividad();
         $actividad->tipoActividad_idtipoActividad = $tipo;
+        $actividad->usuarios_idusuarios = Auth::user()->idusuarios;
         $actividad->save();
         return $actividad;
     }

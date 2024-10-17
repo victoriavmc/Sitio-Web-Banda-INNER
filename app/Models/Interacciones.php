@@ -11,6 +11,12 @@ class Interacciones extends Model
     protected $primaryKey = 'idinteracciones';
     public $timestamps = false;
 
+    protected $fillable = [
+        'usuarios_idusuarios',
+        'actividad_idActividad',
+        'reporte',
+    ];
+
     // Relación con Usuarios
     public function usuario()
     {

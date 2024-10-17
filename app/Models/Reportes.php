@@ -11,6 +11,10 @@ class Reportes extends Model
     public $timestamps = false;
     protected $primaryKey = 'idreportes';
 
+    protected $fillable = [
+        'usuarios_idusuarios',
+    ];
+
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');

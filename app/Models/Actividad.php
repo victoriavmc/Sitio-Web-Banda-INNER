@@ -12,6 +12,11 @@ class Actividad extends Model
     protected $primaryKey = 'idActividad';
     public $timestamps = false;
 
+    protected $fillable = [
+        'tipoActividad_idtipoActividad',
+        'usuarios_idusuarios',
+    ];
+
     // Relación con Usuarios
     public function usuario()
     {
@@ -28,17 +33,6 @@ class Actividad extends Model
     public function comentarios()
     {
         return $this->hasMany(Comentarios::class, 'Actividad_idActividad', 'idActividad');
-    }
-
-    # Se ejecuta justo antes de que se cree un nuevo registro de contenidos o comentarios en la base de datos
-    protected static function booted()
-    {
-        // Este evento se ejecuta justo antes de que se cree un nuevo registro
-        static::creating(function ($actividad) {
-            if (Auth::check()) {
-                $actividad->usuarios_idusuarios = Auth::user()->idusuarios;
-            }
-        });
     }
 
     public function interacciones()

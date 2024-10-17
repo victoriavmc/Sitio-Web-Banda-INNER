@@ -87,8 +87,10 @@ Route::get('/perfil-ajeno/{id}', [perfilController::class, 'verPerfilAjeno'])
     ->name('perfil-ajeno');
 
 // Reportar perfil ajeno
-Route::post('/perfil-ajeno/reportar/{$usuarioReportado}', [perfilController::class, 'reportarPerfilAjeno'])
-    ->name('reportarPerfilAjeno')->middleware('auth');
+Route::post('/perfil-ajeno/reportar/{id}', [perfilController::class, 'reportarCuenta'])
+    ->name('reportarPerfilAjeno');
+// ->middleware('auth');
+
 
 //----------------------- Redes
 Route::get('/modificar-redes', [redessocialesController::class, 'modificarRedes'])

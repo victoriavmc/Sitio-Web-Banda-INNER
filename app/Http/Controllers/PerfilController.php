@@ -479,6 +479,7 @@ class PerfilController extends Controller
 
             // Retorna la vista con la información del usuario
             return view('profile.verPerfilAjeno', [
+                'id' => $id,
                 'usuarioUser' => $usuarioUser,
                 'nombreApellido' => $nombreApellido,
                 'tipoRol' => $tipoRol,
@@ -626,27 +627,35 @@ class PerfilController extends Controller
     }
 
     #Si alguien reporta una cuenta
-    public function reportarCuenta(Request $request, $usuarioReportado)
+    public function reportarCuenta($id)
     {
         // Recupero quien es el usuario que reportó
         $usuarioReporte = Auth::user();
 
+        // Quien fue el reportado
+        $usuarioReportado = Usuario::find($id);
+
         // Verificar si ya existe una actividad con tipoActividad_idtipoActividad === 1
         $actividadExistente = Actividad::where('tipoActividad_idtipoActividad', 1)
-            ->where('usuarios_idusuarios', $usuarioReportado)
+            ->where('usuarios_idusuarios', $usuarioReportado->idusuarios)
             ->first();
 
-        // Si no existe, crear una nueva actividad de tipo 1
+        // Si no existe la actividad, crear una nueva actividad de tipo 1
         if (!$actividadExistente) {
             $actividad = new Actividad();
             $actividad->tipoActividad_idtipoActividad = 1;
-            $actividad->usuarios_idusuarios = $usuarioReportado;
+            $actividad->usuarios_idusuarios = $usuarioReportado->idusuarios;
             $actividad->save();
 
-            #Enlazo con el reporte (si y solo si se crea la actividad)
-            $reporte = new Reportes();
-            $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
-            $reporte->save();
+            // Verificar si el usuario no tenía reportes previos
+            $reporteExistente = Reportes::where('usuarios_idusuarios', $usuarioReportado->idusuarios)->first();
+
+            if (!$reporteExistente) {
+                // Enlazo con el reporte solo si no tenía reportes previos
+                $reporte = new Reportes();
+                $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
+                $reporte->save();
+            }
         } else {
             $actividad = $actividadExistente;
         }
@@ -659,9 +668,9 @@ class PerfilController extends Controller
 
         if ($interaccionExistente) {
             // Si ya existe una interacción con reporte, mostrar un mensaje de advertencia
-            return redirect()->back()->with('alertInteraccion', [
+            return redirect()->back()->with('alertReporte', [
                 'type' => 'Warning',
-                'message' => 'Ya has reportado esta actividad.',
+                'message' => 'Ya has reportado este perfil.',
             ]);
         }
 
@@ -674,14 +683,14 @@ class PerfilController extends Controller
 
         #Envia mails ...
         #1 Reportaste la cuenta...
-        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReporto($userReportado->genero, $userReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReporto($usuarioReportado->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
 
         #2 Admin Reporto x a y, revisar publicacion...
-        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $userReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
+        Mail::to($usuarioReporte->correoElectronicoUser)->send(new msjReportaron($usuarioReporte->usuarioUser, $usuarioReporte->genero, $usuarioReportado->usuarioUser, $actividad->tipoActividad_idtipoActividad));
 
-        return redirect()->back()->with('alertPublicacion', [
+        return redirect()->back()->with('alertReporte', [
             'type' => 'Success',
-            'message' => 'Actividad reportada exitosamente.',
+            'message' => 'Perfil reportado exitosamente.',
         ]);
     }
 }
