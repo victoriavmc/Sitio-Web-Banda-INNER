@@ -1,7 +1,8 @@
 <x-EmailLayout>
-    <h1>Reportaron tu cuenta</h1>
-    <p>Hemos recibido un Reporte por tu cuenta. <br>
-        Al revisarlo, nos hemos dado cuenta que efectivamente, estas incumpliendo con normas de la comunidad.</p>
-    <p>Por lo tanto, hemos decidido <strong>eliminar tu cuenta</strong></p>
-    <p>Lamentamos mucho la situacion.</p>
+    <h1>Notificación de Eliminación de Cuenta</h1>
+    <p>Estimado usuario,</p>
+    <p>Hemos recibido un reporte sobre tu cuenta. Tras revisarlo, hemos determinado que incumples con las normas de la
+        comunidad.</p>
+    <p>Por lo tanto, hemos decidido <strong>eliminar tu cuenta</strong>.</p>
+    <p>Lamentamos mucho esta situación y te agradecemos por tu comprensión.</p>
 </x-EmailLayout>

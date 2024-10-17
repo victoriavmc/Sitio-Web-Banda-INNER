@@ -8,11 +8,15 @@ use App\Models\RevisionImagenes;
 use App\Models\Usuario;
 use App\Models\Actividad;
 use App\Models\Comentarios;
+use App\Models\DatosPersonales;
+use App\Models\HistorialUsuario;
 use App\Models\Interacciones;
 use App\Models\ImagenesContenido;
 use App\Models\Reportes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReportesController extends Controller
 {
@@ -124,7 +128,28 @@ class ReportesController extends Controller
 
         return $resultados;
     }
+    #Eliminar Revision e Imagenes
+    private function eliminarImagenYRevision($revisionImagenId)
+    {
+        if ($revisionImagenId) {
+            $revisionImagen = RevisionImagenes::find($revisionImagenId);
+            if ($revisionImagen) {
+                // Eliminar la revisión de la imagen
+                $revisionImagen->delete();
 
+                // Eliminar la imagen asociada
+                if ($revisionImagen->imagenes_idimagenes) {
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                    if ($imagen) {
+                        // Eliminar la imagen del almacenamiento
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                        // Eliminar la imagen de la base de datos
+                        $imagen->delete();
+                    }
+                }
+            }
+        }
+    }
     //Obtener que reportaron
     public function procesarReportes($actividades)
     {
@@ -222,7 +247,44 @@ class ReportesController extends Controller
         ));
     }
 
+    public function vistaDecideReporte()
+    {
+        $idusuario = Auth::user()->idusuarios;
 
+        if ($idusuario === 1) {
+            return view('profile.vistaDecideReporte');
+        } else {
+            return view('inicio');
+        }
+    }
+
+    #ELiminiar Imagen Logica
+    public function eliminarImagenLogica($userId)
+    {
+        // Verificar si existe una foto asociada al usuario
+        $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $userId)
+            ->where('tipoDeFoto_idtipoDeFoto', 1)
+            ->first();
+
+        if ($existeFoto != null) {
+            // Obtener la imagen asociada a la revisión de imagen
+            $imagenAnterior = Imagenes::find($existeFoto->imagenes_idimagenes);
+
+            // Eliminar la entrada de revisión de imagen
+            $existeFoto->delete();
+
+            // Verificar si la imagen existe en el almacenamiento Imagen y eliminarla
+            if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
+                Storage::delete($imagenAnterior->subidaImg);
+            }
+
+            // Eliminar la entrada de la imagen
+            $imagenAnterior->delete();
+            return True;
+        } else {
+            return False;
+        }
+    }
     #Admin decide que hacer con el reportado
     public function decideReportes(Request $request)
     {
@@ -268,10 +330,168 @@ class ReportesController extends Controller
                 break;
             case 1:
                 #En caso que el reporte sea necesario pero lo suspendemos la cuenta segun un tiempo que defina el administardor, entro a la tabla historialUsuario y desactivamos por tiempo definido
+                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
+                if ($reporte) {
+                    $reporte->motivos = $request->motivo; //array
+                    $reporte->save();
+                }
+
+                // Obtener todas las actividades creadas por el usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+
+                foreach ($actividades as $actividad) {
+                    $idact = $actividad->idActividad;
+
+                    // Interacciones de la gente ante esa actividad
+                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    foreach ($interacciones as $interaccion) {
+                        // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
+                        if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
+                            // Eliminar la interacción
+                            $interaccion->delete();
+                        } else {
+                            // Actualizar el reporte a 0
+                            $interaccion->reporte = 0;
+                            $interaccion->save();
+                        }
+                    }
+                }
+
+                // En caso que el reporte sea necesario pero lo suspendemos la cuenta
+                $duracionSuspension = $request->duracion;
+                $fechaInica = now(); // Fecha actual
+                $fechaFinaliza = now()->addDays($duracionSuspension); // Fecha de finalización
+
+                //idDatospersonales del usuario
+                $idDato = DatosPersonales::where('usuarios_idusuarios', $idReportado)->first();
+
+                //Encuentro el historial del Usuario
+                $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
+
+                $historial->estado = 'suspendido';
+                $historial->fechaInica = $fechaInica;
+                $historial->fechaFinaliza = $fechaFinaliza;
+                $historial->save();
+
+                // MAIL INFORME DE BANEO Y
+                // Enviar correo electrónico al usuario informando que su cuenta ha sido suspendida
+
+                return redirect()->back()->with('alertReporte', [
+                    'type' => 'Success',
+                    'message' => 'La cuenta ha sido suspendida por ' . $duracionSuspension . ' días.',
+                ]);
                 break;
             case 2:
                 #En caso que el reporte sea necesario pero pesado, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
-                break;
+                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
+                if ($reporte) {
+                    $reporte->motivos = $request->motivo; //array
+                    $reporte->save();
+                }
+
+                // Obtener todas las actividades creadas por el usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+
+                foreach ($actividades as $actividad) {
+                    $idact = $actividad->idActividad;
+
+                    // Interacciones de la gente ante esa actividad
+                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    foreach ($interacciones as $interaccion) {
+                        // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
+                        if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
+                            // Eliminar la interacción
+                            $interaccion->delete();
+                        } else {
+                            // Actualizar el reporte a 0
+                            $interaccion->reporte = 0;
+                            $interaccion->save();
+                        }
+                    }
+                }
+
+                // En caso que el reporte sea necesario pero le betamos de la pagina.
+                $fechaInica = now(); // Fecha actual
+
+                //idDatospersonales del usuario
+                $idDato = DatosPersonales::where('usuarios_idusuarios', $idReportado)->first();
+
+                //Encuentro el historial del Usuario
+                $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
+
+                $historial->estado = 'Inactivo';
+                $historial->eliminacionLogica = 'Si';
+                $historial->fechaInica = $fechaInica;
+                $historial->save();
+
+                //Actualiza los datos del usuario
+                // Borrar la contraseña del usuario de manera segura
+                $usuario = Usuario::where('usuarios_idusuarios', $idReportado)->first();
+                $usuario->contraseniaUser = null;
+                $usuario->save();
+                // Eliminar reportes asociados al usuario
+                Reportes::where('usuarios_idusuarios', $idReportado)->delete();
+
+                // Eliminar todas las interacciones que realizó el usuario
+                Interacciones::where('usuarios_idusuarios', $idReportado)->delete();
+
+                // Acceder a todas las actividades realizadas por el usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->with(['comentarios', 'contenidos'])->get();
+                foreach ($actividades as $actividad) {
+                    // Eliminar las interacciones de esa actividad
+                    Interacciones::where('actividades_idactividad', $actividad->idActividad)->delete();
+
+                    // Eliminar los comentarios
+                    foreach ($actividad->comentarios as $comentario) {
+                        // Eliminar las interacciones del comentario
+                        Interacciones::where('actividades_idactividad', $comentario->Actividad_idActividad)->delete();
+
+                        // Eliminar la imagen asociada al comentario
+                        if ($comentario->revisionImagenes_idrevisionImagenescol) {
+                            // Eliminar el comentario primero
+                            $comentario->delete();
+                            // Ahora eliminar la revisión de imagen asociada
+                            $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                        } else {
+                            // Solo elimina el comentario si no tiene revisión
+                            $comentario->delete();
+                        }
+                    }
+
+                    // Eliminar los contenidos
+                    foreach ($actividad->contenidos as $contenido) {
+                        foreach ($contenido->comentarios as $comentario) {
+                            Interacciones::where('actividades_idactividad', $comentario->Actividad_idActividad)->delete();
+                            $comentario->delete();
+                            $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
+                            // Eliminar la actividad del comentario de la tabla actividad
+                            Actividad::where('idActividad', $comentario->Actividad_idActividad)->delete();
+                        }
+
+                        // Eliminar imágenes de contenido y sus revisiones
+                        foreach ($contenido->imagenesContenido as $imagenContenido) {
+                            $imagenContenido->delete();
+                            $this->eliminarImagenYRevision($imagenContenido->revisionImagenes_idrevisionImagenescol);
+                        }
+
+                        // Eliminar el contenido
+                        $contenido->delete();
+                    }
+
+                    // Después de eliminar los contenidos y comentarios, eliminar la actividad
+                    $actividad->delete();
+                }
+
+                // Borrar la imagen de perfil si tiene
+                $eliminado = $this->eliminarImagenLogica($idReportado);
+
+                // Enviar correo electrónico al usuario informando que su cuenta ha sido ELIMINADA MSJ REPORTE
+
+                // Redirigir a la página de panel de usuarios
+                return redirect('///')->with('alertBorrar', [
+                    'type' => 'Success',
+                    'message' => 'Se ha borrado la cuenta con éxito!',
+                ]);
         }
     }
 }

@@ -22,13 +22,13 @@
                             Historial del Usuario
                         @endif
                     </h1>
-
-                    <a class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center"
-                        href="">
+                    {{-- <a href="Ñ"> --}}
+                    <button
+                        class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
                         Manejar Reporte
+                    </button>
                     </a>
                 </div>
-
 
                 {{-- DATOS DEL USUARIO --}}
                 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -106,6 +106,7 @@
                     </div>
                 @endif
             </div>
+
             {{-- DERECHO --}}
             <div class="md:col-span-8 p-10">
                 {{-- ENCABEZADO DE REPORTES --}}
@@ -266,7 +267,8 @@
                     {{-- SI TIENE ACTIVIDADES PERO NI UNA REPORTADA --}}
                 @elseif ($totalReportadas === 0 && $totalNoReportadas >= 1)
                     <h1 class="text-3xl mb-4 text-center">
-                        Actividades Registradas <b class="text-base font-thin italic text-red-500"> * No Reportadas.
+                        Actividades Registradas <b class="text-base font-thin italic text-red-500"> * No
+                            Reportadas.
                         </b>
                     </h1>
                     {{-- SI NO REPORTARON LA PUBLICACION --}}

@@ -529,12 +529,12 @@ class PerfilController extends Controller
         $usuario = Usuario::find($id);
 
         // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
-        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->first();
 
         // Relaciono a su usuario con datos personales
         $datospersonales = DatosPersonales::where('usuarios_idusuarios', $id)->first();
 
-        if ($tieneReportes === 0) {
+        if (!$tieneReportes) {
             // Verificamos si existen los datos personales
             if ($datospersonales) {
                 // Actualizo el Historial Usuario
