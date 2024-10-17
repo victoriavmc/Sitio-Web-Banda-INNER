@@ -14,25 +14,35 @@
             <div class="bg-red-500  md:col-span-4 p-10 ">
                 {{-- ENCABEZADO DEL USUARIO --}}
 
-                <h1 class='text-2xl font-semibold text-center uppercase'>
-                    @if (isset($totalReportadas) && $totalReportadas > 0)
-                        Usuario Reportado
-                    @else
-                        Historial del Usuario
-                    @endif
-                </h1>
+                <div class="flex justify-evenly">
+                    <h1 class='text-2xl font-semibold text-center uppercase'>
+                        @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
+                            No Presenta Reportes
+                        @elseif ($totalReportadas === 1)
+                            Actividad Reportada
+                        @elseif ($totalReportadas > 1)
+                            Actividades Reportadas
+                        @else
+                            Fue Reportado el Perfil
+                        @endif
+                    </h1>
+
+                    <a class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center"
+                        href="">
+                        Manejar Reporte
+                    </a>
+                </div>
+
 
                 {{-- DATOS DEL USUARIO --}}
                 <div class="max-w-4xl mx-auto px-4 py-8">
                     <div class=" space-y-4">
                         <div class="py-4 rounded shadow-md  bg-gray-50">
                             <div class="flex p-4 space-x-4 sm:px-8">
-                                <div class="flex-shrink-0 w-24 h-24">
-                                    <img id="imagen"
-                                        class="cursor-pointer imagen-modal object-cover object-center w-full h-40 max-w-full rounded-lg"
-                                        src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.png') }}"
-                                        alt="Foto de perfil">
-                                </div>
+                                <img id="imagen"
+                                    class="cursor-pointer imagen-modal object-cover object-center w-full h-24 max-w-24 rounded-lg"
+                                    src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.png') }}"
+                                    alt="Foto de perfil">
                                 <div class="flex-1 py-2 space-y-4">
                                     <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
                                         <div class="text-lg font-semibold break-words">
@@ -72,11 +82,11 @@
                     }
                 @endphp
 
-
-                @if (isset($totalReportadas) && $totalReportadas > 0)
+                @if ((isset($totalReportadas) && $totalReportadas > 0) || (isset($perfilReportado) && $perfilReportado))
                     <div class="flex space-x-2 items-center animate-out zoom-in duration-200 delay-300">
                         <div class="font-semibold text-center md:text-left">
-                            Reportado por {{ count($quienesReportaron) === 1 ? 'el usuario:' : 'los usuarios:' }}
+                            <p class="mb-2">Reportado por
+                                {{ count($quienesReportaron) === 1 ? 'el usuario:' : 'los usuarios:' }}</p>
 
                             <div class="flex space-x-2 items-center flex-col md:flex-row">
                                 <div class="flex space-x-2 ml-10">
@@ -136,7 +146,7 @@
                                 Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                         <!-- Mostrar publicaciones reportadas -->
                         @foreach ($actividadesReportadas['contenidos'] as $contenido)
-                            <div class="relative ml-0 md:mr-10 mb-6">
+                            <div class="relative ml-0 md:mr-10">
                                 <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                                 <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                     <div class="flex items-center -mt-1">
@@ -166,20 +176,21 @@
                             </div>
                             <!-- Botón para eliminar publicacion -->
                             @if (Auth::user()->rol->idrol == 1)
-                                <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
                                     method="POST"
                                     onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                    <button type="submit"
+                                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                                 stroke-width="2"
                                                 d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
                                         </svg>
-                                        <p class="text-base font-semibold">Eliminar</p>
+                                        <p class="text-base font-semibold ml-1">Eliminar</p>
                                     </button>
                                 </form>
                             @endif
@@ -193,7 +204,7 @@
                         </h2>
                         <!-- Mostrar comentarios reportados -->
                         @foreach ($actividadesReportadas['comentarios'] as $contenido)
-                            <div class="relative ml-0 md:mr-10 mb-6">
+                            <div class="relative ml-0 md:mr-10">
                                 <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                                 <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                     <div class="flex items-center -mt-1">
@@ -224,21 +235,22 @@
                             </div>
                             <!-- Botón para eliminar comentario -->
                             @if (Auth::user()->rol->idrol == 1)
-                                <form class=""
+                                <form class="mt-4"
                                     action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
                                     method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
+                                    <button type="submit"
+                                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round"
                                                 stroke-linejoin="round" stroke-width="2"
                                                 d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
                                         </svg>
-                                        <p class="text-base font-semibold">Eliminar</p>
+                                        <p class="text-base font-semibold ml-1">Eliminar</p>
                                     </button>
                                 </form>
                             @endif
@@ -269,7 +281,7 @@
                                 Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                         <!-- Mostrar publicaciones  -->
                         @foreach ($actividadesNoReportadas['contenidos'] as $contenido)
-                            <div class="relative ml-0 md:mr-10 mb-6">
+                            <div class="relative ml-0 md:mr-10">
                                 <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                                 <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                     <div class="flex items-center -mt-1">
@@ -300,7 +312,7 @@
                             </div>
                             <!-- Botón para eliminar publicacion -->
                             @if (Auth::user()->rol->idrol == 1)
-                                <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
                                     method="POST"
                                     onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
                                     @csrf
@@ -328,7 +340,7 @@
                         </h2>
                         <!-- Mostrar comentarios -->
                         @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
-                            <div class="relative ml-0 md:mr-10 mb-6">
+                            <div class="relative ml-0 md:mr-10">
                                 <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                                 <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                     <div class="flex items-center -mt-1">
@@ -359,7 +371,7 @@
                             </div>
                             <!-- Botón para eliminar comentario -->
                             @if (Auth::user()->rol->idrol == 1)
-                                <form class=""
+                                <form class="my-4"
                                     action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
                                     method="POST">
                                     @csrf
@@ -396,7 +408,7 @@
             {{-- SI TIENE ACTIVIDADES REPORTADAS Y NO REPORTADAS --}}
         @elseif ($totalReportadas > 0 && $totalNoReportadas > 0)
             <div class="py-8 flex flex-col ml-4">
-                <h1 class="text-3xl mb-4 ml-4 flex justify-center">
+                <h1 class="text-3xl mb-4 ml-4 text-center">
                     Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
                 </h1>
                 {{-- SI NO REPORTARON LA PUBLICACION --}}
@@ -406,7 +418,7 @@
                             Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                     <!-- Mostrar publicaciones  -->
                     @foreach ($actividadesNoReportadas['contenidos'] as $contenido)
-                        <div class="relative ml-0 md:mr-10 mb-6">
+                        <div class="relative ml-0 md:mr-10">
                             <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                             <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                 <div class="flex items-center -mt-1">
@@ -441,20 +453,21 @@
                         </div>
                         <!-- Botón para eliminar publicacion -->
                         @if (Auth::user()->rol->idrol == 1)
-                            <form class="" action="{{ route('eliminarContenido', $contenido['id']) }}"
+                            <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
                                 method="POST"
                                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                             stroke-width="2"
                                             d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
                                     </svg>
-                                    <p class="text-base font-semibold">Eliminar</p>
+                                    <p class="text-base font-semibold ml-1">Eliminar</p>
                                 </button>
                             </form>
                         @endif
@@ -469,7 +482,7 @@
                     </h2>
                     <!-- Mostrar comentarios -->
                     @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
-                        <div class="relative ml-0 md:mr-10 mb-6">
+                        <div class="relative ml-0 md:mr-10">
                             <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
                             <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
                                 <div class="flex items-center -mt-1">
@@ -505,7 +518,7 @@
                         </div>
                         <!-- Botón para eliminar publicacion -->
                         @if (Auth::user()->rol->idrol == 1)
-                            <form class=""
+                            <form class="my-4"
                                 action="{{ route('eliminarContenido', $contenido['idComentario']) }}" method="POST"
                                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
                                 @csrf
@@ -518,7 +531,7 @@
                                             stroke-width="2"
                                             d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
                                     </svg>
-                                    <p class="text-base font-semibold">Eliminar</p>
+                                    <p class="text-base font-semibold my-1">Eliminar</p>
                                 </button>
                             </form>
                         @endif
