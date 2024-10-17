@@ -225,6 +225,7 @@ class panelStaffController extends Controller
 
             // Aquí deberías borrar la contraseña del usuario de manera segura
             $usuario->contraseniaUser = null;
+            $usuario->usuarioUser = null;
             $usuario->save();
 
             #Borro solo el atributo de redSocial enlazada en la tabla staffextra
@@ -236,9 +237,9 @@ class panelStaffController extends Controller
         }
 
         // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
-        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->value('reportes');
+        $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->first();
 
-        if ($tieneReportes === 0) {
+        if (!$tieneReportes) {
             // Si no hay reportes, eliminamos al usuario de la tabla
             Reportes::where('usuarios_idusuarios', $id)->delete();
         }

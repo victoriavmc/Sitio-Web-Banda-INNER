@@ -15,6 +15,13 @@
         </x-alerts>
     @endif
 
+    @if (session('alertLogin'))
+        {{-- Componente de alerta para el Login exitoso o fallido --}}
+        <x-alerts :type="session('alertLogin')['type']">
+            {{ session('alertLogin')['message'] }}
+        </x-alerts>
+    @endif
+
     {{-- Contenedor del formulario de inicio de sesión con un fondo de imagen --}}
     <div class="min-h-screen bg-cover bg-center flex items-center justify-center"
         style="background-image: url(' {{ asset('img/logeo/login_fondo.jpg') }} ');">

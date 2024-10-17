@@ -21,6 +21,24 @@ use illuminate\support\Str;
 
 class LoginController extends Controller
 {
+    // USUARIO VERIFICA ESTADO
+    public function verificarEstado($entradaUsuario)
+    {
+        // Verificar si el usuario existe en la base de datos por correo electrónico o nombre de usuario
+        if (filter_var($entradaUsuario, FILTER_VALIDATE_EMAIL)) {
+            $usuarioExistente = Usuario::where('correoElectronicoUser', $entradaUsuario)->first();
+        } else {
+            $usuarioExistente = Usuario::where('usuarioUser', $entradaUsuario)->first();
+        }
+
+        $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+        $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+
+        if (!$historialUsuario) return false;
+        return $historialUsuario->estado;
+    }
+
     #REGISTRO
     public function register(Request $request)
     {
@@ -35,71 +53,83 @@ class LoginController extends Controller
             'usuario' => 'required|string|max:255|regex:/^[^@]+$/',
         ]);
 
-        // Buscar si el usuario ya existe por correo electrónico o nombre de usuario
-        $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)
-            ->orWhere('usuarioUser', $request->usuario)
-            ->first();
+        // Verificar estado del usuario
+        $usuarioExistente = $this->verificarEstado($request->email);
 
-        if ($usuarioExistente) {
-            // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
-            $datosPersonales = $usuarioExistente->datospersonales;
-            $historialUsuario = $datosPersonales ? $datosPersonales->historialusuario : null;
+        switch ($usuarioExistente) {
+            case false:
+                // Opción 1: Registro normal de un nuevo usuario
+                $usuario = new Usuario();
+                $dato = new DatosPersonales();
 
-            if ($historialUsuario == 'Inactivo') {
+                // Guardar usuario
+                $usuario->usuarioUser = $request->usuario;
+                $usuario->correoElectronicoUser = $request->email;
+                $usuario->contraseniaUser = Hash::make($request->password);
+                $usuario->rol_idrol = 4;
+                $usuario->save();
+
+                // Guardar datos personales
+                $dato->nombreDP = ucwords($request->nombre);
+                $dato->apellidoDP = ucwords($request->apellido);
+                $dato->fechaNacimiento = $request->fechaNacimiento;
+                $dato->PaisNacimiento_idPaisNacimiento = $request->paisDeNacimiento;
+                $dato->generoDP = $request->genero;
+                $dato->usuarios_idusuarios = $usuario->idusuarios;
+                $dato->save();
+
+                // Registrar en HistorialUsuario
+                $historial = new HistorialUsuario();
+                $historial->datospersonales_idDatosPersonales = $dato->idDatosPersonales;
+                $historial->save();
+
+                // Enviar correo de bienvenida
+                Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));
+
+                return redirect(route('login'))->with('alertRegistro', [
+                    'type' => 'Success',
+                    'message' => 'Tu registro ha sido completado con éxito! Por favor, revisa tu correo electrónico. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
+                ]);
+                break;
+
+            case 'Inactivo':
+                // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
+
                 // Redirigir a la página de reactivación de cuenta
-                return redirect(route('reactivar-cuenta'))->with('alert', [
-                    'type' => 'warning',
-                    'message' => 'Tu cuenta está inactiva. Por favor, sigue los pasos para reactivarla.'
-                ]);
-            }
 
-            // Opción 3: Usuario baneado
-            if ($historialUsuario == 'Baneado') {
-                return redirect(route('registro'))->with('alert', [
-                    'type' => 'error',
-                    'message' => 'No puedes registrarte de nuevo ya que tu cuenta fue baneada.'
+                // mensaje alerta existe un usuario con ese correo electronico
+                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                    'type' => 'Warning',
+                    'message' => 'Su cuenta se encuentra Inactiva.',
                 ]);
-            }
+                break;
 
-            // El usuario existe pero no está inactivo ni baneado (no permitir registro)
-            return redirect(route('registro'))->with('alert', [
-                'type' => 'error',
-                'message' => 'El correo electrónico o el nombre de usuario ya están en uso.'
-            ]);
+            case 'Baneado':
+                // Opción 3: Usuario baneado
+                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
+                // Redirigir a la página de contacto
+
+                // Mensaje alerta: el usuario se encuentra baneado.
+                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
+                    ->with('alertBaneo', [
+                        'type' => 'warning',
+                        'message' => 'Su usuario ha sido baneado, no podrá acceder.',
+                    ]);
+
+
+            default:
+                // El usuario existe pero no está inactivo ni baneado (no permitir registro)
+                return redirect()->back()->with('alertRegistro', [
+                    'type' => 'Warning',
+                    'message' => 'Ya existe una cuenta asociada a este correo electrónico.',
+                ]);
+                break;
         }
-
-        // Opción 1: Registro normal de un nuevo usuario
-        $usuario = new Usuario();
-        $dato = new DatosPersonales();
-
-        // Guardar usuario
-        $usuario->usuarioUser = $request->usuario;
-        $usuario->correoElectronicoUser = $request->email;
-        $usuario->contraseniaUser = Hash::make($request->password);
-        $usuario->rol_idrol = 4;
-        $usuario->save();
-
-        // Guardar datos personales
-        $dato->nombreDP = ucwords($request->nombre);
-        $dato->apellidoDP = ucwords($request->apellido);
-        $dato->fechaNacimiento = $request->fechaNacimiento;
-        $dato->PaisNacimiento_idPaisNacimiento = $request->paisDeNacimiento;
-        $dato->generoDP = $request->genero;
-        $dato->usuarios_idusuarios = $usuario->idusuarios;
-        $dato->save();
-
-        // Registrar en HistorialUsuario
-        $historial = new HistorialUsuario();
-        $historial->datospersonales_idDatosPersonales = $dato->idDatosPersonales;
-        $historial->save();
-
-        // Enviar correo de bienvenida
-        Mail::to($request->email)->send(new msjRegistro(ucwords($request->nombre), $request->genero));
-
-        return redirect(route('login'))->with('alertRegistro', [
-            'type' => 'Success',
-            'message' => 'Tu registro ha sido completado con éxito! Por favor, revisa tu correo electrónico. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
-        ]);
     }
 
 
@@ -136,35 +166,90 @@ class LoginController extends Controller
     #LOGEARSE
     public function login(Request $request)
     {
+        // validar inicio de sesion
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required|min:8|max:16',
+        ]);
+
         // LLAMAMOS LA FUNCION ANTERIOR
-        $fail = $this->verificarCorreoUsuario($request);
+        $usuario = $this->verificarEstado($request->email);
+        // $usuario = Usuario::where('usuarioUser', $request->usuario)->exists();
 
-        if ($fail) {
-            // Validar si corresponde el usuario con la contraseña
-            $input = $request->input('email');
-            $isEmail = filter_var($input, FILTER_VALIDATE_EMAIL);
+        switch ($usuario) {
+            case false:
+                return redirect()->back()->with('alertLogin', [
+                    'type' => 'Success',
+                    'message' => 'Este correo y contraseña no coinciden con ningun usuario registrado, ingrese sus datos nuevamente.',
+                ]);
+                break;
 
-            // Crear las credenciales con el campo 'password'
-            $credentials = $isEmail
-                ? ['correoElectronicoUser' => $input, 'password' => $request->password]
-                : ['usuarioUser' => $input, 'password' => $request->password];
+            case 'Inactivo':
+                // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
 
-            // Intentar iniciar sesión con las credenciales proporcionadas
-            if (Auth::attempt($credentials)) {
-                // Regenerar la sesión para evitar fijación de sesión
-                $request->session()->regenerate();
+                // Redirigir a la página de reactivación de cuenta
+
+                // mensaje alerta existe un usuario con ese correo electronico
+                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                    'type' => 'Warning',
+                    'message' => 'Su cuenta se encuentra Inactiva.',
+                ]);
+                break;
+
+            case 'Baneado':
+                // Opción 3: Usuario baneado
+                if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                    $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+                } else {
+                    $usuarioExistente = Usuario::where('usuarioUser', $request->email)->first();
+                }
+
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
+                // Redirigir a la página de contacto
+
+                // Mensaje alerta: el usuario se encuentra baneado.
+                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
+                    ->with('alertBaneo', [
+                        'type' => 'Warning',
+                        'message' => 'Su usuario ha sido baneado, no podrá acceder.',
+                    ]);
+
+
+            case 'Activo':
+                $fail = $this->verificarCorreoUsuario($request);
+
+                if ($fail) {
+                    $input = $request->input('email');
+                    $isEmail = filter_var($input, FILTER_VALIDATE_EMAIL);
+
+                    // Crear las credenciales con el campo 'password'
+                    $credentials = $isEmail
+                        ? ['correoElectronicoUser' => $input, 'password' => $request->password]
+                        : ['usuarioUser' => $input, 'password' => $request->password];
+
+                    // Intentar iniciar sesión con las credenciales proporcionadas
+                    if (Auth::attempt($credentials)) {
+                        // Regenerar la sesión para evitar fijación de sesión
+                        $request->session()->regenerate();
+
+                        // Redirigir al perfil con un mensaje de éxito si la autenticación fue exitosa
+                        return redirect(route('perfil'))->with('alertInicioSesion', [
+                            'type' => 'Success',
+                            'message' => 'Inicio de sesión exitoso.'
+                        ]);
+                    } else {
+                        // Si las credenciales no son válidas, redirigir de vuelta con un mensaje de error
+                        return redirect()->back()->withErrors(['loginError' => 'Usuario o contraseña incorrectos.']);
+                    }
+                } else {
+                    return redirect()->back()->withErrors(['loginError' => 'Usuario o correo electronico incorrectos.']);
+                }
 
                 // Redirigir al perfil con un mensaje de éxito si la autenticación fue exitosa
-                return redirect(route('perfil'))->with('alertInicioSesion', [
-                    'type' => 'Success',
-                    'message' => 'Inicio de sesión exitoso.'
-                ]);
-            } else {
-                // Si las credenciales no son válidas, redirigir de vuelta con un mensaje de error
-                return redirect()->back()->withErrors(['loginError' => 'Usuario o contraseña incorrectos.']);
-            }
-        } else {
-            return redirect()->back()->withErrors(['loginError' => 'Usuario o correo electronico incorrectos.']);
+                break;
         }
     }
 
@@ -175,30 +260,74 @@ class LoginController extends Controller
             'email' => 'required|email|exists:usuarios,correoElectronicoUser',
         ]);
 
-        // Obtener el valor del campo 'email' del request
-        $input = $request->input('email');
+        $usuario = $this->verificarEstado($request->email);
 
-        // Generar un PIN aleatorio de 6 caracteres
-        $pin = Str::random(6);
+        switch ($usuario) {
+            case false:
+                return redirect()->back()->withErrors('email', [
+                    'message' => 'Este correo no coinciden con ningun usuario registrado, ingrese nuevamente.',
+                ]);
+                break;
 
-        // Buscar el usuario en la base de datos por su correo electrónico
-        $usuario = Usuario::where('correoElectronicoUser', $input)->first();
+            case 'Inactivo':
+                // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
 
-        // Actualizar el usuario con el nuevo PIN hasheado
-        $usuario->pinOlvidoUser = Hash::make($pin);
-        $usuario->save();
+                // Redirigir a la página de reactivación de cuenta
 
-        // Almacenar el correo electrónico en la sesión para uso posterior
-        session(['email' => $input]);
+                // mensaje alerta existe un usuario con ese correo electronico
+                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                    'type' => 'Warning',
+                    'message' => 'Su cuenta se encuentra Inactiva.',
+                ]);
+                break;
 
-        // Enviar un correo electrónico al usuario con el PIN generado
-        Mail::to($usuario->correoElectronicoUser)->send(new msjPinOlvido($pin));
+            case 'Baneado':
+                // Opción 3: Usuario baneado
+                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
 
-        // Redirigir al usuario a la página de comprobación de PIN con un mensaje de advertencia
-        return redirect(route('comprobarPin'))->with('alertRestablecer', [
-            'type' => 'Warning',
-            'message' => 'Por favor, revisa tu correo electrónico donde se te envió el pin de olvido. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
-        ]);
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
+                // Redirigir a la página de contacto
+
+                // Mensaje alerta: el usuario se encuentra baneado.
+                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
+                    ->with('alertBaneo', [
+                        'type' => 'Warning',
+                        'message' => 'Su usuario ha sido baneado, no podrá acceder.',
+                    ]);
+
+            case 'Activo':
+                // Obtener el valor del campo 'email' del request
+                $input = $request->input('email');
+
+                // Generar un PIN aleatorio de 6 caracteres
+                $pin = Str::random(6);
+
+                // Buscar el usuario en la base de datos por su correo electrónico
+                $usuario = Usuario::where('correoElectronicoUser', $input)->first();
+
+                // Actualizar el usuario con el nuevo PIN hasheado
+                $usuario->pinOlvidoUser = Hash::make($pin);
+                $usuario->save();
+
+                // Almacenar el correo electrónico en la sesión para uso posterior
+                session(['email' => $input]);
+
+                // Enviar un correo electrónico al usuario con el PIN generado
+                Mail::to($usuario->correoElectronicoUser)->send(new msjPinOlvido($pin));
+
+                // Redirigir al usuario a la página de comprobación de PIN con un mensaje de advertencia
+                return redirect(route('comprobarPin'))->with('alertRestablecer', [
+                    'type' => 'Warning',
+                    'message' => 'Por favor, revisa tu correo electrónico donde se te envió el pin de olvido. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
+                ]);
+
+
+                // Redirigir al perfil con un mensaje de éxito si la autenticación fue exitosa
+                break;
+        }
     }
 
     #COMPROBAR PIN
@@ -208,7 +337,6 @@ class LoginController extends Controller
         $request->validate([
             'pinOlvido' => 'required|min:6',
         ]);
-
 
         // Obtener el email del usuario de la sesión actual
         $email = session('email');
@@ -287,4 +415,26 @@ class LoginController extends Controller
             'message' => 'Contraseña restablecida con éxito. Por favor, inicie sesión.'
         ]);
     }
+
+    public function vistaReactivarCuenta()
+    {
+        return view('auth.reactivarCuenta');
+    }
+
+    public function contacto($id)
+    {
+        // Fecha hasta el desbaneo del usuario
+        $usuario = HistorialUsuario::find($id);
+
+        $fechaFinal = $usuario->fechaFinaliza;
+
+        return view('auth.contacto', compact('fechaFinal'));
+    }
+
+    // reactivarCUENTA
+    // Opcion 1
+    // Ingrese el correo para OP 1 : RECUPERA LA CONTRASEÑA
+
+    // Opcion 2 
+    // No teien más el mismo correo, registrar como nuevo usuario
 }
