@@ -4,7 +4,7 @@
             <div class="flex flex-col mt-8">
                 <div class="container max-w-7xl px-4">
                     <div class="flex w-full flex-wrap justify-center text-center mb-24">
-                        <h1 class="text-gray-900 text-5xl font-bold mb-8">
+                        <h1 class="text-gray-900 text-5xl font-bold mb-2">
                             Miembros del Staff
                         </h1>
                     </div>
@@ -16,32 +16,32 @@
                                 <div class="grid grid-cols-1 gap-2 mt-12 list-none md:grid-cols-2 lg:mt-24 max-w-5xl mx-auto"
                                     role="list">
                                     <article
-                                        class="mx-auto  shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                        style="background-image: url('https://i.pinimg.com/736x/2b/74/7b/2b747b71b782a8833f2b3ad9b0e37cd1.jpg');">
+                                        class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
+                                        style="background-image:url('{{ asset('img/artistas/victoriavmc.png') }}');">
                                         <div
                                             class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                            <div class=" bg-black p-8 h-full justify-end flex flex-col">
+                                            <div class="bg-black p-8 h-full justify-end flex flex-col">
                                                 <h1
                                                     class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                                    01⏤ Experience </h1>
+                                                    VictoriaVMC </h1>
                                                 <p
                                                     class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
-                                                    Crafting an effortless journey with user-first. </p>
+                                                    Fan de la pepsi y el Csgo. </p>
                                             </div>
                                         </div>
                                     </article>
                                     <article
                                         class="mx-auto  shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                        style="background-image: url('https://i.pinimg.com/736x/2b/74/7b/2b747b71b782a8833f2b3ad9b0e37cd1.jpg');">
+                                        style="background-image:url('{{ asset('img/artistas/santi.png') }}');">
                                         <div
                                             class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
                                             <div class=" bg-black p-8 h-full justify-end flex flex-col">
                                                 <h1
                                                     class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                                    01⏤ Experience </h1>
+                                                    Santi </h1>
                                                 <p
                                                     class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
-                                                    Crafting an effortless journey with user-first. </p>
+                                                    Fan de los juegos de Rol. </p>
                                             </div>
                                         </div>
                                     </article>
