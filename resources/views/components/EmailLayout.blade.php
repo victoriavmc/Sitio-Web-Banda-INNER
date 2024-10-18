@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Inner</title>
+    <title>{{ !$recuperoRedesSociales->isEmpty() ? 'Inner' : 'PerriPepsi' }}</title>
 
     <style>
         .header p {
@@ -63,27 +63,56 @@
 <body>
     <div class="container">
         <div class="header" style="text-align: center;">
-            <img src="https://drive.google.com/uc?export=view&id=10gZANlyf6bae4Fs055t5hPnnYliAzFFA" alt="Inner"
-                style="width: 250px; height: auto;">
+            @if (!$recuperoRedesSociales->isEmpty())
+                <img style="width: 250px; height: auto;"
+                    src="https://drive.google.com/uc?export=view&id=10gZANlyf6bae4Fs055t5hPnnYliAzFFA" alt="Inner">
+            @else
+                <img style="margin-left:10px; margin-top:10px; margin-bottom:10px; width: 48px; height: auto;"
+                    src='https://drive.google.com/uc?export=view&id=1YX5QmFvgIOiD0uHoUVufU0zHWW1yrqDt' alt="PerriPepsi">
+            @endif
         </div>
 
         <div class="body-content">
             {{ $slot }}
         </div>
 
-        <div class="footer">
-            <p>Síguenos en nuestras redes sociales:</p>
-            <div class="social-media">
-                <a href="{{ $linkSpotify }}">Spotify
-                </a> |
-                <a href="{{ $linkYoutube }}">YouTube
-                </a> |
-                <a href="{{ $linkItunes }}">Apple Music
-                </a> |
-                <a href="{{ $linkInstagram }}">Instagram
-                </a>
+        @if (!$recuperoRedesSociales->isEmpty())
+            <div class="footer">
+                <p>Síguenos en nuestras redes sociales:</p>
+                <div class="social-media">
+                    @foreach ($recuperoRedesSociales as $redSocial)
+                        @if ($redSocial->linkRedSocial)
+                            @switch($redSocial->nombreRedSocial)
+                                @case('Deezer')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    |
+                                @break
+
+                                @case('Spotify')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    |
+                                @break
+
+                                @case('Youtube')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    |
+                                @break
+
+                                @case('iTunes')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    |
+                                @break
+
+                                @case('Amazon Music')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    |
+                                @break
+                            @endswitch
+                        @endif
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </body>
 

@@ -15,74 +15,74 @@
 
     <div class="bg-cover min-h-screen bg-center w-full p-10"
         style="background-image: url('{{ asset('img/foro_fondo.jpg') }}')">
-        <div class="grid gap-5 justify-center">
-            <!-- Buscador -->
-            <div class="flex items-center justify-around">
-                <div class="w-full max-w-lg bg-white bg-opacity-70 rounded-lg shadow-xl">
-                    <form action="{{ route('eventos') }}" method="GET"
-                        class="w-full max-w-lg bg-white rounded-lg shadow-xl">
-                        <div
-                            class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-red-500 focus-within:!ring-2 ring-inset focus-within:!ring-red-500 rounded-md">
-                            <svg class="mr-2 h-5 w-5 text-black stroke-black" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                            <input
-                                class="block w-full appearance-none text-base text-black placeholder:text-black focus:outline-none sm:text-sm sm:leading-6 border-none"
-                                placeholder="Buscar publicacion..." name="search" aria-label="Search components"
-                                type="text" aria-expanded="false" aria-autocomplete="list"
-                                value="{{ request('search') }}" style="caret-color: rgb(107, 114, 128)">
-                        </div>
-                    </form>
-                </div>
-
-                {{-- ORDENAR CONTENIDOS  --}}
-                <!-- Botón para abrir el menú desplegable -->
-                <div class="relative">
-                    <button id="sortButton"
-                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 pl-4 pr-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
-                        <p class="mr-1">Ordenar</p>
-                        <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 9-7 7-7-7" />
+        <!-- Buscador -->
+        <div class="flex items-center justify-center gap-4">
+            <div class="w-full max-w-lg bg-white bg-opacity-70 rounded-lg shadow-xl">
+                <form action="{{ route('eventos') }}" method="GET" class="w-full max-w-lg bg-white rounded-lg shadow-xl">
+                    <div
+                        class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-red-500 focus-within:!ring-2 ring-inset focus-within:!ring-red-500 rounded-md">
+                        <svg class="mr-2 h-5 w-5 text-black stroke-black" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
+                        <input
+                            class="block w-full appearance-none text-base text-black placeholder:text-black focus:outline-none sm:text-sm sm:leading-6 border-none"
+                            placeholder="Buscar publicacion..." name="search" aria-label="Search components"
+                            type="text" aria-expanded="false" aria-autocomplete="list"
+                            value="{{ request('search') }}" style="caret-color: rgb(107, 114, 128)">
+                    </div>
+                </form>
+            </div>
 
-                    </button>
+            {{-- ORDENAR CONTENIDOS  --}}
+            <!-- Botón para abrir el menú desplegable -->
+            <div class="relative">
+                <button id="sortButton"
+                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 pl-4 pr-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                    <p class="mr-1">Ordenar</p>
+                    <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m19 9-7 7-7-7" />
+                    </svg>
 
-                    <!-- Menú desplegable -->
-                    <div id="dropdownMenu" class="hidden absolute">
-                        <div class="flex flex-col rounded-lg bg-white shadow-sm border border-slate-200 mt-2">
-                            <nav class="flex min-w-[240px] flex-col gap-1 p-1.5">
-                                <a href="{{ url()->current() }}?orden=1"
-                                    class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
-                                    Más Nuevo al más Antiguo
-                                </a>
-                                <a href="{{ url()->current() }}?orden=2"
-                                    class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
-                                    Más Antiguo al más Nuevo
-                                </a>
-                                <a href="{{ url()->current() }}?orden=3"
-                                    class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
-                                    Mayor número de Interacciones
-                                </a>
-                            </nav>
-                        </div>
+                </button>
+
+                <!-- Menú desplegable -->
+                <div id="dropdownMenu" class="hidden absolute">
+                    <div class="flex flex-col rounded-lg bg-white shadow-sm border border-slate-200 mt-2">
+                        <nav class="flex min-w-[240px] flex-col gap-1 p-1.5">
+                            <a href="{{ url()->current() }}?orden=1"
+                                class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                                Más Nuevo al más Antiguo
+                            </a>
+                            <a href="{{ url()->current() }}?orden=2"
+                                class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                                Más Antiguo al más Nuevo
+                            </a>
+                            <a href="{{ url()->current() }}?orden=3"
+                                class="text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                                Mayor número de Interacciones
+                            </a>
+                        </nav>
                     </div>
                 </div>
-
-                @auth
-                    @if (auth()->user()->rol->idrol == 4)
-                        <a class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                            href="{{ route('superFan') }}">Crear Publicación</a>
-                    @else
-                        <a class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                            href="{{ route('verFormularioForo') }}">Crear Publicación</a>
-                    @endif
-                @endauth
-
             </div>
+            @auth
+                @if (auth()->user()->rol->idrol == 4)
+                    <a class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+                        href="{{ route('superFan') }}">Crear Publicación</a>
+                @else
+                    <a class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+                        href="{{ route('verFormularioForo') }}">Crear Publicación</a>
+                @endif
+            @endauth
+        </div>
+        @if ($recuperoPublicaciones->isEmpty())
+            <p class="text-center mt-5 text-2xl text-white">No hay publicaciones</p>
+            <p class="text-center mt-20 text-2xl text-white">Haz la primer publicacion!</p>
+        @else
             <div class="flex flex-col gap-8">
                 @foreach ($recuperoPublicaciones as $publicacion)
                     <article>
@@ -161,7 +161,7 @@
                     </article>
                 @endforeach
             </div>
-        </div>
+        @endif
     </div>
     <script>
         // Mostrar/ocultar el menú desplegable

@@ -39,7 +39,7 @@
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
+                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Biografía</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('artistas') }}">Artistas</a>
@@ -139,7 +139,7 @@
                     <a class="hover:animate-pulse" href="{{ route('eventos') }}">Eventos</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
-                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Historia</a>
+                    <a class="hover:animate-pulse" href="{{ route('biografia') }}">Biografía</a>
                 </li>
                 <li class="transition-all duration-500 ease-in-out hover:text-white hover:underline">
                     <a class="hover:animate-pulse" href="{{ route('artistas') }}">Artistas</a>
