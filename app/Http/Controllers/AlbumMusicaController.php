@@ -36,12 +36,12 @@ class AlbumMusicaController extends Controller
             $listacanciones = [];
 
             // Obtener las canciones relacionadas con el álbum
-            $canciones = $album->canciones;
-            // dd($album->canciones);
+            $canciones = $album->cancion;
 
             // Verificar si hay canciones antes de recorrer
             if ($canciones) {
                 foreach ($canciones as $cancion) {
+
                     // Añadir los detalles de la canción: nombre, letra en español y letra en inglés
                     $listacanciones[] = [
                         'id' => $cancion->idcancion,
