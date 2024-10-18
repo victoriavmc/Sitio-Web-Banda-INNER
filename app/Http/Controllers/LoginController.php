@@ -32,7 +32,11 @@ class LoginController extends Controller
             $usuarioExistente = Usuario::where('usuarioUser', $entradaUsuario)->first();
         }
 
-        $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+        try {
+            $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+        } catch (\Throwable $th) {
+            return false;
+        }
 
         $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
 
@@ -182,13 +186,12 @@ class LoginController extends Controller
 
         // LLAMAMOS LA FUNCION ANTERIOR
         $usuario = $this->verificarEstado($request->email);
-        // $usuario = Usuario::where('usuarioUser', $request->usuario)->exists();
 
         switch ($usuario) {
             case false:
                 return redirect()->back()->with('alertLogin', [
-                    'type' => 'Success',
-                    'message' => 'Este correo y contraseña no coinciden con ningun usuario registrado, ingrese sus datos nuevamente.',
+                    'type' => 'Warning',
+                    'message' => 'Este correo y contraseña no coinciden con ningun usuario registrado, ingrese sus datos nuevamente o registrese.',
                 ]);
                 break;
 

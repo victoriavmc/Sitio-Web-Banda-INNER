@@ -5,9 +5,16 @@
             {{ session('alertBiografia')['message'] }}
         </x-alerts>
     @endif
+<<<<<<< HEAD
     @if ($recuperoBiografia === null)
         <div class="min-h-screen">
             <h1 class="text-black font-bold text-center text-8xl mb-2 mb-8">Biografía
+=======
+
+    @if ($recuperoBiografia === null)
+        <div class="min-h-screen">
+            <h1 class="text-black font-bold text-center text-8xl mb-8">Biografía
+>>>>>>> 3a83935290ac4b8535d61b4d0bc7b5fe42cd813c
             </h1>
             <p class="text-center text-2xl text-gray-500">No esta disponible
             </p>
@@ -59,9 +66,15 @@
 
 
 
+<<<<<<< HEAD
                         <div class="mx-auto ">
                             <div class="flex flex-col justify-center">
                                 <h2 class="text-center font-semibold text-3xl text-black mt-4 mb-4">¡Escúchanos!</h2>
+=======
+                        <div class="mx-auto">
+                            <div class="flex flex-col justify-center">
+                                <h2 class="text-center font-semibold text-3xl text-black">¡Escúchanos!</h2>
+>>>>>>> 3a83935290ac4b8535d61b4d0bc7b5fe42cd813c
                                 <div class="flex flex-wrap items-center justify-center gap-10 mt-2 md:justify-around">
                                     @foreach ($recuperoRedesSociales as $redSocial)
                                         @if ($redSocial->linkRedSocial)

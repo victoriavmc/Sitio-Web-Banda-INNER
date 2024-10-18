@@ -15,17 +15,14 @@ class emailLayout extends Component
     public $linkItunes;
     public $links;
 
-    public function __construct()
+    public function linksRedes()
     {
-        $this->linkYoutube = redessociales::where('nombreRedSocial', 'Youtube')->first()->linkRedSocial;
-        $this->linkSpotify = redessociales::where('nombreRedSocial', 'Spotify')->first()->linkRedSocial;
-        $this->linkInstagram = redessociales::where('nombreRedSocial', 'Instagram')->first()->linkRedSocial;
-        $this->linkItunes = redessociales::where('nombreRedSocial', 'iTunes')->first()->linkRedSocial;
-        $this->links = redessociales::all()->pluck('linkRedSocial', 'nombreRedSocial');
+        return $this->links = RedesSociales::whereRaw('nombreRedSocial NOT REGEXP "^[0-9]"')->get();
     }
 
     public function render(): View|Closure|string
     {
-        return view('components.EmailLayout');
+        $recuperoRedesSociales = $this->linksRedes();
+        return view('components.EmailLayout', compact('recuperoRedesSociales'));
     }
 }

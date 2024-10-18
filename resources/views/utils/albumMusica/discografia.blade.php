@@ -13,7 +13,7 @@
         </x-alerts>
     @endif
 
-    <div class="">
+    <div class="min-h-screen">
         <div style="background-image: url({{ asset('/img/albums/musica/musica_fondo.jpg') }})"
             class="bg-cover bg-center flex justify-center items-center h-96">
             <div class="absolute bg-black bg-opacity-30 h-96 w-full"></div>
@@ -55,6 +55,32 @@
                                         </button>
                                     </form>
 
+<<<<<<< HEAD
+=======
+            @if (!$listaAlbum)
+                <p class="text-center text-2xl text-gray-500">No hay albums disponibles</p>
+            @else
+                @foreach ($listaAlbum as $album)
+                    <div class="flex w-full justify-center gap-12">
+                        <div class="max-w-sm border border-gray-300 flex">
+                            @auth
+                                <div class="flex gap-3 absolute pl-3 pt-3">
+                                    <form action="{{ route('eliminar-album', $album['id']) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                            <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+
+>>>>>>> 3a83935290ac4b8535d61b4d0bc7b5fe42cd813c
                                     <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
                                         href="{{ route('formulario-modificar-album', $album['id']) }}">
                                         <svg class="w-5 h-5 text-white" aria-hidden="true"
