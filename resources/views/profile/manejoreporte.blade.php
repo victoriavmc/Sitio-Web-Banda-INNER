@@ -22,11 +22,11 @@
                             Historial del Usuario
                         @endif
                     </h1>
-                    {{-- <a href="Ñ"> --}}
-                    <button
-                        class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
-                        Manejar Reporte
-                    </button>
+                    <a href="{{ route('vistaDecideReporte') }}">
+                        <button
+                            class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
+                            Manejar Reporte
+                        </button>
                     </a>
                 </div>
 
@@ -83,7 +83,6 @@
                         <div class="font-semibold text-center md:text-left">
                             <p class="mb-2">Reportado por
                                 {{ count($quienesReportaron) === 1 ? 'el usuario:' : 'los usuarios:' }}</p>
-
                             <div class="flex space-x-2 items-center flex-col md:flex-row">
                                 <div class="flex space-x-2 ml-10">
                                     @foreach ($quienesReportaron as $usuarioReporto)
@@ -101,7 +100,6 @@
                                     @endforeach
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 @endif
@@ -142,54 +140,50 @@
                                 Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                         <!-- Mostrar publicaciones reportadas -->
                         @foreach ($actividadesReportadas['contenidos'] as $contenido)
-                            <div class="relative ml-0 md:mr-10">
-                                <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                    <div class="flex items-center -mt-1">
-                                        <a href={{ route('foroUnico', $contenido['id']) }}>
-                                            <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                                {{ $contenido['titulo'] }}
-                                            </h3>
-                                        </a>
-                                    </div>
-                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                        publicación: {{ $contenido['fechaComent'] }} </p>
-                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                        @foreach ($contenido['rutaImagen'] as $imagen)
-                                            <div class="group cursor-pointer relative">
-                                                <div class="group relative cursor-pointer">
-                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                        alt="ImagenesCargadas"
-                                                        class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                            <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <a href={{ route('foroUnico', $contenido['id']) }}>
+                                        <h3 class="text-2xl font-bold text-gray-800">
+                                            {{ $contenido['titulo'] }}
+                                        </h3>
+                                    </a>
+                                    <!-- Botón para eliminar publicacion -->
+                                    @if (Auth::user()->rol->idrol == 1)
+                                        <form action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                                <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                                <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
+                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                    publicación: {{ $contenido['fechaComent'] }} </p>
+                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                    @foreach ($contenido['rutaImagen'] as $imagen)
+                                        <div class="group cursor-pointer relative">
+                                            <div class="group relative cursor-pointer">
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                             </div>
-                            <!-- Botón para eliminar publicacion -->
-                            @if (Auth::user()->rol->idrol == 1)
-                                <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
-                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                        <p class="text-base font-semibold ml-1">Eliminar</p>
-                                    </button>
-                                </form>
-                            @endif
                         @endforeach
                     @endif
 
@@ -200,63 +194,56 @@
                         </h2>
                         <!-- Mostrar comentarios reportados -->
                         @foreach ($actividadesReportadas['comentarios'] as $contenido)
-                            <div class="relative ml-0 md:mr-10">
-                                <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                    <div class="flex items-center -mt-1">
-                                        <a href={{ route('foroUnico', $contenido['idComentario']) }}>
-                                            <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                                {{ $contenido['tituloContenido'] }}
-                                            </h3>
-                                        </a>
-                                    </div>
-                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                        publicación: {{ $contenido['fechaComent'] }} </p>
-                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                        @foreach ($contenido['rutaImagen'] as $imagen)
-                                            <div class="group cursor-pointer relative">
-                                                <div class="group relative cursor-pointer">
-                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                        alt="ImagenesCargadas"
-                                                        class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                </div>
+                            <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                        <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
+                                            {{ $contenido['tituloContenido'] }}
+                                        </h3>
+                                    </a>
+                                    <!-- Botón para eliminar comentario -->
+                                    @if (Auth::user()->rol->idrol == 1)
+                                        <form action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
+                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                                <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                                <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                    publicación: {{ $contenido['fechaComent'] }} </p>
+                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                    @foreach ($contenido['rutaImagen'] as $imagen)
+                                        <div class="group cursor-pointer relative">
+                                            <div class="group relative cursor-pointer">
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
                                             </div>
-                                        @endforeach
-                                    </div>
-
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
-                            <!-- Botón para eliminar comentario -->
-                            @if (Auth::user()->rol->idrol == 1)
-                                <form class="mt-4"
-                                    action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
-                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
-                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                        <p class="text-base font-semibold ml-1">Eliminar</p>
-                                    </button>
-                                </form>
-                            @endif
                         @endforeach
                     @endif
                 @endif
 
                 {{-- SI NO HAY ACTIVIDADES REPORTADAS NI NO REPORTADAS --}}
                 @if ($totalReportadas === 0 && $totalNoReportadas === 0)
-                    <div class="py-8 flex justify-center h-full items-center">
+                    <div class="flex justify-center h-full items-center">
                         <!-- Si no hay actividades reportadas, ni no reportadas -->
                         <h1 class="text-3xl text-center">
                             El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no ha realizado
@@ -278,55 +265,49 @@
                                 Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                         <!-- Mostrar publicaciones  -->
                         @foreach ($actividadesNoReportadas['contenidos'] as $contenido)
-                            <div class="relative ml-0 md:mr-10">
-                                <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                    <div class="flex items-center -mt-1">
-                                        <a href={{ route('foroUnico', $contenido['id']) }}>
-                                            <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                                {{ $contenido['titulo'] }}
-                                            </h3>
-                                        </a>
-                                    </div>
-                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                        publicación: {{ $contenido['fechaComent'] }} </p>
-                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                        @foreach ($contenido['rutaImagen'] as $imagen)
-                                            <div class="group cursor-pointer relative">
-                                                <div class="group relative cursor-pointer">
-                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                        alt="ImagenesCargadas"
-                                                        class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                </div>
+                            <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <a href={{ route('foroUnico', $contenido['id']) }}>
+                                        <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
+                                            {{ $contenido['titulo'] }}
+                                        </h3>
+                                    </a>
+                                    @if (Auth::user()->rol->idrol == 1)
+                                        <form action="{{ route('eliminarContenido', $contenido['id']) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                                <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                                <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                    publicación: {{ $contenido['fechaComent'] }} </p>
+                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                    @foreach ($contenido['rutaImagen'] as $imagen)
+                                        <div class="group cursor-pointer relative">
+                                            <div class="group relative cursor-pointer">
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
                                             </div>
-                                        @endforeach
-                                    </div>
-
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <!-- Botón para eliminar publicacion -->
-                            @if (Auth::user()->rol->idrol == 1)
-                                <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                        <p class="text-base font-semibold">Eliminar</p>
-                                    </button>
-                                </form>
-                            @endif
                         @endforeach
                     @endif
                     {{-- SI NO REPORTARON EL COMENTARIO --}}
@@ -337,56 +318,49 @@
                         </h2>
                         <!-- Mostrar comentarios -->
                         @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
-                            <div class="relative ml-0 md:mr-10">
-                                <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                                <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                    <div class="flex items-center -mt-1">
-                                        <a href={{ route('foroUnico', $contenido['idComentario']) }}>
-                                            <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                                {{ $contenido['tituloContenido'] }}
-                                            </h3>
-                                        </a>
-                                    </div>
-                                    <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                        publicación: {{ $contenido['fechaComent'] }} </p>
-                                    <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                    {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                        @foreach ($contenido['rutaImagen'] as $imagen)
-                                            <div class="group cursor-pointer relative">
-                                                <div class="group relative cursor-pointer">
-                                                    <img src="{{ asset(Storage::url($imagen)) }}"
-                                                        alt="ImagenesCargadas"
-                                                        class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                </div>
+                            <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                        <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
+                                            {{ $contenido['tituloContenido'] }}
+                                        </h3>
+                                    </a>
+                                    <!-- Botón para eliminar comentario -->
+                                    @if (Auth::user()->rol->idrol == 1)
+                                        <form action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
+                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                                <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                                <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                    publicación: {{ $contenido['fechaComent'] }} </p>
+                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                    @foreach ($contenido['rutaImagen'] as $imagen)
+                                        <div class="group cursor-pointer relative">
+                                            <div class="group relative cursor-pointer">
+                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
                                             </div>
-                                        @endforeach
-                                    </div>
-
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
-                            <!-- Botón para eliminar comentario -->
-                            @if (Auth::user()->rol->idrol == 1)
-                                <form class="my-4"
-                                    action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300"
-                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                        <p class="text-base font-semibold">Eliminar</p>
-                                    </button>
-                                </form>
-                            @endif
                         @endforeach
                     @endif
                 @endif
@@ -404,7 +378,7 @@
             </div>
             {{-- SI TIENE ACTIVIDADES REPORTADAS Y NO REPORTADAS --}}
         @elseif ($totalReportadas > 0 && $totalNoReportadas > 0)
-            <div class="py-8 flex flex-col ml-4">
+            <div class="p-8 flex flex-col">
                 <h1 class="text-3xl mb-4 ml-4 text-center">
                     Otras Actividades realizadas por <b class="text-red-500">{{ $usuario->usuarioUser }}</b>
                 </h1>
@@ -415,59 +389,55 @@
                             Podes acceder a la publicación haciendo clic en el titulo</b></h2>
                     <!-- Mostrar publicaciones  -->
                     @foreach ($actividadesNoReportadas['contenidos'] as $contenido)
-                        <div class="relative ml-0 md:mr-10">
-                            <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                            <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                <div class="flex items-center -mt-1">
-                                    <a href={{ route('foroUnico', $contenido['id']) }}>
-                                        <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                            {{ $contenido['titulo'] }}
-                                        </h3>
-                                    </a>
-                                </div>
-                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                    publicación: {{ $contenido['fechaComent'] }} </p>
-                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                    @foreach ($contenido['rutaImagen'] as $imagen)
-                                        <div class="group cursor-pointer relative">
-                                            <div class="group relative cursor-pointer">
-                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                <div
-                                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button
-                                                        class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                        Ampliar
-                                                    </button>
-                                                </div>
+                        <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <a href={{ route('foroUnico', $contenido['id']) }}>
+                                    <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
+                                        {{ $contenido['titulo'] }}
+                                    </h3>
+                                </a>
+                                <!-- Botón para eliminar publicacion -->
+                                @if (Auth::user()->rol->idrol == 1)
+                                    <form action="{{ route('eliminarContenido', $contenido['id']) }}" method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                            <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                            <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                            <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                publicación: {{ $contenido['fechaComent'] }} </p>
+                            <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                            {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                @foreach ($contenido['rutaImagen'] as $imagen)
+                                    <div class="group cursor-pointer relative">
+                                        <div class="group relative cursor-pointer">
+                                            <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                            <div
+                                                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                    Ampliar
+                                                </button>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                        <!-- Botón para eliminar publicacion -->
-                        @if (Auth::user()->rol->idrol == 1)
-                            <form class="my-4" action="{{ route('eliminarContenido', $contenido['id']) }}"
-                                method="POST"
-                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
-                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                    </svg>
-                                    <p class="text-base font-semibold ml-1">Eliminar</p>
-                                </button>
-                            </form>
-                        @endif
                     @endforeach
                 @endif
                 {{-- SI NO REPORTARON EL COMENTARIO --}}
@@ -479,59 +449,56 @@
                     </h2>
                     <!-- Mostrar comentarios -->
                     @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
-                        <div class="relative ml-0 md:mr-10">
-                            <span class="absolute top-0 left-0 w-full mt-1 ml-1 bg-red-500 rounded-lg"></span>
-                            <div class="relative p-5 bg-white border-2 border-red-500 rounded-lg">
-                                <div class="flex items-center -mt-1">
-                                    <a href={{ route('foroUnico', $contenido['idComentario']) }}>
-                                        <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
-                                            {{ $contenido['tituloContenido'] }}
-                                        </h3>
-                                    </a>
-                                </div>
-                                <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
-                                    publicación: {{ $contenido['fechaComent'] }} </p>
-                                <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
-                                {{-- Imagenes NO REPORTADAS CONTENIDO --}}
-                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                                    @foreach ($contenido['rutaImagen'] as $imagen)
-                                        <div class="group cursor-pointer relative">
-                                            <div class="group relative cursor-pointer">
-                                                <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
-                                                    class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
-                                                <div
-                                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button
-                                                        class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                                        Ampliar
-                                                    </button>
-                                                </div>
+                        <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                    <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
+                                        {{ $contenido['tituloContenido'] }}
+                                    </h3>
+                                </a>
+                                <!-- Botón para eliminar publicacion -->
+                                @if (Auth::user()->rol->idrol == 1)
+                                    <form action="{{ route('eliminarContenido', $contenido['idComentario']) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                            <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                            <p class="text-base font-semibold ml-1.5">Eliminar</p>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                            <p class="mt-3 mb-1 text-xs font-medium text-red-500 uppercase">Fecha de la
+                                publicación: {{ $contenido['fechaComent'] }} </p>
+                            <p class="mb-2 text-gray-600">{{ $contenido['descripcion'] }}</p>
+                            {{-- Imagenes NO REPORTADAS CONTENIDO --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                                @foreach ($contenido['rutaImagen'] as $imagen)
+                                    <div class="group cursor-pointer relative">
+                                        <div class="group relative cursor-pointer">
+                                            <img src="{{ asset(Storage::url($imagen)) }}" alt="ImagenesCargadas"
+                                                class="imagen-modal cursor-pointer w-full h-48 object-cover object-center max-w-full rounded-lg transition-transform transform scale-100 group-hover:scale-105" />
+                                            <div
+                                                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    class="btn-ampliar bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                                    Ampliar
+                                                </button>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
-
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                        <!-- Botón para eliminar publicacion -->
-                        @if (Auth::user()->rol->idrol == 1)
-                            <form class="my-4"
-                                action="{{ route('eliminarContenido', $contenido['idComentario']) }}" method="POST"
-                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contenido?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="flex items-center gap-5 py-2 px-10 hover:bg-gray-300">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                    </svg>
-                                    <p class="text-base font-semibold my-1">Eliminar</p>
-                                </button>
-                            </form>
-                        @endif
                     @endforeach
                 @endif
             </div>

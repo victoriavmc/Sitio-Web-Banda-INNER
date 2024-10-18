@@ -62,6 +62,13 @@ Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
 
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
+
+Route::get('/reactivar-cuenta/{id}', [loginController::class, 'vistaReactivarCuenta'])
+    ->name('reactivar-cuenta')->middleware('guest');
+
+// Ruta hacia contacto
+Route::get('/contacto/{id}', [loginController::class, 'contacto'])
+    ->name('contacto')->middleware('guest');
 //----------------------- Vistas inicio de sesion 
 Route::view('/login', "auth.login")
     ->name('login')->middleware('guest');

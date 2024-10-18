@@ -1,5 +1,5 @@
 <x-AppLayout title="Login" :login=true>
-    <div class="min-h=screen
+    <div class="min-h-screen
     bg-cover bg-center flex items-center justify-center"
         style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_agus.png') }} ');">
         <div x-data="{ email: '', password: '', name: '' }"
@@ -15,6 +15,9 @@
                     Ingresa tu correo para que podamos enviarte el pin de recuperacion
                 </p>
                 <div class="input-field relative">
+                    <!-- Campo oculto para identificar el origen -->
+                    <input type="hidden" name="source" value="solicitar">
+
                     <input x-model="email" name="email" type="text" id="email"
                         class="w-full font-urbanist px-4 py-3 rounded-lg bg-white bg-opacity-20 focus:bg-opacity-30 focus:ring-2 focus:ring-orange-500 text-white placeholder-gray-200 transition duration-200"
                         placeholder="Correo">

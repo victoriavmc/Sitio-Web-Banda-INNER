@@ -427,7 +427,9 @@ class ReportesController extends Controller
                 // Borrar la contraseña del usuario de manera segura
                 $usuario = Usuario::where('usuarios_idusuarios', $idReportado)->first();
                 $usuario->contraseniaUser = null;
+                $usuario->usuarioUser = null;
                 $usuario->save();
+
                 // Eliminar reportes asociados al usuario
                 Reportes::where('usuarios_idusuarios', $idReportado)->delete();
 

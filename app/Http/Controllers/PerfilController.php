@@ -548,6 +548,7 @@ class PerfilController extends Controller
 
                 // Aquí deberías borrar la contraseña del usuario de manera segura
                 $usuario->contraseniaUser = null;
+                $usuario->usuarioUser = null;
                 $usuario->save();
             }
 

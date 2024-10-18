@@ -22,7 +22,7 @@ class HistorialUsuario extends Model
         static::creating(function ($historialUsuario) {
             $historialUsuario->estado = $historialUsuario->estado ?? 'Activo';
             $historialUsuario->eliminacionLogica = $historialUsuario->eliminacionLogica ?? 'No';
-            $historialUsuario->fechaInicial = $historialUsuario->fechaInicial ?? now();
+            $historialUsuario->fechaInica = $historialUsuario->fechaInica ?? now();
         });
     }
 }

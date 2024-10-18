@@ -1,4 +1,12 @@
 <x-AppLayout title="Registro">
+    {{-- Comprueba si hay mensajes de alerta en la sesión para el registro --}}
+    @if (session('alertRegistro'))
+        {{-- Componente de alerta para el registro exitoso o fallido --}}
+        <x-alerts :type="session('alertRegistro')['type']">
+            {{ session('alertRegistro')['message'] }}
+        </x-alerts>
+    @endif
+
     <div class="wrapper bg-center justify-center min-h-screen"
         style="background-image: url('{{ asset('img/logeo/registro_fondo.jpg') }}');">
         <div class="inner bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
