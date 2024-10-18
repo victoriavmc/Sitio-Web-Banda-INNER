@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AlbumImagenes extends Model
 {
     protected $table = 'albumimagenes';
-    protected $primaryKey = 'albumImagenescol';
+    protected $primaryKey = 'idAlbumImagenes';
     public $timestamps = false;
 
     public function albumDatos()
@@ -21,4 +21,3 @@ class AlbumImagenes extends Model
         return $this->belongsTo(RevisionImagenes::class, 'revisionImagenes_idrevisionImagenescol', 'idrevisionImagenescol');
     }
 }
-

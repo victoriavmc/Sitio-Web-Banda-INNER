@@ -22,7 +22,7 @@
                             Historial del Usuario
                         @endif
                     </h1>
-                    <a href="{{ route('vistaDecideReporte') }}">
+                    <a href="{{ route('vistaDecideReporte', $usuario->idusuarios) }}">
                         <button
                             class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
                             Manejar Reporte
@@ -110,17 +110,16 @@
                 {{-- ENCABEZADO DE REPORTES --}}
                 <div class="m-auto mb-4">
                     <h1 class="text-3xl">
-                        @if ((isset($totalReportadas) && $totalReportadas < 0) || (isset($perfilReportado) && $perfilReportado < 0))
+                        @if ($totalReportadas === 0 && $totalNoReportadas === 0 && !$perfilReportado)
                             No Presenta Reportes
-                        @elseif ($totalReportadas === 1)
-                            Actividad Reportada
-                        @elseif ($totalReportadas > 1)
-                            Actividades Reportadas
-                        @else
+                        @elseif ($perfilReportado && $totalReportadas === 0)
                             Fue Reportado el Perfil
+                        @elseif ($totalReportadas === 1 && !$perfilReportado)
+                            Actividad Reportada
+                        @elseif ($totalReportadas > 1 || ($totalReportadas >= 1 && $perfilReportado))
+                            Actividades Reportadas
                         @endif
                     </h1>
-
                 </div>
                 {{-- Si es que le reportaron entonces que muestre en especifico que le reportaron --}}
                 {{-- 1-Perfil 2-Comentarios 3-Contenido --}}

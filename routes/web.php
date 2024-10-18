@@ -355,7 +355,7 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario');
 
-Route::get('reportes/decidir-reporte', [ReportesController::class, 'vistaDecideReporte'])
+Route::get('reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDecideReporte'])
     ->name('vistaDecideReporte')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago

@@ -13,6 +13,7 @@ use App\Models\HistorialUsuario;
 use App\Models\Interacciones;
 use App\Models\ImagenesContenido;
 use App\Models\Reportes;
+use App\Models\Motivos;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -200,26 +201,21 @@ class ReportesController extends Controller
         return $resultados;
     }
 
-    // Redirigir a manejoReporte
-    public function manejoreporte($id)
+    private function prepararDatosReporte($id)
     {
         $usuario = Usuario::find($id);
         $datosPersonales = $usuario->datosPersonales;
-
         $imagen = $this->buscarImagen($id);
 
         // Obtener todas las actividades del usuario
         $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
         // Separar actividades reportadas y no reportadas
-        #Filter con fn: Filtra elementos de una colección que cumplan con una condición específica definida por una función.
-        #Diff: Devuelve los elementos que están en una colección pero no en otra, ayudando a identificar diferencias entre dos conjuntos de datos.
         $reportadas = $actividades->filter(fn($act) => Interacciones::where('actividad_idActividad', $act->idActividad)->where('reporte', '>', 0)->exists());
         $noReportadas = $actividades->diff($reportadas);
 
         // Procesar y organizar actividades
         $actividadesReportadas = $this->procesarActividades($reportadas, true);
-
         $actividadesNoReportadas = $this->procesarActividades($noReportadas, false);
 
         // Datos de quienes reportaron
@@ -232,27 +228,37 @@ class ReportesController extends Controller
         // Verificar si hubo reportes del perfil
         $perfilReportado = count($actividadesReportadas['perfil']) > 0;
 
-        return view('profile.manejoreporte', compact(
-            'usuario',
-            'datosPersonales',
-            'imagen',
-            'actividades',
-            'actividadesReportadas',
-            'actividadesNoReportadas',
-            'totalNoReportadas',
-            'totalReportadas',
-            'perfilReportado',
-            'quienesReportaron'
-
-        ));
+        return [
+            'usuario' => $usuario,
+            'datosPersonales' => $datosPersonales,
+            'imagen' => $imagen,
+            'actividades' => $actividades,
+            'actividadesReportadas' => $actividadesReportadas,
+            'actividadesNoReportadas' => $actividadesNoReportadas,
+            'totalNoReportadas' => $totalNoReportadas,
+            'totalReportadas' => $totalReportadas,
+            'perfilReportado' => $perfilReportado,
+            'quienesReportaron' => $quienesReportaron
+        ];
     }
 
-    public function vistaDecideReporte()
+    // Redirigir a manejoReporte
+    public function manejoreporte($id)
     {
-        $idusuario = Auth::user()->idusuarios;
+        $data = $this->prepararDatosReporte($id);
+        return view('profile.manejoreporte', $data);
+    }
 
-        if ($idusuario === 1) {
-            return view('profile.vistaDecideReporte');
+    // Redirigir a vistaDecideReporte
+    public function vistaDecideReporte($id)
+    {
+        $motivos = Motivos::get();
+
+        $data = $this->prepararDatosReporte($id);
+        $rolusuario = Auth::user()->rol_idrol;
+
+        if ($rolusuario === 1) {
+            return view('profile.vistaDecideReporte', compact('data', 'motivos'));
         } else {
             return view('inicio');
         }

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
 use App\Models\Usuario;
+use App\Models\RevisionImagenes;
 
 #MAILS
 use App\Mail\msjPinOlvido;
@@ -448,8 +449,15 @@ class LoginController extends Controller
     public function vistaReactivarCuenta($idhistorialUsuario)
     {
         $historialUsuario = HistorialUsuario::find($idhistorialUsuario);
-        if ($idhistorialUsuario) {
-            return view('auth.reactivarCuenta');
+        $revisionImagenes = RevisionImagenes::where('usuarios_idusuarios', $idhistorialUsuario)->get();
+        foreach ($revisionImagenes as $revision) {
+            if ($revision->tipodefoto_idtipoDeFoto === 1) {
+                $fotoDePerfil = $revision->imagenes->subidaImg;
+            }
+        }
+
+        if ($historialUsuario->estado == 'Inactivo') {
+            return view('auth.reactivarCuenta', compact('fotoDePerfil'));
         } else {
             return redirect(route('inicio'));
         }

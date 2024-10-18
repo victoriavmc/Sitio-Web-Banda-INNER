@@ -9,10 +9,10 @@
 
     <div class="wrapper bg-center justify-center min-h-screen"
         style="background-image: url('{{ asset('img/logeo/reactivar_fondo.jpg') }}');">
-        <div class="inner bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
+        <div class="inner p-2 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
-                <img class="pequeño" src="{{ asset('img/logeo/reactivar_costado.jpg') }}" alt="AgusFacha">
+                <img class="pequeño w-72 rounded-md" src="{{ asset(Storage::url($fotoDePerfil)) }}" alt="AgusFacha">
             </div>
 
             <!-- Columna del formulario -->
@@ -34,7 +34,8 @@
                     </div>
 
                     <!-- Boton de registro -->
-                    <button type="submit" class="btn btn-primary w-full">Reactivar</button>
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Reactivar</button>
                 </form>
             </div>
         </div>
