@@ -94,11 +94,18 @@ class LoginController extends Controller
 
             case 'Inactivo':
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
+                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
 
                 // Redirigir a la página de reactivación de cuenta
 
                 // mensaje alerta existe un usuario con ese correo electronico
-                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
                     'type' => 'Warning',
                     'message' => 'Su cuenta se encuentra Inactiva.',
                 ]);
@@ -186,11 +193,23 @@ class LoginController extends Controller
 
             case 'Inactivo':
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
+                if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                    $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+                } else {
+                    $usuarioExistente = Usuario::where('usuarioUser', $request->email)->first();
+                }
+
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+
+
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
 
                 // Redirigir a la página de reactivación de cuenta
 
                 // mensaje alerta existe un usuario con ese correo electronico
-                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
                     'type' => 'Warning',
                     'message' => 'Su cuenta se encuentra Inactiva.',
                 ]);
@@ -270,14 +289,24 @@ class LoginController extends Controller
                 break;
 
             case 'Inactivo':
+
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
 
-                // Redirigir a la página de reactivación de cuenta
+                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
 
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+
+                $historialUsuario->estado = 'Activo';
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
+                $historialUsuario->save();
+
+                // Redirigir a la página de reactivación de cuenta
                 // mensaje alerta existe un usuario con ese correo electronico
-                return redirect()->route('reactivar-cuenta')->with('alertRegistro', [
+                return redirect(route('comprobarPin', ['id' => $idhistorialUsuario]))->with('alertRestablecer', [
                     'type' => 'Warning',
-                    'message' => 'Su cuenta se encuentra Inactiva.',
+                    'message' => 'Para reactivar su cuenta, por favor, ingrese el PIN que se le enviará a su correo electrónico. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
                 ]);
                 break;
 
@@ -416,9 +445,14 @@ class LoginController extends Controller
         ]);
     }
 
-    public function vistaReactivarCuenta()
+    public function vistaReactivarCuenta($idhistorialUsuario)
     {
-        return view('auth.reactivarCuenta');
+        $historialUsuario = HistorialUsuario::find($idhistorialUsuario);
+        if ($idhistorialUsuario) {
+            return view('auth.reactivarCuenta');
+        } else {
+            return redirect(route('inicio'));
+        }
     }
 
     public function contacto($id)

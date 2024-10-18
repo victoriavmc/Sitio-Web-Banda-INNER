@@ -63,7 +63,7 @@ Route::post('/restablecer-contrasenia', [loginController::class, 'restablecer'])
 Route::get('/logout', [loginController::class, 'logout'])
     ->name('logout');
 
-Route::get('/reactivar-cuenta', [loginController::class, 'vistaReactivarCuenta'])
+Route::get('/reactivar-cuenta/{id}', [loginController::class, 'vistaReactivarCuenta'])
     ->name('reactivar-cuenta')->middleware('guest');
 
 // Ruta hacia contacto

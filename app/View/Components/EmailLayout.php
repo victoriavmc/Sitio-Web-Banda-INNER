@@ -2,7 +2,7 @@
 
 namespace App\View\Components;
 
-use App\Models\redessociales;
+use App\Models\RedesSociales;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
