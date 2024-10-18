@@ -1,57 +1,56 @@
 <x-AppLayout>
     <div class="flex items-center justify-center min-h-screen bg-white">
-        <div class="flex flex-col">
-            <div class="flex flex-col mt-8">
-                <div class="container max-w-7xl px-4">
-                    <div class="flex w-full flex-wrap justify-center text-center mb-24">
-                        <h1 class="text-gray-900 text-5xl font-bold mb-2">
-                            Miembros del Staff
-                        </h1>
-                    </div>
-                    <!-- NO trae datos de la base de datos -->
-                    @if (!$listaStaff)
-                        <section class="bg-white">
-                            <div
-                                class="max-w-screen-xl 2xl:max-w-screen-2xl px-8 md:px-12 mx-auto py-12 lg:py-24 space-y-24 flex flex-col justify-center lg:h-screen">
-                                <div class="grid grid-cols-1 gap-2 mt-12 list-none md:grid-cols-2 lg:mt-24 max-w-5xl mx-auto"
-                                    role="list">
-                                    <article
-                                        class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
-                                        style="background-image:url('{{ asset('img/artistas/victoriavmc.png') }}');">
-                                        <div
-                                            class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                            <div class="bg-black p-8 h-full justify-end flex flex-col">
-                                                <h1
-                                                    class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                                    VictoriaVMC </h1>
-                                                <p
-                                                    class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
-                                                    Fan de la pepsi y el Csgo. </p>
-                                            </div>
+        <div class="flex flex-col mt-8">
+            <div class="container max-w-7xl px-4">
+                <div class="flex w-full flex-wrap justify-center text-center">
+                    <h1 class="text-gray-900 text-5xl font-bold mb-2">
+                        Miembros del Staff
+                    </h1>
+                </div>
+                <!-- NO trae datos de la base de datos -->
+                @if (!$listaStaff)
+                    <section class="bg-white">
+                        <div
+                            class="max-w-screen-xl 2xl:max-w-screen-2xl px-8 md:px-12 mx-auto py-12 mt-0 md:mt-10 space-y-24 flex flex-col justify-center lg:h-screen">
+                            <div class="grid grid-cols-1 gap-2 mt-12 list-none md:grid-cols-2 max-w-5xl mx-auto"
+                                role="list">
+                                <article
+                                    class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
+                                    style="background-image:url('{{ asset('img/artistas/victoriavmc.png') }}');">
+                                    <div
+                                        class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150 flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
+                                        <div class="bg-black p-8 h-full justify-end flex flex-col">
+                                            <h1
+                                                class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
+                                                VictoriaVMC </h1>
+                                            <p
+                                                class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
+                                                Fan de la pepsi y el Csgo. </p>
                                         </div>
-                                    </article>
-                                    <article
-                                        class="mx-auto  shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                        style="background-image:url('{{ asset('img/artistas/santi.png') }}');">
-                                        <div
-                                            class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                            <div class=" bg-black p-8 h-full justify-end flex flex-col">
-                                                <h1
-                                                    class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                                    Santi </h1>
-                                                <p
-                                                    class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
-                                                    Fan de los juegos de Rol. </p>
-                                            </div>
+                                    </div>
+                                </article>
+                                <article
+                                    class="mx-auto  shadow-xl mt-20 md:mt-0 bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
+                                    style="background-image:url('{{ asset('img/artistas/santi.png') }}');">
+                                    <div
+                                        class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
+                                        <div class=" bg-black p-8 h-full justify-end flex flex-col">
+                                            <h1
+                                                class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
+                                                Santi </h1>
+                                            <p
+                                                class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
+                                                Fan de los juegos de Rol. </p>
                                         </div>
-                                    </article>
-                                </div>
+                                    </div>
+                                </article>
                             </div>
-                        </section>
-                    @else
-                        <!-- SI trae datos de la base de datos -->
-                        <!-- Team Members -->
-                        <div class="grid grid-cols-3 gap-4 justify-items-center"></div>
+                        </div>
+                    </section>
+                @else
+                    <!-- SI trae datos de la base de datos -->
+                    <!-- Team Members -->
+                    <div class="grid grid-cols-3 gap-4 justify-items-center">
                         @foreach ($listaStaff as $item)
                             @if (!in_array($item['rol'], ['Guitar', 'Vocalist and Guitar', 'Bass Guitar', 'Drummer']))
                                 <div class="w-full md:w-4/5 mb-6 px-6 sm:px-6 lg:px-4">
@@ -109,10 +108,9 @@
                                 </div>
                             @endif
                         @endforeach
-                </div>
+                    </div>
                 @endif
             </div>
         </div>
-    </div>
     </div>
 </x-AppLayout>
