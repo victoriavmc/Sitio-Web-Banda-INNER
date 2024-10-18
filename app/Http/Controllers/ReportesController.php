@@ -48,7 +48,6 @@ class ReportesController extends Controller
         return [];
     }
 
-
     // Obtener Imágenes de Contenido según Opción
     public function obtenerImagenesContenido($idContent, $opcion)
     {
