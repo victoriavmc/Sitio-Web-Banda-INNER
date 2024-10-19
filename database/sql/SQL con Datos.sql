@@ -1,437 +1,493 @@
--- MySQL Workbench Forward Engineering
-SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS,
-  UNIQUE_CHECKS = 0;
-SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS,
-  FOREIGN_KEY_CHECKS = 0;
-SET @OLD_SQL_MODE = @@SQL_MODE,
-  SQL_MODE = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
--- -----------------------------------------------------
--- Schema inner
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema inner
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `inner` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `inner`;
--- -----------------------------------------------------
--- Table `inner`.`roles`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`roles` (
-  `idrol` INT NOT NULL AUTO_INCREMENT,
-  `rol` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idrol`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`usuarios` (
-  `idusuarios` INT NOT NULL AUTO_INCREMENT,
-  `usuarioUser` VARCHAR(45) NOT NULL,
-  `contraseniaUser` VARCHAR(100) NULL DEFAULT NULL,
-  `pinOlvidoUser` VARCHAR(100) NULL DEFAULT NULL,
-  `correoElectronicoUser` VARCHAR(45) NOT NULL,
-  `rol_idrol` INT NOT NULL,
-  PRIMARY KEY (`idusuarios`),
-  INDEX `fk_usuarios_rol1_idx` (`rol_idrol` ASC),
-  CONSTRAINT `fk_usuarios_rol1` FOREIGN KEY (`rol_idrol`) REFERENCES `inner`.`roles` (`idrol`)
-) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`tipoActividad`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`tipoActividad` (
-  `idtipoActividad` INT NOT NULL AUTO_INCREMENT,
-  `nombreActividad` VARCHAR(45) NULL,
-  PRIMARY KEY (`idtipoActividad`)
-) ENGINE = InnoDB;
--- -----------------------------------------------------
--- Table `inner`.`actividad`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`actividad` (
-  `idActividad` INT NOT NULL AUTO_INCREMENT,
-  `usuarios_idusuarios` INT NOT NULL,
-  `tipoActividad_idtipoActividad` INT NULL,
+-- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: inner
+-- ------------------------------------------------------
+-- Server version	8.0.39
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
+;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
+;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
+;
+/*!50503 SET NAMES utf8 */
+;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */
+;
+/*!40103 SET TIME_ZONE='+00:00' */
+;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */
+;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */
+;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */
+;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */
+;
+--
+-- Table structure for table `actividad`
+--
+DROP TABLE IF EXISTS `actividad`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `actividad` (
+  `idActividad` int NOT NULL AUTO_INCREMENT,
+  `usuarios_idusuarios` int NOT NULL,
+  `tipoActividad_idtipoActividad` int DEFAULT NULL,
   PRIMARY KEY (`idActividad`),
-  INDEX `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_actividad_tipoActividad1_idx` (`tipoActividad_idtipoActividad` ASC),
-  CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`),
-  CONSTRAINT `fk_actividad_tipoActividad1` FOREIGN KEY (`tipoActividad_idtipoActividad`) REFERENCES `inner`.`tipoActividad` (`idtipoActividad`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 43 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`albumdatos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`albumdatos` (
-  `idalbumDatos` INT NOT NULL AUTO_INCREMENT,
-  `tituloAlbum` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `fechaSubido` DATE NULL DEFAULT NULL,
+  KEY `fk_Actividad_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_actividad_tipoActividad1_idx` (`tipoActividad_idtipoActividad`),
+  CONSTRAINT `fk_actividad_tipoActividad1` FOREIGN KEY (`tipoActividad_idtipoActividad`) REFERENCES `tipoactividad` (`idtipoActividad`),
+  CONSTRAINT `fk_Actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB AUTO_INCREMENT = 43 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `actividad`
+--
+LOCK TABLES `actividad` WRITE;
+/*!40000 ALTER TABLE `actividad` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `actividad` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `albumdatos`
+--
+DROP TABLE IF EXISTS `albumdatos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `albumdatos` (
+  `idalbumDatos` int NOT NULL AUTO_INCREMENT,
+  `tituloAlbum` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fechaSubido` date DEFAULT NULL,
   PRIMARY KEY (`idalbumDatos`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`tipodefoto`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`tipodefoto` (
-  `idtipoDeFoto` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idtipoDeFoto`)
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
--- -----------------------------------------------------
--- Table `inner`.`imagenes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`imagenes` (
-  `idimagenes` INT NOT NULL AUTO_INCREMENT,
-  `subidaImg` VARCHAR(255) NULL DEFAULT NULL,
-  `fechaSubidaImg` DATE NULL DEFAULT NULL,
-  `contenidoDescargable` VARCHAR(45) NULL DEFAULT 'No',
-  PRIMARY KEY (`idimagenes`)
-) ENGINE = InnoDB AUTO_INCREMENT = 58 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`revisionimagenes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`revisionimagenes` (
-  `idrevisionImagenescol` INT NOT NULL AUTO_INCREMENT,
-  `usuarios_idusuarios` INT NOT NULL,
-  `imagenes_idimagenes` INT NOT NULL,
-  `tipodefoto_idtipoDeFoto` INT NOT NULL,
-  PRIMARY KEY (`idrevisionImagenescol`),
-  INDEX `fk_usuarios_has_imagenes_imagenes1_idx` (`imagenes_idimagenes` ASC),
-  INDEX `fk_usuarios_has_imagenes_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_revisionImagenes_tipodefoto1_idx` (`tipodefoto_idtipoDeFoto` ASC),
-  CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `inner`.`tipodefoto` (`idtipoDeFoto`),
-  CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `inner`.`imagenes` (`idimagenes`),
-  CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`)
-) ENGINE = InnoDB AUTO_INCREMENT = 58 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`albumimagenes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`albumimagenes` (
-  `albumImagenescol` INT NOT NULL AUTO_INCREMENT,
-  `albumDatos_idalbumDatos` INT NOT NULL,
-  `revisionImagenes_idrevisionImagenescol` INT NOT NULL,
-  PRIMARY KEY (`albumImagenescol`),
-  INDEX `fk_table1_albumDatos1_idx` (`albumDatos_idalbumDatos` ASC),
-  INDEX `fk_albumImagenes_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  CONSTRAINT `fk_albumImagenes_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`),
-  CONSTRAINT `fk_table1_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `inner`.`albumdatos` (`idalbumDatos`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`albummusical`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`albummusical` (
-  `albumMusicalcol` INT NOT NULL AUTO_INCREMENT,
-  `albumDatos_idalbumDatos` INT NOT NULL,
-  `revisionImagenes_idrevisionImagenescol` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`albumMusicalcol`),
-  INDEX `fk_albumMusical_albumDatos1_idx` (`albumDatos_idalbumDatos` ASC),
-  INDEX `fk_albumMusical_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  CONSTRAINT `fk_albumMusical_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `inner`.`albumdatos` (`idalbumDatos`),
-  CONSTRAINT `fk_albumMusical_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`videos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`videos` (
-  `idvideos` INT NOT NULL AUTO_INCREMENT,
-  `subidaVideo` VARCHAR(45) NULL DEFAULT NULL,
-  `fechaSubidoVideo` VARCHAR(45) NULL DEFAULT NULL,
-  `contenidoDescargable` VARCHAR(45) NULL DEFAULT 'No',
-  PRIMARY KEY (`idvideos`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`albumvideo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`albumvideo` (
-  `idalbumVideo` INT NOT NULL AUTO_INCREMENT,
-  `albumDatos_idalbumDatos` INT NOT NULL,
-  `videos_idvideos` INT NOT NULL,
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `albumdatos`
+--
+LOCK TABLES `albumdatos` WRITE;
+/*!40000 ALTER TABLE `albumdatos` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `albumdatos` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `albumimagenes`
+--
+DROP TABLE IF EXISTS `albumimagenes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `albumimagenes` (
+  `idalbumImagenes` int NOT NULL AUTO_INCREMENT,
+  `albumDatos_idalbumDatos` int NOT NULL,
+  `revisionImagenes_idrevisionImagenescol` int NOT NULL,
+  PRIMARY KEY (`idalbumImagenes`),
+  KEY `fk_table1_albumDatos1_idx` (`albumDatos_idalbumDatos`),
+  KEY `fk_albumImagenes_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  CONSTRAINT `fk_albumImagenes_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
+  CONSTRAINT `fk_table1_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `albumdatos` (`idalbumDatos`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `albumimagenes`
+--
+LOCK TABLES `albumimagenes` WRITE;
+/*!40000 ALTER TABLE `albumimagenes` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `albumimagenes` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `albummusical`
+--
+DROP TABLE IF EXISTS `albummusical`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `albummusical` (
+  `idalbumMusical` int NOT NULL AUTO_INCREMENT,
+  `albumDatos_idalbumDatos` int NOT NULL,
+  `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
+  PRIMARY KEY (`idalbumMusical`),
+  KEY `fk_albumMusical_albumDatos1_idx` (`albumDatos_idalbumDatos`),
+  KEY `fk_albumMusical_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  CONSTRAINT `fk_albumMusical_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `albumdatos` (`idalbumDatos`),
+  CONSTRAINT `fk_albumMusical_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`)
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `albummusical`
+--
+LOCK TABLES `albummusical` WRITE;
+/*!40000 ALTER TABLE `albummusical` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `albummusical` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `albumvideo`
+--
+DROP TABLE IF EXISTS `albumvideo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `albumvideo` (
+  `idalbumVideo` int NOT NULL AUTO_INCREMENT,
+  `albumDatos_idalbumDatos` int NOT NULL,
+  `videos_idvideos` int NOT NULL,
   PRIMARY KEY (`idalbumVideo`),
-  INDEX `fk_albumVideo_albumDatos1_idx` (`albumDatos_idalbumDatos` ASC),
-  INDEX `fk_albumVideo_videos1_idx` (`videos_idvideos` ASC),
-  CONSTRAINT `fk_albumVideo_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `inner`.`albumdatos` (`idalbumDatos`),
-  CONSTRAINT `fk_albumVideo_videos1` FOREIGN KEY (`videos_idvideos`) REFERENCES `inner`.`videos` (`idvideos`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`redessociales`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`redessociales` (
-  `idredesSociales` INT NOT NULL AUTO_INCREMENT,
-  `linkRedSocial` VARCHAR(512) NULL DEFAULT NULL,
-  `nombreRedSocial` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idredesSociales`)
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`tipostaff`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`tipostaff` (
-  `idtipoStaff` INT NOT NULL AUTO_INCREMENT,
-  `nombreStaff` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  PRIMARY KEY (`idtipoStaff`)
-) ENGINE = InnoDB AUTO_INCREMENT = 15 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`staffextra`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`staffextra` (
-  `idstaffExtra` INT NOT NULL AUTO_INCREMENT,
-  `redesSociales_idredesSociales` INT NULL DEFAULT NULL,
-  `usuarios_idusuarios` INT NOT NULL,
-  `tipoStaff_idtipoStaff` INT NOT NULL,
-  `revisionimagenes_idrevisionImagenescol` INT NULL,
-  PRIMARY KEY (`idstaffExtra`),
-  INDEX `fk_staffExtra_redesSociales_idx` (`redesSociales_idredesSociales` ASC),
-  INDEX `fk_staffExtra_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_staffextra_tipoStaff1_idx` (`tipoStaff_idtipoStaff` ASC),
-  INDEX `fk_staffextra_revisionimagenes1_idx` (`revisionimagenes_idrevisionImagenescol` ASC),
-  CONSTRAINT `fk_staffExtra_redesSociales` FOREIGN KEY (`redesSociales_idredesSociales`) REFERENCES `inner`.`redessociales` (`idredesSociales`),
-  CONSTRAINT `fk_staffextra_tipoStaff1` FOREIGN KEY (`tipoStaff_idtipoStaff`) REFERENCES `inner`.`tipostaff` (`idtipoStaff`),
-  CONSTRAINT `fk_staffExtra_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`),
-  CONSTRAINT `fk_staffextra_revisionimagenes1` FOREIGN KEY (`revisionimagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`artistas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`artistas` (
-  `idartistas` INT NOT NULL AUTO_INCREMENT,
-  `revisionImagenes_idrevisionImagenescol` INT NULL DEFAULT NULL,
-  `staffextra_idstaffExtra` INT NOT NULL,
+  KEY `fk_albumVideo_albumDatos1_idx` (`albumDatos_idalbumDatos`),
+  KEY `fk_albumVideo_videos1_idx` (`videos_idvideos`),
+  CONSTRAINT `fk_albumVideo_albumDatos1` FOREIGN KEY (`albumDatos_idalbumDatos`) REFERENCES `albumdatos` (`idalbumDatos`),
+  CONSTRAINT `fk_albumVideo_videos1` FOREIGN KEY (`videos_idvideos`) REFERENCES `videos` (`idvideos`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `albumvideo`
+--
+LOCK TABLES `albumvideo` WRITE;
+/*!40000 ALTER TABLE `albumvideo` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `albumvideo` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `artistas`
+--
+DROP TABLE IF EXISTS `artistas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `artistas` (
+  `idartistas` int NOT NULL AUTO_INCREMENT,
+  `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
+  `staffextra_idstaffExtra` int NOT NULL,
   PRIMARY KEY (`idartistas`),
-  INDEX `fk_artistas_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  INDEX `fk_artistas_staffextra1_idx` (`staffextra_idstaffExtra` ASC),
-  CONSTRAINT `fk_artistas_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`),
-  CONSTRAINT `fk_artistas_staffextra1` FOREIGN KEY (`staffextra_idstaffExtra`) REFERENCES `inner`.`staffextra` (`idstaffExtra`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`cancion`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`cancion` (
-  `idcancion` INT NOT NULL AUTO_INCREMENT,
-  `tituloCancion` LONGTEXT NULL DEFAULT NULL,
-  `letraEspCancion` LONGTEXT NULL DEFAULT NULL,
-  `letraInglesCancion` LONGTEXT NULL DEFAULT NULL,
-  `archivoDsCancion` LONGTEXT NULL DEFAULT NULL,
-  `contenidoDescargable` VARCHAR(45) NULL DEFAULT 'No',
-  `albumMusical_albumMusicalcol` INT NOT NULL,
+  KEY `fk_artistas_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  KEY `fk_artistas_staffextra1_idx` (`staffextra_idstaffExtra`),
+  CONSTRAINT `fk_artistas_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
+  CONSTRAINT `fk_artistas_staffextra1` FOREIGN KEY (`staffextra_idstaffExtra`) REFERENCES `staffextra` (`idstaffExtra`)
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `artistas`
+--
+LOCK TABLES `artistas` WRITE;
+/*!40000 ALTER TABLE `artistas` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `artistas` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `cancion`
+--
+DROP TABLE IF EXISTS `cancion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `cancion` (
+  `idcancion` int NOT NULL AUTO_INCREMENT,
+  `tituloCancion` longtext,
+  `letraEspCancion` longtext,
+  `letraInglesCancion` longtext,
+  `archivoDsCancion` longtext,
+  `contenidoDescargable` varchar(45) DEFAULT 'No',
+  `albumMusical_idalbumMusical` int NOT NULL,
   PRIMARY KEY (`idcancion`),
-  INDEX `fk_cancion_albumMusical1_idx` (`albumMusical_albumMusicalcol` ASC),
-  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_albumMusicalcol`) REFERENCES `inner`.`albummusical` (`albumMusicalcol`)
-) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`tipocontenido`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`tipocontenido` (
-  `idtipoContenido` INT NOT NULL AUTO_INCREMENT,
-  `tipoContenido` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  PRIMARY KEY (`idtipoContenido`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`contenidos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`contenidos` (
-  `idcontenidos` INT NOT NULL AUTO_INCREMENT,
-  `fechaSubida` DATE NULL DEFAULT NULL,
-  `titulo` LONGTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `descripcion` LONGTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `tipoContenido_idtipoContenido` INT NOT NULL,
-  `Actividad_idActividad` INT NOT NULL,
-  PRIMARY KEY (`idcontenidos`),
-  INDEX `fk_contenidos_tipoContenido1_idx` (`tipoContenido_idtipoContenido` ASC),
-  INDEX `fk_contenidos_Actividad1_idx` (`Actividad_idActividad` ASC),
-  CONSTRAINT `fk_contenidos_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `inner`.`actividad` (`idActividad`),
-  CONSTRAINT `fk_contenidos_tipoContenido1` FOREIGN KEY (`tipoContenido_idtipoContenido`) REFERENCES `inner`.`tipocontenido` (`idtipoContenido`)
-) ENGINE = InnoDB AUTO_INCREMENT = 23 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`comentarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`comentarios` (
-  `idcomentarios` INT NOT NULL AUTO_INCREMENT,
-  `fechaComent` DATE NULL DEFAULT NULL,
-  `descripcion` LONGTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `Actividad_idActividad` INT NOT NULL,
-  `contenidos_idcontenidos` INT NOT NULL,
-  `revisionImagenes_idrevisionImagenescol` INT NULL DEFAULT NULL,
+  KEY `fk_cancion_albumMusical1_idx` (`albumMusical_idalbumMusical`),
+  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_idalbumMusical`) REFERENCES `albummusical` (`idalbumMusical`)
+) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `cancion`
+--
+LOCK TABLES `cancion` WRITE;
+/*!40000 ALTER TABLE `cancion` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `cancion` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `comentarios`
+--
+DROP TABLE IF EXISTS `comentarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `comentarios` (
+  `idcomentarios` int NOT NULL AUTO_INCREMENT,
+  `fechaComent` date DEFAULT NULL,
+  `descripcion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `Actividad_idActividad` int NOT NULL,
+  `contenidos_idcontenidos` int NOT NULL,
+  `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
   PRIMARY KEY (`idcomentarios`),
-  INDEX `fk_table1_Actividad1_idx` (`Actividad_idActividad` ASC),
-  INDEX `fk_table1_contenidos1_idx` (`contenidos_idcontenidos` ASC),
-  INDEX `fk_comentarios_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  CONSTRAINT `fk_comentarios_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`),
-  CONSTRAINT `fk_table1_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `inner`.`actividad` (`idActividad`),
-  CONSTRAINT `fk_table1_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `inner`.`contenidos` (`idcontenidos`)
-) ENGINE = InnoDB AUTO_INCREMENT = 21 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`paisnacimiento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`paisnacimiento` (
-  `idPaisNacimiento` INT NOT NULL AUTO_INCREMENT,
-  `nombrePN` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`idPaisNacimiento`)
-) ENGINE = InnoDB AUTO_INCREMENT = 195 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`datospersonales`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`datospersonales` (
-  `idDatosPersonales` INT NOT NULL AUTO_INCREMENT,
-  `nombreDP` VARCHAR(45) NULL DEFAULT NULL,
-  `apellidoDP` VARCHAR(45) NULL DEFAULT NULL,
-  `fechaNacimiento` DATE NULL DEFAULT NULL,
-  `generoDP` VARCHAR(45) NULL DEFAULT NULL,
-  `usuarios_idusuarios` INT NOT NULL,
-  `PaisNacimiento_idPaisNacimiento` INT NOT NULL,
+  KEY `fk_table1_Actividad1_idx` (`Actividad_idActividad`),
+  KEY `fk_table1_contenidos1_idx` (`contenidos_idcontenidos`),
+  KEY `fk_comentarios_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  CONSTRAINT `fk_comentarios_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
+  CONSTRAINT `fk_table1_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
+  CONSTRAINT `fk_table1_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`)
+) ENGINE = InnoDB AUTO_INCREMENT = 21 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `comentarios`
+--
+LOCK TABLES `comentarios` WRITE;
+/*!40000 ALTER TABLE `comentarios` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `comentarios` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `contenidos`
+--
+DROP TABLE IF EXISTS `contenidos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `contenidos` (
+  `idcontenidos` int NOT NULL AUTO_INCREMENT,
+  `fechaSubida` date DEFAULT NULL,
+  `titulo` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `descripcion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `tipoContenido_idtipoContenido` int NOT NULL,
+  `Actividad_idActividad` int NOT NULL,
+  PRIMARY KEY (`idcontenidos`),
+  KEY `fk_contenidos_tipoContenido1_idx` (`tipoContenido_idtipoContenido`),
+  KEY `fk_contenidos_Actividad1_idx` (`Actividad_idActividad`),
+  CONSTRAINT `fk_contenidos_Actividad1` FOREIGN KEY (`Actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
+  CONSTRAINT `fk_contenidos_tipoContenido1` FOREIGN KEY (`tipoContenido_idtipoContenido`) REFERENCES `tipocontenido` (`idtipoContenido`)
+) ENGINE = InnoDB AUTO_INCREMENT = 23 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `contenidos`
+--
+LOCK TABLES `contenidos` WRITE;
+/*!40000 ALTER TABLE `contenidos` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `contenidos` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `datospersonales`
+--
+DROP TABLE IF EXISTS `datospersonales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `datospersonales` (
+  `idDatosPersonales` int NOT NULL AUTO_INCREMENT,
+  `nombreDP` varchar(45) DEFAULT NULL,
+  `apellidoDP` varchar(45) DEFAULT NULL,
+  `fechaNacimiento` date DEFAULT NULL,
+  `generoDP` varchar(45) DEFAULT NULL,
+  `usuarios_idusuarios` int NOT NULL,
+  `PaisNacimiento_idPaisNacimiento` int NOT NULL,
   PRIMARY KEY (`idDatosPersonales`),
-  INDEX `fk_datosPersonales_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_datosPersonales_PaisNacimiento1_idx` (`PaisNacimiento_idPaisNacimiento` ASC),
-  CONSTRAINT `fk_datosPersonales_PaisNacimiento1` FOREIGN KEY (`PaisNacimiento_idPaisNacimiento`) REFERENCES `inner`.`paisnacimiento` (`idPaisNacimiento`),
-  CONSTRAINT `fk_datosPersonales_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`)
-) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`historialusuario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`historialusuario` (
-  `idhistorialusuario` INT NOT NULL AUTO_INCREMENT,
-  `estado` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT 'Activo',
-  `eliminacionLogica` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT 'No',
-  `fechaInica` DATE NULL DEFAULT NULL,
-  `fechaFinaliza` DATE NULL DEFAULT NULL,
-  `datospersonales_idDatosPersonales` INT NOT NULL,
+  KEY `fk_datosPersonales_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_datosPersonales_PaisNacimiento1_idx` (`PaisNacimiento_idPaisNacimiento`),
+  CONSTRAINT `fk_datosPersonales_PaisNacimiento1` FOREIGN KEY (`PaisNacimiento_idPaisNacimiento`) REFERENCES `paisnacimiento` (`idPaisNacimiento`),
+  CONSTRAINT `fk_datosPersonales_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `datospersonales`
+--
+LOCK TABLES `datospersonales` WRITE;
+/*!40000 ALTER TABLE `datospersonales` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `datospersonales` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `historialusuario`
+--
+DROP TABLE IF EXISTS `historialusuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `historialusuario` (
+  `idhistorialusuario` int NOT NULL AUTO_INCREMENT,
+  `estado` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Activo',
+  `eliminacionLogica` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'No',
+  `fechaInica` date DEFAULT NULL,
+  `fechaFinaliza` date DEFAULT NULL,
+  `datospersonales_idDatosPersonales` int NOT NULL,
   PRIMARY KEY (`idhistorialusuario`),
-  INDEX `fk_historialusuario_datospersonales1_idx` (`datospersonales_idDatosPersonales` ASC),
-  CONSTRAINT `fk_historialusuario_datospersonales1` FOREIGN KEY (`datospersonales_idDatosPersonales`) REFERENCES `inner`.`datospersonales` (`idDatosPersonales`)
-) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`imagenescontenido`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`imagenescontenido` (
-  `idimagenescontenido` INT NOT NULL AUTO_INCREMENT,
-  `revisionImagenes_idrevisionImagenescol` INT NOT NULL,
-  `contenidos_idcontenidos` INT NOT NULL,
+  KEY `fk_historialusuario_datospersonales1_idx` (`datospersonales_idDatosPersonales`),
+  CONSTRAINT `fk_historialusuario_datospersonales1` FOREIGN KEY (`datospersonales_idDatosPersonales`) REFERENCES `datospersonales` (`idDatosPersonales`)
+) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `historialusuario`
+--
+LOCK TABLES `historialusuario` WRITE;
+/*!40000 ALTER TABLE `historialusuario` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `historialusuario` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `imagenes`
+--
+DROP TABLE IF EXISTS `imagenes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `imagenes` (
+  `idimagenes` int NOT NULL AUTO_INCREMENT,
+  `subidaImg` varchar(255) DEFAULT NULL,
+  `fechaSubidaImg` date DEFAULT NULL,
+  `contenidoDescargable` varchar(45) DEFAULT 'No',
+  PRIMARY KEY (`idimagenes`)
+) ENGINE = InnoDB AUTO_INCREMENT = 58 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `imagenes`
+--
+LOCK TABLES `imagenes` WRITE;
+/*!40000 ALTER TABLE `imagenes` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `imagenes` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `imagenescontenido`
+--
+DROP TABLE IF EXISTS `imagenescontenido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `imagenescontenido` (
+  `idimagenescontenido` int NOT NULL AUTO_INCREMENT,
+  `revisionImagenes_idrevisionImagenescol` int NOT NULL,
+  `contenidos_idcontenidos` int NOT NULL,
   PRIMARY KEY (`idimagenescontenido`),
-  INDEX `fk_revisionImagenes_has_contenidos_contenidos1_idx` (`contenidos_idcontenidos` ASC),
-  INDEX `fk_revisionImagenes_has_contenidos_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  CONSTRAINT `fk_revisionImagenes_has_contenidos_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `inner`.`contenidos` (`idcontenidos`),
-  CONSTRAINT `fk_revisionImagenes_has_contenidos_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`)
-) ENGINE = InnoDB AUTO_INCREMENT = 27 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`interacciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`interacciones` (
-  `idinteracciones` INT NOT NULL AUTO_INCREMENT,
-  `usuarios_idusuarios` INT NOT NULL,
-  `actividad_idActividad` INT NOT NULL,
-  `megusta` INT NULL DEFAULT '0',
-  `nomegusta` INT NULL DEFAULT '0',
-  `reporte` INT NULL DEFAULT '0',
+  KEY `fk_revisionImagenes_has_contenidos_contenidos1_idx` (`contenidos_idcontenidos`),
+  KEY `fk_revisionImagenes_has_contenidos_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  CONSTRAINT `fk_revisionImagenes_has_contenidos_contenidos1` FOREIGN KEY (`contenidos_idcontenidos`) REFERENCES `contenidos` (`idcontenidos`),
+  CONSTRAINT `fk_revisionImagenes_has_contenidos_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`)
+) ENGINE = InnoDB AUTO_INCREMENT = 27 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `imagenescontenido`
+--
+LOCK TABLES `imagenescontenido` WRITE;
+/*!40000 ALTER TABLE `imagenescontenido` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `imagenescontenido` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `interacciones`
+--
+DROP TABLE IF EXISTS `interacciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `interacciones` (
+  `idinteracciones` int NOT NULL AUTO_INCREMENT,
+  `usuarios_idusuarios` int NOT NULL,
+  `actividad_idActividad` int NOT NULL,
+  `megusta` int DEFAULT '0',
+  `nomegusta` int DEFAULT '0',
+  `reporte` int DEFAULT '0',
   PRIMARY KEY (`idinteracciones`),
-  INDEX `fk_usuarios_has_actividad_actividad1_idx` (`actividad_idActividad` ASC),
-  INDEX `fk_usuarios_has_actividad_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  CONSTRAINT `fk_usuarios_has_actividad_actividad1` FOREIGN KEY (`actividad_idActividad`) REFERENCES `inner`.`actividad` (`idActividad`),
-  CONSTRAINT `fk_usuarios_has_actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`)
-) ENGINE = InnoDB AUTO_INCREMENT = 42 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`lugarlocal`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`lugarlocal` (
-  `idlugarLocal` INT NOT NULL AUTO_INCREMENT,
-  `nombreLugar` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `localidad` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `calle` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `numero` INT NULL DEFAULT NULL,
+  KEY `fk_usuarios_has_actividad_actividad1_idx` (`actividad_idActividad`),
+  KEY `fk_usuarios_has_actividad_usuarios1_idx` (`usuarios_idusuarios`),
+  CONSTRAINT `fk_usuarios_has_actividad_actividad1` FOREIGN KEY (`actividad_idActividad`) REFERENCES `actividad` (`idActividad`),
+  CONSTRAINT `fk_usuarios_has_actividad_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB AUTO_INCREMENT = 42 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `interacciones`
+--
+LOCK TABLES `interacciones` WRITE;
+/*!40000 ALTER TABLE `interacciones` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `interacciones` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `lugarlocal`
+--
+DROP TABLE IF EXISTS `lugarlocal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `lugarlocal` (
+  `idlugarLocal` int NOT NULL AUTO_INCREMENT,
+  `nombreLugar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `localidad` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `calle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero` int DEFAULT NULL,
   PRIMARY KEY (`idlugarLocal`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`notificaciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`notificaciones` (
-  `idnotificaciones` INT NOT NULL AUTO_INCREMENT,
-  `opcionNotificacion` VARCHAR(45) NULL DEFAULT NULL,
-  `usuarios_idusuarios` INT NOT NULL,
-  PRIMARY KEY (`idnotificaciones`),
-  INDEX `fk_notificaciones_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  CONSTRAINT `fk_notificaciones_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`motivos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`motivos` (
-  `idmotivos` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` LONGTEXT NULL,
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `lugarlocal`
+--
+LOCK TABLES `lugarlocal` WRITE;
+/*!40000 ALTER TABLE `lugarlocal` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `lugarlocal` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `motivos`
+--
+DROP TABLE IF EXISTS `motivos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `motivos` (
+  `idmotivos` int NOT NULL AUTO_INCREMENT,
+  `descripcion` longtext,
   PRIMARY KEY (`idmotivos`)
-) ENGINE = InnoDB;
--- -----------------------------------------------------
--- Table `inner`.`reportes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`reportes` (
-  `idreportes` INT NOT NULL AUTO_INCREMENT,
-  `usuarios_idusuarios` INT NOT NULL,
-  `motivos_idmotivos` INT NULL,
-  PRIMARY KEY (`idreportes`),
-  INDEX `fk_redsocial_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_reportes_motivos1_idx` (`motivos_idmotivos` ASC),
-  CONSTRAINT `fk_redsocial_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`),
-  CONSTRAINT `fk_reportes_motivos1` FOREIGN KEY (`motivos_idmotivos`) REFERENCES `inner`.`motivos` (`idmotivos`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- -----------------------------------------------------
--- Table `inner`.`ubicacionshow`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`ubicacionshow` (
-  `idubicacionShow` INT NOT NULL AUTO_INCREMENT,
-  `provinciaLugar` VARCHAR(255) NULL DEFAULT NULL,
-  `paisLugar` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`idubicacionShow`)
-) ENGINE = InnoDB AUTO_INCREMENT = 25 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`precio`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`precio` (
-  `idprecio` INT NOT NULL AUTO_INCREMENT,
-  `precio` DECIMAL NOT NULL,
-  PRIMARY KEY (`idprecio`)
-) ENGINE = InnoDB;
--- -----------------------------------------------------
--- Table `inner`.`ordenpago`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`ordenpago` (
-  `idordenpago` INT NOT NULL AUTO_INCREMENT,
-  `factura` LONGTEXT NOT NULL,
-  `metodoPago` LONGTEXT NOT NULL,
-  `diaPago` DATETIME NOT NULL,
-  `estadoPago` VARCHAR(255) NOT NULL,
-  `precio_idprecio` INT NOT NULL,
-  `usuarios_idusuarios` INT NOT NULL,
-  PRIMARY KEY (`idordenpago`),
-  INDEX `fk_suscripcion_usuarios1_idx` (`usuarios_idusuarios` ASC),
-  INDEX `fk_suscripcion_precio1_idx` (`precio_idprecio` ASC),
-  CONSTRAINT `fk_suscripcion_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `inner`.`usuarios` (`idusuarios`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_suscripcion_precio1` FOREIGN KEY (`precio_idprecio`) REFERENCES `inner`.`precio` (`idprecio`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB;
--- -----------------------------------------------------
--- Table `inner`.`show`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`show` (
-  `idshow` INT NOT NULL AUTO_INCREMENT,
-  `fechashow` DATETIME NOT NULL,
-  `estadoShow` VARCHAR(45) NULL DEFAULT 'Activo',
-  `linkCompraEntrada` VARCHAR(255) NULL DEFAULT NULL,
-  `ubicacionShow_idubicacionShow` INT NOT NULL,
-  `revisionImagenes_idrevisionImagenescol` INT NULL DEFAULT NULL,
-  `lugarLocal_idlugarLocal` INT NOT NULL,
-  `ordenpago_idordenpago` INT NULL,
-  PRIMARY KEY (`idshow`),
-  INDEX `fk_show_ubicacionShow1_idx` (`ubicacionShow_idubicacionShow` ASC),
-  INDEX `fk_show_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
-  INDEX `fk_show_lugarLocal1_idx` (`lugarLocal_idlugarLocal` ASC),
-  INDEX `fk_show_ordenpago1_idx` (`ordenpago_idordenpago` ASC),
-  CONSTRAINT `fk_show_lugarLocal1` FOREIGN KEY (`lugarLocal_idlugarLocal`) REFERENCES `inner`.`lugarlocal` (`idlugarLocal`),
-  CONSTRAINT `fk_show_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`),
-  CONSTRAINT `fk_show_ubicacionShow1` FOREIGN KEY (`ubicacionShow_idubicacionShow`) REFERENCES `inner`.`ubicacionshow` (`idubicacionShow`),
-  CONSTRAINT `fk_show_ordenpago1` FOREIGN KEY (`ordenpago_idordenpago`) REFERENCES `inner`.`ordenpago` (`idordenpago`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARACTER SET = utf8mb3;
--- -----------------------------------------------------
--- Table `inner`.`youtubeapi`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inner`.`youtubeapi` (
-  `idYoutubeApi` INT NOT NULL AUTO_INCREMENT,
-  `tituloYt` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  `fecha` DATE NULL DEFAULT NULL,
-  `linkYt` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
-  PRIMARY KEY (`idYoutubeApi`)
-) ENGINE = InnoDB AUTO_INCREMENT = 15 DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- INSERTS
+) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `motivos`
+--
+LOCK TABLES `motivos` WRITE;
+/*!40000 ALTER TABLE `motivos` DISABLE KEYS */
+;
 INSERT INTO `motivos`
 VALUES (
     1,
@@ -465,6 +521,90 @@ VALUES (
     'Recibió múltiples denuncias de otros usuarios por conducta inapropiada'
   ),
   (11, 'Publicó imágenes inapropiadas');
+/*!40000 ALTER TABLE `motivos` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `notificaciones`
+--
+DROP TABLE IF EXISTS `notificaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `notificaciones` (
+  `idnotificaciones` int NOT NULL AUTO_INCREMENT,
+  `opcionNotificacion` varchar(45) DEFAULT NULL,
+  `usuarios_idusuarios` int NOT NULL,
+  PRIMARY KEY (`idnotificaciones`),
+  KEY `fk_notificaciones_usuarios1_idx` (`usuarios_idusuarios`),
+  CONSTRAINT `fk_notificaciones_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `notificaciones`
+--
+LOCK TABLES `notificaciones` WRITE;
+/*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `ordenpago`
+--
+DROP TABLE IF EXISTS `ordenpago`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `ordenpago` (
+  `idordenpago` int NOT NULL AUTO_INCREMENT,
+  `factura` longtext NOT NULL,
+  `metodoPago` longtext NOT NULL,
+  `diaPago` datetime NOT NULL,
+  `estadoPago` varchar(255) NOT NULL,
+  `precio_idprecio` int NOT NULL,
+  `usuarios_idusuarios` int NOT NULL,
+  PRIMARY KEY (`idordenpago`),
+  KEY `fk_suscripcion_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_suscripcion_precio1_idx` (`precio_idprecio`),
+  CONSTRAINT `fk_suscripcion_precio1` FOREIGN KEY (`precio_idprecio`) REFERENCES `precio` (`idprecio`),
+  CONSTRAINT `fk_suscripcion_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `ordenpago`
+--
+LOCK TABLES `ordenpago` WRITE;
+/*!40000 ALTER TABLE `ordenpago` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `ordenpago` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `paisnacimiento`
+--
+DROP TABLE IF EXISTS `paisnacimiento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `paisnacimiento` (
+  `idPaisNacimiento` int NOT NULL AUTO_INCREMENT,
+  `nombrePN` varchar(100) NOT NULL,
+  PRIMARY KEY (`idPaisNacimiento`)
+) ENGINE = InnoDB AUTO_INCREMENT = 195 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `paisnacimiento`
+--
+LOCK TABLES `paisnacimiento` WRITE;
+/*!40000 ALTER TABLE `paisnacimiento` DISABLE KEYS */
+;
 INSERT INTO `paisnacimiento`
 VALUES (1, 'Afganistán'),
   (2, 'Albania'),
@@ -660,19 +800,298 @@ VALUES (1, 'Afganistán'),
   (192, 'Yibuti'),
   (193, 'Zambia'),
   (194, 'Zimbabue');
+/*!40000 ALTER TABLE `paisnacimiento` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `precio`
+--
+DROP TABLE IF EXISTS `precio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `precio` (
+  `idprecio` int NOT NULL AUTO_INCREMENT,
+  `precio` decimal(10, 0) NOT NULL,
+  PRIMARY KEY (`idprecio`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `precio`
+--
+LOCK TABLES `precio` WRITE;
+/*!40000 ALTER TABLE `precio` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `precio` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `redessociales`
+--
+DROP TABLE IF EXISTS `redessociales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `redessociales` (
+  `idredesSociales` int NOT NULL AUTO_INCREMENT,
+  `linkRedSocial` varchar(512) DEFAULT NULL,
+  `nombreRedSocial` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idredesSociales`)
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `redessociales`
+--
+LOCK TABLES `redessociales` WRITE;
+/*!40000 ALTER TABLE `redessociales` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `redessociales` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `reportes`
+--
+DROP TABLE IF EXISTS `reportes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `reportes` (
+  `idreportes` int NOT NULL AUTO_INCREMENT,
+  `usuarios_idusuarios` int NOT NULL,
+  `motivos_idmotivos` int DEFAULT NULL,
+  PRIMARY KEY (`idreportes`),
+  KEY `fk_redsocial_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_reportes_motivos1_idx` (`motivos_idmotivos`),
+  CONSTRAINT `fk_redsocial_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`),
+  CONSTRAINT `fk_reportes_motivos1` FOREIGN KEY (`motivos_idmotivos`) REFERENCES `motivos` (`idmotivos`)
+) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `reportes`
+--
+LOCK TABLES `reportes` WRITE;
+/*!40000 ALTER TABLE `reportes` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `reportes` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `revisionimagenes`
+--
+DROP TABLE IF EXISTS `revisionimagenes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `revisionimagenes` (
+  `idrevisionImagenescol` int NOT NULL AUTO_INCREMENT,
+  `usuarios_idusuarios` int NOT NULL,
+  `imagenes_idimagenes` int NOT NULL,
+  `tipodefoto_idtipoDeFoto` int NOT NULL,
+  PRIMARY KEY (`idrevisionImagenescol`),
+  KEY `fk_usuarios_has_imagenes_imagenes1_idx` (`imagenes_idimagenes`),
+  KEY `fk_usuarios_has_imagenes_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_revisionImagenes_tipodefoto1_idx` (`tipodefoto_idtipoDeFoto`),
+  CONSTRAINT `fk_revisionImagenes_tipodefoto1` FOREIGN KEY (`tipodefoto_idtipoDeFoto`) REFERENCES `tipodefoto` (`idtipoDeFoto`),
+  CONSTRAINT `fk_usuarios_has_imagenes_imagenes1` FOREIGN KEY (`imagenes_idimagenes`) REFERENCES `imagenes` (`idimagenes`),
+  CONSTRAINT `fk_usuarios_has_imagenes_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB AUTO_INCREMENT = 58 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `revisionimagenes`
+--
+LOCK TABLES `revisionimagenes` WRITE;
+/*!40000 ALTER TABLE `revisionimagenes` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `revisionimagenes` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `roles`
+--
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `roles` (
+  `idrol` int NOT NULL AUTO_INCREMENT,
+  `rol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idrol`)
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `roles`
+--
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */
+;
 INSERT INTO `roles`
 VALUES (1, 'Administrador'),
   (2, 'Staff'),
   (3, 'SuperFan'),
   (4, 'FanBasic');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `show`
+--
+DROP TABLE IF EXISTS `show`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `show` (
+  `idshow` int NOT NULL AUTO_INCREMENT,
+  `fechashow` datetime NOT NULL,
+  `estadoShow` varchar(45) DEFAULT 'Activo',
+  `linkCompraEntrada` varchar(255) DEFAULT NULL,
+  `ubicacionShow_idubicacionShow` int NOT NULL,
+  `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
+  `lugarLocal_idlugarLocal` int NOT NULL,
+  `ordenpago_idordenpago` int DEFAULT NULL,
+  PRIMARY KEY (`idshow`),
+  KEY `fk_show_ubicacionShow1_idx` (`ubicacionShow_idubicacionShow`),
+  KEY `fk_show_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol`),
+  KEY `fk_show_lugarLocal1_idx` (`lugarLocal_idlugarLocal`),
+  KEY `fk_show_ordenpago1_idx` (`ordenpago_idordenpago`),
+  CONSTRAINT `fk_show_lugarLocal1` FOREIGN KEY (`lugarLocal_idlugarLocal`) REFERENCES `lugarlocal` (`idlugarLocal`),
+  CONSTRAINT `fk_show_ordenpago1` FOREIGN KEY (`ordenpago_idordenpago`) REFERENCES `ordenpago` (`idordenpago`),
+  CONSTRAINT `fk_show_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
+  CONSTRAINT `fk_show_ubicacionShow1` FOREIGN KEY (`ubicacionShow_idubicacionShow`) REFERENCES `ubicacionshow` (`idubicacionShow`)
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `show`
+--
+LOCK TABLES `show` WRITE;
+/*!40000 ALTER TABLE `show` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `show` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `staffextra`
+--
+DROP TABLE IF EXISTS `staffextra`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `staffextra` (
+  `idstaffExtra` int NOT NULL AUTO_INCREMENT,
+  `redesSociales_idredesSociales` int DEFAULT NULL,
+  `usuarios_idusuarios` int NOT NULL,
+  `tipoStaff_idtipoStaff` int NOT NULL,
+  `revisionimagenes_idrevisionImagenescol` int DEFAULT NULL,
+  PRIMARY KEY (`idstaffExtra`),
+  KEY `fk_staffExtra_redesSociales_idx` (`redesSociales_idredesSociales`),
+  KEY `fk_staffExtra_usuarios1_idx` (`usuarios_idusuarios`),
+  KEY `fk_staffextra_tipoStaff1_idx` (`tipoStaff_idtipoStaff`),
+  KEY `fk_staffextra_revisionimagenes1_idx` (`revisionimagenes_idrevisionImagenescol`),
+  CONSTRAINT `fk_staffExtra_redesSociales` FOREIGN KEY (`redesSociales_idredesSociales`) REFERENCES `redessociales` (`idredesSociales`),
+  CONSTRAINT `fk_staffextra_revisionimagenes1` FOREIGN KEY (`revisionimagenes_idrevisionImagenescol`) REFERENCES `revisionimagenes` (`idrevisionImagenescol`),
+  CONSTRAINT `fk_staffextra_tipoStaff1` FOREIGN KEY (`tipoStaff_idtipoStaff`) REFERENCES `tipostaff` (`idtipoStaff`),
+  CONSTRAINT `fk_staffExtra_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `staffextra`
+--
+LOCK TABLES `staffextra` WRITE;
+/*!40000 ALTER TABLE `staffextra` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `staffextra` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `tipoactividad`
+--
+DROP TABLE IF EXISTS `tipoactividad`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `tipoactividad` (
+  `idtipoActividad` int NOT NULL AUTO_INCREMENT,
+  `nombreActividad` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idtipoActividad`)
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `tipoactividad`
+--
+LOCK TABLES `tipoactividad` WRITE;
+/*!40000 ALTER TABLE `tipoactividad` DISABLE KEYS */
+;
 INSERT INTO `tipoactividad`
 VALUES (1, 'Perfil'),
   (2, 'Comentarios'),
   (3, 'Contenidos');
+/*!40000 ALTER TABLE `tipoactividad` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `tipocontenido`
+--
+DROP TABLE IF EXISTS `tipocontenido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `tipocontenido` (
+  `idtipoContenido` int NOT NULL AUTO_INCREMENT,
+  `tipoContenido` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idtipoContenido`)
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `tipocontenido`
+--
+LOCK TABLES `tipocontenido` WRITE;
+/*!40000 ALTER TABLE `tipocontenido` DISABLE KEYS */
+;
 INSERT INTO `tipocontenido`
 VALUES (1, 'Foro'),
   (2, 'Noticias'),
   (3, 'Biografia');
+/*!40000 ALTER TABLE `tipocontenido` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `tipodefoto`
+--
+DROP TABLE IF EXISTS `tipodefoto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `tipodefoto` (
+  `idtipoDeFoto` int NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idtipoDeFoto`)
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `tipodefoto`
+--
+LOCK TABLES `tipodefoto` WRITE;
+/*!40000 ALTER TABLE `tipodefoto` DISABLE KEYS */
+;
 INSERT INTO `tipodefoto`
 VALUES (1, 'Usuarios'),
   (2, 'Contenido Staff'),
@@ -681,6 +1100,30 @@ VALUES (1, 'Usuarios'),
   (5, 'Contenido Foro'),
   (6, 'Portada'),
   (7, 'Fijas');
+/*!40000 ALTER TABLE `tipodefoto` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `tipostaff`
+--
+DROP TABLE IF EXISTS `tipostaff`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `tipostaff` (
+  `idtipoStaff` int NOT NULL AUTO_INCREMENT,
+  `nombreStaff` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idtipoStaff`)
+) ENGINE = InnoDB AUTO_INCREMENT = 15 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `tipostaff`
+--
+LOCK TABLES `tipostaff` WRITE;
+/*!40000 ALTER TABLE `tipostaff` DISABLE KEYS */
+;
 INSERT INTO `tipostaff`
 VALUES (1, 'Bass Guitar'),
   (2, 'Cameraman'),
@@ -696,6 +1139,130 @@ VALUES (1, 'Bass Guitar'),
   (12, 'Sound Technician'),
   (13, 'Stage Manager or Technician'),
   (14, 'Vocalist and Guitar');
-SET SQL_MODE = @OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
+/*!40000 ALTER TABLE `tipostaff` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `ubicacionshow`
+--
+DROP TABLE IF EXISTS `ubicacionshow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `ubicacionshow` (
+  `idubicacionShow` int NOT NULL AUTO_INCREMENT,
+  `provinciaLugar` varchar(255) DEFAULT NULL,
+  `paisLugar` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idubicacionShow`)
+) ENGINE = InnoDB AUTO_INCREMENT = 25 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `ubicacionshow`
+--
+LOCK TABLES `ubicacionshow` WRITE;
+/*!40000 ALTER TABLE `ubicacionshow` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `ubicacionshow` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `usuarios`
+--
+DROP TABLE IF EXISTS `usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `usuarios` (
+  `idusuarios` int NOT NULL AUTO_INCREMENT,
+  `usuarioUser` varchar(45) NOT NULL,
+  `contraseniaUser` varchar(100) DEFAULT NULL,
+  `pinOlvidoUser` varchar(100) DEFAULT NULL,
+  `correoElectronicoUser` varchar(45) NOT NULL,
+  `rol_idrol` int NOT NULL,
+  PRIMARY KEY (`idusuarios`),
+  KEY `fk_usuarios_rol1_idx` (`rol_idrol`),
+  CONSTRAINT `fk_usuarios_rol1` FOREIGN KEY (`rol_idrol`) REFERENCES `roles` (`idrol`)
+) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `usuarios`
+--
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `videos`
+--
+DROP TABLE IF EXISTS `videos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `videos` (
+  `idvideos` int NOT NULL AUTO_INCREMENT,
+  `subidaVideo` varchar(45) DEFAULT NULL,
+  `fechaSubidoVideo` varchar(45) DEFAULT NULL,
+  `contenidoDescargable` varchar(45) DEFAULT 'No',
+  PRIMARY KEY (`idvideos`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `videos`
+--
+LOCK TABLES `videos` WRITE;
+/*!40000 ALTER TABLE `videos` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `videos` ENABLE KEYS */
+;
+UNLOCK TABLES;
+--
+-- Table structure for table `youtubeapi`
+--
+DROP TABLE IF EXISTS `youtubeapi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE TABLE `youtubeapi` (
+  `idYoutubeApi` int NOT NULL AUTO_INCREMENT,
+  `tituloYt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  `linkYt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idYoutubeApi`)
+) ENGINE = InnoDB AUTO_INCREMENT = 15 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `youtubeapi`
+--
+LOCK TABLES `youtubeapi` WRITE;
+/*!40000 ALTER TABLE `youtubeapi` DISABLE KEYS */
+;
+/*!40000 ALTER TABLE `youtubeapi` ENABLE KEYS */
+;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */
+;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */
+;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */
+;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */
+;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */
+;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */
+;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */
+;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */
+;
+-- Dump completed on 2024-10-19 13:32:58
