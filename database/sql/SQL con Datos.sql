@@ -103,10 +103,10 @@ CREATE TABLE IF NOT EXISTS `inner`.`revisionimagenes` (
 -- Table `inner`.`albumimagenes`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `inner`.`albumimagenes` (
-  `albumImagenescol` INT NOT NULL AUTO_INCREMENT,
+  `idalbumImagenes` INT NOT NULL AUTO_INCREMENT,
   `albumDatos_idalbumDatos` INT NOT NULL,
   `revisionImagenes_idrevisionImagenescol` INT NOT NULL,
-  PRIMARY KEY (`albumImagenescol`),
+  PRIMARY KEY (`idalbumImagenes`),
   INDEX `fk_table1_albumDatos1_idx` (`albumDatos_idalbumDatos` ASC),
   INDEX `fk_albumImagenes_revisionImagenes1_idx` (`revisionImagenes_idrevisionImagenescol` ASC),
   CONSTRAINT `fk_albumImagenes_revisionImagenes1` FOREIGN KEY (`revisionImagenes_idrevisionImagenescol`) REFERENCES `inner`.`revisionimagenes` (`idrevisionImagenescol`),
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `inner`.`cancion` (
   `albumMusical_albumMusicalcol` INT NOT NULL,
   PRIMARY KEY (`idcancion`),
   INDEX `fk_cancion_albumMusical1_idx` (`albumMusical_albumMusicalcol` ASC),
-  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_albumMusicalcol`) REFERENCES `inner`.`albummusical` (`albumMusicalcol`)
+  CONSTRAINT `fk_cancion_albumMusical1` FOREIGN KEY (`albumMusical_idalbumMusical`) REFERENCES `inner`.`albummusical` (`albumMusicalcol`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 -- Table `inner`.`tipocontenido`
