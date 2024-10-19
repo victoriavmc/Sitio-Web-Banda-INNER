@@ -10,13 +10,19 @@
         </x-alerts>
     @endif
     @if (!$funciona)
-        <p class="text-center mt-5 text-2xl text-gray-500">No hay Usuarios registrados</p>
+        <div class="min-h-screen
+    justify-center items-center">
+            <div class="text-center mt-80">
+                <p class=" text-2xl text-gray-500">No hay Usuarios registrados</p>
+            </div>
+        </div>
     @else
         <div class="flex flex-col bg-white min-h-screen">
             <div
                 class="mx-auto mb-10 flex w-full flex-col px-5 pt-0 md:h-[unset] md:max-w-[95%] lg:h-[100vh] lg:max-w-[70%] lg:px-6 xl:pl-0 mt-10">
                 <div class="h-min w-full rounded-lg">
-                    <form class="flex items-center max-w-sm my-2" method="GET" action="{{ route('panel-de-usuarios') }}">
+                    <form class="flex items-center max-w-sm my-2" method="GET"
+                        action="{{ route('panel-de-usuarios') }}">
                         <label for="simple-search" class="sr-only">Buscar</label>
                         <div class="relative w-full">
                             <input type="text" id="simple-search" name="busqueda"
@@ -167,7 +173,8 @@
                                                                 xmlns="http://www.w3.org/2000/svg" width="24"
                                                                 height="24" fill="none" viewBox="0 0 24 24">
                                                                 <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-width="2" d="M6 12h.01m6 0h.01m5.99 0h.01" />
+                                                                    stroke-width="2"
+                                                                    d="M6 12h.01m6 0h.01m5.99 0h.01" />
                                                             </svg>
                                                         </button>
 

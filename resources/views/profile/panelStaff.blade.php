@@ -10,9 +10,14 @@
         </x-alerts>
     @endif
     @if (!$funcion)
-        <p class="text-center mt-5 text-2xl text-gray-500">No hay Miembros registrados</p>
+        <div class="min-h-screen
+         justify-center items-center">
+            <div class="text-center mt-80">
+                <p class=" text-2xl text-gray-500">No hay Miembros registrados</p>
+            </div>
+        </div>
     @else
-        <div class="flex flex-col bg-white min-h-screen">
+        <div class="flex flex-col bg-white min-h-screen justify-center">
             <div
                 class="mx-auto mb-10 flex w-full flex-col px-5 pt-0 md:h-[unset] md:max-w-[95%] lg:h-[100vh] lg:max-w-[70%] lg:px-6 xl:pl-0 mt-10">
                 <div class="h-min w-full rounded-lg">
