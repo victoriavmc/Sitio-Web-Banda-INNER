@@ -95,7 +95,7 @@
                     @endauth
                 </div>
                 @if (!$listaYt)
-                    <p class=" flex justify-center text-2xl text-center text-black mt-8">No hay álbumes de videos
+                    <p class=" flex justify-center text-2xl text-center text-black mt-8">No hay videos de
                         youtube</p>
                 @else
                     <div class="flex flex-wrap justify-between gap-5">
