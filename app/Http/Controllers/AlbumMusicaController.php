@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 #Clases
 use App\Models\AlbumDatos;
 use App\Models\AlbumMusical;
+use App\Models\Cancion;
 use App\Models\Imagenes;
 use App\Models\RevisionImagenes;
 #Otros
@@ -42,7 +43,7 @@ class AlbumMusicaController extends Controller
             $listacanciones = [];
 
             // Obtener las canciones relacionadas con el álbum
-            $canciones = $album->cancion;
+            $canciones = Cancion::where('albumMusical_idalbumMusical', $idalbum)->get();
 
             // Verificar si hay canciones antes de recorrer
             if ($canciones) {
@@ -73,46 +74,16 @@ class AlbumMusicaController extends Controller
 
     // ------------------ CRUD DE ÁLBUMES ------------------
 
-    // Formulario Crear Album
-    public function formularioCrearAlbum()
-    {
-        return view('utils.albumMusica.formularioCrearAlbum');
-    }
-
-    // Guardar Album
     public function crearAlbum(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'titulo' => 'required|max:255|unique:albumdatos,tituloAlbum',
-            'fecha' => 'required|date',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-        ]);
+        $validator = $this->validateAlbum($request);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
-                'type' => 'Danger',
-                'message' => 'Error al crear el album, verifique los datos.',
-            ]);
+            return $this->redirectWithError('Error al crear el álbum, verifique los datos.');
         }
 
-        $albumDatos = new AlbumDatos();
-        $albumDatos->tituloAlbum = $request->titulo;
-        $albumDatos->fechaSubido = $request->fecha;
-        $albumDatos->save();
-
-        if ($request->file('imagen')) {
-            $path = $request->file('imagen')->store('img', 'public');
-            $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
-            $imagen->fechaSubidaImg = now();
-            $imagen->save();
-
-            $revImg = new RevisionImagenes();
-            $revImg->usuarios_idusuarios = Auth::user()->idusuarios;
-            $revImg->imagenes_idimagenes = $imagen->idimagenes;
-            $revImg->tipodefoto_idtipodefoto = 6;
-            $revImg->save();
-        }
+        $albumDatos = $this->guardarDatosAlbum($request);
+        $revImg = $this->guardarImagenSiExiste($request);
 
         $albumMusical = new AlbumMusical();
         $albumMusical->albumDatos_idalbumDatos = $albumDatos->idalbumDatos;
@@ -125,6 +96,135 @@ class AlbumMusicaController extends Controller
         ]);
     }
 
+    public function modificarAlbum(Request $request, $id)
+    {
+        $validator = $this->validateAlbum($request);
+
+        if ($validator->fails()) {
+            return $this->redirectWithError('Error al modificar el álbum, verifique los datos.');
+        }
+
+        $album = AlbumMusical::findOrFail($id);
+        $this->actualizarDatosAlbum($request, $album->albumDatos_idalbumDatos);
+
+        if ($request->file('imagen')) {
+            $this->actualizarImagen($album, $request);
+        }
+
+        $album->save();
+
+        return redirect()->route('discografia')->with('alertAlbum', [
+            'type' => 'Success',
+            'message' => 'Álbum modificado correctamente.',
+        ]);
+    }
+
+    // Solicita
+    public function validateAlbum(Request $request)
+    {
+        return Validator::make($request->all(), [
+            'titulo' => 'required|max:255',
+            'fecha' => 'required|date',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+        ]);
+    }
+
+    #Error
+    public function redirectWithError($message)
+    {
+        return redirect()->back()->withInput()->with('alertAlbum', [
+            'type' => 'Danger',
+            'message' => $message,
+        ]);
+    }
+
+    #Guardo ALBUM DATOS
+    public function guardarDatosAlbum(Request $request)
+    {
+        $albumDatos = new AlbumDatos();
+        $albumDatos->tituloAlbum = $request->titulo;
+        $albumDatos->fechaSubido = $request->fecha;
+        $albumDatos->save();
+
+        return $albumDatos;
+    }
+
+    #GUARDO IMAGEN
+    public function guardarImagenSiExiste(Request $request)
+    {
+        if ($request->file('imagen')) {
+            $path = $request->file('imagen')->store('img', 'public');
+            $imagen = new Imagenes();
+            $imagen->subidaImg = $path;
+            $imagen->fechaSubidaImg = now();
+            $imagen->save();
+
+            $revImg = new RevisionImagenes();
+            $revImg->usuarios_idusuarios = Auth::user()->idusuarios;
+            $revImg->imagenes_idimagenes = $imagen->idimagenes;
+            $revImg->tipodefoto_idtipodefoto = 6;
+            $revImg->save();
+
+            return $revImg;
+        }
+        return null;
+    }
+
+    #ACTUALIZO SI ES QUE TIENE PARA ACTUALIZAR
+    public function actualizarDatosAlbum(Request $request, $idAlbumMusical)
+    {
+        $albumDatos = AlbumDatos::findOrFail($idAlbumMusical);
+        if ($request->has('titulo')) {
+            $albumDatos->tituloAlbum = $request->titulo;
+        }
+        if ($request->has('fecha')) {
+            $albumDatos->fechaSubido = $request->fecha;
+        }
+        $albumDatos->save();
+    }
+
+    #ACTUALIZO SI ES QUE TIENE PARA ACTUALIZAR
+    public function actualizarImagen($album, Request $request)
+    {
+        $revImg = RevisionImagenes::find($album->revisionImagenes_idrevisionImagenescol);
+
+        if ($revImg) {
+            $imagen = Imagenes::find($revImg->imagenes_idimagenes);
+
+            if ($imagen) {
+                // Eliminar la referencia en albummusical, si es necesario
+                $albumMusical = AlbumMusical::where('revisionImagenes_idrevisionImagenescol', $revImg->idrevisionImagenescol)->first();
+                if ($albumMusical) {
+                    $albumMusical->revisionImagenes_idrevisionImagenescol = null;
+                    $albumMusical->save();
+                }
+
+                // Eliminar la revisión de imagen
+                $revImg->delete();
+
+                // Eliminar la imagen del almacenamiento
+                Storage::disk('public')->delete($imagen->subidaImg);
+
+                // Eliminar la imagen de la base de datos
+                $imagen->delete();
+            }
+        }
+
+        // Guardar nueva imagen y obtener el objeto de revisión de imagen
+        $revImg = $this->guardarImagenSiExiste($request);
+        $album->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+
+        // Asegúrate de guardar el álbum si ha habido cambios
+        $album->save();
+    }
+
+
+    // Formulario Crear Album
+    public function formularioCrearAlbum()
+    {
+        return view('utils.albumMusica.formularioCrearAlbum');
+    }
+
     // Formulario Editar Album
     public function formularioModificarAlbum($id)
     {
@@ -133,62 +233,6 @@ class AlbumMusicaController extends Controller
         return view('utils.albumMusica.formularioModificarAlbum', compact('album', 'imagen'));
     }
 
-    // Actualizar Album
-    public function modificarAlbum(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'titulo' => 'required|max:255',
-            'fecha' => 'required|date',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
-                'type' => 'Danger',
-                'message' => 'Error al modificar el album, verifique los datos.',
-            ]);
-        }
-
-        $album = AlbumMusical::findOrFail($id);
-
-        $albumDatos = $album->albumDatos;
-        $albumDatos->tituloAlbum = $request->titulo;
-        $albumDatos->fechaSubido = $request->fecha;
-        $albumDatos->save();
-
-        // Actualizar la imagen y borrar del storage la imagen anterior
-        if ($request->file('imagen')) {
-            $revImg = $album->revisionimagenes;
-            $imagen = Imagenes::where('idimagenes', $revImg->imagenes_idimagenes)->first();
-
-            if ($imagen) {
-                Storage::disk('public')->delete($imagen->subidaImg);
-                $imagen->delete();
-            }
-
-            $imagen = new Imagenes();
-            $path = $request->file('imagen')->store('img', 'public');
-            $imagen->subidaImg = $path;
-            $imagen->fechaSubidaImg = now();
-            $imagen->save();
-
-            $idimagen = $imagen->idimagenes;
-
-            $revImg = new RevisionImagenes();
-            $revImg->usuarios_idusuarios = Auth::user()->idusuarios;
-            $revImg->imagenes_idimagenes = $idimagen;
-            $revImg->tipodefoto_idtipodefoto = 6;
-            $revImg->save();
-
-            $album->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol;
-        }
-
-        $album->save();
-        return redirect()->route('discografia')->with('alertAlbum', [
-            'type' => 'Success',
-            'message' => 'Álbum modificado correctamente.',
-        ]);
-    }
 
     // Eliminar Album
     public function eliminarAlbum($id)
@@ -197,17 +241,22 @@ class AlbumMusicaController extends Controller
 
         $revImg = $album->revisionimagenes;
 
-        $imagen = $revImg->imagenes;
+        // Comprobar si existe la revisión de imagen
+        if ($revImg) {
+            $imagen = $revImg->imagenes;
+            $album->delete();
+            $revImg->delete();
+            if ($imagen) {
+                // Eliminar la imagen del almacenamiento
+                Storage::disk('public')->delete($imagen->subidaImg);
+                // Eliminar la imagen de la base de datos
+                $imagen->delete();
+            }
+        }
 
         $album->delete();
 
-        $revImg->delete();
-
-        if ($imagen) {
-            Storage::disk('public')->delete($imagen->subidaImg);
-            $imagen->delete();
-        }
-
+        // Eliminar los datos del álbum
         $album->albumDatos->delete();
 
         return redirect()->back()->with('alertAlbum', [
