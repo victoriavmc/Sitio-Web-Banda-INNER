@@ -23,57 +23,64 @@
                 Discografia
             </h3>
         </div>
-        <div class="container mx-auto max-w-4xl mt-10 border-b border-gray-300 pb-3">
+        <div class="container mx-auto max-w-4xl mt-10  pb-3">
             <!-- Centering wrapper -->
             <h2 class="text-4xl font-bold text-center mb-5">ALBUMS</h2>
             @auth
-                <a href="{{ route('formulario-crear-album') }}" type="submit"
-                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                    Crear Album
-                </a>
+                @if (Auth::user()->rol->idrol === 1)
+                    <a href="{{ route('formulario-crear-album') }}" type="submit"
+                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        Crear Album
+                    </a>
+                @endif
             @endauth
 
             @if (!$listaAlbum)
                 <p class="text-center mt-5 text-2xl text-gray-500">No hay albums disponibles</p>
             @else
                 @foreach ($listaAlbum as $album)
-                    <div class="flex w-full justify-center gap-12">
-                        <div class="max-w-sm border border-gray-300 flex">
+                    <div class="flex w-full justify-center gap-12 border-b border-gray-300 pb-3">
+                        <div class="border w-[300px] max-h-72 border-gray-300 flex">
                             @auth
-                                <div class="flex gap-3 absolute pl-3 pt-3">
-                                    <form action="{{ route('eliminar-album', $album['id']) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                @if (Auth::user()->rol->idrol === 1)
+                                    <div class="flex gap-3 absolute pl-3 pt-3">
+                                        <form action="{{ route('eliminar-album', $album['id']) }}" id="btnEliminarAlbum"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                                <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
+                                            href="{{ route('formulario-modificar-album', $album['id']) }}">
                                             <svg class="w-5 h-5 text-white" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 fill="none" viewBox="0 0 24 24">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                                     stroke-width="2"
-                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                             </svg>
-                                        </button>
-                                    </form>
-
-                                    <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
-                                        href="{{ route('formulario-modificar-album', $album['id']) }}">
-                                        <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                            viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                        </svg>
-                                    </a>
-                                </div>
+                                        </a>
+                                    </div>
+                                @endif
                             @endauth
-                            {{-- <img class="w-[400px]" src="{{ asset(Storage::url($album['imagen'])) }}"
-                                alt="{{ $album['titulo'] }}"> --}}
-                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="">
+                            {{-- @dd($album['imagen']) --}}
+                            @if ($album['imagen'] == 'imagen_por_defecto.jpg')
+                                <img src="{{ asset('img/logo_inner_negro.png') }}" alt="{{ $album['titulo'] }}">
+                            @else
+                                <img src="{{ asset(Storage::url($album['imagen'])) }}" alt="{{ $album['titulo'] }}">
+                            @endif
                         </div>
 
-                        <div class="w-full flex justify-start" id="songs-{{ $album['titulo'] }}">
+                        <div class=" flex justify-start" id="songs-{{ $album['titulo'] }}">
                             <div class="flex flex-col h-full">
                                 <div class="flex gap-2 items-center">
                                     <h2 class="text-3xl font-bold text-center">{{ $album['titulo'] }}</h2>
@@ -107,33 +114,38 @@
                                                     </div>
 
                                                     @auth
-                                                        <div class="flex gap-2">
-                                                            <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
-                                                                href="{{ route('formulario-modificar-cancion', $titulos['id']) }}">
-                                                                <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                                                </svg>
-                                                            </a>
-                                                            <form action="{{ route('eliminar-cancion', $titulos['id']) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                                        @if (Auth::user()->rol->idrol === 1)
+                                                            <div class="flex gap-2">
+                                                                <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
+                                                                    href="{{ route('formulario-modificar-cancion', $titulos['id']) }}">
                                                                     <svg class="w-5 h-5 text-white" aria-hidden="true"
                                                                         xmlns="http://www.w3.org/2000/svg" width="24"
                                                                         height="24" fill="none" viewBox="0 0 24 24">
                                                                         <path stroke="currentColor" stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
-                                                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                                                     </svg>
-                                                                </button>
-                                                            </form>
-                                                        </div>
+                                                                </a>
+                                                                <form
+                                                                    action="{{ route('eliminar-cancion', $titulos['id']) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                                                        <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24" fill="none"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke="currentColor"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
                                                     @endauth
                                                 </div>
                                             </nav>

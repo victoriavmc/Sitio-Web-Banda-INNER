@@ -204,8 +204,6 @@ class ContenidoController extends Controller
             }
         }
 
-
-
         // Manejar nuevas imágenes subidas
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {

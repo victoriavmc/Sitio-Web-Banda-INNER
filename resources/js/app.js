@@ -120,6 +120,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Alerta para borrar contenido
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("btnEliminarAlbum")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No puedes revertir los cambios!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, borrarlo!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+});
+
+// Alerta para borrar contenido
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".btnEliminarContenido").forEach((element) => {
         element.addEventListener("submit", async function (event) {
             event.preventDefault();

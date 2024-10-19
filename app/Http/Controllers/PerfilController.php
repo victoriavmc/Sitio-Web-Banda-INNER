@@ -260,22 +260,21 @@ class PerfilController extends Controller
             $userId = $usuarioBD->idusuarios;
             $idFoto = $imagen->idimagenes;
 
-            $existeFoto = RevisionImagenes::where('usuarios_idusuarios', $userId)->where('tipoDeFoto_idtipoDeFoto', 1)->first();
+            $revisionImagen = RevisionImagenes::where('usuarios_idusuarios', $userId)->where('tipoDeFoto_idtipoDeFoto', 1)->first();
+            if ($revisionImagen) {
+                // Eliminar la revisión de la imagen
+                $revisionImagen->delete();
 
-            if ($existeFoto != null) {
-                // Obtener el registro de la imagen anterior
-                $imagenAnterior = Imagenes::find($existeFoto->imagenes_idimagenes);
-
-                // Eliminar el registro de la revisión anterior
-                $existeFoto->delete(); // IMPORTANTE: Eliminar primero la revisión
-
-                // Eliminar el archivo del almacenamiento y el registro de la imagen anterior
-                if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
-                    Storage::delete($imagenAnterior->subidaImg);
+                // Eliminar la imagen asociada
+                if ($revisionImagen->imagenes_idimagenes) {
+                    $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
+                    if ($imagen) {
+                        // Eliminar la imagen del almacenamiento
+                        Storage::disk('public')->delete($imagen->subidaImg);
+                        // Eliminar la imagen de la base de datos
+                        $imagen->delete();
+                    }
                 }
-
-                // Ahora eliminar el registro de la imagen anterior
-                $imagenAnterior->delete();
             }
 
             $this->cargaImagenTipo1($userId, $idFoto);

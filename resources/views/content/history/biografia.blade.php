@@ -7,11 +7,16 @@
     @endif
 
     @if ($recuperoBiografia === null)
-        <div class="min-h-screen">
-            <h1 class="text-black font-bold text-center text-8xl mb-8">Biografía
-            </h1>
-            <p class="text-center text-2xl text-gray-500">No esta disponible
-            </p>
+        <div class="min-h-screen flex justify-center items-center flex-col">
+            <h1 class="text-black font-bold text-center text-8xl mb-8">Biografía</h1>
+            <p class="text-center mb-8 text-2xl text-gray-500">No esta disponible</p>
+
+            @auth
+                @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                    <a href="{{ route('crearP', 1) }}"
+                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Crear</a>
+                @endif
+            @endauth
         </div>
     @else
         @if ($imagenesBiografia)
