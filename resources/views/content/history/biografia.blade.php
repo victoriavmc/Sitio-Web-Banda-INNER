@@ -57,85 +57,78 @@
                                 </div>
                             </div>
                         @endif
-
-
-
-                        <<<<<<< HEAD <div class="mx-auto ">
+                    </div>
+                    <div class="mx-auto ">
+                        <div class="flex flex-col justify-center">
                             <div class="flex flex-col justify-center">
-                                <h2 class="text-center font-semibold text-3xl text-black mt-4 mb-4">¡Escúchanos!</h2>
-                                =======
-                                <div class="mx-auto">
-                                    <div class="flex flex-col justify-center">
-                                        <h2 class="text-center font-semibold text-3xl text-black">¡Escúchanos!</h2>
-                                        >>>>>>> 3a83935290ac4b8535d61b4d0bc7b5fe42cd813c
-                                        <div
-                                            class="flex flex-wrap items-center justify-center gap-10 mt-2 md:justify-around">
-                                            @foreach ($recuperoRedesSociales as $redSocial)
-                                                @if ($redSocial->linkRedSocial)
-                                                    @switch($redSocial->nombreRedSocial)
-                                                        @case('Deezer')
-                                                            <div class="text-gray-400">
-                                                                <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
-                                                                    rel="noopener noreferrer">
-                                                                    <img class="w-38"
-                                                                        src="{{ asset('img/biografia/logoOficial_deezer.svg') }}"
-                                                                        alt="Deezer">
-                                                                </a>
-                                                            </div>
-                                                        @break
+                                <h2 class="text-center font-semibold text-3xl text-black">¡Escúchanos!</h2>
+                                <div class="flex flex-wrap items-center justify-center gap-10 mt-2 md:justify-around">
+                                    @foreach ($recuperoRedesSociales as $redSocial)
+                                        @if ($redSocial->linkRedSocial)
+                                            @switch($redSocial->nombreRedSocial)
+                                                @case('Deezer')
+                                                    <div class="text-gray-400">
+                                                        <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <img class="w-38"
+                                                                src="{{ asset('img/biografia/logoOficial_deezer.svg') }}"
+                                                                alt="Deezer">
+                                                        </a>
+                                                    </div>
+                                                @break
 
-                                                        @case('Spotify')
-                                                            <div class="text-gray-400">
-                                                                <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
-                                                                    rel="noopener noreferrer">
-                                                                    <img class=" h-40"
-                                                                        src="{{ asset('img/biografia/logoOficial_spotify.svg') }}"
-                                                                        alt="Spotify">
-                                                                </a>
-                                                            </div>
-                                                        @break
+                                                @case('Spotify')
+                                                    <div class="text-gray-400">
+                                                        <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <img class=" h-40"
+                                                                src="{{ asset('img/biografia/logoOficial_spotify.svg') }}"
+                                                                alt="Spotify">
+                                                        </a>
+                                                    </div>
+                                                @break
 
-                                                        @case('Youtube')
-                                                            <div class="text-gray-400">
-                                                                <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
-                                                                    rel="noopener noreferrer">
-                                                                    <img class=" h-40"
-                                                                        src="{{ asset('img/biografia/logoOficial_youtube.svg') }}"
-                                                                        alt="Youtube">
-                                                                </a>
-                                                            </div>
-                                                        @break
+                                                @case('Youtube')
+                                                    <div class="text-gray-400">
+                                                        <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <img class=" h-40"
+                                                                src="{{ asset('img/biografia/logoOficial_youtube.svg') }}"
+                                                                alt="Youtube">
+                                                        </a>
+                                                    </div>
+                                                @break
 
-                                                        @case('iTunes')
-                                                            <div class="text-gray-400">
-                                                                <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
-                                                                    rel="noopener noreferrer">
-                                                                    <img class=" h-40"
-                                                                        src="{{ asset('img/biografia/logoOficial_iTunes.svg') }}"
-                                                                        alt="iTunes">
-                                                                </a>
-                                                            </div>
-                                                        @break
+                                                @case('iTunes')
+                                                    <div class="text-gray-400">
+                                                        <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <img class=" h-40"
+                                                                src="{{ asset('img/biografia/logoOficial_iTunes.svg') }}"
+                                                                alt="iTunes">
+                                                        </a>
+                                                    </div>
+                                                @break
 
-                                                        @case('Amazon Music')
-                                                            <div class="text-gray-400">
-                                                                <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
-                                                                    rel="noopener noreferrer">
-                                                                    <img class=" h-20"
-                                                                        src="{{ asset('img/biografia/logoOficial_amazon_music.svg') }}"
-                                                                        alt="Amazon Music">
-                                                                </a>
-                                                            </div>
-                                                        @break
-                                                    @endswitch
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                                @case('Amazon Music')
+                                                    <div class="text-gray-400">
+                                                        <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <img class=" h-20"
+                                                                src="{{ asset('img/biografia/logoOficial_amazon_music.svg') }}"
+                                                                alt="Amazon Music">
+                                                        </a>
+                                                    </div>
+                                                @break
+                                            @endswitch
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
+            </div>
         @endif
     @endif
     <!-- Contenedor del modal -->

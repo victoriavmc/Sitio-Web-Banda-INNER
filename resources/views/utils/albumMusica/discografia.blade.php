@@ -65,7 +65,6 @@
                                 </a>
                             </div>
                         @endauth
-
                         {{-- <img class="w-[400px]" src="{{ asset(Storage::url($album['imagen'])) }}"
                                 alt="{{ $album['titulo'] }}"> --}}
                         <img src="{{ asset('img/logo_inner_negro.png') }}" alt="">

@@ -52,12 +52,20 @@ class panelStaffController extends Controller
             ->orderByRaw("CASE WHEN historialusuario.estado = 'Activo' THEN 1 ELSE 2 END");
 
         // Paginación de usuarios
-        return $usuarios = $query->paginate(6);
+        $usuarios = $query->paginate(6);
+
+        // Verificar si hay usuarios
+        if ($usuarios->isEmpty()) {
+            return false;
+        }
+        return $usuarios;
     }
 
     #Visualiza a los miembros del Staff
     public function panel(Request $request)
     {
+        $funciona = true;
+
         // Obtener los roles desde la base de datos
         $roles = Roles::where('rol', '!=', 'Administrador')->get();
         $usuariostabla = Usuario::with('staffExtra.tipoStaff')->get();
@@ -72,48 +80,56 @@ class panelStaffController extends Controller
         // Obtener la lista de usuarios
         $usuarios = $this->listar($request);
 
-        // Asignar imágenes y especialidades a los usuarios
-        foreach ($usuarios as $usuario) {
-            $usuario->urlImagen = $this->mirar($usuario->idusuarios);
+        $funcion = true;
+        if ($usuarios != false) {
+            // Asignar imágenes y especialidades a los usuarios
+            foreach ($usuarios as $usuario) {
+                $usuario->urlImagen = $this->mirar($usuario->idusuarios);
 
-            // Obtener la especialidad del usuario
-            $obtenerEspecificoUser = StaffExtra::where('usuarios_idusuarios', $usuario->idusuarios)->first();
-            if ($obtenerEspecificoUser) {
-                $especialidad = TipodeStaff::find($obtenerEspecificoUser->tipoStaff_idtipoStaff);
-                $usuario->especialidad = $especialidad ? $especialidad->nombre : 'Sin especialidad';
-            } else {
-                $usuario->especialidad = 'Sin especialidad';
+                // Obtener la especialidad del usuario
+                $obtenerEspecificoUser = StaffExtra::where('usuarios_idusuarios', $usuario->idusuarios)->first();
+                if ($obtenerEspecificoUser) {
+                    $especialidad = TipodeStaff::find($obtenerEspecificoUser->tipoStaff_idtipoStaff);
+                    $usuario->especialidad = $especialidad ? $especialidad->nombre : 'Sin especialidad';
+                } else {
+                    $usuario->especialidad = 'Sin especialidad';
+                }
+
+                # REPORETE
+                // Obtener todas las actividades del usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $usuario->idusuarios)->get();
+
+                // Contabilizar el número total de reportes en las actividades del usuario
+                $totalReportes = 0;
+
+                foreach ($actividades as $actividad) {
+                    // Contar las interacciones de tipo reporte para cada actividad
+                    $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
+                        ->where('reporte', '>', 0)
+                        ->count();
+
+                    // Sumar al total de reportes del usuario
+                    $totalReportes += $reporteCount;
+                }
+
+                // Guardar el número total de reportes en la lista
+                $listaReportado[$usuario->idusuarios] = $totalReportes;
             }
 
-            # REPORETE
-            // Obtener todas las actividades del usuario
-            $actividades = Actividad::where('usuarios_idusuarios', $usuario->idusuarios)->get();
-
-            // Contabilizar el número total de reportes en las actividades del usuario
-            $totalReportes = 0;
-
-            foreach ($actividades as $actividad) {
-                // Contar las interacciones de tipo reporte para cada actividad
-                $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
-                    ->where('reporte', '>', 0)
-                    ->count();
-
-                // Sumar al total de reportes del usuario
-                $totalReportes += $reporteCount;
-            }
-
-            // Guardar el número total de reportes en la lista
-            $listaReportado[$usuario->idusuarios] = $totalReportes;
+            return view('profile.panelStaff', [
+                'usuarios' => $usuarios,
+                'roles' => $roles,
+                'rol' => $rol,
+                'especialidadModal' => $especialidadModal,
+                'usuariostabla' => $usuariostabla,
+                'listaReportado' => $listaReportado,
+            ]);
+        } else {
+            $funcion = false;
+            return view('profile.panelStaff', [
+                'funcion' => $funcion,
+            ]);
         }
-
-        return view('profile.panelStaff', [
-            'usuarios' => $usuarios,
-            'roles' => $roles,
-            'rol' => $rol,
-            'especialidadModal' => $especialidadModal,
-            'usuariostabla' => $usuariostabla,
-            'listaReportado' => $listaReportado,
-        ]);
     }
 
     #Buscamos y enviamos a la vista Usuario especifico

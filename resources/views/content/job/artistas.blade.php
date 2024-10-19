@@ -1,56 +1,59 @@
 <x-AppLayout>
-    <div class="max-w-screen-xl mx-auto p-5 sm:p-10 min-h-screen">
-        <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-20">
-            {{--    SI TRAE DATO --}}
-            @if (!$listaArtistas)
-                <section class="bg-white flex">
-                    <div
-                        class="max-w-screen-xl 2xl:max-w-screen-2xl px-8 md:px-12 mx-auto py-12 lg:py-24 space-y-24 flex flex-col justify-center lg:h-screen">
-                        <div class="grid grid-cols-1 gap-2 mt-12 list-none md:grid-cols-2 lg:mt-24 max-w-5xl mx-auto"
-                            role="list">
-                            <article
-                                class="mx-auto  shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                style="background-image:url('{{ asset('img/artistas/artistaA.jpg') }}');">
-                                <div
-                                    class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                    <div class=" bg-black p-8 h-full justify-end flex flex-col">
-                                        <h1
-                                            class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                            Santi </h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <article
-                                class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
-                                style="background-image:url('{{ asset('img/artistas/artistaC.jpg') }}');">
-                                <div
-                                    class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                    <div class="bg-black p-8 h-full justify-end flex flex-col">
-                                        <h1
-                                            class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                            VictoriaVMC </h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <article
-                                class="mx-auto  shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                style="background-image:url('{{ asset('img/artistas/artistaB.jpeg') }}');">
-                                <div
-                                    class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
-                                    <div class=" bg-black p-8 h-full justify-end flex flex-col">
-                                        <h1
-                                            class="text-white mt-2 text-xl mb-5 transform  translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
-                                            Kevin </h1>
-                                        <p
-                                            class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500 ">
-                                            Power de Apoyo </p>
-                                    </div>
-                                </div>
-                            </article>
+    {{--    SI TRAE DATO --}}
+    @if (!$listaArtistas)
+        <section class="bg-white min-h-screen p-10">
+            <h1 class="text-center text-4xl mb-5">Pseudo Artistas</h1>
+            <div
+                class="max-w-screen-xl 2xl:max-w-screen-2xl px-8 md:px-12 mx-auto space-y-12 flex flex-col justify-center">
+                <div class="grid grid-cols-1 gap-2 list-none md:grid-cols-3 lg:mt-10 max-w-5xl mx-auto" role="list">
+                    <article
+                        class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
+                        style="background-image: url('{{ asset('img/artistas/artistaA.jpg') }}'); background-size: cover; background-position: center;">
+                        <div
+                            class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
+                            <h1
+                                class="text-white mt-2 text-xl mb-5 translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
+                                Santi
+                            </h1>
+                            <p class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500">Power
+                                FrontEnd</p>
                         </div>
-                    </div>
-                </section>
-            @else
+                    </article>
+
+                    <article
+                        class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
+                        style="background-image: url('{{ asset('img/artistas/artistac.jpg') }}'); background-size: cover; background-position: center;">
+                        <div
+                            class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
+                            <h1
+                                class="text-white mt-2 text-xl mb-5 translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
+                                VictoriaVMC
+                            </h1>
+                            <p class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500">Power
+                                BackEnd</p>
+                        </div>
+                    </article>
+
+                    <article
+                        class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
+                        style="background-image: url('{{ asset('img/artistas/artistaB.jpeg') }}'); background-size: cover; background-position: center;">
+                        <div
+                            class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
+                            <h1
+                                class="text-white mt-2 text-xl mb-5 translate-y-20 uppercase group-hover:translate-y-0 duration-300 group-hover:text-orange-500">
+                                Kevin
+                            </h1>
+                            <p class="opacity-0 text-white text-xl group-hover:opacity-80 transform duration-500">
+                                Power de Apoyo
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    @else
+        <div class="max-w-screen-xl mx-auto p-5 sm:p-10 min-h-screen">
+            <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-20">
                 @foreach ($listaArtistas as $artista)
                     {{-- Solo mostrar el botón de modificar imagen si el usuario tiene rol tipo 1 o 2 --}}
                     @if (Auth::check() && (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2))
@@ -129,10 +132,9 @@
                         </a>
                     @endif
                 @endforeach
-            @endif
-
+            </div>
         </div>
-    </div>
+    @endif
 
     <script>
         function actualizarNombreArchivo(id) {

@@ -75,6 +75,15 @@ class PanelUsuariosController extends Controller
     #Envia a la vista
     public function panel(Request $request)
     {
+        $funciona = true;
+
+        $usuarios = Usuario::where('rol_idrol', '!=', 1)->get();
+
+        if ($usuarios->isEmpty()) {
+            $funciona = false;
+            return view('profile.panelUsuarios', ['funciona' => $funciona]);
+        }
+
         // Obtener la lista de usuarios
         $usuarios = $this->listar($request);
 
@@ -119,6 +128,7 @@ class PanelUsuariosController extends Controller
 
         // Retornar la vista con los usuarios, roles y el rol del usuario autenticado
         return view('profile.panelUsuarios', [
+            'funciona' => $funciona,
             'usuarios' => $usuarios,
             'roles' => $roles,
             'rol' => $rol,
