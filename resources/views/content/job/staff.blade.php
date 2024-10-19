@@ -15,7 +15,7 @@
                             <div class="grid grid-cols-1 gap-2 mt-12 list-none md:grid-cols-2 max-w-5xl mx-auto"
                                 role="list">
                                 <article
-                                    class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 imagen-modal cursor-pointer group"
+                                    class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
                                     style="background-image:url('{{ asset('img/artistas/victoriavmc.png') }}');">
                                     <div
                                         class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150 flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
@@ -30,7 +30,7 @@
                                     </div>
                                 </article>
                                 <article
-                                    class="mx-auto shadow-xl mt-20 md:mt-0 bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12 imagen-modal cursor-pointer group"
+                                    class="mx-auto  shadow-xl mt-20 md:mt-0 bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
                                     style="background-image:url('{{ asset('img/artistas/santi.png') }}');">
                                     <div
                                         class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
@@ -111,13 +111,6 @@
                     </div>
                 @endif
             </div>
-        </div>
-    </div>
-
-    <!-- Contenedor del modal -->
-    <div id="modal" class="hidden imagenG">
-        <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-            <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
 </x-AppLayout>
