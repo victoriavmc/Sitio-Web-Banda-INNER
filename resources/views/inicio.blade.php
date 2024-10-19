@@ -38,70 +38,74 @@
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos
         </h3>
-
-        <div class="swiper">
-            <div class="slide-content mb-10">
-                <div class="swiper-wrapper">
-                    @foreach ($shows as $show)
-                        <div class="swiper-slide" style="display:flex; justify-content: center; width:100%;">
-                            <div class="event-card mx-2 pl-10 pb-5 text-start text-black bg-center bg-cover"
-                                style="background-image:url({{ asset('img/index_fondo_contenido_evento.jpg') }})">
-                                <div class="flex flex-col justify-around h-full">
-                                    <div class="mt-10">
-                                        <div class="flex justify-between">
-                                            <p class="event-date font-semibold text-2xl">
-                                                {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
-                                            <p class="event-date font-semibold text-2xl pr-4">
-                                                {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}</p>
+        @if ($shows->isEmpty())
+            <p class=" text-2xl text-white">No hay shows registrados</p>
+        @else
+            <div class="swiper">
+                <div class="slide-content mb-10">
+                    <div class="swiper-wrapper">
+                        @foreach ($shows as $show)
+                            <div class="swiper-slide" style="display:flex; justify-content: center; width:100%;">
+                                <div class="event-card mx-2 pl-10 pb-5 text-start text-black bg-center bg-cover"
+                                    style="background-image:url({{ asset('img/index_fondo_contenido_evento.jpg') }})">
+                                    <div class="flex flex-col justify-around h-full">
+                                        <div class="mt-10">
+                                            <div class="flex justify-between">
+                                                <p class="event-date font-semibold text-2xl">
+                                                    {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
+                                                <p class="event-date font-semibold text-2xl pr-4">
+                                                    {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-center">
+                                            <p class="event-title text-center font-bold text-5xl pr-4">
+                                                {{ $show->lugarlocal->nombreLugar }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="event-location font-medium text-lg pr-4">
+                                                {{ $show->lugarlocal->calle . ' ' . $show->lugarlocal->numero }}
+                                            </p>
+                                            <p class="event-location font-medium text-lg pr-4">
+                                                {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center justify-center">
-                                        <p class="event-title text-center font-bold text-5xl pr-4">
-                                            {{ $show->lugarlocal->nombreLugar }}
-                                        </p>
-                                    </div>
                                     <div>
-                                        <p class="event-location font-medium text-lg pr-4">
-                                            {{ $show->lugarlocal->calle . ' ' . $show->lugarlocal->numero }}
-                                        </p>
-                                        <p class="event-location font-medium text-lg pr-4">
-                                            {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex items-end justify-center pr-4">
-                                        @php
-                                            $isPastEvent = \Carbon\Carbon::now()->greaterThanOrEqualTo(
-                                                \Carbon\Carbon::parse($show->fechashow),
-                                            );
-                                        @endphp
-                                        @if ($show->estadoShow == 'Inactivo' || $isPastEvent)
-                                            <button
-                                                class="boton-eventos mb-0 mt-4 text-lg max-w-max cursor-default bg-gray-400"
-                                                disabled>Ver mas</button>
-                                        @else
-                                            <a href="{{ route('eventos') }}">
+                                        <div class="flex items-end justify-center pr-4">
+                                            @php
+                                                $isPastEvent = \Carbon\Carbon::now()->greaterThanOrEqualTo(
+                                                    \Carbon\Carbon::parse($show->fechashow),
+                                                );
+                                            @endphp
+                                            @if ($show->estadoShow == 'Inactivo' || $isPastEvent)
                                                 <button
-                                                    class="boton-eventos mb-0 mt-4 font-medium text-lg max-w-max bg-black text-white hover:bg-red-600 hover:text-white">Ver
-                                                    mas</button>
-                                            </a>
-                                        @endif
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <img class="imagen w-24 pr-1 pb-6"
-                                            src="{{ asset('img/logo_inner_negro.png') }}" alt="">
+                                                    class="boton-eventos mb-0 mt-4 text-lg max-w-max cursor-default bg-gray-400"
+                                                    disabled>Ver mas</button>
+                                            @else
+                                                <a href="{{ route('eventos') }}">
+                                                    <button
+                                                        class="boton-eventos mb-0 mt-4 font-medium text-lg max-w-max bg-black text-white hover:bg-red-600 hover:text-white">Ver
+                                                        mas</button>
+                                                </a>
+                                            @endif
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <img class="imagen w-24 pr-1 pb-6"
+                                                src="{{ asset('img/logo_inner_negro.png') }}" alt="">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
+        @endif
+
     </div>
 
 
@@ -155,43 +159,51 @@
                     <h3 class="text-center text-5xl font-amsterdam mb-7 text-uppercase deepshadow">
                         Noticias</h3>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        {{-- NOTICIAS --}}
-                        @foreach ($noticias as $noticia)
-                            <div class="bg-white rounded-xl shadow-lg p-4">
-                                <div class="relative overflow-hidden rounded-xl mb-2">
-                                    <a class="flex justify-center"
-                                        href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
-                                        @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
-                                            <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
-                                                alt="Imagen de {{ $noticia->titulo }}"
-                                                class="imagen object-cover w-48 h-48 object-center" />
-                                        @else
-                                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
-                                                class="imagen object-cover w-full h-48 object-center" />
-                                        @endif
-                                    </a>
+                    @if ($noticias->isEmpty())
+                        <div class="flex justify-center">
+                            <p class=" text-2xl text-center text-black">No hay Noticias registrados</p>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            {{-- NOTICIAS --}}
+                            @foreach ($noticias as $noticia)
+                                <div class="bg-white rounded-xl shadow-lg p-4">
+                                    <div class="relative overflow-hidden rounded-xl mb-2">
+                                        <a class="flex justify-center"
+                                            href="{{ route('noticiaUnica', $noticia->idcontenidos) }}">
+                                            @if (!empty($noticiasImg[$noticia->idcontenidos]) && isset($noticiasImg[$noticia->idcontenidos][0]))
+                                                <img src="{{ asset(Storage::url($noticiasImg[$noticia->idcontenidos][0])) }}"
+                                                    alt="Imagen de {{ $noticia->titulo }}"
+                                                    class="imagen object-cover w-48 h-48 object-center" />
+                                            @else
+                                                <img src="{{ asset('img/logo_inner_negro.png') }}"
+                                                    alt="Imagen por defecto"
+                                                    class="imagen object-cover w-full h-48 object-center" />
+                                            @endif
+                                        </a>
+                                    </div>
+                                    <div class="">
+                                        <p class="text-sm font-semibold text-gray-700">{{ $noticia->fechaSubida }}
+                                        </p>
+                                        <a class="w-full" href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
+                                            class="block text-xl font-semibold text-blue-gray-900 mt-2 hover:text-black">
+                                            {{ $noticia->titulo }}
+                                        </a>
+                                        <p class="text-base text-black mt-4">{{ $noticia->descripcion }}</p>
+                                    </div>
                                 </div>
-                                <div class="">
-                                    <p class="text-sm font-semibold text-gray-700">{{ $noticia->fechaSubida }}</p>
-                                    <a class="w-full" href="{{ route('noticiaUnica', $noticia->idcontenidos) }}"
-                                        class="block text-xl font-semibold text-blue-gray-900 mt-2 hover:text-black">
-                                        {{ $noticia->titulo }}
-                                    </a>
-                                    <p class="text-base text-black mt-4">{{ $noticia->descripcion }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
 
-                    <div class="flex justify-end mt-5">
-                        <a class="relative" href="{{ route('noticias') }}">
-                            <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
-                            <span
-                                class="relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Más
-                                Noticias</span>
-                        </a>
-                    </div>
+                        <div class="flex justify-end mt-5">
+                            <a class="relative" href="{{ route('noticias') }}">
+                                <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
+                                <span
+                                    class="relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Más
+                                    Noticias</span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Columna 2: Foro --}}
