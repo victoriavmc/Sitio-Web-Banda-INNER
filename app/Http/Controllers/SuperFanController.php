@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Precio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,5 +16,17 @@ class SuperFanController extends Controller
         }
 
         return view('content.superFan');
+    }
+
+    public function precioAgregar() {}
+
+    public function precioModificar() {}
+
+    public function precioMostrarTodosLosCargados() {}
+
+    public function precioMostrar()
+    {
+        // Traigo el precio de la base de datos
+        $ultimoPrecio = Precio::orderBy('idprecio', 'desc')->first();
     }
 }

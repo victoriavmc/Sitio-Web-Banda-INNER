@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Suscripcion extends Model
+class OrdenPago extends Model
 {
     // Definimos la tabla correspondiente
-    protected $table = 'suscripcion';
+    protected $table = 'ordenpago';
 
     // Definimos la clave primaria
-    protected $primaryKey = 'idsuscripcion';
+    protected $primaryKey = 'idordenpago';
 
     // Habilitamos el autoincremento
     public $incrementing = true;
@@ -18,17 +18,18 @@ class Suscripcion extends Model
     // Desactivamos el timestamp por defecto de Laravel
     public $timestamps = false;
 
-    // Definimos los campos que se pueden asignar masivamente
-    protected $fillable = [
-        'preference_id',
-        'amount',
-        'payment_method',
-        'created_at',
-        'usuarios_idusuarios',
-    ];
-
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
+    }
+
+    public function precio()
+    {
+        return $this->hasOne(Precio::class, 'precio_idprecio', 'idprecio');
+    }
+
+    public function show()
+    {
+        return $this->hasOne(Show::class, 'ordenpago_idordenpago', 'idordenpago');
     }
 }
