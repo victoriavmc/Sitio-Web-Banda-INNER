@@ -71,7 +71,6 @@ class AlbumMusicaController extends Controller
 
         return $listaAlbum;
     }
-
     // ------------------ CRUD DE ÁLBUMES ------------------
 
     public function crearAlbum(Request $request)
@@ -218,7 +217,6 @@ class AlbumMusicaController extends Controller
         $album->save();
     }
 
-
     // Formulario Crear Album
     public function formularioCrearAlbum()
     {
@@ -233,7 +231,6 @@ class AlbumMusicaController extends Controller
         return view('utils.albumMusica.formularioModificarAlbum', compact('album', 'imagen'));
     }
 
-
     // Eliminar Album
     public function eliminarAlbum($id)
     {
@@ -241,6 +238,10 @@ class AlbumMusicaController extends Controller
 
         $revImg = $album->revisionimagenes;
 
+        $canciones = Cancion::where('albumMusical_idalbumMusical', $id)->get();
+        foreach ($canciones as $cancion) {
+            $cancion->delete();
+        }
         // Comprobar si existe la revisión de imagen
         if ($revImg) {
             $imagen = $revImg->imagenes;

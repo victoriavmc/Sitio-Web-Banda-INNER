@@ -324,17 +324,17 @@ Route::delete('/albumMusica/discografia/eliminar-album/{id}', [AlbumMusicaContro
 
 // CRUD CANCIONES
 
-Route::get('/albumMusica/discografia/crear-cancion', [CancionController::class, 'formularioCrearCancion'])
+Route::get('/albumMusica/discografia/crear-cancion/{id}', [CancionController::class, 'formularioCrearCancion'])
     ->name('formulario-crear-cancion')->middleware('auth');
 
-Route::post('/albumMusica/discografia/crear-cancion', [CancionController::class, 'crearCancion'])
-    ->name('crear-cancion')->middleware('auth');
+Route::post('/albumMusica/discografia/crear-cancion/{id}', [CancionController::class, 'guardarCancion'])->name('guardar-cancion');
 
 Route::get('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'formularioModificarCancion'])
     ->name('formulario-modificar-cancion')->middleware('auth');
 
-Route::put('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'modificarCancion'])
+Route::put('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'actualizarCancion'])
     ->name('modificar-cancion')->middleware('auth');
+
 
 Route::delete('/albumMusica/discografia/eliminar-cancion/{id}', [CancionController::class, 'eliminarCancion'])
     ->name('eliminar-cancion')->middleware('auth');
