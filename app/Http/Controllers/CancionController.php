@@ -7,19 +7,29 @@ use App\Models\Cancion;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CancionController extends Controller
 {
     //Validator
     public function validateIngreso(Request $request)
     {
-        return Validator::make($request->all(), [
-            'idalbumMusical' => 'required|exists:albummusical,idalbumMusical',
+        $rules = [
             'tituloCancion' => 'required|max:255',
             'letraEspCancion' => 'nullable|string',
             'letraInglesCancion' => 'nullable|string',
             'archivoDsCancion' => 'nullable|mimes:mp3,mp4,ogg,wav|max:51200',
-        ]);
+        ];
+
+        // Si el álbum no es correcto, requerir el nuevo id
+        if ($request->input('album_correcto') === 'no') {
+            $rules['otroAlbum'] = 'required|exists:albummusical,idalbumMusical'; // Validar que se seleccione un nuevo álbum
+        } else {
+            // Si es correcto, añadir la validación del id del álbum original
+            $rules['idalbumMusical'] = 'required|exists:albummusical,idalbumMusical';
+        }
+
+        return Validator::make($request->all(), $rules);
     }
 
     //Error
@@ -74,7 +84,19 @@ class CancionController extends Controller
     #Actualizar
     public function actualizarDatosIngresados(Cancion $cancion, Request $request)
     {
+        if ($request->input('album_correcto') === 'no') {
+            $nuevoAlbumId = $request->input('otroAlbum');
 
+            // Asegurarte de que se ha proporcionado un nuevo álbum
+            if (empty($nuevoAlbumId)) {
+                throw ValidationException::withMessages([
+                    'otroAlbum' => 'Se requiere seleccionar un nuevo álbum si se indica que no es el álbum correcto.',
+                ]);
+            }
+
+            // Cambiar el álbum de la canción
+            $cancion->albumMusical_idalbumMusical = $nuevoAlbumId;
+        }
         // Actualizar los datos existentes
         $cancion->tituloCancion = $request->tituloCancion;
         $cancion->letraEspCancion = $request->letraEspCancion;
@@ -92,14 +114,42 @@ class CancionController extends Controller
         $album = AlbumMusical::findOrFail($idAlbum);
         $tituloAlbum = $album->albumDatos->tituloAlbum;
 
-        return view('utils.albumMusica.formularioCrearCancion', compact('idAlbum', 'tituloAlbum'));
+        $listaCancion = [];
+        $canciones = Cancion::where('albumMusical_idalbumMusical', $id)->get();
+
+        if ($canciones->isEmpty()) {
+        } else {
+            foreach ($canciones as $cancion) {
+                $idCancion = $cancion->idcancion;
+                $tituloCancion = $cancion->tituloCancion;
+                $letraEspCancion = $cancion->letraEspCancion;
+                $letraInglesCancion = $cancion->letraInglesCancion;
+                $descargable = $cancion->archivoDsCancion;
+
+
+                $listaCancion[] = [
+                    'idCancion' => $idCancion,
+                    'tituloCancion' => $tituloCancion,
+                    'letraEspCancion' => $letraEspCancion,
+                    'letraInglesCancion' => $letraInglesCancion,
+                    'descargable' => $descargable,
+                ];
+            }
+        }
+        return view('utils.albumMusica.formularioCrearCancion', compact('idAlbum', 'tituloAlbum', 'listaCancion'));
     }
 
     // Mostrar formulario para modificar una canción específica
     public function formularioModificarCancion(Request $request, $id)
     {
         $cancion = Cancion::findOrFail($id);
-        return view('utils.albumMusica.formularioCrearCancion', compact('cancion'));
+        // datos de que album es
+        $idAlbum = $cancion->albumMusical_idalbumMusical;
+        $album = AlbumMusical::findOrFail($idAlbum);
+        $tituloAlbum = $album->albumDatos->tituloAlbum;
+
+        $albumesDisponibles = AlbumMusical::all();
+        return view('utils.albumMusica.formularioModificarCancion', compact('cancion', 'tituloAlbum', 'albumesDisponibles'));
     }
 
     // Guardar cambios en una canción existente
@@ -121,8 +171,6 @@ class CancionController extends Controller
             'message' => 'Canción actualizada correctamente.',
         ]);
     }
-
-
 
     public function eliminarCancion($id)
     {

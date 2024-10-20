@@ -70,53 +70,111 @@
                 </div>
             </form>
         </div>
-        <div class="w-full lg:w-2/3 m-1 bg-white shadow-lg text-lg rounded-sm border border-gray-200">
-            <div class="overflow-x-auto rounded-lg p-3">
-                <table class="table-auto w-full">
-                    <thead class="text-sm font-semibold uppercase text-gray-800 bg-gray-50 mx-auto">
-                        <tr>
-                            <th></th>
-                            <th><svg xmlns="http://www.w3.org/2000/svg" class="fill-current w-5 h-5 mx-auto">
-                                    <path
-                                        d="M6 22h12a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2zm7-18 5 5h-5V4zm-4.5 7a1.5 1.5 0 1 1-.001 3.001A1.5 1.5 0 0 1 8.5 11zm.5 5 1.597 1.363L13 13l4 6H7l2-3z">
-                                    </path>
-                                </svg></th>
-                            <th class="p-2">
-                                <div class="font-semibold">Category</div>
-                            </th>
-                            <th class="p-2">
-                                <div class="font-semibold text-left">Description</div>
-                            </th>
-                            <th class="p-2">
-                                <div class="font-semibold text-center">Action</div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://images.pexels.com/photos/25652584/pexels-photo-25652584/free-photo-of-elegant-man-wearing-navy-suit.jpeg?auto=compress&cs=tinysrgb&w=400"
-                                    class="h-8 w-8 mx-auto" /></td>
-                            <td>Sample Name</td>
-                            <td>Sample Description</td>
-                            <td class="p-2">
-                                <div class="flex justify-center">
-                                    <a href="#"
-                                        class="rounded-md hover:bg-green-100 text-green-600 p-2 flex justify-between items-center">
-                                        <span>
-                                            <FaEdit class="w-4 h-4 mr-1" />
-                                        </span> Edit
-                                    </a>
-                                    <button
-                                        class="rounded-md hover:bg-red-100 text-red-600 p-2 flex justify-between items-center">
-                                        <span>
-                                            <FaTrash class="w-4 h-4 mr-1" />
-                                        </span> Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
+        @if (!$listaCancion)
+        @else
+            <div class="w-full lg:w-2/3 m-1 bg-white shadow-lg text-lg rounded-sm border border-gray-200">
+                <div class="overflow-x-auto rounded-lg p-3">
+                    <table class="table-auto w-full">
+                        <thead class="text-sm font-semibold uppercase text-gray-800 bg-gray-50 mx-auto">
+                            <tr>
+                                <th>
+                                    <div class="fill-current w-5 h-5 mx-auto">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 48 48">
+                                            <circle cx="24" cy="24" r="21.5" fill="none" stroke="black"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <circle cx="24" cy="24" r="5.5" fill="none" stroke="black"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path fill="black"
+                                                d="M24.75 24a.75.75 0 1 1-.75-.75a.76.76 0 0 1 .75.75" />
+                                            <path fill="none" stroke="black" stroke-linecap="round"
+                                                stroke-linejoin="round" d="M24 7.5A16.5 16.5 0 0 0 7.5 24" />
+                                            <path fill="none" stroke="black" stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M24 13a11 11 0 0 0-11 11m11 16.5A16.5 16.5 0 0 0 40.5 24" />
+                                            <path fill="none" stroke="black" stroke-linecap="round"
+                                                stroke-linejoin="round" d="M24 35a11 11 0 0 0 11-11" />
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th class="p-2">
+                                    <div class="font-semibold text-left">Nombre de Canción</div>
+                                </th>
+                                <th class="p-2">
+                                    <div class="font-semibold text-left">Letra de Canción Español</div>
+                                </th>
+                                <th class="p-2">
+                                    <div class="font-semibold text-left">Letra de Canción Ingles</div>
+                                </th>
+                                <th class="p-2">
+                                    <div class="font-semibold text-left">Archivo de Audio</div>
+                                </th>
+                                <th class="p-2">
+                                    <div class="font-semibold text-center">Acciones</div>
+                                </th>
+                            </tr>
+                            @foreach ($listaCancion as $item)
+                                <tr>
+                                    <td> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 20 20">
+                                            <path fill="black" fill-rule="evenodd"
+                                                d="M16 1H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1m-3.205 10.519c-.185.382-.373.402-.291 0C12.715 10.48 12.572 8.248 11 8v4.75c0 .973-.448 1.82-1.639 2.203c-1.156.369-2.449-.016-2.752-.846s.377-1.84 1.518-2.256c.637-.232 1.375-.292 1.873-.101V5h1c0 2.355 4.065 1.839 1.795 6.519"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </td>
+                                    <td> {{ $item['tituloCancion'] }}</td>
+                                    <td>
+                                        @if ($item['letraEspCancion'])
+                                            Cargado
+                                        @else
+                                            No Cargado
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item['letraInglesCancion'])
+                                            Cargado
+                                        @else
+                                            No Cargado
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item['descargable'])
+                                            Cargado
+                                        @else
+                                            No Cargado
+                                        @endif
+                                    </td>
+                                    <td class="p-2">
+                                        <div class="flex justify-center">
+                                            <a href="{{ route('formulario-modificar-cancion', $item['idCancion']) }}"
+                                                class="rounded-md uppercase hover:bg-green-100 text-green-600 p-2 flex justify-between items-center">
+                                                <span>
+                                                    <FaEdit class="w-4 h-4 mr-1" />
+                                                </span>
+                                                Editar
+                                            </a>
+
+                                            <form action="{{ route('eliminar-cancion', $item['idCancion']) }}"
+                                                method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="rounded-md uppercase hover:bg-red-100 text-red-600 p-2 flex justify-between items-center">
+                                                    <span>
+                                                        <FaTrash class="w-4 h-4 mr-1" />
+                                                    </span>
+                                                    Borrar
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </thead>
+                    </table>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </x-AppLayout>

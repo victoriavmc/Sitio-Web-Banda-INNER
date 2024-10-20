@@ -238,6 +238,10 @@ class AlbumMusicaController extends Controller
 
         $revImg = $album->revisionimagenes;
 
+        $canciones = Cancion::where('albumMusical_idalbumMusical', $id)->get();
+        foreach ($canciones as $cancion) {
+            $cancion->delete();
+        }
         // Comprobar si existe la revisión de imagen
         if ($revImg) {
             $imagen = $revImg->imagenes;
