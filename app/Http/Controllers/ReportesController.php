@@ -291,10 +291,10 @@ class ReportesController extends Controller
         }
     }
     #Admin decide que hacer con el reportado
-    public function decideReportes(Request $request)
+    public function decideReportes(Request $request, $id)
     {
         // Obtengo el usuario que fue reportado
-        $idReportado = $request->idusuario;
+        $idReportado = $id;
 
         // Obtengo decision del admin
         $decision = $request->decision;

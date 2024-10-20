@@ -202,7 +202,8 @@
                                     </a>
                                     <!-- Botón para eliminar comentario -->
                                     @if (Auth::user()->rol->idrol == 1)
-                                        <form action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                        <form id="btnEliminarComentarioReporte"
+                                            action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
                                             method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -326,7 +327,8 @@
                                     </a>
                                     <!-- Botón para eliminar comentario -->
                                     @if (Auth::user()->rol->idrol == 1)
-                                        <form action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
+                                        <form id="btnEliminarComentarioReporte"
+                                            action="{{ route('eliminarComentario', $contenido['idComentario']) }}"
                                             method="POST">
                                             @csrf
                                             @method('DELETE')

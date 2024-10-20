@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -244,12 +245,13 @@ class PerfilController extends Controller
     {
         // Validar la imagen
         $request->validate([
-            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:512',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $usuarioBD = $this->identificaUsername();
 
         if ($request->hasFile('imagen')) {
+            // Guardar la imagen en el almacenamiento
             $path = $request->file('imagen')->store('img', 'public');
             $imagen = new Imagenes();
             $imagen->subidaImg = $path;

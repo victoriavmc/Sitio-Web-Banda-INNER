@@ -108,7 +108,7 @@
 
             {{-- DERECHO --}}
             <div class="md:col-span-8 p-10">
-                <form action="/reportar" method="POST">
+                <form action="{{ route('decideReporte', $data['usuario']->idusuarios) }}" method="POST">
                     @csrf <!-- Para proteger contra CSRF -->
                     <label for="motivo">Selecciona un motivo para el reporte:</label>
                     <select name="motivo" id="motivo" required>
