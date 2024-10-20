@@ -350,13 +350,16 @@ Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'boton
 //------------------------ REPORTES ------------------------
 // VER REPORTES
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-    ->name('reportarStaff');
+    ->name('reportarStaff')->middleware('auth');
 
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
-    ->name('reportarUsuario');
+    ->name('reportarUsuario')->middleware('auth');
 
 Route::get('reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDecideReporte'])
     ->name('vistaDecideReporte')->middleware('auth');
+
+Route::post('reportes/decidir-reporte/{id}', [ReportesController::class, 'decideReportes'])
+    ->name('decideReporte')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);

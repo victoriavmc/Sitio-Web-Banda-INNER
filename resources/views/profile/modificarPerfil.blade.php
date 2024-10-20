@@ -90,8 +90,8 @@
                                 <label for="imagen-usuario" class="block text-sm font-medium text-black">Imagen
                                     (tamaño recomendado para ícono)</label>
                                 <div class="relative flex h-10 w-full min-w-[200px] max-w-[26rem]">
-                                    <input id="file-upload" type="file" name="imagen" class="peer hidden" required
-                                        onchange="actualizarNombreArchivo()" />
+                                    <input id="file-upload" type="file" name="imagen" class="peer hidden"
+                                        accept="image/*" required onchange="actualizarNombreArchivo()" />
                                     <label for="file-upload"
                                         class="absolute right-1 top-1 z-10 select-none rounded bg-red-500 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:shadow-lg hover:bg-red-600 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85]">
                                         Subir Imagen
