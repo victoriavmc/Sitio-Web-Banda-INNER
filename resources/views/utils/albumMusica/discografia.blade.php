@@ -86,9 +86,15 @@
                                     <h2 class="text-3xl font-bold text-center">{{ $album['titulo'] }}</h2>
                                     <p class="text-center">({{ $album['fecha'] }})</p>
                                 </div>
+                                <a href="{{ route('formulario-crear-cancion', $album['id']) }}" type="submit"
+                                    class="bg-red-500 mb-4 hover:bg-red-400 mt-4 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                    Agregar Canción
+                                </a>
+
                                 @if (!$album['canciones'])
                                     <p class="text-center mt-5 text-2xl text-gray-500">No hay canciones disponibles</p>
                                 @else
+                                    {{-- EN CASO QUE EXISTE LAS CANCIONES --}}
                                     @foreach ($album['canciones'] as $titulos)
                                         <div class="relative">
                                             <nav class="flex min-w-[240px] flex-col gap-1 py-1.5">

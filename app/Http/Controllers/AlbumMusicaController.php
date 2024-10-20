@@ -71,7 +71,6 @@ class AlbumMusicaController extends Controller
 
         return $listaAlbum;
     }
-
     // ------------------ CRUD DE ÁLBUMES ------------------
 
     public function crearAlbum(Request $request)
@@ -218,7 +217,6 @@ class AlbumMusicaController extends Controller
         $album->save();
     }
 
-
     // Formulario Crear Album
     public function formularioCrearAlbum()
     {
@@ -232,7 +230,6 @@ class AlbumMusicaController extends Controller
         $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
         return view('utils.albumMusica.formularioModificarAlbum', compact('album', 'imagen'));
     }
-
 
     // Eliminar Album
     public function eliminarAlbum($id)

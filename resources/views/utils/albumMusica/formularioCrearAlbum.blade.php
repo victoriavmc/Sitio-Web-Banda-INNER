@@ -5,7 +5,7 @@
         </x-alerts>
     @endif
 
-    <div class="wrapper bg-center justify-center min-h-[86.5vh]"
+    <div class="wrapper bg-center justify-center min-h-screen"
         style="background-image: url('{{ asset('img/logeo/reactivar_fondo.jpg') }}');">
         <div class=" p-5 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <form id="form-reactivar" class="grid grid-cols-2 gap-5" method="POST" action="{{ route('crear-album') }}"
