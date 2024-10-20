@@ -1,5 +1,5 @@
 <x-AppLayout>
-    <div class="flex flex-col mx-3 mt-6 min-h-screen lg:flex-row">
+    <div class="flex justify-center mx-3 mt-6 min-h-screen lg:flex-row">
         <div class="w-full lg:w-1/3 m-1">
             <form action="{{ route('modificar-cancion', $cancion->idcancion) }}" method="POST"
                 enctype="multipart/form-data" class="w-full bg-white shadow-md p-6">
