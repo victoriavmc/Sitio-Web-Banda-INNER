@@ -99,7 +99,7 @@
                                 @else
                                     {{-- EN CASO QUE EXISTE LAS CANCIONES --}}
                                     @auth
-                                        @if (Auth::user()->rol->idrol === 1)
+                                        @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
                                             <a href="{{ route('formulario-crear-cancion', $album['id']) }}" type="submit"
                                                 class="bg-red-500 mb-4 hover:bg-red-400 mt-4 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                                 Administrar Canciones del Album
@@ -107,7 +107,7 @@
                                         @endif
                                     @endauth
 
-                                    @foreach ($album['canciones'] as $titulos)
+                                    @foreach ($album['canciones'] as $cancion)
                                         <div class="relative">
                                             <nav class="flex min-w-[240px] flex-col gap-1 py-1.5">
                                                 <div role="button"
@@ -123,7 +123,8 @@
                                                                     d="M8 18a3 3 0 1 1-6 0c0-1.657 1.343-2 3-2s3 .343 3 2m13-2a3 3 0 1 1-6 0c0-1.657 1.343-2 3-2s3 .343 3 2" />
                                                             </g>
                                                         </svg>
-                                                        <strong>{{ $titulos['titulo'] }}</strong>
+                                                        <a
+                                                            href="{{ route('ver-cancion', $cancion['id']) }}"><strong>{{ $cancion['titulo'] }}</strong></a>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em"
                                                             height="1em" viewBox="0 0 16 16">
                                                             <path fill="black"

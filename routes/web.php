@@ -324,6 +324,10 @@ Route::delete('/albumMusica/discografia/eliminar-album/{id}', [AlbumMusicaContro
 
 // CRUD CANCIONES
 
+//Ver cancion
+Route::get('/albumMusica/discografia/ver-cancion/{id}', [AlbumMusicaController::class, 'verCancion'])
+    ->name('ver-cancion');
+
 Route::get('/albumMusica/discografia/crear-cancion/{id}', [CancionController::class, 'formularioCrearCancion'])
     ->name('formulario-crear-cancion')->middleware('auth');
 
@@ -334,7 +338,6 @@ Route::get('/albumMusica/discografia/modificar-cancion/{id}', [CancionController
 
 Route::put('/albumMusica/discografia/modificar-cancion/{id}', [CancionController::class, 'actualizarCancion'])
     ->name('modificar-cancion')->middleware('auth');
-
 
 Route::delete('/albumMusica/discografia/eliminar-cancion/{id}', [CancionController::class, 'eliminarCancion'])
     ->name('eliminar-cancion')->middleware('auth');
