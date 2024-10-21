@@ -179,7 +179,7 @@
                                                 <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-600"
                                                     id="dropdownMenu-{{ $usuario->idusuarios }}">
                                                     {{-- Botón para editar rol del usuario --}}
-                                                    <div class="border-b-2">
+                                                    <div>
                                                         <button type="button"
                                                             data-usuario-id="{{ $usuario->idusuarios }}"
                                                             onclick="openModal(this)"
@@ -198,7 +198,7 @@
                                                     {{-- Botón para borrar imagen del usuario --}}
                                                     <form
                                                         action="{{ route('borrar-imagen-staff', $usuario->idusuarios) }}"
-                                                        method="POST" class="border-b-2">
+                                                        method="POST">
                                                         @csrf
                                                         <button type="submit"
                                                             class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
@@ -215,7 +215,7 @@
                                                     </form>
 
                                                     {{-- Boton para reportar usuario --}}
-                                                    <div class="border-b-2">
+                                                    <div>
                                                         <a href="{{ route('reportarUsuario', $usuario->idusuarios) }}"
                                                             class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
                                                             <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true"

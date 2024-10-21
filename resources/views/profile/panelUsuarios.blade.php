@@ -9,7 +9,7 @@
             {{ session('alertEliminacion')['message'] }}
         </x-alerts>
     @endif
-    @dd($funciona)
+
     @if (!$funciona)
         <div class="min-h-screen
     justify-center items-center">

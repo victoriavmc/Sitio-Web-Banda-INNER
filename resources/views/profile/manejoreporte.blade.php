@@ -33,6 +33,18 @@
                 <div class="max-w-4xl mx-auto px-4 py-8">
                     <div class=" space-y-4">
                         <div class="py-4 rounded shadow-md  bg-gray-50">
+                            @if (!$motivos->isEmpty())
+                                <div class="flex justify-end mr-4">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </div>
+                            @endif
+
                             <div class="flex p-4 space-x-4 sm:px-8">
                                 <img id="imagen"
                                     class="cursor-pointer imagen-modal object-cover object-center w-full h-24 max-w-24 rounded-lg"
@@ -242,7 +254,7 @@
 
                 {{-- SI NO HAY ACTIVIDADES REPORTADAS NI NO REPORTADAS --}}
                 @if ($totalReportadas === 0 && $totalNoReportadas === 0)
-                    <div class="flex justify-center h-full items-center">
+                    <div class="flex justify-center items-center">
                         <!-- Si no hay actividades reportadas, ni no reportadas -->
                         <h1 class="text-3xl text-center">
                             El usuario <b class="text-red-500">{{ $usuario->usuarioUser }}</b> no ha realizado

@@ -126,15 +126,18 @@
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
                 </div>
-
                 {{-- Solo aparece si el usuario selecciona la opción 1 o 2 --}}
                 <div id="motivoWrapper" style="display: none;">
                     <label for="motivo">Selecciona un motivo de baneo:</label>
-                    <select name="motivo" id="motivo" required>
-                        @foreach ($motivos as $motivo)
-                            <option value="{{ $motivo->idmotivos }}">{{ $motivo->descripcion }}</option>
-                        @endforeach
-                    </select>
+
+                    @foreach ($motivos as $motivo)
+                        <div class="flex gap-1 my-2">
+                            <input type="checkbox" id="motivo_{{ $motivo->idmotivos }}" name="motivo[]"
+                                value="{{ $motivo->idmotivos }}">
+                            <label for="motivo_{{ $motivo->idmotivos }}">{{ $motivo->descripcion }}</label>
+                        </div>
+                    @endforeach
+
                     @error('motivo')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror

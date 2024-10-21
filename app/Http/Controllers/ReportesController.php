@@ -242,8 +242,17 @@ class ReportesController extends Controller
     // Redirigir a manejoReporte
     public function manejoreporte($id)
     {
+        $motivos = [];
+
         $data = $this->prepararDatosReporte($id);
-        return view('profile.manejoreporte', $data);
+        $reportes = Reportes::where('usuarios_idusuarios', $id)->get();
+        foreach ($reportes as $reporte) {
+            $nombreMotivo = $reporte->motivos->descripcion;
+            //guardo el nombreMotivo dentro del array
+            array_push($motivos, $nombreMotivo);
+        }
+
+        return view('profile.manejoreporte', $data, $motivos);
     }
 
     // Redirigir a vistaDecideReporte
@@ -294,7 +303,11 @@ class ReportesController extends Controller
         // Validacion
         $request->validate([
             'manejarReporte' => 'required',
-            'motivo' => 'required_if:manejarReporte,1',
+            'motivo' => [
+                'required_if:manejarReporte,1',
+                'array',
+                'min:1' // Asegura que haya al menos un motivo seleccionado
+            ],
             'fechaDesbaneo' => 'required_if:manejarReporte,1',
         ]);
 
@@ -351,10 +364,23 @@ class ReportesController extends Controller
 
             case "1":
                 if ($reporte) {
-                    $reporte->motivos_idmotivos = $request->motivo; //array
-                    $reporte->save();
-                }
+                    $primero = true; // Para marcar la primera iteración
 
+                    foreach ($request->motivo as $motivo) {
+                        if ($primero) {
+                            // Actualiza el reporte existente con el primer motivo
+                            $reporte->motivos_idmotivos = $motivo;
+                            $reporte->save();
+                            $primero = false; // Marca que ya se usó el reporte existente
+                        } else {
+                            // Crea nuevos reportes para los motivos adicionales
+                            $nuevoReporte = new Reportes();
+                            $nuevoReporte->motivos_idmotivos = $motivo;
+                            $nuevoReporte->usuarios_idusuarios = $id;
+                            $nuevoReporte->save();
+                        }
+                    }
+                }
                 // Obtener todas las actividades creadas por el usuario
                 $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
@@ -408,7 +434,7 @@ class ReportesController extends Controller
             case "2":
                 #En caso que el reporte sea necesario pero pesado, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
                 if ($reporte) {
-                    $reporte->motivos_idmotivos = $request->motivo; //array
+                    $reporte->motivos_idmotivos = $request->motivo;
                     $reporte->save();
                 }
 
