@@ -28,10 +28,16 @@
             <h2 class="text-4xl font-bold text-center mb-5">ALBUMS</h2>
             @auth
                 @if (Auth::user()->rol->idrol === 1)
-                    <a href="{{ route('formulario-crear-album') }}" type="submit"
-                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                        Crear Album
-                    </a>
+                    <!-- Formulario para crear un álbum musical -->
+                    <form method="get" action="{{ route('crear-album') }}">
+                        @csrf
+                        <input type="hidden" name="accion" value=1>
+                        <input type="hidden" name="tipoAlbum" value=1>
+                        <button type="submit"
+                            class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                            Crear Álbum
+                        </button>
+                    </form>
                 @endif
             @endauth
 
@@ -44,10 +50,14 @@
                             @auth
                                 @if (Auth::user()->rol->idrol === 1)
                                     <div class="flex gap-3 absolute pl-3 pt-3">
-                                        <form action="{{ route('eliminar-album', $album['id']) }}" id="btnEliminarAlbum"
+                                        {{-- Borrar album especifico --}}
+                                        <form action="{{ route('eliminarAlbumEspecifico') }}" id="btnEliminarAlbum"
                                             method="POST">
                                             @csrf
-                                            @method('DELETE')
+                                            @method('POST')
+                                            <input type="hidden" name="accion" value=3>
+                                            <input type="hidden" name="tipoAlbum" value=1>
+                                            <input type="hidden" name="idAlbumEspecifico" value="{{ $album['id'] }}">
                                             <button type="submit"
                                                 class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                                 <svg class="w-5 h-5 text-white" aria-hidden="true"
@@ -59,20 +69,30 @@
                                                 </svg>
                                             </button>
                                         </form>
-                                        <a class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max"
-                                            href="{{ route('formulario-modificar-album', $album['id']) }}">
-                                            <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                            </svg>
-                                        </a>
+                                        {{-- Modificar album especifico --}}
+                                        <form action="{{ route('crear-album') }}" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="accion" value=2>
+                                            <input type="hidden" name="tipoAlbum" value=1>
+
+                                            <input type="hidden" name="idAlbumEspecifico"
+                                                value="{{ $album['idAlbumDatos'] }}">
+
+                                            <button type="submit"
+                                                class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max">
+                                                <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
                                 @endif
                             @endauth
-                            {{-- @dd($album['imagen']) --}}
+
                             @if ($album['imagen'] == 'imagen_por_defecto.jpg')
                                 <img src="{{ asset('img/logo_inner_negro.png') }}" alt="{{ $album['titulo'] }}">
                             @else

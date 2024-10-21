@@ -15,7 +15,7 @@ use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
 use App\Http\Controllers\cancionController;
 use App\Http\Controllers\MercadoPagoController;
-
+use App\Http\Controllers\AlbumController;
 #Modelo
 use App\Models\Paisnacimiento;
 use App\Models\Reportes;
@@ -306,21 +306,18 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])
 Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbumMusica'])
     ->name('discografia');
 
-// CRUD ALBUM
-Route::get('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'formularioCrearAlbum'])
-    ->name('formulario-crear-album')->middleware('auth');
+// ALBUMS
+// Ruta formulario crear un álbum
+Route::get('/crear-album', [AlbumController::class, 'manejarAlbum'])->name('crear-album');
 
-Route::post('/albumMusica/discografia/crear-album', [AlbumMusicaController::class, 'crearAlbum'])
-    ->name('crear-album')->middleware('auth');
+// Ruta para manejar álbum (crear)
+Route::post('/manejo-album/{accion}/{tipoAlbum}', [AlbumController::class, 'manejoAlbum'])->name('manejo-album');
 
-Route::get('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'formularioModificarAlbum'])
-    ->name('formulario-modificar-album')->middleware('auth');
+// Ruta para manejar álbum (modificar)
+Route::post('/modificar-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])->name('modificarAlbumEspecifico');
 
-Route::put('/albumMusica/discografia/modificar-album/{id}', [AlbumMusicaController::class, 'modificarAlbum'])
-    ->name('modificar-album')->middleware('auth');
-
-Route::delete('/albumMusica/discografia/eliminar-album/{id}', [AlbumMusicaController::class, 'eliminarAlbum'])
-    ->name('eliminar-album')->middleware('auth');
+// Ruta para manejar álbum (eliminar)
+Route::post('/manejo-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])->name('eliminarAlbumEspecifico');
 
 // CRUD CANCIONES
 

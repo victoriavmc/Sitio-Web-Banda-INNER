@@ -4,7 +4,6 @@
             {{ session('alertAlbum')['message'] }}
         </x-alerts>
     @endif
-
     <div class="wrapper bg-center justify-center min-h-screen"
         style="background-image: url('{{ asset('img/logeo/reactivar_fondo.jpg') }}');">
         <div class=" p-5 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
@@ -74,7 +73,6 @@
                             Crear
                         </button>
                     </div>
-
                 </div>
             </form>
         </div>

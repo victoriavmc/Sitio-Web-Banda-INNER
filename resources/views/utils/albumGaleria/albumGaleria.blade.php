@@ -27,6 +27,19 @@
         <section id="album-imagenes">
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Imágenes Exclusivas</h2>
+                @auth
+                    @if (auth()->user()->rol->idrol == 1 || auth()->user()->rol->idrol == 2)
+                        <div class="text-center mb-5">
+                            <form action='' method="POST">
+                                @csrf <!-- Asegúrate de incluir el token CSRF -->
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                    Agregar Album Imagenes
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
                 @if (!$listaAlbumI)
                     <p class=" flex justify-center text-2xl text-center text-black mt-8">No hay álbumes de imagenes
                         todavia</p>
@@ -52,6 +65,19 @@
         <section id="album-videos-exclusivos">
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Videos Exclusivos</h2>
+                @auth
+                    @if (auth()->user()->rol->idrol == 1 || auth()->user()->rol->idrol == 2)
+                        <div class="text-center mb-5">
+                            <form action='' method="POST">
+                                @csrf <!-- Asegúrate de incluir el token CSRF -->
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                    Agregar Album de Videos
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
                 @if (!$listaAlbumV)
                     <p class=" flex justify-center text-2xl text-center text-black mt-8">No hay álbumes de videos
                         todavia</p>
