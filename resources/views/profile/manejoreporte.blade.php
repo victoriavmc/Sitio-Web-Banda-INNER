@@ -523,10 +523,21 @@
     <div id="modalReportes" class="hidden">
         <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="bg-white p-6 rounded">
+                <p class="text-center font-semibold mb-5 text-lg">Motivos de reportes anteriores</p>
                 @foreach ($motivos as $motivo)
-                    <p>{{$motivo}}</p>
+                    <div class="flex justify-between items-center mb-4 gap-5">                      
+                        <p>{{$motivo}}</p>
+                        <form method="POST" action="{{ route('eliminarMotivo') }}">
+                            @csrf
+                            @method('DELETE')
+                            <!-- boton para eliminar -->
+                            <svg class="w-5.5 h-5.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                            </svg>
+                        </form>
+                    </div>
                 @endforeach
-                <button onclick="cerrarModal()" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded">Cerrar</button>
+                <button onclick="cerrarModal()" class="px-4 py-2 bg-gray-800 text-white rounded">Cancelar</button>
             </div>
         </div>
     </div>

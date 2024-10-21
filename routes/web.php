@@ -360,6 +360,9 @@ Route::get('reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDe
 
 Route::post('reportes/decidir-reporte/{id}', [ReportesController::class, 'decideReportes'])
     ->name('decideReporte')->middleware('auth');
+
+Route::delete('repotes/eliminar-motivo/{id}', [ReportesController::class, 'eliminarMotivo'])
+    ->name('eliminarMotivo')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
