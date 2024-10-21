@@ -247,12 +247,14 @@ class ReportesController extends Controller
         $data = $this->prepararDatosReporte($id);
         $reportes = Reportes::where('usuarios_idusuarios', $id)->get();
         foreach ($reportes as $reporte) {
-            $nombreMotivo = $reporte->motivos->descripcion;
-            //guardo el nombreMotivo dentro del array
-            array_push($motivos, $nombreMotivo);
+            if ($reporte->motivos_idmotivos != null) {
+                $nombreMotivo = $reporte->motivos->descripcion;
+                //guardo el nombreMotivo dentro del array
+                array_push($motivos, $nombreMotivo);
+            }
         }
 
-        return view('profile.manejoreporte', $data, $motivos);
+        return view('profile.manejoreporte', $data, compact('motivos'));
     }
 
     // Redirigir a vistaDecideReporte

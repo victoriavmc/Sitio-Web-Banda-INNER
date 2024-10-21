@@ -33,15 +33,17 @@
                 <div class="max-w-4xl mx-auto px-4 py-8">
                     <div class=" space-y-4">
                         <div class="py-4 rounded shadow-md  bg-gray-50">
-                            @if (!$motivos->isEmpty())
+                            @if ($motivos != null)
                                 <div class="flex justify-end mr-4">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                    <button id="btnAbrirModal" type="button" onclick="abrirModal()">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                         viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                             stroke-width="2"
                                             d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
+                                    </button>
                                 </div>
                             @endif
 
@@ -516,11 +518,35 @@
             </div>
         @endif
     </div>
+
+<!-- Modal de reportes -->
+    <div id="modalReportes" class="hidden">
+        <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded">
+                @foreach ($motivos as $motivo)
+                    <p>{{$motivo}}</p>
+                @endforeach
+                <button onclick="cerrarModal()" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    
+
     <!-- Contenedor del modal -->
     <div id="modal" class="hidden imagenG">
         <div id="modal" class=" fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
             <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
+
+    <script>
+        function abrirModal() {
+            document.getElementById('modalReportes').classList.remove('hidden');
+        }
+    
+        function cerrarModal() {
+            document.getElementById('modalReportes').classList.add('hidden');
+        }
+    </script>
 
 </x-AppLayout>
