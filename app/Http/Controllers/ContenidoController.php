@@ -1014,6 +1014,7 @@ class ContenidoController extends Controller
         #Recupero quien es el usuario que reporto
         $usuarioReporte = Auth::user();
 
+
         // Recuperar la interacción existente
         $interaccion = Interacciones::where('actividad_idActividad', $id)
             ->where('usuarios_idusuarios', $usuarioReporte->idusuarios)
@@ -1037,7 +1038,7 @@ class ContenidoController extends Controller
             $reporteExistente = Reportes::where('usuarios_idusuarios', $usuarioReportado->idusuarios)->first();
 
             // Crear el reporte solo si no existe
-            if (!$reporteExistente) {
+            if ($reporteExistente === null) {
                 $reporte = new Reportes();
                 $reporte->usuarios_idusuarios = $usuarioReportado->idusuarios;
                 $reporte->save();

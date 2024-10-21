@@ -117,6 +117,7 @@ class panelStaffController extends Controller
             }
 
             return view('profile.panelStaff', [
+                'funcion' => $funcion,
                 'usuarios' => $usuarios,
                 'roles' => $roles,
                 'rol' => $rol,
@@ -126,9 +127,7 @@ class panelStaffController extends Controller
             ]);
         } else {
             $funcion = false;
-            return view('profile.panelStaff', [
-                'funcion' => $funcion,
-            ]);
+            return view('profile.panelStaff', compact('funcion'));
         }
     }
 
