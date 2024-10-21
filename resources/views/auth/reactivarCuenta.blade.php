@@ -12,7 +12,11 @@
         <div class="inner p-2 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
-                <img class="pequeño w-72 rounded-md" src="{{ asset(Storage::url($fotoDePerfil)) }}" alt="AgusFacha">
+                @if ($fotoDePerfil)
+                    <img class="pequeño w-72 rounded-md" src="{{ asset($fotoDePerfil) }}" alt="AgusFacha">
+                @else
+                    <img class="pequeño w-72 rounded-md" src="{{ asset('img/logo_usuario.png') }}" alt="AgusFacha">
+                @endif
             </div>
 
             <!-- Columna del formulario -->

@@ -15,19 +15,18 @@
                 {{-- ENCABEZADO DEL USUARIO --}}
 
                 <div class="flex justify-evenly">
-                    <h1 class='text-2xl font-semibold text-center uppercase'>
-                        @if ($totalReportadas && $perfilReportado > 0)
-                            Usuario Reportado
-                        @else
-                            Historial del Usuario
-                        @endif
-                    </h1>
-                    <a href="{{ route('vistaDecideReporte', $usuario->idusuarios) }}">
-                        <button
-                            class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
-                            Manejar Reporte
-                        </button>
-                    </a>
+                    @if ($totalReportadas || $perfilReportado > 0)
+                        <h1 class='text-2xl font-semibold text-center uppercase'>Usuario Reportado</h1>
+
+                        <a href="{{ route('vistaDecideReporte', $usuario->idusuarios) }}">
+                            <button
+                                class="bg-white hover:bg-gray-400 hover:text-white text-black text-base font-bold py-2 px-2 border-b-4 border-gray-700 hover:border-gray-500 rounded flex items-center">
+                                Manejar Reporte
+                            </button>
+                        </a>
+                    @else
+                        <h1 class='text-2xl font-semibold text-center uppercase'>Historial del Usuario</h1>
+                    @endif
                 </div>
 
                 {{-- DATOS DEL USUARIO --}}

@@ -103,7 +103,6 @@ class ReportesController extends Controller
                         'reportado' => $reportado,
                         'rutaImagen' => $rutaImagen,
                         'tipoActividad' => $tipoActividad,
-
                     ];
                 }
             } elseif ($tipoActividad == 3) { // Contenidos
@@ -120,7 +119,6 @@ class ReportesController extends Controller
                         'reportado' => $reportado,
                         'rutaImagen' => $rutaImagen,
                         'tipoActividad' => $tipoActividad,
-
                     ];
                 }
             }
@@ -293,28 +291,37 @@ class ReportesController extends Controller
     #Admin decide que hacer con el reportado
     public function decideReportes(Request $request, $id)
     {
-        // Obtengo el usuario que fue reportado
-        $idReportado = $id;
+        // Validacion
+        $request->validate([
+            'manejarReporte' => 'required',
+            'motivo' => 'required_if:manejarReporte,1',
+            'fechaDesbaneo' => 'required_if:manejarReporte,1',
+        ]);
+
+        // Obtengo el usuario reportado
+        $usuario = Usuario::find($id);
+
+        // Obtengo el reporte del usuario que fue reportado
+        $reporte = Reportes::where('usuarios_idusuarios', $id)->first();
 
         // Obtengo decision del admin
-        $decision = $request->decision;
+        $decision = $request->manejarReporte;
 
         switch ($decision) {
-            case 0:
+            case "0":
                 // En caso de que el reporte sea falso, eliminar el reporte
-                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
                 if ($reporte) {
                     $reporte->delete();
                 }
 
                 // Obtener todas las actividades creadas por el usuario
-                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+                $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
                 foreach ($actividades as $actividad) {
                     $idact = $actividad->idActividad;
 
                     // Interacciones de la gente ante esa actividad
-                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    $interacciones = Interacciones::where('actividad_idActividad', $idact)->get();
                     foreach ($interacciones as $interaccion) {
                         // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
                         if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
@@ -326,29 +333,36 @@ class ReportesController extends Controller
                             $interaccion->save();
                         }
                     }
+
+                    if ($actividad->tipoActividad_idtipoActividad === 1) {
+                        $actividad->delete();
+                    }
                 }
 
-                return redirect()->back()->with('alertReporte', [
+                // Redirigir según el rol del usuario
+                $route = ($usuario->rol_idrol === 2) ? 'panel-de-staff' : 'panel-de-usuarios';
+
+                return redirect()->route($route)->with('alertReporte', [
                     'type' => 'Success',
-                    'message' => 'El reporte y las actividades han sido eliminados correctamente.',
+                    'message' => 'El reporte, las actividades y sus interacciones han sido eliminados correctamente.',
                 ]);
+
                 break;
-            case 1:
-                #En caso que el reporte sea necesario pero lo suspendemos la cuenta segun un tiempo que defina el administardor, entro a la tabla historialUsuario y desactivamos por tiempo definido
-                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
+
+            case "1":
                 if ($reporte) {
-                    $reporte->motivos = $request->motivo; //array
+                    $reporte->motivos_idmotivos = $request->motivo; //array
                     $reporte->save();
                 }
 
                 // Obtener todas las actividades creadas por el usuario
-                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+                $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
                 foreach ($actividades as $actividad) {
                     $idact = $actividad->idActividad;
 
                     // Interacciones de la gente ante esa actividad
-                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    $interacciones = Interacciones::where('actividad_idActividad', $idact)->get();
                     foreach ($interacciones as $interaccion) {
                         // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
                         if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
@@ -360,48 +374,52 @@ class ReportesController extends Controller
                             $interaccion->save();
                         }
                     }
+
+                    if ($actividad->tipoActividad_idtipoActividad === 1) {
+                        $actividad->delete();
+                    }
                 }
 
                 // En caso que el reporte sea necesario pero lo suspendemos la cuenta
-                $duracionSuspension = $request->duracion;
-                $fechaInica = now(); // Fecha actual
-                $fechaFinaliza = now()->addDays($duracionSuspension); // Fecha de finalización
 
                 //idDatospersonales del usuario
-                $idDato = DatosPersonales::where('usuarios_idusuarios', $idReportado)->first();
+                $idDato = DatosPersonales::where('usuarios_idusuarios', $id)->first();
 
                 //Encuentro el historial del Usuario
                 $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
 
-                $historial->estado = 'suspendido';
-                $historial->fechaInica = $fechaInica;
-                $historial->fechaFinaliza = $fechaFinaliza;
+                $historial->estado = 'Inactivo';
+                $historial->fechaInica = now();
+                $historial->fechaFinaliza = $request->fechaDesbaneo;
                 $historial->save();
 
                 // MAIL INFORME DE BANEO Y
                 // Enviar correo electrónico al usuario informando que su cuenta ha sido suspendida
 
-                return redirect()->back()->with('alertReporte', [
+                // Redirigir según el rol del usuario
+                $route = ($usuario->rol_idrol === 2) ? 'panel-de-staff' : 'panel-de-usuarios';
+
+                return redirect()->route($route)->with('alertReporte', [
                     'type' => 'Success',
-                    'message' => 'La cuenta ha sido suspendida por ' . $duracionSuspension . ' días.',
+                    'message' => 'La cuenta ha sido suspendida por ' . $request->fechaDesbaneo . ' días.',
                 ]);
                 break;
-            case 2:
+
+            case "2":
                 #En caso que el reporte sea necesario pero pesado, entro a la tabla historialUsuario y eliminamos (Eliminacion logica si, usuario, datos personales)
-                $reporte = Reportes::where('usuarios_idusuarios', $idReportado)->first();
                 if ($reporte) {
-                    $reporte->motivos = $request->motivo; //array
+                    $reporte->motivos_idmotivos = $request->motivo; //array
                     $reporte->save();
                 }
 
                 // Obtener todas las actividades creadas por el usuario
-                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->get();
+                $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
                 foreach ($actividades as $actividad) {
                     $idact = $actividad->idActividad;
 
                     // Interacciones de la gente ante esa actividad
-                    $interacciones = Interacciones::where('actividades_idactividad', $idact)->get();
+                    $interacciones = Interacciones::where('actividad_idActividad', $idact)->get();
                     foreach ($interacciones as $interaccion) {
                         // Si la interacción es solo un reporte (reporte === 1 y me gusta o no me gusta === 0)
                         if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
@@ -412,6 +430,10 @@ class ReportesController extends Controller
                             $interaccion->reporte = 0;
                             $interaccion->save();
                         }
+                    }
+
+                    if ($actividad->tipoActividad_idtipoActividad === 1) {
+                        $actividad->delete();
                     }
                 }
 
@@ -419,7 +441,7 @@ class ReportesController extends Controller
                 $fechaInica = now(); // Fecha actual
 
                 //idDatospersonales del usuario
-                $idDato = DatosPersonales::where('usuarios_idusuarios', $idReportado)->first();
+                $idDato = DatosPersonales::where('usuarios_idusuarios', $id)->first();
 
                 //Encuentro el historial del Usuario
                 $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
@@ -431,27 +453,27 @@ class ReportesController extends Controller
 
                 //Actualiza los datos del usuario
                 // Borrar la contraseña del usuario de manera segura
-                $usuario = Usuario::where('usuarios_idusuarios', $idReportado)->first();
+                $usuario = Usuario::find($id);
                 $usuario->contraseniaUser = null;
                 $usuario->usuarioUser = null;
                 $usuario->save();
 
                 // Eliminar reportes asociados al usuario
-                Reportes::where('usuarios_idusuarios', $idReportado)->delete();
+                Reportes::where('usuarios_idusuarios', $id)->delete();
 
                 // Eliminar todas las interacciones que realizó el usuario
-                Interacciones::where('usuarios_idusuarios', $idReportado)->delete();
+                Interacciones::where('usuarios_idusuarios', $id)->delete();
 
                 // Acceder a todas las actividades realizadas por el usuario
-                $actividades = Actividad::where('usuarios_idusuarios', $idReportado)->with(['comentarios', 'contenidos'])->get();
+                $actividades = Actividad::where('usuarios_idusuarios', $id)->with(['comentarios', 'contenidos'])->get();
                 foreach ($actividades as $actividad) {
                     // Eliminar las interacciones de esa actividad
-                    Interacciones::where('actividades_idactividad', $actividad->idActividad)->delete();
+                    Interacciones::where('actividad_idActividad', $actividad->idActividad)->delete();
 
                     // Eliminar los comentarios
                     foreach ($actividad->comentarios as $comentario) {
                         // Eliminar las interacciones del comentario
-                        Interacciones::where('actividades_idactividad', $comentario->Actividad_idActividad)->delete();
+                        Interacciones::where('actividad_idActividad', $comentario->Actividad_idActividad)->delete();
 
                         // Eliminar la imagen asociada al comentario
                         if ($comentario->revisionImagenes_idrevisionImagenescol) {
@@ -468,7 +490,7 @@ class ReportesController extends Controller
                     // Eliminar los contenidos
                     foreach ($actividad->contenidos as $contenido) {
                         foreach ($contenido->comentarios as $comentario) {
-                            Interacciones::where('actividades_idactividad', $comentario->Actividad_idActividad)->delete();
+                            Interacciones::where('actividad_idActividad', $comentario->Actividad_idActividad)->delete();
                             $comentario->delete();
                             $this->eliminarImagenYRevision($comentario->revisionImagenes_idrevisionImagenescol);
                             // Eliminar la actividad del comentario de la tabla actividad
@@ -490,14 +512,17 @@ class ReportesController extends Controller
                 }
 
                 // Borrar la imagen de perfil si tiene
-                $eliminado = $this->eliminarImagenLogica($idReportado);
+                $eliminado = $this->eliminarImagenLogica($id);
 
                 // Enviar correo electrónico al usuario informando que su cuenta ha sido ELIMINADA MSJ REPORTE
 
+                // Redirigir según el rol del usuario
+                $route = ($usuario->rol_idrol === 2) ? 'panel-de-staff' : 'panel-de-usuarios';
+
                 // Redirigir a la página de panel de usuarios
-                return redirect('///')->with('alertBorrar', [
+                return redirect($route)->with('alertBorrar', [
                     'type' => 'Success',
-                    'message' => 'Se ha vetado la cuenta con éxito!',
+                    'message' => 'Se ha baneado a la cuenta de manera permanente con éxito!',
                 ]);
         }
     }

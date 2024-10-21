@@ -207,15 +207,21 @@ class LoginController extends Controller
 
                 $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
 
-
                 $idhistorialUsuario = $historialUsuario->idhistorialusuario;
 
                 // Redirigir a la página de reactivación de cuenta
 
                 // mensaje alerta existe un usuario con ese correo electronico
-                return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
+                if ($historialUsuario->fechaFinaliza < now()) {
+                    return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
+                        'type' => 'Warning',
+                        'message' => 'Su cuenta se encuentra Inactiva. Reactivala siguiendo los pasos',
+                    ]);
+                }
+
+                return redirect()->route('login')->with('alertRegistro', [
                     'type' => 'Warning',
-                    'message' => 'Su cuenta se encuentra Inactiva.',
+                    'message' => 'Su usuario ha sido baneado hasta el dia ' . $historialUsuario->fechaFinaliza . ' , no podrá acceder.',
                 ]);
                 break;
 
@@ -293,18 +299,27 @@ class LoginController extends Controller
                 break;
 
             case 'Inactivo':
-
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
+                $pin = Str::random(6);
 
+                // Buscar el usuario en la base de datos por su correo electrónico
                 $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+
+                // Actualizar el usuario con el nuevo PIN hasheado
+                $usuarioExistente->pinOlvidoUser = Hash::make($pin);
+                $usuarioExistente->save();
+
+                // Almacenar el correo electrónico en la sesión para uso posterior
+                session(['email' => $request->email]);
 
                 $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
 
                 $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
 
-                $historialUsuario->estado = 'Activo';
                 $idhistorialUsuario = $historialUsuario->idhistorialusuario;
-                $historialUsuario->save();
+
+                // Enviar un correo electrónico al usuario con el PIN generado
+                Mail::to($usuarioExistente->correoElectronicoUser)->send(new msjPinOlvido($pin));
 
                 // Redirigir a la página de reactivación de cuenta
                 // mensaje alerta existe un usuario con ese correo electronico
@@ -421,7 +436,14 @@ class LoginController extends Controller
         $usuario = Usuario::where('correoElectronicoUser', $email)->first();
 
         // Obtener la contraseña actual del usuario
-        $passwordActual = $usuario->contraseniaUser;
+        try {
+            $passwordActual = $usuario->contraseniaUser;
+        } catch (\Throwable $th) {
+            return redirect()->route('login')->with('alertRestablecer', [
+                'type' => 'Danger',
+                'message' => 'Error al reestablecer contraseña.'
+            ]);
+        }
 
         // Hashear la contraseña actual para poder compararla con la nueva
         $passwordActual = Hash::make($passwordActual);
@@ -433,6 +455,11 @@ class LoginController extends Controller
 
         $usuario->contraseniaUser = Hash::make($request->password);
         $usuario->save();
+
+        // Buscar el historial del usuario
+        $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $usuario->datospersonales->idDatosPersonales)->first();
+        $historialUsuario->estado = 'Activo';
+        $historialUsuario->save();
 
         Auth::logout();
         session()->forget('email');
@@ -452,14 +479,19 @@ class LoginController extends Controller
     public function vistaReactivarCuenta($idhistorialUsuario)
     {
         $historialUsuario = HistorialUsuario::find($idhistorialUsuario);
-        $revisionImagenes = RevisionImagenes::where('usuarios_idusuarios', $idhistorialUsuario)->get();
-        foreach ($revisionImagenes as $revision) {
-            if ($revision->tipodefoto_idtipoDeFoto === 1) {
-                $fotoDePerfil = $revision->imagenes->subidaImg;
+        $revisionImagenes = RevisionImagenes::where('usuarios_idusuarios', $historialUsuario->datospersonales->usuario->idusuarios)->get();
+
+        $fotoDePerfil = null;
+
+        if ($revisionImagenes) {
+            foreach ($revisionImagenes as $revision) {
+                if ($revision->tipodefoto_idtipoDeFoto === 1) {
+                    $fotoDePerfil = $revision->imagenes->subidaImg;
+                }
             }
         }
 
-        if ($historialUsuario->estado == 'Inactivo') {
+        if ($historialUsuario->estado == 'Inactivo' && $historialUsuario->fechaFinaliza < now()) {
             return view('auth.reactivarCuenta', compact('fotoDePerfil'));
         } else {
             return redirect(route('inicio'));

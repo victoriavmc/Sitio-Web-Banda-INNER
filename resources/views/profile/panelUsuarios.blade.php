@@ -9,6 +9,7 @@
             {{ session('alertEliminacion')['message'] }}
         </x-alerts>
     @endif
+    @dd($funciona)
     @if (!$funciona)
         <div class="min-h-screen
     justify-center items-center">
@@ -182,7 +183,7 @@
                                                         <div class="absolute right-0 z-50 rounded-xl hidden bg-white shadow-lg mt-2 transition-all duration-300"
                                                             id="dropdownMenu-{{ $usuario->idusuarios }}">
                                                             {{-- Botón para editar rol del usuario --}}
-                                                            <div class="border-b-2">
+                                                            <div>
                                                                 <button type="button"
                                                                     data-usuario-id="{{ $usuario->idusuarios }}"
                                                                     onclick="openModal(this)"
@@ -204,7 +205,7 @@
                                                             {{-- Botón para borrar imagen del usuario --}}
                                                             <form
                                                                 action="{{ route('borrar-imagen', $usuario->idusuarios) }}"
-                                                                method="POST" class="border-b-2">
+                                                                method="POST">
                                                                 @csrf
                                                                 <button type="submit"
                                                                     class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
@@ -221,7 +222,7 @@
                                                             </form>
 
                                                             {{-- Boton para reportar usuario --}}
-                                                            <div class="border-b-2">
+                                                            <div>
                                                                 <a href="{{ route('reportarUsuario', $usuario->idusuarios) }}"
                                                                     class="flex items-center whitespace-nowrap px-4 py-2 text-gray-800 hover:bg-gray-200 w-full">
                                                                     <svg class="w-6 h-6 mr-2 text-gray-800"
@@ -234,7 +235,11 @@
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
                                                                     </svg>
-                                                                    <p>Manejar Reporte</p>
+                                                                    @if (isset($listaReportado[$usuario->idusuarios]) && $listaReportado[$usuario->idusuarios] > 0)
+                                                                        <p>Manejar Reporte</p>
+                                                                    @else
+                                                                        <p>Historial de Usuario</p>
+                                                                    @endif
                                                                 </a>
                                                             </div>
 

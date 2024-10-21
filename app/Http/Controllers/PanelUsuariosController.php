@@ -75,8 +75,9 @@ class PanelUsuariosController extends Controller
     #Envia a la vista
     public function panel(Request $request)
     {
-        $funciona = true;
+        $funciona = true; // Inicializamos como true
 
+        // Obtener los usuarios que no son administradores
         $usuarios = Usuario::where('rol_idrol', '!=', 1)->get();
 
         if ($usuarios->isEmpty()) {
@@ -84,59 +85,67 @@ class PanelUsuariosController extends Controller
             return view('profile.panelUsuarios', ['funciona' => $funciona]);
         }
 
-        // Obtener la lista de usuarios
+        // Obtener la lista de usuarios utilizando la función listar
         $usuarios = $this->listar($request);
 
-        // Obtener los roles desde la base de datos
+        // Obtener roles y especialidades desde la base de datos
         $roles = Roles::where('rol', '!=', 'Administrador')->get();
-
         $especialidades = TipodeStaff::all();
 
-        // Obtener el usuario autenticado
+        // Obtener el usuario autenticado y su rol
         $usuarioAutenticado = Auth::user();
         $rol = $usuarioAutenticado->rol_idrol;
 
+        // Inicializar la lista de reportados y la variable $id
         $listaReportado = [];
-        // Asignar la URL de la imagen a cada usuario
+        $id = null; // Asegura que siempre esté definida
+
         foreach ($usuarios as $usuario) {
-            // Obtener el ID del usuario
-            $id = $usuario->idusuarios;
+            if ($usuario) {
+                // Asignar el ID del usuario
+                $id = $usuario->idusuarios;
 
-            // Asignar la URL de la imagen
-            $usuario->urlImagen = $this->mirar($usuario->idusuarios);
+                // Asignar la URL de la imagen al usuario
+                $usuario->urlImagen = $this->mirar($id);
 
-            # REPORETE
-            // Obtener todas las actividades del usuario
-            $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
+                // Obtener las actividades del usuario
+                $actividades = Actividad::where('usuarios_idusuarios', $id)->get();
 
-            // Contabilizar el número total de reportes en las actividades del usuario
-            $totalReportes = 0;
+                // Inicializar contador de reportes para este usuario
+                $totalReportes = 0;
 
-            foreach ($actividades as $actividad) {
-                // Contar las interacciones de tipo reporte para cada actividad
-                $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
-                    ->where('reporte', '>', 0)
-                    ->count();
+                // Recorrer las actividades y contar los reportes
+                foreach ($actividades as $actividad) {
+                    $reporteCount = Interacciones::where('actividad_idActividad', $actividad->idActividad)
+                        ->where('reporte', '>', 0)
+                        ->count();
 
-                // Sumar al total de reportes del usuario
-                $totalReportes += $reporteCount;
+                    $totalReportes += $reporteCount;
+                }
+
+                // Guardar el total de reportes del usuario en la lista
+                $listaReportado[$id] = $totalReportes;
             }
-
-            // Guardar el número total de reportes en la lista
-            $listaReportado[$usuario->idusuarios] = $totalReportes;
         }
 
-        // Retornar la vista con los usuarios, roles y el rol del usuario autenticado
+        // Si no se encontró ningún ID, cambiar $funciona a false
+        if (is_null($id)) {
+            $funciona = false;
+        }
+
+        // Retornar la vista con los datos necesarios
         return view('profile.panelUsuarios', [
             'funciona' => $funciona,
             'usuarios' => $usuarios,
             'roles' => $roles,
             'rol' => $rol,
             'especialidades' => $especialidades,
-            'id' => $id,
+            'id' => $id, // Puede ser null si no hay usuarios
             'listaReportado' => $listaReportado,
         ]);
     }
+
+
 
     #Envia a la vista usuariotabla
     public function buscarUsuarios(Request $request)
