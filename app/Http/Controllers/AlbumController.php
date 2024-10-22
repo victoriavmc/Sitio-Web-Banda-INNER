@@ -237,7 +237,6 @@ class AlbumController extends Controller
         $album->save();
     }
 
-
     public function manejoAlbumEliminarModificar(Request $request)
     {
 
@@ -277,130 +276,195 @@ class AlbumController extends Controller
                     break;
                 case 2:
                     // Videos
-                    $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-
-                    break;
-                case 3:
-                    // Imagenes
-                    $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-
-                    break;
-            }
-        } elseif ($accion == '3') {
-            // ELIMINAR
-            switch ($tipoAlbum) {
-                case 1:
-                    $album = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-
-                    $revImg = $album->revisionimagenes;
-
-                    $canciones = Cancion::where('albumMusical_idalbumMusical', $idAlbumEspecifico)->get();
-                    foreach ($canciones as $cancion) {
-                        $cancion->delete();
-                    }
-                    // Comprobar si existe la revisión de imagen
-                    if ($revImg) {
-                        $imagen = $revImg->imagenes;
-                        $album->delete();
-                        $revImg->delete();
-                        if ($imagen) {
-                            // Eliminar la imagen del almacenamiento
-                            Storage::disk('public')->delete($imagen->subidaImg);
-                            // Eliminar la imagen de la base de datos
-                            $imagen->delete();
-                        }
-                    }
-
-                    $album->delete();
-
-                    // Eliminar los datos del álbum
-                    $album->albumDatos->delete();
-
-                    return redirect()->back()->with('alertAlbum', [
-                        'type' => 'Success',
-                        'message' => 'Álbum eliminado correctamente.',
-                    ]);
-
-                    break;
-                case 2:
-                    // Obtener todas las entradas del álbum por el mismo `idAlbumEspecifico`
                     $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
 
-                    foreach ($album as $alb) {
-                        // Obtener el ID del video y del álbum de datos
-                        $videoId = $alb->videos_idvideos;
-                        $idDatos = $alb->albumDatos_idalbumDatos;
+                    // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
+                    if ($request->has('videos')) { // Cambiar 'video' por 'videos' para que coincida con el nombre del input
+                        foreach ($request->videos as $videoFile) {
+                            // Guarda el video en el sistema de archivos y obtén la ruta
+                            $path = $videoFile->store('video', 'public');
 
-                        // Eliminar la entrada de AlbumVideo
-                        $alb->delete();
+                            // Crea una nueva instancia del modelo Videos
+                            $video = new Videos();
+                            // Guarda la ruta y otros datos en la base de datos
+                            $video->subidaVideo = $path;
+                            $video->fechaSubidoVideo = now();
+                            $video->contenidoDescargable = 'No'; // Esto puede ser dinámico si lo necesitas
+                            $video->save();
 
-                        // Buscar el video por ID
-                        $tablaVideo = Videos::find($videoId);
-
-                        if ($tablaVideo) {
-                            // Eliminar el archivo de video de almacenamiento
-                            Storage::disk('public')->delete($tablaVideo->subidaVideo);
-
-                            // Eliminar la entrada del video en la base de datos
-                            $tablaVideo->delete();
+                            // Crear un nuevo registro en AlbumVideo
+                            $albumVideo = new AlbumVideo();
+                            $albumVideo->albumDatos_idalbumDatos = $idAlbumEspecifico; // Asigna el ID del álbum
+                            $albumVideo->videos_idvideos = $video->idvideos; // Relaciona el video guardado
+                            $albumVideo->save(); // Guarda el álbum de video
                         }
                     }
 
-                    // Eliminar los datos del álbum (solo si se elimina el último video)
-                    $datos = AlbumDatos::find($idAlbumEspecifico);
-                    if ($datos) {
-                        $datos->delete();
-                    }
+                    // Si se desea eliminar un video, se debe mostrar primero todos los videos con el mismo id de álbum de datos
+                    if ($request->has('eliminarVideo')) {
+                        $idVideoEspecifico = $request->eliminarVideo;
 
-                    return redirect()->back()->with('alertAlbum', [
-                        'type' => 'Success',
-                        'message' => 'Álbum de videos eliminado correctamente.',
-                    ]);
+                        // Busca y elimina el video específico del álbum
+                        $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)
+                            ->where('videos_idvideos', $idVideoEspecifico)
+                            ->first();
 
-                    break;
-                case 3:
-                    // Imagenes
-                    $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
-
-                    foreach ($albumImagenes as $alb) {
-                        if (!$alb) {
-                            continue; // Si no hay álbum, salta a la siguiente iteración
-                        }
-
-                        // Eliminar la entrada de AlbumImagenes
-                        $alb->delete();
-
-                        $revImg = $alb->revisionimagenes; // Obtener la revisión de imagen
-
-                        // Comprobar si existe la revisión de imagen
-                        if ($revImg) {
-
-                            // Eliminar la revisión de imagen antes de eliminar las imágenes
-                            $revImg->delete();
-
-                            // Obtener las imágenes relacionadas
-                            $imagenes = $revImg->imagenes;
-                            // Verificar que la imagen no sea null y sea un objeto válido
-                            if ($imagenes instanceof Imagenes) {
-                                // Eliminar la imagen del almacenamiento
-                                Storage::disk('public')->delete($imagenes->subidaImg);
-
-                                // Eliminar la imagen de la base de datos
-                                $imagenes->delete();
+                        if ($albumVideo) { // Asegúrate de que el álbum de video exista antes de intentar eliminarlo
+                            $albumVideo->delete();
+                            // También puedes eliminar el video del sistema de archivos si lo deseas
+                            $video = Videos::find($idVideoEspecifico);
+                            if ($video) {
+                                Storage::disk('public')->delete($video->subidaVideo); // Eliminar el video del almacenamiento
+                                $video->delete(); // Eliminar el video de la base de datos
                             }
                         }
                     }
-                    // Eliminar los datos del álbum
-                    $albumDatos = AlbumDatos::find($idAlbumEspecifico);
-                    if ($albumDatos) {
-                        $albumDatos->delete();
+
+                    return redirect()->route('albumGaleria')->with('alertAlbum', [
+                        'type' => 'Success',
+                        'message' => 'Álbum modificado correctamente.',
+                    ]);
+                    break;
+                case 3:
+                    // Imagenes
+                    $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                    // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
+                    if ($request->hasFile('imagenes')) {
+                        foreach ($request->file('imagenes') as $imagen) { // Usar file('imagenes') para múltiples archivos
+                            $revImg = $this->guardarImagenSiExiste($imagen);
+                            $albumImagenes = new AlbumImagenes();
+                            $albumImagenes->albumDatos_idalbumDatos = $idAlbumEspecifico;
+                            $albumImagenes->revisionImagenes_idrevisionImagenescol = $revImg ? $revImg->idrevisionImagenescol : null;
+                            $albumImagenes->save();
+                        }
                     }
 
-                    // Redireccionar con mensaje de éxito
-                    return redirect()->back()->with('alertAlbum', [
+                    // Si se desea eliminar una imagen, se debe mostrar primero todas las imagenes con el mismo id de álbum de datos
+                    if ($request->has('eliminarVideo')) {
+                        $idVideoEspecifico = $request->eliminarVideo;
+
+                        // Busca y elimina el video específico del álbum
+                        $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)
+                            ->where('videos_idvideos', $idVideoEspecifico)
+                            ->first();
+
+                        if ($albumVideo) { // Asegúrate de que el álbum de video exista antes de intentar eliminarlo
+                            $albumVideo->delete();
+                            // También puedes eliminar el video del sistema de archivos si lo deseas
+                            $video = Videos::find($idVideoEspecifico);
+                            if ($video) {
+                                Storage::disk('public')->delete($video->subidaVideo); // Eliminar el video del almacenamiento
+                                $video->delete(); // Eliminar el video de la base de datos
+                            }
+                        }
+                    }
+
+                    return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
-                        'message' => 'Álbum eliminado correctamente.',
+                        'message' => 'Álbum modificado correctamente.',
                     ]);
+                    break;
+            }
+        } elseif ($accion == '3') {
+            switch ($tipoAlbum) {
+                case 1:
+                    $album = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+                    $this->eliminarAlbumMusical($album);
+                    break;
+
+                case 2:
+                    $albumVideos = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                    foreach ($albumVideos as $alb) {
+                        $this->eliminarVideo($alb);
+                    }
+                    break;
+
+                case 3:
+                    $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                    foreach ($albumImagenes as $alb) {
+                        $this->eliminarImagen($alb);
+                    }
+                    break;
+            }
+
+            // Redireccionar con mensaje de éxito
+            return redirect()->back()->with('alertAlbum', [
+                'type' => 'Success',
+                'message' => 'Álbum eliminado correctamente.',
+            ]);
+        }
+    }
+
+    /**
+     * Elimina un álbum musical y sus canciones.
+     */
+    private function eliminarAlbumMusical($album)
+    {
+        if (!$album) return;
+
+        // Eliminar canciones asociadas
+        Cancion::where('albumMusical_idalbumMusical', $album->idalbumMusical)->delete();
+
+        // Eliminar el álbum
+        $album->delete();
+
+        // Eliminar la revisión de imagen
+        $revImg = $album->revisionimagenes;
+        if ($revImg) {
+            $imagen = $revImg->imagenes;
+            $revImg->delete();
+            if ($imagen) {
+                Storage::disk('public')->delete($imagen->subidaImg);
+                $imagen->delete();
+            }
+        }
+
+        // Eliminar los datos del álbum
+        $album->albumDatos->delete();
+    }
+
+    /**
+     * Elimina un video y su archivo asociado.
+     */
+    private function eliminarVideo($albumVideo)
+    {
+        if (!$albumVideo) return;
+
+        // Obtener el ID del video
+        $videoId = $albumVideo->videos_idvideos;
+
+        // Eliminar la entrada de AlbumVideo
+        $albumVideo->delete();
+
+        // Buscar el video por ID y eliminarlo
+        $tablaVideo = Videos::find($videoId);
+        if ($tablaVideo) {
+            Storage::disk('public')->delete($tablaVideo->subidaVideo);
+            $tablaVideo->delete();
+        }
+    }
+
+    /**
+     * Elimina una imagen y su archivo asociado.
+     */
+    private function eliminarImagen($albumImagen)
+    {
+        if (!$albumImagen) return;
+
+        // Eliminar la entrada de AlbumImagenes
+        $albumImagen->delete();
+
+        // Obtener la revisión de imagen
+        $revImg = $albumImagen->revisionimagenes;
+        if ($revImg) {
+            // Eliminar la revisión de imagen
+            $imagenes = $revImg->imagenes;
+            $revImg->delete();
+
+            // Verificar que la imagen no sea null y eliminarla
+            if ($imagenes instanceof Imagenes) {
+                Storage::disk('public')->delete($imagenes->subidaImg);
+                $imagenes->delete();
             }
         }
     }
