@@ -27,34 +27,45 @@ class AlbumGaleriaController extends Controller
         // Obtener todos los álbumes de Video
         $albumes = AlbumVideo::all();
 
-        // Recorrer cada álbum y extraer los datos
-        foreach ($albumes as $album) {
-            // Verificar si las relaciones existen para evitar errores
-            $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
-            $albumFecha = $album->albumdatos->fechaAlbum ?? 'Fecha no disponible';
+        // Array para controlar los álbumes procesados
+        $procesados = [];
 
-            // Obtener videos asociados al álbum
-            $videos = $album->videos ?? [];
+        foreach ($albumes as $album) {
+            // Obtener el ID del álbum para evitar duplicados
+            $idDatosAlbum = $album->albumDatos_idalbumDatos;
+
+            // Verificar si el álbum ya se ha procesado
+            if (in_array($idDatosAlbum, $procesados)) {
+                continue;
+            }
+
+            // Obtener todas las entradas del álbum por el mismo `idAlbumDatos`
+            $albumGrupal = AlbumVideo::where('albumDatos_idalbumDatos', $idDatosAlbum)->get();
+
+            // Obtener datos del álbum (título y fecha) del primer registro
+            $albumTitulo = $albumGrupal->first()->albumDatos->tituloAlbum ?? 'Título no disponible';
+            $albumFecha = $albumGrupal->first()->albumDatos->fechaSubido ?? 'Fecha no disponible';
 
             // Inicializar la lista de videos
             $albumVideos = [];
 
-            // Verificar si hay videos antes de recorrer
-            if (count($videos) > 0) {
-                foreach ($videos as $video) {
-                    $albumVideos[] = $video->subidaVideo ?? null; // Si no hay video, es nulo
+            // Recorrer cada entrada del álbum para obtener los videos
+            foreach ($albumGrupal as $item) {
+                $video = $item->videos->subidaVideo ?? null; // Obtener el video o nulo si no existe
+                if ($video) {
+                    $albumVideos[] = $video;
                 }
-            } else {
-                // Si no hay videos, establecer el valor como nulo
-                $albumVideos = null;
             }
 
             // Agregar los datos del álbum junto con los videos
             $listaAlbumV[] = [
                 'titulo' => $albumTitulo,
                 'fecha' => $albumFecha,
-                'videos' => $albumVideos,
+                'videos' => $albumVideos ?: null, // Si no hay videos, establecer como nulo
             ];
+
+            // Marcar este álbum como procesado
+            $procesados[] = $idDatosAlbum;
         }
 
         return $listaAlbumV;
@@ -67,34 +78,40 @@ class AlbumGaleriaController extends Controller
         // Obtener todos los álbumes de Imágenes
         $albumes = AlbumImagenes::all();
 
-        // Recorrer cada álbum y extraer los datos
+        // Array para controlar los álbumes procesados
+        $procesados = [];
+
         foreach ($albumes as $album) {
-            // Verificar si las relaciones existen para evitar errores
-            $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
-            $albumFecha = $album->albumdatos->fechaAlbum ?? 'Fecha no disponible';
+            // Verificar si el álbum ya se ha procesado
+            $idDatosAlbum = $album->albumDatos_idalbumDatos;
+            if (in_array($idDatosAlbum, $procesados)) {
+                continue;
+            }
+            // Obtener todas las imágenes relacionadas al mismo `idAlbumDatos`
+            $albumGrupal = AlbumImagenes::where('albumDatos_idalbumDatos', $idDatosAlbum)->get();
 
-            // Verificar si la relación 'revisionimagenes' existe
-            $imagenes = $album->revisionimagenes->imagenes ?? [];
+            // Obtener datos de álbum (título y fecha) del primer registro
+            $albumTitulo = $albumGrupal->first()->albumDatos->tituloAlbum;
+            $albumFecha = $albumGrupal->first()->albumDatos->fechaSubido;
 
-            // Inicializar la lista de imágenes
+            // Obtener todas las imágenes de este álbum
             $albumImagenes = [];
-
-            // Verificar si hay imágenes antes de recorrer
-            if (count($imagenes) > 0) {
-                foreach ($imagenes as $imagen) {
-                    $albumImagenes[] = $imagen->subidaimagen ?? null; // Si no hay imagen, es nulo
+            foreach ($albumGrupal as $item) {
+                $imagen = $item->revisionImagenes->imagenes->subidaImg ?? null;
+                if ($imagen) {
+                    $albumImagenes[] = $imagen;
                 }
-            } else {
-                // Si no hay imágenes, establecer el valor como nulo
-                $albumImagenes = null;
             }
 
             // Agregar los datos del álbum junto con las imágenes
             $listaAlbumI[] = [
                 'titulo' => $albumTitulo,
                 'fecha' => $albumFecha,
-                'imagen' => $albumImagenes,
+                'imagenes' => $albumImagenes ?: null,
             ];
+
+            // Marcar este álbum como procesado
+            $procesados[] = $idDatosAlbum;
         }
 
         return $listaAlbumI;

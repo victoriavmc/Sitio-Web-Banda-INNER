@@ -66,14 +66,16 @@
                     <div class="mt-4">
                         <h4 class="font-bold mb-2">Selecciona videos</h4>
                         <input type="file" name="videos[]" multiple accept="video/*"
-                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0">
+                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
+                            required>
                     </div>
                 @elseif ($tipoAlbum == 3)
                     <!-- Imágenes -->
                     <div class="mt-4">
                         <h4 class="font-bold mb-2">Selecciona imágenes</h4>
                         <input type="file" name="imagenes[]" multiple accept="image/*"
-                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0">
+                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
+                            required>
                     </div>
                 @endif
 

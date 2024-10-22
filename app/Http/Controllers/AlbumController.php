@@ -9,10 +9,11 @@ use App\Models\AlbumVideo;
 use App\Models\Cancion;
 use App\Models\Imagenes;
 use App\Models\RevisionImagenes;
-
+use App\Models\Videos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AlbumController extends Controller
 {
@@ -70,30 +71,43 @@ class AlbumController extends Controller
         }
     }
 
-    public function rules()
+    public function rules($tipoAlbum)
     {
-        return [
+        // Inicializa el arreglo de reglas
+        $rules = [
             'titulo' => 'required|string|max:255',
             'fecha' => 'required|date',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Solo para tipo álbum 1
-            'videos.*' => 'nullable|file|mimes:mp4,mov,avi,mkv|max:20480', // Solo para tipo álbum 2
-            'imagenes.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Solo para tipo álbum 3
         ];
+
+        // Agrega reglas dependiendo del tipo de álbum
+        if ($tipoAlbum == 1) {
+            // Álbum de tipo 1: solo una imagen
+            $rules['imagen'] = 'null|image|mimes:jpeg,png,jpg,gif|max:2048';
+        } elseif ($tipoAlbum == 2) {
+            // Álbum de tipo 2: solo videos
+            $rules['videos.*'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
+        } elseif ($tipoAlbum == 3) {
+            // Álbum de tipo 3: varias imágenes
+            $rules['imagenes'] = 'required|array|min:2'; // Al menos 2 imágenes
+            $rules['imagenes.*'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048'; // Cada imagen
+        }
+
+        return $rules;
     }
 
     #GUARDO IMAGEN
-    public function guardarImagenSiExiste(Request $request)
+    public function guardarImagenSiExiste($imagen)
     {
-        if ($request->file('imagen')) {
-            $path = $request->file('imagen')->store('img', 'public');
-            $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
-            $imagen->fechaSubidaImg = now();
-            $imagen->save();
+        if ($imagen && $imagen->isValid()) {
+            $path = $imagen->store('img', 'public');
+            $imagenModel = new Imagenes();
+            $imagenModel->subidaImg = $path;
+            $imagenModel->fechaSubidaImg = now();
+            $imagenModel->save();
 
             $revImg = new RevisionImagenes();
             $revImg->usuarios_idusuarios = Auth::user()->idusuarios;
-            $revImg->imagenes_idimagenes = $imagen->idimagenes;
+            $revImg->imagenes_idimagenes = $imagenModel->idimagenes;
             $revImg->tipodefoto_idtipodefoto = 6;
             $revImg->save();
 
@@ -102,11 +116,22 @@ class AlbumController extends Controller
         return null;
     }
 
+
+
     /// INICIO
     public function manejoAlbum(Request $request, $accion, $tipoAlbum)
     {
         // Valida los datos
-        $request->validate($this->rules());
+        $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
+
+        // Verifica si la validación falló
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
+                'type' => 'Warning',
+                'message' => 'Error al cargar datos.',
+            ]);
+        }
+
 
         if ($accion == '1') {
 
@@ -118,7 +143,7 @@ class AlbumController extends Controller
 
             switch ($tipoAlbum) {
                 case "1":
-                    $revImg = $this->guardarImagenSiExiste($request);
+                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'));
                     $albumMusical = new AlbumMusical();
                     $albumMusical->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumMusical->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
@@ -132,14 +157,26 @@ class AlbumController extends Controller
 
 
                 case "2":
-                    $albumVideo = new AlbumVideo();
-                    // Tengo que guardar TODOS los videos que pasaron 
                     foreach ($request->videos as $video) {
+                        $albumVideo = new AlbumVideo();
+                        // Asigna el ID del álbum
                         $albumVideo->albumDatos_idalbumDatos = $album->idalbumDatos;
-                        $path = $video->store('albumes/videos');
-                        $albumVideo->videos_idvideos = $path;
+
+                        // Guarda el video en el sistema de archivos y obtén la ruta
+                        $path = $video->store('video', 'public');
+
+                        $video = new Videos();
+                        // Guarda la ruta en la base de datos
+                        $video->subidaVideo = $path;
+                        $video->fechaSubidoVideo = now();
+                        $video->contenidoDescargable = 'No';
+                        $video->save();
+                        // Guardar el registro del video en la base de datos
+                        $albumVideo->videos_idvideos = $video->idvideos;
                         $albumVideo->save();
                     }
+
+                    // Redirigir a la ruta después de guardar los videos
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
@@ -147,17 +184,18 @@ class AlbumController extends Controller
 
                     break;
                 case "3":
-                    $albumImagenes = new AlbumImagenes();
-                    // Tengo que guardar TODOS los Imageness que pasaron 
-                    foreach ($request->imagenes as $imagen) {
-                        $albumImagenes->albumDatos_idalbumDatos = $album->idalbumDatos;
-                        $revImg = $this->guardarImagenSiExiste($imagen);
-                        $albumImagenes->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
-                        $albumImagenes->save();
+                    if ($request->hasFile('imagenes')) {
+                        foreach ($request->file('imagenes') as $imagen) { // Usar file('imagenes') para múltiples archivos
+                            $revImg = $this->guardarImagenSiExiste($imagen);
+                            $albumImagenes = new AlbumImagenes();
+                            $albumImagenes->albumDatos_idalbumDatos = $album->idalbumDatos;
+                            $albumImagenes->revisionImagenes_idrevisionImagenescol = $revImg ? $revImg->idrevisionImagenescol : null;
+                            $albumImagenes->save();
+                        }
                     }
-                    break;
+
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
-                        'type' => 'Success',
+                        'type' => 'success',
                         'message' => 'Álbum creado correctamente.',
                     ]);
             }

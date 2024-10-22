@@ -28,16 +28,17 @@
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Imágenes Exclusivas</h2>
                 @auth
-                    @if (auth()->user()->rol->idrol == 1 || auth()->user()->rol->idrol == 2)
-                        <div class="text-center mb-5">
-                            <form action='' method="POST">
-                                @csrf <!-- Asegúrate de incluir el token CSRF -->
-                                <button type="submit"
-                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                    Agregar Album Imagenes
-                                </button>
-                            </form>
-                        </div>
+                    @if (Auth::user()->rol->idrol === 1)
+                        <!-- Formulario para crear un álbum Imagenes -->
+                        <form method="get" action="{{ route('crear-album') }}">
+                            @csrf
+                            <input type="hidden" name="accion" value=1>
+                            <input type="hidden" name="tipoAlbum" value=3>
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                Crear Álbum
+                            </button>
+                        </form>
                     @endif
                 @endauth
                 @if (!$listaAlbumI)
@@ -45,17 +46,19 @@
                         todavia</p>
                 @else
                     <div class="mx-auto grid justify-items-stretch gap-4 md:grid-cols-2 lg:gap-10">
-                        @foreach ($listaAlbumI as $imagen)
+                        @foreach ($listaAlbumI as $album)
                             <a href="#" class="relative flex h-[300px] items-end">
-                                <img src="{{ asset(Storage::url($album['imagen'])) }}" alt="{{ $album['titulo'] }}"
+                                <!-- Muestra solo la primera imagen -->
+                                <img src="{{ asset(Storage::url($album['imagenes'][0])) }}" alt="{{ $album['titulo'] }}"
                                     class="inline-block h-full w-full rounded-lg object-cover" />
                                 <div
                                     class="absolute bottom-5 left-5 flex flex-col justify-center rounded-lg bg-white px-8 py-4">
-                                    <p class="text-sm font-medium sm:text-xl">{{ $imagen['titulo'] }}</p>
-                                    <p class="text-sm sm:text-base">{{ $imagen['fecha'] }}</p>
+                                    <p class="text-sm font-medium sm:text-xl">{{ $album['titulo'] }}</p>
+                                    <p class="text-sm sm:text-base">{{ $album['fecha'] }}</p>
                                 </div>
                             </a>
                         @endforeach
+
                     </div>
                 @endif
             </div>
@@ -66,16 +69,17 @@
             <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
                 <h2 class="text-center text-3xl font-bold md:text-5xl">Álbum de Videos Exclusivos</h2>
                 @auth
-                    @if (auth()->user()->rol->idrol == 1 || auth()->user()->rol->idrol == 2)
-                        <div class="text-center mb-5">
-                            <form action='' method="POST">
-                                @csrf <!-- Asegúrate de incluir el token CSRF -->
-                                <button type="submit"
-                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                    Agregar Album de Videos
-                                </button>
-                            </form>
-                        </div>
+                    @if (Auth::user()->rol->idrol === 1)
+                        <!-- Formulario para crear un álbum musical -->
+                        <form method="get" action="{{ route('crear-album') }}">
+                            @csrf
+                            <input type="hidden" name="accion" value=1>
+                            <input type="hidden" name="tipoAlbum" value=2>
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                Crear Álbum
+                            </button>
+                        </form>
                     @endif
                 @endauth
                 @if (!$listaAlbumV)
@@ -83,14 +87,19 @@
                         todavia</p>
                 @else
                     <div class="mx-auto grid justify-items-stretch gap-4 md:grid-cols-2 lg:gap-10">
-                        @foreach ($listaAlbumV as $imagen)
+
+                        @foreach ($listaAlbumV as $album)
                             <a href="#" class="relative flex h-[300px] items-end">
-                                <img src="{{ asset(Storage::url($album['videos'])) }}" alt="{{ $album['titulo'] }}"
-                                    class="inline-block h-full w-full rounded-lg object-cover" />
+                                @if (!empty($album['videos']))
+                                    <video controls class="inline-block h-full w-full rounded-lg object-cover">
+                                        <source src="{{ asset(Storage::url($album['videos'][0])) }}" type="video/mp4">
+                                        Tu navegador no soporta el elemento de video.
+                                    </video>
+                                @endif
                                 <div
                                     class="absolute bottom-5 left-5 flex flex-col justify-center rounded-lg bg-white px-8 py-4">
-                                    <p class="text-sm font-medium sm:text-xl">{{ $imagen['titulo'] }}</p>
-                                    <p class="text-sm sm:text-base">{{ $imagen['fecha'] }}</p>
+                                    <p class="text-sm font-medium sm:text-xl">{{ $album['titulo'] }}</p>
+                                    <p class="text-sm sm:text-base">{{ $album['fecha'] }}</p>
                                 </div>
                             </a>
                         @endforeach
