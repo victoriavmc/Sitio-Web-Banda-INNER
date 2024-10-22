@@ -67,7 +67,8 @@
                         <h4 class="font-bold mb-2">Selecciona videos</h4>
                         <input type="file" name="videos[]" multiple accept="video/*"
                             class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
-                            required>
+                            onchange="previewVideos(event)" required>
+                        <div id="video-preview-container" class="mt-2 flex flex-wrap"></div>
                     </div>
                 @elseif ($tipoAlbum == 3)
                     <!-- Imágenes -->
@@ -75,7 +76,8 @@
                         <h4 class="font-bold mb-2">Selecciona imágenes</h4>
                         <input type="file" name="imagenes[]" multiple accept="image/*"
                             class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
-                            required>
+                            onchange="previewImages(event)" required>
+                        <div id="image-preview-container" class="mt-2 flex flex-wrap"></div>
                     </div>
                 @endif
 
@@ -146,6 +148,51 @@
                 };
 
                 reader.readAsDataURL(file); // Leer el archivo como Data URL
+            }
+        }
+
+        // Función para previsualizar múltiples imágenes
+        function previewImages(event) {
+            const input = event.target;
+            const files = input.files; // Obtener todos los archivos seleccionados
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // Limpiar el contenedor antes de mostrar nuevas imágenes
+            previewContainer.innerHTML = '';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-24 h-24 object-cover m-2'; // Estilo para las imágenes previsualizadas
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file); // Leer cada archivo como Data URL
+            }
+        }
+
+        // Función para previsualizar múltiples videos
+        function previewVideos(event) {
+            const input = event.target;
+            const files = input.files; // Obtener todos los archivos seleccionados
+            const previewContainer = document.getElementById('video-preview-container');
+
+            // Limpiar el contenedor antes de mostrar nuevos videos
+            previewContainer.innerHTML = '';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const url = URL.createObjectURL(file); // Crear un URL temporal para el video
+
+                const video = document.createElement('video');
+                video.src = url;
+                video.className = 'w-24 h-24 object-cover m-2'; // Estilo para los videos previsualizados
+                video.controls = true; // Agregar controles para reproducir el video
+                previewContainer.appendChild(video);
             }
         }
     </script>

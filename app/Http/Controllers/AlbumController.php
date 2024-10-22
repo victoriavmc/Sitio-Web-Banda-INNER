@@ -25,6 +25,9 @@ class AlbumController extends Controller
         $tipoAlbum = (int) $request->tipoAlbum;
 
         $idAlbumEspecifico = null;
+        $imagen = null;
+        $videos = null;
+        $imagenes = null;
 
         $titulo = '';
         switch ($tipoAlbum) {
@@ -57,18 +60,59 @@ class AlbumController extends Controller
                     $tituloAlbum = $album->tituloAlbum;
                     $fechaSubida = $album->fechaSubido;
 
-                    $albumMusical = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-                    if ($albumMusical) {
-                        $revisionImagen = $albumMusical->revisionimagenes ?? null;
-                        $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
+                    switch ($tipoAlbum) {
+                        case 1:
+                            $albumMusical = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+                            if ($albumMusical) {
+                                $revisionImagen = $albumMusical->revisionimagenes ?? null;
+                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
+                            }
+                            break;
+
+                        case 2:
+                            $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                            // Obtener la información de los videos asociados al álbum
+                            if ($albumVideo) {
+                                $videos = []; // Crear un array para almacenar los videos
+                                foreach ($albumVideo as $video) {
+                                    $videoDetails = Videos::find($video->videos_idvideos);
+                                    if ($videoDetails) {
+                                        $videos[] = [
+                                            'id' => $videoDetails->idvideos,
+                                            'ruta' => $videoDetails->subidaVideo,
+                                            'fechaSubido' => $videoDetails->fechaSubidoVideo,
+                                        ];
+                                    }
+                                }
+                            } else {
+                                $videos = []; // Si no hay videos, inicializar como array vacío
+                            }
+                            break;
+
+                        case 3:
+                            $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                            // Obtener la información de las imágenes asociadas al álbum
+                            if ($albumImagenes) {
+                                $imagenes = []; // Crear un array para almacenar las imágenes
+                                foreach ($albumImagenes as $albumImg) {
+                                    $imagenDetails = Imagenes::find($albumImg->revisionImagenes_idrevisionImagenescol);
+                                    if ($imagenDetails) {
+                                        $imagenes[] = [
+                                            'id' => $imagenDetails->idimagenes,
+                                            'ruta' => $imagenDetails->subidaImg,
+                                            'fechaSubido' => $imagenDetails->fechaSubidaImg,
+                                        ];
+                                    }
+                                }
+                            } else {
+                                $imagenes = []; // Si no hay imágenes, inicializar como array vacío
+                            }
+                            break;
                     }
 
-                    return view('components.manejo-album', compact('accion', 'tipoAlbum', 'idAlbumEspecifico', 'titulo', 'tituloAlbum', 'fechaSubida', 'imagen'));
+                    return view('components.manejo-album', compact('accion', 'tipoAlbum', 'idAlbumEspecifico', 'titulo', 'tituloAlbum', 'fechaSubida', 'imagen', 'videos', 'imagenes'));
                 }
-                break;
 
-            case 3:
-                // Manejo para otro caso
                 break;
         }
     }
