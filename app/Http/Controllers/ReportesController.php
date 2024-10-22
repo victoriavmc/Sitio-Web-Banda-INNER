@@ -126,6 +126,7 @@ class ReportesController extends Controller
 
         return $resultados;
     }
+
     #Eliminar Revision e Imagenes
     private function eliminarImagenYRevision($revisionImagenId)
     {
@@ -148,6 +149,7 @@ class ReportesController extends Controller
             }
         }
     }
+
     //Obtener que reportaron
     public function procesarReportes($actividades)
     {
@@ -249,8 +251,11 @@ class ReportesController extends Controller
         foreach ($reportes as $reporte) {
             if ($reporte->motivos_idmotivos != null) {
                 $nombreMotivo = $reporte->motivos->descripcion;
-                //guardo el nombreMotivo dentro del array
-                array_push($motivos, $nombreMotivo);
+                //Guardar el nombre del motivo en un array y el id del reporte
+                $motivos[] = [
+                    'id' => $reporte->idreportes,
+                    'motivo' => $nombreMotivo,
+                ];
             }
         }
 
@@ -299,6 +304,7 @@ class ReportesController extends Controller
             return False;
         }
     }
+
     #Admin decide que hacer con el reportado
     public function decideReportes(Request $request, $id)
     {
@@ -553,5 +559,39 @@ class ReportesController extends Controller
                     'message' => 'Se ha baneado a la cuenta de manera permanente con éxito!',
                 ]);
         }
+    }
+
+    // Eliminar Motivo del Reporte
+    public function eliminarMotivo($id)
+    {
+        $reporte = Reportes::find($id);
+        $idusuarios = $reporte->usuarios_idusuarios;
+
+        $actividades = Actividad::where('usuarios_idusuarios', $idusuarios)->get();
+
+        foreach ($actividades as $actividad) {
+            $interacciones = Interacciones::where('actividad_idActividad', $actividad->idActividad)->get();
+            foreach ($interacciones as $interaccion) {
+                if ($interaccion->reporte === 1 && $interaccion->megusta === 0 && $interaccion->nomegusta === 0) {
+                    $interaccion->delete();
+                } else {
+                    $interaccion->reporte = 0;
+                    $interaccion->save();
+                }
+            }
+        }
+
+        if ($reporte) {
+            $reporte->delete();
+            return redirect()->back()->with('alertReporte', [
+                'type' => 'Success',
+                'message' => 'El motivo del reporte ha sido eliminado correctamente.',
+            ]);
+        }
+
+        return redirect()->back()->with('alertReporte', [
+            'type' => 'Danger',
+            'message' => 'No se pudo eliminar el motivo del reporte.',
+        ]);
     }
 }

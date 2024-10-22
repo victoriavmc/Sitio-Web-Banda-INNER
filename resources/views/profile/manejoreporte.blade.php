@@ -36,18 +36,18 @@
                             @if ($motivos != null)
                                 <div class="flex justify-end mr-4">
                                     <button id="btnAbrirModal" type="button" onclick="abrirModal()">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
                                     </button>
                                 </div>
                             @endif
 
-                            <div class="flex p-4 space-x-4 sm:px-8">
+                            <div class="flex px-4 space-x-4 sm:px-8">
                                 <img id="imagen"
                                     class="cursor-pointer imagen-modal object-cover object-center w-full h-24 max-w-24 rounded-lg"
                                     src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.png') }}"
@@ -519,21 +519,27 @@
         @endif
     </div>
 
-<!-- Modal de reportes -->
+    <!-- Modal de reportes -->
     <div id="modalReportes" class="hidden">
         <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="bg-white p-6 rounded">
-                <p class="text-center font-semibold mb-5 text-lg">Motivos de reportes anteriores</p>
+                <p class="text-center font-semibold mb-4 text-lg">Motivos de reportes anteriores</p>
                 @foreach ($motivos as $motivo)
-                    <div class="flex justify-between items-center mb-4 gap-5">                      
-                        <p>{{$motivo}}</p>
-                        <form method="POST" action="{{ route('eliminarMotivo') }}">
+                    <div class="flex justify-between items-center mb-4 gap-5">
+                        <p>{{ $motivo['motivo'] }}</p>
+                        <form method="POST" action="{{ route('eliminarMotivo', $motivo['id']) }}">
                             @csrf
                             @method('DELETE')
                             <!-- boton para eliminar -->
-                            <svg class="w-5.5 h-5.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                            </svg>
+                            <button type="submit">
+                                <svg class="w-5.5 h-5.5 text-gray-800 dark:text-white" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                </svg>
+                            </button>
                         </form>
                     </div>
                 @endforeach
@@ -541,7 +547,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <!-- Contenedor del modal -->
     <div id="modal" class="hidden imagenG">
@@ -554,7 +560,7 @@
         function abrirModal() {
             document.getElementById('modalReportes').classList.remove('hidden');
         }
-    
+
         function cerrarModal() {
             document.getElementById('modalReportes').classList.add('hidden');
         }
