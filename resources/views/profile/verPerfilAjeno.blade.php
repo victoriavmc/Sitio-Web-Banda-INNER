@@ -41,13 +41,16 @@
                                     <p class="text-gray-700">{{ $usuarioUser }}</p>
                                     <div class="mt-6 flex flex-wrap gap-4 justify-center">
                                         {{-- boton reportar usuario --}}
-                                        <form action="{{ route('reportarPerfilAjeno', ['id' => $id]) }}" method="POST">
-                                            @csrf
-                                            <button type="submit"
-                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
-                                                Reportar
-                                            </button>
-                                        </form>
+                                        @if (Auth::user()->idusuarios != $id)
+                                            <form action="{{ route('reportarPerfilAjeno', ['id' => $id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
+                                                    Reportar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                                 <hr class="my-6 border-t border-gray-300">
