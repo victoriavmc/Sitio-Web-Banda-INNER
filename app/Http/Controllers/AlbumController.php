@@ -7,9 +7,11 @@ use App\Models\AlbumImagenes;
 use App\Models\AlbumMusical;
 use App\Models\AlbumVideo;
 use App\Models\Cancion;
+use App\Models\DatosPersonales;
 use App\Models\Imagenes;
 use App\Models\RevisionImagenes;
 use App\Models\Videos;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +84,7 @@ class AlbumController extends Controller
         // Agrega reglas dependiendo del tipo de álbum
         if ($tipoAlbum == 1) {
             // Álbum de tipo 1: solo una imagen
-            $rules['imagen'] = 'null|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
         } elseif ($tipoAlbum == 2) {
             // Álbum de tipo 2: solo videos
             $rules['videos.*'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
@@ -115,8 +117,6 @@ class AlbumController extends Controller
         }
         return null;
     }
-
-
 
     /// INICIO
     public function manejoAlbum(Request $request, $accion, $tipoAlbum)
@@ -245,6 +245,8 @@ class AlbumController extends Controller
         $tipoAlbum = (int) $request->tipoAlbum;
         $idAlbumEspecifico = $request->idAlbumEspecifico;
 
+
+
         if ($accion == '2') {
             // MODIFICAR
             $albumDatos = AlbumDatos::findOrFail($idAlbumEspecifico);
@@ -274,17 +276,21 @@ class AlbumController extends Controller
                     ]);
                     break;
                 case 2:
-                    # code...
+                    // Videos
+                    $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+
                     break;
                 case 3:
-                    # code...
+                    // Imagenes
+                    $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+
                     break;
             }
         } elseif ($accion == '3') {
             // ELIMINAR
             switch ($tipoAlbum) {
                 case 1:
-                    $album = AlbumMusical::findOrFail($idAlbumEspecifico);
+                    $album = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
 
                     $revImg = $album->revisionimagenes;
 
@@ -317,11 +323,84 @@ class AlbumController extends Controller
 
                     break;
                 case 2:
-                    # code...
+                    // Obtener todas las entradas del álbum por el mismo `idAlbumEspecifico`
+                    $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+
+                    foreach ($album as $alb) {
+                        // Obtener el ID del video y del álbum de datos
+                        $videoId = $alb->videos_idvideos;
+                        $idDatos = $alb->albumDatos_idalbumDatos;
+
+                        // Eliminar la entrada de AlbumVideo
+                        $alb->delete();
+
+                        // Buscar el video por ID
+                        $tablaVideo = Videos::find($videoId);
+
+                        if ($tablaVideo) {
+                            // Eliminar el archivo de video de almacenamiento
+                            Storage::disk('public')->delete($tablaVideo->subidaVideo);
+
+                            // Eliminar la entrada del video en la base de datos
+                            $tablaVideo->delete();
+                        }
+                    }
+
+                    // Eliminar los datos del álbum (solo si se elimina el último video)
+                    $datos = AlbumDatos::find($idAlbumEspecifico);
+                    if ($datos) {
+                        $datos->delete();
+                    }
+
+                    return redirect()->back()->with('alertAlbum', [
+                        'type' => 'Success',
+                        'message' => 'Álbum de videos eliminado correctamente.',
+                    ]);
+
                     break;
                 case 3:
-                    # code...
-                    break;
+                    // Imagenes
+                    $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+
+                    foreach ($albumImagenes as $alb) {
+                        if (!$alb) {
+                            continue; // Si no hay álbum, salta a la siguiente iteración
+                        }
+
+                        // Eliminar la entrada de AlbumImagenes
+                        $alb->delete();
+
+                        $revImg = $alb->revisionimagenes; // Obtener la revisión de imagen
+
+                        // Comprobar si existe la revisión de imagen
+                        if ($revImg) {
+
+                            // Eliminar la revisión de imagen antes de eliminar las imágenes
+                            $revImg->delete();
+
+                            // Obtener las imágenes relacionadas
+                            $imagenes = $revImg->imagenes;
+                            // Verificar que la imagen no sea null y sea un objeto válido
+                            if ($imagenes instanceof Imagenes) {
+                                // Eliminar la imagen del almacenamiento
+                                Storage::disk('public')->delete($imagenes->subidaImg);
+
+                                // Eliminar la imagen de la base de datos
+                                $imagenes->delete();
+                            }
+                        }
+                    }
+                    // Eliminar los datos del álbum
+                    $albumDatos = AlbumDatos::find($idAlbumEspecifico);
+                    if ($albumDatos) {
+                        $albumDatos->delete();
+                    }
+
+                    // Redireccionar con mensaje de éxito
+                    return redirect()->back()->with('alertAlbum', [
+                        'type' => 'Success',
+                        'message' => 'Álbum eliminado correctamente.',
+                    ]);
             }
         }
     }

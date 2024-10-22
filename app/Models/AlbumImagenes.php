@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AlbumImagenes extends Model
 {
     protected $table = 'albumimagenes';
-    protected $primaryKey = 'idAlbumImagenes';
+    protected $primaryKey = 'albumImagenescol';
     public $timestamps = false;
 
     public function albumDatos()

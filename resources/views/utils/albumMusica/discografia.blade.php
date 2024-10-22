@@ -57,7 +57,8 @@
                                             @method('POST')
                                             <input type="hidden" name="accion" value=3>
                                             <input type="hidden" name="tipoAlbum" value=1>
-                                            <input type="hidden" name="idAlbumEspecifico" value="{{ $album['id'] }}">
+                                            <input type="hidden" name="idAlbumEspecifico"
+                                                value="{{ $album['idAlbumDatos'] }}">
                                             <button type="submit"
                                                 class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                                 <svg class="w-5 h-5 text-white" aria-hidden="true"
