@@ -31,7 +31,7 @@ class SuperFanController extends Controller
         foreach ($albumDatos as $albumDato) {
             // Almacenar el título y la fecha del álbum
             $tituloAlbum = $albumDato->tituloAlbum;
-            $fechaAlbum = $albumDato->fechaAlbum;
+            $fechaAlbum = $albumDato->fechaSubido;
 
             // Relacionar con subidas de imágenes
             $albumImagen = AlbumImagenes::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
