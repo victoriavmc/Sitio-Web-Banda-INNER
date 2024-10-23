@@ -295,7 +295,7 @@ Route::get('/job/artistas', [JobsController::class, 'indexArtistas'])
     ->name('artistas');
 
 Route::put('/artistas/{id}/modificar-imagen', [JobsController::class, 'modificarImagenArtista'])
-    ->name('artistas.modificarImagen');
+    ->name('artistas.modificarImagen')->middleware('auth');
 
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])
@@ -308,16 +308,20 @@ Route::get('/albumMusica/discografia', [AlbumMusicaController::class, 'indexAlbu
 
 // ALBUMS
 // Ruta formulario crear un álbum
-Route::get('/crear-album', [AlbumController::class, 'manejarAlbum'])->name('crear-album');
+Route::get('/crear-album', [AlbumController::class, 'manejarAlbum'])
+    ->name('crear-album')->middleware('auth');
 
 // Ruta para manejar álbum (crear)
-Route::post('/manejo-album/{accion}/{tipoAlbum}', [AlbumController::class, 'manejoAlbum'])->name('manejo-album');
+Route::post('/manejo-album/{accion}/{tipoAlbum}', [AlbumController::class, 'manejoAlbum'])
+    ->name('manejo-album')->middleware('auth');
 
 // Ruta para manejar álbum (modificar)
-Route::post('/modificar-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])->name('modificarAlbumEspecifico');
+Route::post('/modificar-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])
+    ->name('modificarAlbumEspecifico')->middleware('auth');
 
 // Ruta para manejar álbum (eliminar)
-Route::post('/manejo-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])->name('eliminarAlbumEspecifico');
+Route::post('/manejo-album/', [AlbumController::class, 'manejoAlbumEliminarModificar'])
+    ->name('eliminarAlbumEspecifico')->middleware('auth');
 
 // CRUD CANCIONES
 
@@ -363,8 +367,24 @@ Route::post('reportes/decidir-reporte/{id}', [ReportesController::class, 'decide
 
 Route::delete('repotes/eliminar-motivo/{id}', [ReportesController::class, 'eliminarMotivo'])
     ->name('eliminarMotivo')->middleware('auth');
+
+Route::post('reportes/crear-motivo', [ReportesController::class, 'crearMotivo'])
+    ->name('crearMotivo')->middleware('auth');
+
+Route::put('reportes/modificar-motivo/{id}', [ReportesController::class, 'modificarMotivo'])
+    ->name('modificarMotivo')->middleware('auth');
+
+Route::delete('reportes/eliminar-motivo-admin/{id}', [ReportesController::class, 'eliminarMotivoAdmin'])
+    ->name('eliminarMotivoAdmin')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
+Route::view('/mercadopago', 'mptest')
+    ->name('mercadopago');
+
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
-Route::get('/mercadopago/success', [MercadoPagoController::class, 'success'])->name('mercadopago.success');
-Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])->name('mercadopago.failed');
+
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'success'])
+    ->name('mercadopago.success');
+
+Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])
+    ->name('mercadopago.failed');
