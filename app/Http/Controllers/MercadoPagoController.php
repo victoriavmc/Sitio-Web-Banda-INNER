@@ -171,6 +171,6 @@ class MercadoPagoController extends Controller
         $pdf = PDF::loadView('comprobantePDF', compact('paymentDetails'));
 
         // Descargar el PDF
-        return $pdf->download('comprobante_pago.pdf');
+        return $pdf->stream('comprobante_pago.pdf');
     }
 }
