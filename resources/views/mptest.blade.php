@@ -156,7 +156,7 @@
         </div>
         <div class="product-info">
             <h1 class="product-name">Calzado Deportivo Multicolor</h1>
-            <div class="product-price" id="product-price">$29.99</div>
+            <div class="product-price" id="product-price">$5</div>
             <hr />
             <div class="product-specs">
                 <div class="spec-item">
@@ -187,7 +187,7 @@
                     <input type="number" id="quantity" name="quantity" min="1" required />
                 </div>
                 <input type="hidden" id="product_id" value="1234567890" />
-                <input type="hidden" id="product_price" value="29.99" />
+                <input type="hidden" id="product_price" value="5,68" />
 
                 <button class="btn-submit" id="checkout-btn" type="button">
                     <span class="icon-credit-card text-center">💳</span>Pagar
@@ -217,18 +217,32 @@
             return;
         }
 
+        // Convertir el precio correctamente, permitiendo decimales
+        const precioInput = document.getElementById('product_price').value.replace(',', '.');
+        const unitPrice = parseFloat(precioInput);
+
+        if (isNaN(unitPrice) || unitPrice <= 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'El precio debe ser un número válido mayor a 0.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
         const orderData = {
             product: [{
                 id: document.getElementById('product_id').value,
                 title: document.querySelector('.product-name').innerText,
-                description: 'Descripción del producto', // Puedes ajustar esto si tienes más información
-                currency_id: "USD",
+                description: 'Descripción del producto',
+                currency_id: "ARS", // Moneda en pesos argentinos
                 quantity: cantidad,
-                unit_price: parseFloat(document.getElementById('product_price').value),
+                unit_price: unitPrice, // Usar el precio con decimales
             }],
             name: nombre,
-            surname: '', // Si tienes un campo de apellido, añádelo aquí
-            email: '', // Agrega el correo electrónico si es necesario
+            surname: '',
+            email: '',
             phone: telefono,
             address: direccion,
         };
@@ -255,7 +269,7 @@
                 }
                 mp.checkout({
                     preference: {
-                        id: preference.id // Asegúrate de que esta línea sea correcta
+                        id: preference.id
                     },
                     autoOpen: true
                 });
