@@ -347,6 +347,18 @@ Route::delete('/albumMusica/discografia/eliminar-cancion/{id}', [CancionControll
 Route::get('/albumGaleria/albumGaleria', [AlbumGaleriaController::class, 'indexAlbumGaleria'])
     ->name('albumGaleria');
 
+// Ruta para mostrar un álbum específico
+Route::get('/album/{idAlbumEspecifico}/{tipo}', [AlbumController::class, 'mostrarDeUno'])->name('mostrar.de.uno');
+
+// Ruta para agregar un video o imagen a un álbum
+Route::post('/album/', [AlbumController::class, 'agregarVideoAlbum'])->name('agregarVideoAlbum');
+
+// Ruta para mostrar la galería interna
+Route::get('/galeria-interna', [AlbumController::class, 'metodoGaleriaInterna'])->name('components.galeria-interna');
+// Ruta para eliminar objeto especifico de la galería interna
+Route::post('/eliminar-objeto', [AlbumController::class, 'eliminarObjeto'])->name('eliminar.objeto');
+
+
 // Traer API YT
 Route::post('/albumGaleria/actualizarYt', [AlbumGaleriaController::class, 'botonObtenerVideoYt'])
     ->name('actualizarYt')->middleware('auth');

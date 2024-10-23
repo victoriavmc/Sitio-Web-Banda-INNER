@@ -123,7 +123,7 @@ class AlbumController extends Controller
     }
 
     #GUARDO IMAGEN
-    public function guardarImagenSiExiste($imagen)
+    public function guardarImagenSiExiste($imagen, $tipo)
     {
         if ($imagen && $imagen->isValid()) {
             $path = $imagen->store('img', 'public');
@@ -131,11 +131,14 @@ class AlbumController extends Controller
             $imagenModel->subidaImg = $path;
             $imagenModel->fechaSubidaImg = now();
             $imagenModel->save();
-
             $revImg = new RevisionImagenes();
             $revImg->usuarios_idusuarios = Auth::user()->idusuarios;
             $revImg->imagenes_idimagenes = $imagenModel->idimagenes;
-            $revImg->tipodefoto_idtipodefoto = 6;
+            if ($tipo == 1) {
+                $revImg->tipodefoto_idtipodefoto = 6;
+            } else {
+                $revImg->tipodefoto_idtipodefoto = 3;
+            }
             $revImg->save();
 
             return $revImg;
@@ -167,7 +170,7 @@ class AlbumController extends Controller
 
             switch ($tipoAlbum) {
                 case "1":
-                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'));
+                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'), 1);
                     $albumMusical = new AlbumMusical();
                     $albumMusical->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumMusical->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
@@ -210,7 +213,7 @@ class AlbumController extends Controller
 
                     break;
                 case "3":
-                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'));
+                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'), 2);
                     $albumImagen = new AlbumImagenes();
                     $albumImagen->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumImagen->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
@@ -261,8 +264,11 @@ class AlbumController extends Controller
         // Guardar nueva imagen y obtener el objeto de revisión de imagen
         if ($request->file('imagen')) {
             // Guarda la imagen y obtiene el objeto de revisión de imagen
-            $revImg = $this->guardarImagenSiExiste($request->file('imagen')); // Pasa el archivo subido aquí
-
+            if ($tipoAlbum == 1) { // Musical
+                $revImg = $this->guardarImagenSiExiste($request->file('imagen'), 1); // Pasa el archivo subido aquí
+            } elseif ($tipoAlbum == 3) { // Imágenes
+                $revImg = $this->guardarImagenSiExiste($request->file('imagen'), 2); // Pasa el archivo subido aquí
+            }
             // Asigna el ID de revisión de imagen al álbum
             $album->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
             $album->save();
@@ -371,12 +377,23 @@ class AlbumController extends Controller
                     foreach ($albumVideos as $alb) {
                         $this->eliminarVideo($alb);
                     }
+                    // Eliminar los datos del álbum después de eliminar todas las imágenes
+                    $albumDatos = AlbumDatos::find($idAlbumEspecifico);
+                    if ($albumDatos) {
+                        $albumDatos->delete();
+                    }
                     break;
 
                 case 3:
                     $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+
                     foreach ($albumImagenes as $alb) {
                         $this->eliminarImagen($alb);
+                    }
+                    // Eliminar los datos del álbum después de eliminar todas las imágenes
+                    $albumDatos = AlbumDatos::find($idAlbumEspecifico);
+                    if ($albumDatos) {
+                        $albumDatos->delete();
                     }
                     break;
             }
@@ -461,5 +478,156 @@ class AlbumController extends Controller
                 $imagenes->delete();
             }
         }
+    }
+
+    #Elimino objeto especifico
+    public function eliminarObjeto(Request $request)
+    {
+        // Obtener valores enviados desde el formulario
+        $objeto = $request->input('idAlbumEspecifico');
+        $tipo = $request->input('tipo');
+        // Buscar el objeto basado en el tipo
+        $albumMuestra = ($tipo == 1)
+            ? AlbumVideo::find($objeto)
+            : AlbumImagenes::find($objeto);
+
+        // Verificar si se encontró el objeto y eliminarlo
+        if ($albumMuestra) {
+            if ($tipo == 1) {
+                $this->eliminarVideo($albumMuestra); // Eliminar el video si el tipo es 1
+            } else {
+                $this->eliminarImagen($albumMuestra); // Eliminar la imagen si el tipo es diferente de 1
+            }
+            // Redireccionar con mensaje de éxito
+            return redirect()->back()->with('success', [
+                'type' => 'success',
+                'message' => 'Objeto eliminado correctamente.'
+            ]);
+        }
+    }
+
+    #Reglas de Ingresa datos
+    public function reglas($tipo)
+    {
+        $rules = [];
+        switch ($tipo) {
+            case 1:
+                // Álbum de tipo 1: varios videos
+                $rules['videos'] = 'required|array'; // Cambia 'video' a 'videos'
+                $rules['videos.*'] = 'file|mimes:mp4,mov,avi,mkv|max:20480'; // Validación para cada video
+                break;
+            case 2:
+                // Álbum de tipo 2: varias imágenes
+                $rules['imagenes'] = 'required|array';
+                $rules['imagenes.*'] = 'image|mimes:jpeg,png,jpg,gif|max:2048'; // Validación para cada imagen
+                break;
+        }
+        return $rules;
+    }
+
+    #Agregar videos/imagenes a albums especificos
+    public function agregarVideoAlbum(Request $request)
+    {
+        $albumId = $request->input('idAlbumEspecifico');
+        $tipo = $request->input('tipo');
+
+
+        $validator = Validator::make($request->all(), $this->reglas($tipo));
+
+        // Verifica si la validación falló
+        if ($validator->fails()) {
+            dd($validator->errors());
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
+                'type' => 'Warning',
+                'message' => 'Error al cargar datos.',
+            ]);
+        }
+
+        if ($tipo == 1) {
+            // Procesar videos
+            foreach ($request->file('videos') as $videoFile) {
+                if ($videoFile->isValid()) {
+                    $albumVideo = new AlbumVideo();
+                    $albumVideo->albumDatos_idalbumDatos = $albumId;
+
+                    $path = $videoFile->store('video', 'public');
+
+                    $video = new Videos();
+                    $video->subidaVideo = $path;
+                    $video->fechaSubidoVideo = now();
+                    $video->contenidoDescargable = 'No';
+                    $video->save();
+
+                    $albumVideo->videos_idvideos = $video->idvideos;
+                    $albumVideo->save();
+                } else {
+                    return redirect()->back()->withErrors('Uno o más archivos de video son inválidos.');
+                }
+            }
+
+            return redirect()->back()->with('alertAlbum', [
+                'type' => 'success',
+                'message' => 'Videos añadidos correctamente.',
+            ]);
+        } else {
+            // Procesar imágenes
+            foreach ($request->file('imagenes') as $imagenFile) {
+                if ($imagenFile->isValid()) {
+                    $revImg = $this->guardarImagenSiExiste($imagenFile, $tipo);
+                    $albumImagen = new AlbumImagenes();
+                    $albumImagen->albumDatos_idalbumDatos = $albumId;
+                    $albumImagen->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+                    $albumImagen->save();
+                } else {
+                    return redirect()->back()->withErrors('Uno o más archivos de imagen son inválidos.');
+                }
+            }
+
+            return redirect()->back()->with('alertAlbum', [
+                'type' => 'success',
+                'message' => 'Imágenes añadidas correctamente.',
+            ]);
+        }
+    }
+
+    ##ALBUM INTERNO
+    public function mostrarDeUno($idAlbumEspecifico, $tipo)
+    {
+        $albumDato = AlbumDatos::find($idAlbumEspecifico);
+
+        $idAlbumDato = $albumDato->idalbumDatos;
+        $titulo = $albumDato->tituloAlbum;
+        $fecha = $albumDato->fechaSubido;
+
+        $albumMuestra = ($tipo == 1)
+            ? AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get()
+            : AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+
+        $medios = [];
+
+        foreach ($albumMuestra as $objetoAlbum) {
+            if ($tipo == 1) {
+                $idMuestra = $objetoAlbum->idalbumVideo;
+                $idObjetoEspecifico = $objetoAlbum->videos_idvideos;
+                $rutaEspecifica = $objetoAlbum->videos->subidaVideo;
+            } else {
+                $idMuestra = $objetoAlbum->albumImagenescol;
+                $idObjetoEspecifico = $objetoAlbum->revisionImagenes_idrevisionImagenescol;
+                $rutaEspecifica = $objetoAlbum->revisionImagenes->imagenes->subidaImg;
+            }
+
+            $medios[$idMuestra] = [
+                'idEspecificoObjeto' => $idObjetoEspecifico,
+                'rutaEspecifica' => $rutaEspecifica
+            ];
+        }
+
+        return view('components.galeria-interna', [
+            'idDato' => $idAlbumDato,
+            'titulo' => $titulo,
+            'fecha' => $fecha,
+            'medios' => $medios,
+            'tipo' => $tipo
+        ]);
     }
 }

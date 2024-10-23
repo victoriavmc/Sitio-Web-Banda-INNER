@@ -11,14 +11,16 @@ class galeriaInterna extends Component
     public $titulo;
     public $fecha;
     public $medios;
+    public $tipo;
     /**
      * Create a new component instance.
      */
-    public function __construct($titulo, $fecha, $medios)
+    public function __construct($titulo, $fecha, $medios, $tipo)
     {
         $this->titulo = $titulo;
         $this->fecha = $fecha;
         $this->medios = $medios;
+        $this->tipo = $tipo;
     }
 
     /**
