@@ -63,21 +63,83 @@
                     </div>
                 @elseif ($tipoAlbum == 2)
                     <!-- Videos -->
-                    <div class="mt-4">
-                        <h4 class="font-bold mb-2">Selecciona videos</h4>
-                        <input type="file" name="videos[]" multiple accept="video/*"
-                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
-                            onchange="previewVideos(event)" required>
-                        <div id="video-preview-container" class="mt-2 flex flex-wrap"></div>
+                    <!-- Contenedor del video de portada -->
+                    <div id="video-container" class="relative w-80 h-46 bg-gray-300 rounded-lg overflow-hidden group">
+                        <!-- Etiqueta de video para mostrar la vista previa sin controles y pausado -->
+                        <video id="video-preview"
+                            class="w-full h-full object-cover {{ $video !== 'video_por_defecto.mp4' ? '' : 'hidden' }}"
+                            muted autoplay loop>
+                            @if ($video !== 'video_por_defecto.mp4')
+                                <source src="{{ asset('storage/' . $video) }}" type="video/mp4">
+                            @endif
+                        </video>
+
+                        <!-- Mostrar el texto solo si no hay un video seleccionado -->
+                        <p id="placeholder-text"
+                            class="absolute inset-0 flex flex-col items-center justify-center text-gray-700 text-base font-semibold transition-opacity duration-300 z-10">
+                            <svg class="w-20 h-20 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Selecciona un video de portada
+                        </p>
+                        <!-- Input de archivo oculto para cargar el video -->
+                        <input type="file" name="video" id="cover_video" class="hidden" accept="video/*"
+                            onchange="previewVideo(event)">
+
+                        <!-- Botón para seleccionar un video -->
+                        <div
+                            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 text-gray-800 font-semibold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 z-20">
+                            <button type="button"
+                                class="bg-red-500 hover:bg-red-700 transition-all duration-300 text-white flex items-center gap-1 p-2 rounded-md"
+                                onclick="document.getElementById('cover_video').click()">
+                                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="font-bold">Subir Video de Portada</span>
+                            </button>
+                        </div>
                     </div>
                 @elseif ($tipoAlbum == 3)
                     <!-- Imágenes -->
-                    <div class="mt-4">
-                        <h4 class="font-bold mb-2">Selecciona imágenes</h4>
-                        <input type="file" name="imagenes[]" multiple accept="image/*"
-                            class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
-                            onchange="previewImages(event)" required>
-                        <div id="image-preview-container" class="mt-2 flex flex-wrap"></div>
+                    <div id="image-container" class="relative w-80 h-46 bg-gray-300 rounded-lg overflow-hidden group"
+                        style="background-image: url('{{ asset('storage/' . $imagen) }}'); background-size: cover; background-position: center;">
+
+                        <!-- Mostrar el texto solo si la imagen es la imagen por defecto -->
+                        @if ($imagen === 'imagen_por_defecto.jpg')
+                            <p id="placeholder-text"
+                                class="absolute inset-0 flex flex-col items-center justify-center text-gray-700 text-base font-semibold transition-opacity duration-300 group-hover:opacity-0 z-10">
+                                <svg class="w-20 h-20 text-gray-800 dark:text-white" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" />
+                                </svg>
+                                Selecciona una imagen de portada
+                            </p>
+                        @endif
+
+                        <input type="file" name="imagen" id="imagen" class="hidden" accept="image/*"
+                            onchange="previewImage(event)">
+
+                        <div
+                            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 text-gray-800 font-semibold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 z-20">
+                            <button type="button"
+                                class="bg-red-500 hover:bg-red-700 transition-all duration-300 text-white flex items-center gap-1 p-2 rounded-md"
+                                onclick="document.getElementById('imagen').click()">
+                                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="font-bold">Subir Imagen</span>
+                            </button>
+                        </div>
                     </div>
                 @endif
 
@@ -92,7 +154,8 @@
 
                     <!-- Titulo del album -->
                     <div class="mb-2">
-                        <input type="text" name="titulo" autocomplete="new-password" placeholder="Titulo del album"
+                        <input type="text" name="titulo" autocomplete="new-password"
+                            placeholder="Titulo del album"
                             class="w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
                             value="{{ old('titulo', $tituloAlbum ?? null) }}">
                         @error('titulo')
@@ -151,48 +214,20 @@
             }
         }
 
-        // Función para previsualizar múltiples imágenes
-        function previewImages(event) {
-            const input = event.target;
-            const files = input.files; // Obtener todos los archivos seleccionados
-            const previewContainer = document.getElementById('image-preview-container');
+        function previewVideo(event) {
+            const videoPreview = document.getElementById('video-preview');
+            const placeholderText = document.getElementById('placeholder-text');
+            const file = event.target.files[0];
 
-            // Limpiar el contenedor antes de mostrar nuevas imágenes
-            previewContainer.innerHTML = '';
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                videoPreview.src = fileURL;
+                videoPreview.classList.remove('hidden');
+                placeholderText.classList.add('hidden');
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'w-24 h-24 object-cover m-2'; // Estilo para las imágenes previsualizadas
-                    previewContainer.appendChild(img);
-                };
-
-                reader.readAsDataURL(file); // Leer cada archivo como Data URL
-            }
-        }
-
-        // Función para previsualizar múltiples videos
-        function previewVideos(event) {
-            const input = event.target;
-            const files = input.files; // Obtener todos los archivos seleccionados
-            const previewContainer = document.getElementById('video-preview-container');
-
-            // Limpiar el contenedor antes de mostrar nuevos videos
-            previewContainer.innerHTML = '';
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const url = URL.createObjectURL(file); // Crear un URL temporal para el video
-
-                const video = document.createElement('video');
-                video.src = url;
-                video.className = 'w-24 h-24 object-cover m-2'; // Estilo para los videos previsualizados
-                video.controls = true; // Agregar controles para reproducir el video
-                previewContainer.appendChild(video);
+                // Asegurarse de que el video quede pausado al cargar
+                videoPreview.load();
+                videoPreview.pause(); // Pausar el video
             }
         }
     </script>
