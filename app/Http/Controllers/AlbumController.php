@@ -274,18 +274,19 @@ class AlbumController extends Controller
         $accion = $request->accion;
         $tipoAlbum = (int) $request->tipoAlbum;
         $idAlbumEspecifico = $request->idAlbumEspecifico;
-        // Valida los datos
-        $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
 
-        // Verifica si la validación falló
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
-                'type' => 'Warning',
-                'message' => 'Error al cargar datos.',
-            ]);
-        }
 
         if ($accion == '2') {
+            // Valida los datos
+            $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
+
+            // Verifica si la validación falló
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
+                    'type' => 'Warning',
+                    'message' => 'Error al cargar datos.',
+                ]);
+            }
             // MODIFICAR
             $albumDatos = AlbumDatos::findOrFail($idAlbumEspecifico);
             if ($request->has('titulo')) {
