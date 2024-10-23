@@ -66,7 +66,7 @@
                         <div class="text-center mt-4">
                             <a href={{ route('registro') }} class='text-black'>
                                 <button
-                                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                     ¡Regístrate Gratis!
                                 </button>
                             </a>
@@ -125,7 +125,7 @@
                     <div class="flex justify-center">
                         <a href={{ route('underConstruction') }} class='text-black'>
                             <button
-                                class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                 ¡Accede a Contenido Premium!
                             </button>
                         </a>
@@ -137,7 +137,13 @@
         @auth
             {{-- En caso de ser 1 o 2 --}}
             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                <h1>jap</h1>
+                <a href={{ route('descargas') }}>
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        Manejar Descargas
+                    </button>
+                </a>
+
                 {{-- <div class="grid grid-cols-2 gap-4  z-10 relative">
                     <div class="text-black text-2xl">
                         <p>Selecciona cómo deseas ver:</p>
@@ -239,7 +245,7 @@
                             <form id="payment-form" action="{{ url('/create-preference') }}" method="POST">
                                 @csrf
                                 <button id="checkout-btn" type="button"
-                                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                     ¡Accede a Contenido Premium!
                                 </button>
                             </form>
@@ -294,7 +300,8 @@
                             </li>
                         </ul>
                         <div class="flex ">
-                            <img src="{{ asset('img/superfan_ladoIzq.png') }}" alt="Lado Izquierdo" class="object-cover">
+                            <img src="{{ asset('img/superfan_ladoIzq.png') }}" alt="Lado Izquierdo"
+                                class="object-cover">
                         </div>
                     </div>
 

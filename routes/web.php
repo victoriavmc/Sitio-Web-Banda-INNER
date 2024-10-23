@@ -302,6 +302,8 @@ Route::put('/artistas/{id}/modificar-imagen', [JobsController::class, 'modificar
 // VER STAFF
 Route::get('/job/staff', [JobsController::class, 'indexStaff'])
     ->name('staff');
+
+Route::get('/descargas', [SuperFanController::class, 'descargas'])->name('descargas');
 ##################################################################################################
 //------------------------ CARPETA UTILS (ALBUMS) ------------------------
 // VER ALBUM Musica

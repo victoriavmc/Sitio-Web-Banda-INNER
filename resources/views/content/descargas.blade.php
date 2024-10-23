@@ -10,6 +10,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white">
+                @dd($albumInfo)
                 <tr>
                     <td class="py-4 px-6 border-b border-gray-200">John Doe</td>
                     <td class="py-4 px-6 border-b border-gray-200 truncate">johndoe@gmail.com</td>
