@@ -28,8 +28,8 @@ class MercadoPagoController extends Controller
 
         // Paso 2: Información del comprador (esto puedes obtenerlo desde el usuario autenticado) 
         $payer = [
-            "name" => $request->input('name', 'John'), // Puedes obtener el nombre del request o usar un valor predeterminado
-            "surname" => $request->input('surname', 'Doe'),
+            "name" => $request->input('name'), // Puedes obtener el nombre del request o usar un valor predeterminado
+            "surname" => $request->input('surname'),
             "email" => $request->input('email', 'TESTUSER1956922157'),
         ];
 
@@ -66,7 +66,7 @@ class MercadoPagoController extends Controller
             throw new Exception("El token de acceso de Mercado Pago no está configurado.");
         }
         MercadoPagoConfig::setAccessToken($mpAccessToken);
-        MercadoPagoConfig::setRuntimeEnviroment(MercadoPagoConfig::SANDBOX);
+        MercadoPagoConfig::setRuntimeEnviroment(MercadoPagoConfig::LOCAL);
     }
 
     // Función para crear la estructura de preferencia 
@@ -76,14 +76,11 @@ class MercadoPagoController extends Controller
             "excluded_payment_methods" => [],
             "installments" => 12,
             "default_installments" => 1
-
         ];
 
         $backUrls = [
-
-            'success' => route('mercadopago.success'),
+            'success' => route('mercadopago.success'),  // Redirige aquí después del pago exitoso
             'failure' => route('mercadopago.failed')
-
         ];
 
         $request = [
@@ -91,12 +88,64 @@ class MercadoPagoController extends Controller
             "payer" => $payer,
             "payment_methods" => $paymentMethods,
             "back_urls" => $backUrls,
-            "statement_descriptor" => "TIENDA ONLINE",
-            "external_reference" => "1234567890",
+            "statement_descriptor" => "INNER",
+            "external_reference" => "1234567890",  // Un identificador único
             "expires" => false,
-            "auto_return" => 'approved',
-
+            "auto_return" => 'approved'
         ];
+
         return $request;
+    }
+
+    private function getPaymentDetails($paymentId)
+    {
+        $this->authenticate();  // Asegúrate de que la autenticación esté lista
+
+        try {
+            $client = new \MercadoPago\Client\Payment\PaymentClient();
+            $payment = $client->get($paymentId);
+
+            return [
+                'id' => $payment->id,
+                'monto' => $payment->transaction_amount,
+                'estado' => $payment->status,
+                'metodo' => $payment->payment_method_id,
+                'email_comprador' => $payment->payer->email,
+                'nombre_comprador' => $payment->payer->first_name ?? 'N/A',
+                'apellido_comprador' => $payment->payer->last_name ?? 'N/A',
+                'descripcion' => $payment->description,
+                'fecha_pago' => $payment->date_approved ?? 'Fecha no disponible',
+            ];
+        } catch (Exception $e) {
+            Log::error('Error al obtener los detalles del pago: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        // Obtener los datos enviados por la query string de Mercado Pago
+        $paymentId = $request->query('payment_id');
+
+        if (!$paymentId) {
+            return response()->json(['error' => 'ID de pago no encontrado'], 400);
+        }
+
+        // Obtener los detalles del pago usando el payment_id
+        $paymentDetails = $this->getPaymentDetails($paymentId);
+
+        dd($paymentDetails);
+
+        if (!$paymentDetails) {
+            return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
+        }
+
+        // Guardar los detalles del pago en la base de datos (ejemplo)
+        // Suscripcion::create($paymentDetails);
+
+        return response()->json([
+            'success' => 'Pago registrado correctamente',
+            'data' => $paymentDetails
+        ]);
     }
 }

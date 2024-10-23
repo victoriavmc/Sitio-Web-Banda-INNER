@@ -16,6 +16,8 @@ use App\Http\Controllers\SuperFanController;
 use App\Http\Controllers\cancionController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\MercadoPagoWebhookController;
+
 #Modelo
 use App\Models\Paisnacimiento;
 use App\Models\Reportes;
@@ -393,10 +395,11 @@ Route::delete('reportes/eliminar-motivo-admin/{id}', [ReportesController::class,
 Route::view('/mercadopago', 'mptest')
     ->name('mercadopago');
 
-Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
-
-Route::get('/mercadopago/success', [MercadoPagoController::class, 'success'])
-    ->name('mercadopago.success');
+Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference'])
+    ->name('mercadopago.create_preference');
 
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])
     ->name('mercadopago.failed');
+
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSuccess'])
+    ->name('mercadopago.success');
