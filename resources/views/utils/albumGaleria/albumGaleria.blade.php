@@ -49,59 +49,63 @@
                 @else
                     <div class="mx-auto grid justify-items-stretch gap-4 md:grid-cols-2 lg:gap-10">
                         @foreach ($listaAlbumI as $album)
-                            <div class="relative flex h-[300px] items-end">
-                                <!-- Muestra solo la primera imagen -->
-                                <img src="{{ asset(Storage::url($album['medios'][0])) }}" alt="{{ $album['titulo'] }}"
-                                    class="inline-block h-full w-full rounded-lg object-cover" />
-                                <div
-                                    class="absolute bottom-5 left-5 flex flex-col justify-center rounded-lg bg-white px-8 py-4">
-                                    <p class="text-sm font-medium sm:text-xl">{{ $album['titulo'] }}</p>
-                                    <p class="text-sm sm:text-base">{{ $album['fecha'] }}</p>
-                                    <p class="text-sm text-red-500 sm:text-sm">Contenido:
-                                        {{ $album['cantidadAlbum'] }}</p>
+                            {{-- Redirecciono a cada album interno --}}
+                            <a href="">
+                                <div class="relative flex h-[300px] items-end">
+                                    <!-- Muestra solo la primera imagen -->
+                                    <img src="{{ asset(Storage::url($album['medios'][0])) }}"
+                                        alt="{{ $album['titulo'] }}"
+                                        class="inline-block h-full w-full rounded-lg object-cover" />
+                                    <div
+                                        class="absolute bottom-5 left-5 flex flex-col justify-center rounded-lg bg-white px-8 py-4">
+                                        <p class="text-sm font-medium sm:text-xl">{{ $album['titulo'] }}</p>
+                                        <p class="text-sm sm:text-base">{{ $album['fecha'] }}</p>
+                                        <p class="text-sm text-red-500 sm:text-sm">Contenido:
+                                            {{ $album['cantidadAlbum'] }}</p>
+                                    </div>
+                                    {{-- Boton de borrar --}}
+                                    <form action="{{ route('eliminarAlbumEspecifico') }}" id="btnEliminarAlbum"
+                                        method="POST">
+                                        @csrf
+                                        @method('POST')
+                                        <input type="hidden" name="accion" value=3>
+                                        <input type="hidden" name="tipoAlbum" value=3>
+                                        <input type="hidden" name="idAlbumEspecifico"
+                                            value="{{ $album['idAlbumEspecifico'] }}">
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                            <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+
+                                    {{-- Modificar album especifico --}}
+                                    <form action="{{ route('crear-album') }}" method="GET">
+                                        @csrf
+                                        <input type="hidden" name="accion" value=2>
+                                        <input type="hidden" name="tipoAlbum" value=3>
+
+                                        <input type="hidden" name="idAlbumEspecifico"
+                                            value="{{ $album['idAlbumEspecifico'] }}">
+
+                                        <button type="submit"
+                                            class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max">
+                                            <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
-                                {{-- Boton de borrar --}}
-                                <form action="{{ route('eliminarAlbumEspecifico') }}" id="btnEliminarAlbum"
-                                    method="POST">
-                                    @csrf
-                                    @method('POST')
-                                    <input type="hidden" name="accion" value=3>
-                                    <input type="hidden" name="tipoAlbum" value=3>
-                                    <input type="hidden" name="idAlbumEspecifico"
-                                        value="{{ $album['idAlbumEspecifico'] }}">
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                        <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                    </button>
-                                </form>
-
-                                {{-- Modificar album especifico --}}
-                                <form action="{{ route('crear-album') }}" method="GET">
-                                    @csrf
-                                    <input type="hidden" name="accion" value=2>
-                                    <input type="hidden" name="tipoAlbum" value=3>
-
-                                    <input type="hidden" name="idAlbumEspecifico"
-                                        value="{{ $album['idAlbumEspecifico'] }}">
-
-                                    <button type="submit"
-                                        class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold p-1 border-b-4 border-blue-700 hover:border-blue-500 rounded w-max">
-                                        <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
+                            </a>
                         @endforeach
 
                     </div>

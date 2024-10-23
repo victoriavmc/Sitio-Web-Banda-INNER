@@ -7,7 +7,6 @@ use App\Models\AlbumImagenes;
 use App\Models\AlbumMusical;
 use App\Models\AlbumVideo;
 use App\Models\Cancion;
-use App\Models\DatosPersonales;
 use App\Models\Imagenes;
 use App\Models\RevisionImagenes;
 use App\Models\Videos;
@@ -26,8 +25,7 @@ class AlbumController extends Controller
 
         $idAlbumEspecifico = null;
         $imagen = null;
-        $videos = null;
-        $imagenes = null;
+        $video = null;
 
         $titulo = '';
         switch ($tipoAlbum) {
@@ -47,7 +45,7 @@ class AlbumController extends Controller
 
         switch ($accion) {
             case 1:
-                return view('components.manejo-album', compact('accion', 'tipoAlbum', 'titulo', 'imagen'));
+                return view('components.manejo-album', compact('accion', 'tipoAlbum', 'titulo', 'imagen', 'video'));
                 break;
 
             case 2:
@@ -61,8 +59,11 @@ class AlbumController extends Controller
                     $fechaSubida = $album->fechaSubido;
 
                     switch ($tipoAlbum) {
+
                         case 1:
+
                             $albumMusical = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+
                             if ($albumMusical) {
                                 $revisionImagen = $albumMusical->revisionimagenes ?? null;
                                 $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
@@ -70,47 +71,28 @@ class AlbumController extends Controller
                             break;
 
                         case 2:
-                            $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
-                            // Obtener la información de los videos asociados al álbum
+
+                            $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+
                             if ($albumVideo) {
-                                $videos = []; // Crear un array para almacenar los videos
-                                foreach ($albumVideo as $video) {
-                                    $videoDetails = Videos::find($video->videos_idvideos);
-                                    if ($videoDetails) {
-                                        $videos[] = [
-                                            'id' => $videoDetails->idvideos,
-                                            'ruta' => $videoDetails->subidaVideo,
-                                            'fechaSubido' => $videoDetails->fechaSubidoVideo,
-                                        ];
-                                    }
+                                $videoDetails = Videos::find($albumVideo->videos_idvideos);
+                                if ($videoDetails) {
+                                    $video = $videoDetails->subidaVideo;
                                 }
-                            } else {
-                                $videos = []; // Si no hay videos, inicializar como array vacío
                             }
                             break;
 
                         case 3:
-                            $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+
+                            $albumImagenes = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
                             // Obtener la información de las imágenes asociadas al álbum
                             if ($albumImagenes) {
-                                $imagenes = []; // Crear un array para almacenar las imágenes
-                                foreach ($albumImagenes as $albumImg) {
-                                    $imagenDetails = Imagenes::find($albumImg->revisionImagenes_idrevisionImagenescol);
-                                    if ($imagenDetails) {
-                                        $imagenes[] = [
-                                            'id' => $imagenDetails->idimagenes,
-                                            'ruta' => $imagenDetails->subidaImg,
-                                            'fechaSubido' => $imagenDetails->fechaSubidaImg,
-                                        ];
-                                    }
-                                }
-                            } else {
-                                $imagenes = []; // Si no hay imágenes, inicializar como array vacío
+                                $revisionImagen = $albumImagenes->revisionimagenes ?? null;
+                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
                             }
                             break;
                     }
-
-                    return view('components.manejo-album', compact('accion', 'tipoAlbum', 'idAlbumEspecifico', 'titulo', 'tituloAlbum', 'fechaSubida', 'imagen', 'videos', 'imagenes'));
+                    return view('components.manejo-album', compact('accion', 'tipoAlbum', 'tituloAlbum', 'titulo', 'idAlbumEspecifico', 'fechaSubida', 'imagen', 'video'));
                 }
 
                 break;
@@ -130,12 +112,11 @@ class AlbumController extends Controller
             // Álbum de tipo 1: solo una imagen
             $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
         } elseif ($tipoAlbum == 2) {
-            // Álbum de tipo 2: solo videos
-            $rules['videos.*'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
+            // Álbum de tipo 2: solo un video
+            $rules['video'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
         } elseif ($tipoAlbum == 3) {
-            // Álbum de tipo 3: varias imágenes
-            $rules['imagenes'] = 'required|array|min:2'; // Al menos 2 imágenes
-            $rules['imagenes.*'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048'; // Cada imagen
+            // Álbum de tipo 3: solo una imagen
+            $rules['imagen'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
         }
 
         return $rules;
@@ -176,7 +157,6 @@ class AlbumController extends Controller
             ]);
         }
 
-
         if ($accion == '1') {
 
             // Crea Album
@@ -201,24 +181,26 @@ class AlbumController extends Controller
 
 
                 case "2":
-                    foreach ($request->videos as $video) {
-                        $albumVideo = new AlbumVideo();
-                        // Asigna el ID del álbum
-                        $albumVideo->albumDatos_idalbumDatos = $album->idalbumDatos;
+                    $albumVideo = new AlbumVideo();
+                    // Asigna el ID del álbum
+                    $albumVideo->albumDatos_idalbumDatos = $album->idalbumDatos;
 
-                        // Guarda el video en el sistema de archivos y obtén la ruta
-                        $path = $video->store('video', 'public');
+                    // Asigna el archivo de video a la variable
+                    $videoFile = $request->file('video');
 
-                        $video = new Videos();
-                        // Guarda la ruta en la base de datos
-                        $video->subidaVideo = $path;
-                        $video->fechaSubidoVideo = now();
-                        $video->contenidoDescargable = 'No';
-                        $video->save();
-                        // Guardar el registro del video en la base de datos
-                        $albumVideo->videos_idvideos = $video->idvideos;
-                        $albumVideo->save();
-                    }
+                    // Ahora puedes usar $videoFile para almacenar el archivo
+                    $path = $videoFile->store('video', 'public');
+
+                    // Crea la instancia de Videos y guarda la ruta
+                    $video = new Videos();
+                    $video->subidaVideo = $path;
+                    $video->fechaSubidoVideo = now();
+                    $video->contenidoDescargable = 'No';
+                    $video->save();
+
+                    // Asigna el ID del video al álbum
+                    $albumVideo->videos_idvideos = $video->idvideos;
+                    $albumVideo->save();
 
                     // Redirigir a la ruta después de guardar los videos
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
@@ -228,15 +210,11 @@ class AlbumController extends Controller
 
                     break;
                 case "3":
-                    if ($request->hasFile('imagenes')) {
-                        foreach ($request->file('imagenes') as $imagen) { // Usar file('imagenes') para múltiples archivos
-                            $revImg = $this->guardarImagenSiExiste($imagen);
-                            $albumImagenes = new AlbumImagenes();
-                            $albumImagenes->albumDatos_idalbumDatos = $album->idalbumDatos;
-                            $albumImagenes->revisionImagenes_idrevisionImagenescol = $revImg ? $revImg->idrevisionImagenescol : null;
-                            $albumImagenes->save();
-                        }
-                    }
+                    $revImg = $this->guardarImagenSiExiste($request->file('imagen'));
+                    $albumImagen = new AlbumImagenes();
+                    $albumImagen->albumDatos_idalbumDatos = $album->idalbumDatos;
+                    $albumImagen->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+                    $albumImagen->save();
 
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'success',
@@ -247,7 +225,7 @@ class AlbumController extends Controller
     }
 
     #ACTUALIZO SI ES QUE TIENE PARA ACTUALIZAR
-    public function actualizarImagen($album, Request $request)
+    public function actualizarImagen($album, Request $request, $tipoAlbum)
     {
         $revImg = RevisionImagenes::find($album->revisionImagenes_idrevisionImagenescol);
 
@@ -255,11 +233,18 @@ class AlbumController extends Controller
             $imagen = Imagenes::find($revImg->imagenes_idimagenes);
 
             if ($imagen) {
-                // Eliminar la referencia en albummusical, si es necesario
-                $albumMusical = AlbumMusical::where('revisionImagenes_idrevisionImagenescol', $revImg->idrevisionImagenescol)->first();
-                if ($albumMusical) {
-                    $albumMusical->revisionImagenes_idrevisionImagenescol = null;
-                    $albumMusical->save();
+                // Eliminar la referencia en albummusical o albumimagenes según el tipo de álbum
+                $album2 = null;
+
+                if ($tipoAlbum == 1) { // Musical
+                    $album2 = AlbumMusical::where('revisionImagenes_idrevisionImagenescol', $revImg->idrevisionImagenescol)->first();
+                } elseif ($tipoAlbum == 3) { // Imágenes
+                    $album2 = AlbumImagenes::where('revisionImagenes_idrevisionImagenescol', $revImg->idrevisionImagenescol)->first();
+                }
+
+                if ($album2) {
+                    $album->revisionImagenes_idrevisionImagenescol = null;
+                    $album->save();
                 }
 
                 // Eliminar la revisión de imagen
@@ -274,21 +259,31 @@ class AlbumController extends Controller
         }
 
         // Guardar nueva imagen y obtener el objeto de revisión de imagen
-        $revImg = $this->guardarImagenSiExiste($request);
-        $album->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+        if ($request->file('imagen')) {
+            // Guarda la imagen y obtiene el objeto de revisión de imagen
+            $revImg = $this->guardarImagenSiExiste($request->file('imagen')); // Pasa el archivo subido aquí
 
-        // Asegúrate de guardar el álbum si ha habido cambios
-        $album->save();
+            // Asigna el ID de revisión de imagen al álbum
+            $album->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+            $album->save();
+        }
     }
 
     public function manejoAlbumEliminarModificar(Request $request)
     {
-
         $accion = $request->accion;
         $tipoAlbum = (int) $request->tipoAlbum;
         $idAlbumEspecifico = $request->idAlbumEspecifico;
+        // Valida los datos
+        $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
 
-
+        // Verifica si la validación falló
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
+                'type' => 'Warning',
+                'message' => 'Error al cargar datos.',
+            ]);
+        }
 
         if ($accion == '2') {
             // MODIFICAR
@@ -308,10 +303,8 @@ class AlbumController extends Controller
                     $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
 
                     if ($request->file('imagen')) {
-                        $this->actualizarImagen($album, $request);
+                        $this->actualizarImagen($album, $request, $tipoAlbum);
                     }
-
-                    $album->save();
 
                     return redirect()->route('discografia')->with('alertAlbum', [
                         'type' => 'Success',
@@ -320,49 +313,31 @@ class AlbumController extends Controller
                     break;
                 case 2:
                     // Videos
-                    $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
+                    $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+                    $idVideoEspecifico = $album->videos_idvideos;
+                    $video = Videos::find($idVideoEspecifico);
 
                     // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
-                    if ($request->has('videos')) { // Cambiar 'video' por 'videos' para que coincida con el nombre del input
-                        foreach ($request->videos as $videoFile) {
-                            // Guarda el video en el sistema de archivos y obtén la ruta
-                            $path = $videoFile->store('video', 'public');
+                    if ($request->has('videos')) {
+                        $video->delete();
+                        // Asigna el archivo de video a la variable
+                        $videoFile = $request->file('video');
 
-                            // Crea una nueva instancia del modelo Videos
-                            $video = new Videos();
-                            // Guarda la ruta y otros datos en la base de datos
-                            $video->subidaVideo = $path;
-                            $video->fechaSubidoVideo = now();
-                            $video->contenidoDescargable = 'No'; // Esto puede ser dinámico si lo necesitas
-                            $video->save();
+                        // Ahora puedes usar $videoFile para almacenar el archivo
+                        $path = $videoFile->store('video', 'public');
 
-                            // Crear un nuevo registro en AlbumVideo
-                            $albumVideo = new AlbumVideo();
-                            $albumVideo->albumDatos_idalbumDatos = $idAlbumEspecifico; // Asigna el ID del álbum
-                            $albumVideo->videos_idvideos = $video->idvideos; // Relaciona el video guardado
-                            $albumVideo->save(); // Guarda el álbum de video
-                        }
+                        // Crea la instancia de Videos y guarda la ruta
+                        $video = new Videos();
+                        $video->subidaVideo = $path;
+                        $video->fechaSubidoVideo = now();
+                        $video->contenidoDescargable = 'No';
+                        $video->save();
+
+                        // Asigna el ID del video al álbum
+                        $album->videos_idvideos = $video->idvideos;
                     }
 
-                    // Si se desea eliminar un video, se debe mostrar primero todos los videos con el mismo id de álbum de datos
-                    if ($request->has('eliminarVideo')) {
-                        $idVideoEspecifico = $request->eliminarVideo;
-
-                        // Busca y elimina el video específico del álbum
-                        $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)
-                            ->where('videos_idvideos', $idVideoEspecifico)
-                            ->first();
-
-                        if ($albumVideo) { // Asegúrate de que el álbum de video exista antes de intentar eliminarlo
-                            $albumVideo->delete();
-                            // También puedes eliminar el video del sistema de archivos si lo deseas
-                            $video = Videos::find($idVideoEspecifico);
-                            if ($video) {
-                                Storage::disk('public')->delete($video->subidaVideo); // Eliminar el video del almacenamiento
-                                $video->delete(); // Eliminar el video de la base de datos
-                            }
-                        }
-                    }
+                    $album->save();
 
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
@@ -370,37 +345,11 @@ class AlbumController extends Controller
                     ]);
                     break;
                 case 3:
-                    // Imagenes
-                    $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->get();
-                    // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
-                    if ($request->hasFile('imagenes')) {
-                        foreach ($request->file('imagenes') as $imagen) { // Usar file('imagenes') para múltiples archivos
-                            $revImg = $this->guardarImagenSiExiste($imagen);
-                            $albumImagenes = new AlbumImagenes();
-                            $albumImagenes->albumDatos_idalbumDatos = $idAlbumEspecifico;
-                            $albumImagenes->revisionImagenes_idrevisionImagenescol = $revImg ? $revImg->idrevisionImagenescol : null;
-                            $albumImagenes->save();
-                        }
-                    }
+                    $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
+                    $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
 
-                    // Si se desea eliminar una imagen, se debe mostrar primero todas las imagenes con el mismo id de álbum de datos
-                    if ($request->has('eliminarVideo')) {
-                        $idVideoEspecifico = $request->eliminarVideo;
-
-                        // Busca y elimina el video específico del álbum
-                        $albumVideo = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)
-                            ->where('videos_idvideos', $idVideoEspecifico)
-                            ->first();
-
-                        if ($albumVideo) { // Asegúrate de que el álbum de video exista antes de intentar eliminarlo
-                            $albumVideo->delete();
-                            // También puedes eliminar el video del sistema de archivos si lo deseas
-                            $video = Videos::find($idVideoEspecifico);
-                            if ($video) {
-                                Storage::disk('public')->delete($video->subidaVideo); // Eliminar el video del almacenamiento
-                                $video->delete(); // Eliminar el video de la base de datos
-                            }
-                        }
+                    if ($request->file('imagen')) {
+                        $this->actualizarImagen($album, $request, $tipoAlbum);
                     }
 
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
