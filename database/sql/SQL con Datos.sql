@@ -335,7 +335,7 @@ CREATE TABLE `historialusuario` (
   `idhistorialusuario` int NOT NULL AUTO_INCREMENT,
   `estado` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Activo',
   `eliminacionLogica` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'No',
-  `fechaInica` date DEFAULT NULL,
+  `fechaInicia` date DEFAULT NULL,
   `fechaFinaliza` date DEFAULT NULL,
   `datospersonales_idDatosPersonales` int NOT NULL,
   PRIMARY KEY (`idhistorialusuario`),

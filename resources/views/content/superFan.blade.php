@@ -242,10 +242,10 @@
                             Precio: $1000
                         </p>
                         <div class="flex justify-center">
-                            <form id="payment-form" action="{{ url('/create-preference') }}" method="POST">
+                            <form action="#" method="POST">
                                 @csrf
-                                <button id="checkout-btn" type="button"
-                                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                <button type="button"
+                                    class="btn-submit bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                     ¡Accede a Contenido Premium!
                                 </button>
                             </form>
@@ -300,8 +300,7 @@
                             </li>
                         </ul>
                         <div class="flex ">
-                            <img src="{{ asset('img/superfan_ladoIzq.png') }}" alt="Lado Izquierdo"
-                                class="object-cover">
+                            <img src="{{ asset('img/superfan_ladoIzq.png') }}" alt="Lado Izquierdo" class="object-cover">
                         </div>
                     </div>
 
@@ -312,4 +311,86 @@
             @endif
         @endauth
     </div>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        const mp = new MercadoPago("{{ env('MERCADO_PAGO_PUBLIC_KEY') }}");
+
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            const cantidad = parseInt(document.getElementById('quantity').value, 10);
+            const nombre = document.getElementById('phone').value;
+            const telefono = document.getElementById('phone').value;
+            const direccion = document.getElementById('address').value;
+
+            if (!cantidad || !telefono || !direccion) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Por favor, completa todos los campos del formulario.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            // Convertir el precio correctamente, permitiendo decimales
+            const precioInput = document.getElementById('product_price').value.replace(',', '.');
+            const unitPrice = parseFloat(precioInput);
+
+            if (isNaN(unitPrice) || unitPrice <= 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El precio debe ser un número válido mayor a 0.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            const orderData = {
+                product: [{
+                    id: document.getElementById('product_id').value,
+                    title: document.querySelector('.product-name').innerText,
+                    description: 'Descripción del producto',
+                    currency_id: "ARS", // Moneda en pesos argentinos
+                    quantity: cantidad,
+                    unit_price: unitPrice, // Usar el precio con decimales
+                }],
+                name: nombre,
+                surname: '',
+                email: '',
+                phone: telefono,
+                address: direccion,
+            };
+
+            console.log('Datos del pedido:', orderData);
+
+            fetch('/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(preference => {
+                    if (preference.error) {
+                        throw new Error(preference.error);
+                    }
+                    mp.checkout({
+                        preference: {
+                            id: preference.id
+                        },
+                        autoOpen: true
+                    });
+                    console.log('Respuesta de la preferencia:', preference);
+                })
+                .catch(error => console.error('Error al crear la preferencia:', error));
+        });
+    </script>
 </x-AppLayout>

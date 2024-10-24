@@ -375,36 +375,38 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
     ->name('reportarUsuario')->middleware('auth');
 
-Route::get('reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDecideReporte'])
+Route::get('/reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDecideReporte'])
     ->name('vistaDecideReporte')->middleware('auth');
 
-Route::post('reportes/decidir-reporte/{id}', [ReportesController::class, 'decideReportes'])
+Route::post('/reportes/decidir-reporte/{id}', [ReportesController::class, 'decideReportes'])
     ->name('decideReporte')->middleware('auth');
 
-Route::delete('repotes/eliminar-motivo/{id}', [ReportesController::class, 'eliminarMotivo'])
+Route::delete('/repotes/eliminar-motivo/{id}', [ReportesController::class, 'eliminarMotivo'])
     ->name('eliminarMotivo')->middleware('auth');
 
-Route::post('reportes/crear-motivo', [ReportesController::class, 'crearMotivo'])
+Route::post('/reportes/crear-motivo', [ReportesController::class, 'crearMotivo'])
     ->name('crearMotivo')->middleware('auth');
 
-Route::put('reportes/modificar-motivo/{id}', [ReportesController::class, 'modificarMotivo'])
+Route::put('/reportes/modificar-motivo/{id}', [ReportesController::class, 'modificarMotivo'])
     ->name('modificarMotivo')->middleware('auth');
 
-Route::delete('reportes/eliminar-motivo-admin/{id}', [ReportesController::class, 'eliminarMotivoAdmin'])
+Route::delete('/reportes/eliminar-motivo-admin/{id}', [ReportesController::class, 'eliminarMotivoAdmin'])
     ->name('eliminarMotivoAdmin')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
-Route::view('/mercadopago', 'mptest')
-    ->name('mercadopago');
+Route::view('/mercadopago', 'mptest')->name('mercadopago');
 
+// Crear preferencia de pago
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference'])
     ->name('mercadopago.create_preference');
 
+// Redirecciones de éxito y error
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])
     ->name('mercadopago.failed');
 
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSuccess'])
     ->name('mercadopago.success');
 
-Route::get('/mercadopago/comprobante', [MercadoPagoController::class, 'comprobantePdf'])
+// Vista y descarga del comprobante
+Route::get('/mercadopago/comprobante', [MercadoPagoController::class, 'ComprobantePdf'])
     ->name('mercadopago.comprobante');

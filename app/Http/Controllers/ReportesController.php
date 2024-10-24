@@ -14,7 +14,10 @@ use App\Models\Interacciones;
 use App\Models\ImagenesContenido;
 use App\Models\Reportes;
 use App\Models\Motivos;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Mail\msjInformeBaneo;
+use App\Mail\msjInformeReporte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -320,6 +323,7 @@ class ReportesController extends Controller
 
         // Obtengo el usuario reportado
         $usuario = Usuario::find($id);
+        $nombreCompleto = $usuario->datospersonales->nombreDP . ' ' . $usuario->datospersonales->apellidoDP;
 
         // Obtengo el reporte del usuario que fue reportado
         $reporte = Reportes::where('usuarios_idusuarios', $id)->first();
@@ -422,7 +426,7 @@ class ReportesController extends Controller
 
                     if ($historial) {
                         $historial->estado = 'Inactivo';
-                        $historial->fechaInica = now();
+                        $historial->fechaInicia = now();
                         $historial->fechaFinaliza = $request->fechaDesbaneo;
                         $historial->save();
                     }
@@ -430,6 +434,9 @@ class ReportesController extends Controller
 
                 // Redirigir según el rol del usuario
                 $route = ($usuario->rol_idrol === 2) ? 'panel-de-staff' : 'panel-de-usuarios';
+
+                // Enviar un mail
+                Mail::to($usuario->correoElectronicoUser)->send(new msjInformeBaneo($usuario->usuarioUser, $request->motivo, now(), $request->fechaDesbaneo));
 
                 return redirect()->route($route)->with('alertReporte', [
                     'type' => 'Success',
@@ -480,14 +487,14 @@ class ReportesController extends Controller
                 }
 
                 // Actualización del historial del usuario
-                $fechaInica = now();
+                $fechaInicia = now();
 
                 $idDato = DatosPersonales::where('usuarios_idusuarios', $id)->first();
                 $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
 
                 $historial->estado = 'Baneado';
                 $historial->eliminacionLogica = 'Si';
-                $historial->fechaInica = $fechaInica;
+                $historial->fechaInicia = $fechaInicia;
                 $historial->save();
 
                 // Actualización del usuario
@@ -536,7 +543,9 @@ class ReportesController extends Controller
 
                 $route = ($usuario->rol_idrol === 2) ? 'panel-de-staff' : 'panel-de-usuarios';
 
-                return redirect($route)->with('alertBorrar', [
+                Mail::to($usuario->correoElectronicoUser)->send(new msjInformeReporte($nombreCompleto));
+
+                return redirect($route)->with('alertReporte', [
                     'type' => 'Success',
                     'message' => 'Se ha baneado a la cuenta de manera permanente con éxito!',
                 ]);

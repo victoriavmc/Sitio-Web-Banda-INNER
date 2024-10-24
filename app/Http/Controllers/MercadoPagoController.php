@@ -109,6 +109,7 @@ class MercadoPagoController extends Controller
 
             return [
                 'factura' => $payment->id,
+                'descripcion' => $payment->description,
                 'monto' => $payment->transaction_amount,
                 'estadoPago' => $payment->status,
                 'metodoPago' => $payment->payment_method_id,
@@ -125,31 +126,25 @@ class MercadoPagoController extends Controller
 
     public function paymentSuccess(Request $request)
     {
-        // Obtener los datos enviados por la query string de Mercado Pago
         $paymentId = $request->query('payment_id');
 
         if (!$paymentId) {
             return response()->json(['error' => 'ID de pago no encontrado'], 400);
         }
 
-        // Obtener los detalles del pago usando el payment_id
         $paymentDetails = $this->getPaymentDetails($paymentId);
-
-        dd($paymentDetails);
 
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
         }
 
         // Guardar los detalles del pago en la base de datos (ejemplo)
-        OrdenPago::create($paymentDetails);
-        // Suscripcion::create($paymentDetails);
+        // OrdenPago::create($paymentDetails);
 
-        return response()->json([
-            'success' => 'Pago registrado correctamente',
-            'data' => $paymentDetails
-        ]);
+        // Renderizamos la vista con los detalles del pago
+        return view('payment-success', compact('paymentDetails'));
     }
+
 
     public function comprobantePdf(Request $request)
     {

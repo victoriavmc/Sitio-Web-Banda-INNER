@@ -10,6 +10,12 @@
         </x-alerts>
     @endif
 
+    @if (session('alertReporte'))
+        <x-alerts :type="session('alertReporte')['type']">
+            {{ session('alertReporte')['message'] }}
+        </x-alerts>
+    @endif
+
     @if (!$funciona)
         <div class="min-h-screen
     justify-center items-center">
