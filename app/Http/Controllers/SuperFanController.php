@@ -18,7 +18,8 @@ class SuperFanController extends Controller
 {
     public function indexSuperFan()
     {
-        return view('content.superFan');
+        $media = $this->descargaVer();
+        return view('content.superFan', ['media' => $media]);
     }
 
     //modificarPara Descargar
@@ -137,16 +138,76 @@ class SuperFanController extends Controller
         return view('content.descargas', ['media' => $media]);
     }
 
-
-    public function precioAgregar() {}
-
-    public function precioModificar() {}
-
-    public function precioMostrarTodosLosCargados() {}
-
-    public function precioMostrar()
+    //Ver solo lo que esta disponible descargar
+    public function descargaVer()
     {
-        // Traigo el precio de la base de datos
-        $ultimoPrecio = Precio::orderBy('idprecio', 'desc')->first();
+        // Album de datos para el título con su fecha
+        $albumDatos = AlbumDatos::all();
+        // Determinar el tipo de contenido del álbum
+        $tipo = [];
+        // Array para almacenar la información de las imágenes
+        $media = [];
+        foreach ($albumDatos as $albumDato) {
+            // Almacenar el título y la fecha del álbum
+            $tituloAlbum = $albumDato->tituloAlbum;
+            $fechaAlbum = $albumDato->fechaSubido;
+
+            // Relacionar con subidas de imágenes
+            $albumImagen = AlbumImagenes::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
+
+            foreach ($albumImagen as $imagen) {
+                $idImagen = $imagen->revisionImagenes->imagenes_idimagenes;
+                $imagen2 = Imagenes::where('idimagenes', $idImagen)->where('contenidoDescargable', 'Sí')->get();
+                foreach ($imagen2 as $imagenG) {
+                    $tipo = 'Imagen';
+                    $media[] = [
+                        'tipo' => $tipo,
+                        'tituloAlbum' => $tituloAlbum,
+                        'fechaAlbum' => $fechaAlbum,
+                        'id' => $imagen->albumImagenescol,
+                        'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default.jpg',
+                    ];
+                }
+            }
+
+            // Relacionar con videos
+            $albumVideos = AlbumVideo::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
+
+            foreach ($albumVideos as $video) {
+                $idVideo = $video->videos_idvideos;
+                $albumVideos = Videos::where('idvideos', $idVideo)->where('contenidoDescargable', 'Sí')->get();
+                $tipo = 'Video';
+                $media[] = [
+                    'tipo' => $tipo,
+                    'tituloAlbum' => $tituloAlbum,
+                    'fechaAlbum' => $fechaAlbum,
+                    'id' => $video->idalbumVideo,
+                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default.mp4',
+                ];
+            }
+
+            // Relacionar con canciones
+            $albumMusical = AlbumMusical::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
+
+            foreach ($albumMusical as $musica) {
+                $idMusica = $musica->idalbumMusical;
+
+                $cancionesAlbum = Cancion::where('albumMusical_idalbumMusical', $idMusica)->where('contenidoDescargable', 'Sí')->get();
+
+                foreach ($cancionesAlbum as $cancion) {
+                    $titulo = $tituloAlbum . ' - ' . $cancion->tituloCancion;
+                    $tipo = 'Cancion';
+                    $media[] = [
+                        'tipo' => $tipo,
+                        'tituloAlbum' => $titulo,
+                        'fechaAlbum' => $fechaAlbum,
+                        'id' => $cancion->idcancion,
+                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default.mp3',
+                    ];
+                }
+            }
+        }
+        // Retornar la información de los álbumes que se puedan descargar
+        return $media;
     }
 }
