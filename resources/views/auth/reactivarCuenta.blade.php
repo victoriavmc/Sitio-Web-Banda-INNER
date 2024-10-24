@@ -8,14 +8,14 @@
     @endif
 
     <div class="wrapper bg-center justify-center min-h-screen"
-        style="background-image: url('{{ asset('img/logeo/reactivar_fondo.jpg') }}');">
+        style="background-image: url('{{ asset('img/logeo/reactivar_fondo.webp') }}');">
         <div class="inner p-2 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
                 @if ($fotoDePerfil)
                     <img class="pequeño w-72 rounded-md" src="{{ asset($fotoDePerfil) }}" alt="AgusFacha">
                 @else
-                    <img class="pequeño w-72 rounded-md" src="{{ asset('img/logo_usuario.png') }}" alt="AgusFacha">
+                    <img class="pequeño w-72 rounded-md" src="{{ asset('img/logo_usuario.webp') }}" alt="AgusFacha">
                 @endif
             </div>
 

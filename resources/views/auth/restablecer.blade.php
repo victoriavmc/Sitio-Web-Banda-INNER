@@ -1,6 +1,6 @@
 <x-AppLayout title="Login" :login=true>
     <div class="bg-cover bg-center flex items-center min-h-screen justify-center"
-        style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_herni.jpg') }} ');">
+        style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_herni.webp') }} ');">
 
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"

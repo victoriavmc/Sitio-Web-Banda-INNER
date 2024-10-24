@@ -1,7 +1,7 @@
 <x-AppLayout title="Login" :login=true>
     <div class="min-h-screen
     bg-cover bg-center flex items-center justify-center"
-        style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_agus.png') }} ');">
+        style="background-image: url(' {{ asset('img/logeo/restablecer_fondo_agus.webp') }} ');">
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"
             x-init="gsap.from($el, { opacity: 0, y: 50, duration: 1, ease: 'back' });

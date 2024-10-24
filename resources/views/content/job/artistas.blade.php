@@ -8,7 +8,7 @@
                 <div class="grid grid-cols-1 gap-2 list-none md:grid-cols-3 lg:mt-10 max-w-5xl mx-auto" role="list">
                     <article
                         class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
-                        style="background-image: url('{{ asset('img/artistas/artistaA.jpg') }}'); background-size: cover; background-position: center;">
+                        style="background-image: url('{{ asset('img/artistas/artistaA.webp') }}'); background-size: cover; background-position: center;">
                         <div
                             class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
                             <h1
@@ -22,7 +22,7 @@
 
                     <article
                         class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
-                        style="background-image: url('{{ asset('img/artistas/artistac.jpg') }}'); background-size: cover; background-position: center;">
+                        style="background-image: url('{{ asset('img/artistas/artistaC.webp') }}'); background-size: cover; background-position: center;">
                         <div
                             class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
                             <h1
@@ -36,7 +36,7 @@
 
                     <article
                         class="mx-auto shadow-xl bg-cover bg-center h-[500px] w-full relative border-8 border-black mt-14 md:mt-0 transform duration-500 hover:-translate-y-12 group"
-                        style="background-image: url('{{ asset('img/artistas/artistaB.jpeg') }}'); background-size: cover; background-position: center;">
+                        style="background-image: url('{{ asset('img/artistas/artistaB.webp') }}'); background-size: cover; background-position: center;">
                         <div
                             class="h-full w-full bg-black bg-opacity-75 group-hover:bg-opacity-0 flex flex-col justify-end p-8 transition duration-300">
                             <h1
@@ -104,7 +104,7 @@
                             </div>
 
                             {{-- Verificar si el artista tiene imagen o usar la por defecto --}}
-                            <img src="{{ $artista['imagen'] ? asset(Storage::url($artista['imagen'])) : asset('img/artistas/imagenBloqueado.jpg') }}"
+                            <img src="{{ $artista['imagen'] ? asset(Storage::url($artista['imagen'])) : asset('img/artistas/imagenBloqueado.webp') }}"
                                 alt="{{ $artista['nombre'] }}" class="w-full h-[690px] object-cover" />
                         </a>
                     @else
@@ -127,7 +127,7 @@
                             </div>
 
                             {{-- Verificar si el artista tiene imagen o usar la por defecto --}}
-                            <img src="{{ $artista['imagen'] ? asset(Storage::url($artista['imagen'])) : asset('img/artistas/imagenBloqueado.jpg') }}"
+                            <img src="{{ $artista['imagen'] ? asset(Storage::url($artista['imagen'])) : asset('img/artistas/imagenBloqueado.webp') }}"
                                 alt="{{ $artista['nombre'] }}" class="w-full h-[690px] object-cover" />
                         </a>
                     @endif

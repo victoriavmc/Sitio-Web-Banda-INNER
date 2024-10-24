@@ -5,7 +5,7 @@
         </x-alerts>
     @endif
     <div class="bg-cover bg-bottom flex items-center min-h-screen justify-center"
-        style="background-image: url(' {{ asset('img/logeo/pin_fondo.jpg') }} ');">
+        style="background-image: url(' {{ asset('img/logeo/pin_fondo.webp') }} ');">
         <div x-data="{ email: '', password: '', name: '' }"
             class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl w-full max-w-md transform hover:scale-105 transition-all duration-300"
             x-init="gsap.from($el, { opacity: 0, y: 50, duration: 1, ease: 'back' });

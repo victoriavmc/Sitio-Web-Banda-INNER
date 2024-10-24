@@ -4,11 +4,11 @@
         <div class="flex-1 bg-indigo-100 flex-col text-center flex items-center justify-center p-4 lg:block">
             {{-- Album (ACHICAR) --}}
             <div class="flex items-center gap-4">
-                @if ($listaAlbum['imagen'] != 'imagen_por_defecto.jpg')
+                @if ($listaAlbum['imagen'] != 'logo_inner.webp')
                     <img src="{{ asset(Storage::url($listaAlbum['imagen'])) }}"
                         alt="{{ $listaAlbum['titulo'] }}"class="w-32 group-hover:w-36 group-hover:h-36 h-32 object-center object-cover rounded-full transition-all duration-500 delay-500 transform" />
                 @else
-                    <img src="{{ asset('img/logo_inner_negro.png') }}"
+                    <img src="{{ asset('img/logo_inner_negro.webp') }}"
                         alt="{{ $listaAlbum['titulo'] }}"class="w-32 group-hover:w-36 group-hover:h-36 h-32 object-center object-cover rounded-full transition-all duration-500 delay-500 transform" />
                 @endif
 
