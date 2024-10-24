@@ -16,15 +16,17 @@
                         Pago</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio
                     </th>
-
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de
+                        Venta
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comprador
                         Nombre y
                         Apellido</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo
                         del
                         Usuario</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario
-                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones
                     </th>
                 </tr>
@@ -38,7 +40,8 @@
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item['estadoPago'] }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item['metodoPago'] }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->precio->precio }}</td>
-
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ $item->precio->tipoServicio }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ $item['nombreComprador'] . ' ' . $item['apellidoComprador'] }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->usuario->correoElectronicoUser }}</td>
