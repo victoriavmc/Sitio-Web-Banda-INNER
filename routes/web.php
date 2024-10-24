@@ -18,7 +18,8 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\MercadoPagoWebhookController;
-
+// eliminar despues
+use App\Http\Controllers\Prueba;
 #Modelo
 use App\Models\Paisnacimiento;
 use App\Models\Reportes;
@@ -415,3 +416,6 @@ Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSucces
 // Vista y descarga del comprobante
 Route::get('/mercadopago/comprobante', [MercadoPagoController::class, 'ComprobantePdf'])
     ->name('mercadopago.comprobante');
+
+// Lista de comprobantes
+Route::get('/comprobantes', [Prueba::class, 'listarComprobantes'])->name('comprobantes.listar');
