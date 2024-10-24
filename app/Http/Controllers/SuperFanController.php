@@ -24,10 +24,10 @@ class SuperFanController extends Controller
     {
         // Album de datos para el título con su fecha
         $albumDatos = AlbumDatos::all();
-
-        // Crear un array para almacenar la información de todos los álbumes
-        $albumInfo = [];
-
+        // Determinar el tipo de contenido del álbum
+        $tipo = [];
+        // Array para almacenar la información de las imágenes
+        $media = [];
         foreach ($albumDatos as $albumDato) {
             // Almacenar el título y la fecha del álbum
             $tituloAlbum = $albumDato->tituloAlbum;
@@ -36,57 +36,60 @@ class SuperFanController extends Controller
             // Relacionar con subidas de imágenes
             $albumImagen = AlbumImagenes::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
 
-            $imagenes = []; // Array para almacenar la información de las imágenes
+
             foreach ($albumImagen as $imagen) {
-                $imagenes[] = [
-                    'idImagen' => $imagen->idalbumImagen,
-                    'rutaImagen' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default.jpg',
-                    'descargaImagen' => $imagen->revisionImagenes->imagenes->contenidoDescargable ?? '#',
+                $tipo = 'Imagen';
+                $media[] = [
+                    'tipo' => $tipo,
+                    'tituloAlbum' => $tituloAlbum,
+                    'fechaAlbum' => $fechaAlbum,
+                    'id' => $imagen->albumImagenescol,
+                    'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default.jpg',
+                    'descarga' => $imagen->revisionImagenes->imagenes->contenidoDescargable ?? '#',
+
                 ];
             }
 
             // Relacionar con videos
             $albumVideos = AlbumVideo::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
 
-            $videos = []; // Array para almacenar la información de los videos
             foreach ($albumVideos as $video) {
-                $videos[] = [
-                    'idVideo' => $video->idalbumVideo,
-                    'rutaVideo' => $video->videos->subidaVideo ?? 'ruta/default.mp4',
-                    'descargaVideo' => $video->videos->contenidoDescargable ?? '#',
+                $tipo = 'Video';
+                $media[] = [
+                    'tipo' => $tipo,
+                    'tituloAlbum' => $tituloAlbum,
+                    'fechaAlbum' => $fechaAlbum,
+                    'id' => $video->idalbumVideo,
+                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default.mp4',
+                    'descarga' => $video->videos->contenidoDescargable ?? '#',
                 ];
             }
 
             // Relacionar con canciones
             $albumMusical = AlbumMusical::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
 
-            $canciones = []; // Array para almacenar la información de las canciones
             foreach ($albumMusical as $musica) {
                 $idMusica = $musica->idalbumMusical;
 
                 $cancionesAlbum = Cancion::where('albumMusical_idalbumMusical', $idMusica)->get();
 
                 foreach ($cancionesAlbum as $cancion) {
-                    $canciones[] = [
-                        'idCancion' => $cancion->idcancion,
-                        'rutaCancion' => $cancion->archivoDsCancion ?? 'ruta/default.mp3',
-                        'descargaCancion' => $cancion->contenidoDescargable ?? '#',
+                    $titulo = $tituloAlbum . ' - ' . $cancion->tituloCancion;
+                    $tipo = 'Cancion';
+                    $media[] = [
+                        'tipo' => $tipo,
+                        'tituloAlbum' => $titulo,
+                        'fechaAlbum' => $fechaAlbum,
+                        'id' => $cancion->idcancion,
+                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default.mp3',
+                        'descarga' => $cancion->contenidoDescargable ?? '#',
                     ];
                 }
             }
-
-            // Agregar toda la información del álbum al array principal
-            $albumInfo[] = [
-                'tituloAlbum' => $tituloAlbum,
-                'fechaAlbum' => $fechaAlbum,
-                'imagenes' => $imagenes,
-                'videos' => $videos,
-                'canciones' => $canciones,
-            ];
         }
 
         // Retornar la vista con la información de los álbumes
-        return view('content.descargas', ['albumInfo' => $albumInfo]);
+        return view('content.descargas', ['media' => $media]);
     }
 
 
