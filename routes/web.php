@@ -405,3 +405,6 @@ Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])
 
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSuccess'])
     ->name('mercadopago.success');
+
+Route::get('/mercadopago/comprobante', [MercadoPagoController::class, 'comprobantePdf'])
+    ->name('mercadopago.comprobante');

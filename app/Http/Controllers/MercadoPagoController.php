@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrdenPago;
 use Illuminate\Http\Request;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Exceptions\MPApiException;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Models\Usuario; // Asegúrate de tener el modelo adecuado para tus usuarios
@@ -106,15 +108,14 @@ class MercadoPagoController extends Controller
             $payment = $client->get($paymentId);
 
             return [
-                'id' => $payment->id,
+                'factura' => $payment->id,
                 'monto' => $payment->transaction_amount,
-                'estado' => $payment->status,
-                'metodo' => $payment->payment_method_id,
+                'estadoPago' => $payment->status,
+                'metodoPago' => $payment->payment_method_id,
                 'email_comprador' => $payment->payer->email,
-                'nombre_comprador' => $payment->payer->first_name ?? 'N/A',
-                'apellido_comprador' => $payment->payer->last_name ?? 'N/A',
-                'descripcion' => $payment->description,
-                'fecha_pago' => $payment->date_approved ?? 'Fecha no disponible',
+                'nombreComprador' => $payment->payer->first_name ?? 'N/A',
+                'apellidoComprador' => $payment->payer->last_name ?? 'N/A',
+                'diaPago' => $payment->date_approved ?? 'Fecha no disponible',
             ];
         } catch (Exception $e) {
             Log::error('Error al obtener los detalles del pago: ' . $e->getMessage());
@@ -141,11 +142,35 @@ class MercadoPagoController extends Controller
         }
 
         // Guardar los detalles del pago en la base de datos (ejemplo)
+        OrdenPago::create($paymentDetails);
         // Suscripcion::create($paymentDetails);
 
         return response()->json([
             'success' => 'Pago registrado correctamente',
             'data' => $paymentDetails
         ]);
+    }
+
+    public function comprobantePdf(Request $request)
+    {
+        // Obtener los datos enviados por la query string de Mercado Pago
+        $paymentId = $request->query('payment_id');
+
+        if (!$paymentId) {
+            return response()->json(['error' => 'ID de pago no encontrado'], 400);
+        }
+
+        // Obtener los detalles del pago usando el payment_id
+        $paymentDetails = $this->getPaymentDetails($paymentId);
+
+        if (!$paymentDetails) {
+            return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
+        }
+
+        // Generar el PDF del comprobante
+        $pdf = PDF::loadView('comprobantePDF', compact('paymentDetails'));
+
+        // Descargar el PDF
+        return $pdf->stream('comprobante_pago.pdf');
     }
 }
