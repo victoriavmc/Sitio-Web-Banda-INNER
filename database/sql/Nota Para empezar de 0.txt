@@ -1,0 +1,38 @@
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE actividad;
+TRUNCATE TABLE albumdatos;
+TRUNCATE TABLE albumimagenes;
+TRUNCATE TABLE albummusical;
+TRUNCATE TABLE albumvideo;
+TRUNCATE TABLE artistas;
+TRUNCATE TABLE cancion;
+TRUNCATE TABLE comentarios;
+TRUNCATE TABLE contenidos;
+TRUNCATE TABLE datospersonales;
+TRUNCATE TABLE historialusuario;
+TRUNCATE TABLE imagenes;
+TRUNCATE TABLE imagenescontenido;
+TRUNCATE TABLE interacciones;
+TRUNCATE TABLE lugarlocal;
+TRUNCATE TABLE motivos;
+TRUNCATE TABLE notificaciones;
+TRUNCATE TABLE ordenpago;
+TRUNCATE TABLE paisnacimiento;
+TRUNCATE TABLE precio;
+TRUNCATE TABLE redessociales;
+TRUNCATE TABLE reportes;
+TRUNCATE TABLE revisionimagenes;
+TRUNCATE TABLE roles;
+TRUNCATE TABLE `show`;
+TRUNCATE TABLE staffextra;
+TRUNCATE TABLE tipoactividad;
+TRUNCATE TABLE tipocontenido;
+TRUNCATE TABLE tipofoto;
+TRUNCATE TABLE tipostaff;
+TRUNCATE TABLE ubicacionshow;
+TRUNCATE TABLE usuarios;
+TRUNCATE TABLE videos;
+TRUNCATE TABLE youtubeapi;
+SET FOREIGN_KEY_CHECKS = 1;
+
+#Despues actualizo, se eliminaran algunas tablas para luego normalizar la parte de multimedia.
