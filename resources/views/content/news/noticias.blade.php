@@ -7,7 +7,7 @@
     @endif
 
     <div class="min-h-screen bg-cover bg-center w-full p-10"
-        style="background-image: url('{{ asset('img/noticias_fondo.png') }}')">
+        style="background-image: url('{{ asset('img/noticias_fondo.webp') }}')">
         <div class="flex flex-col gap-4 px-8 pb-8">
             <div class="">
                 @auth
@@ -88,7 +88,7 @@
                                                 alt="ImagenPrincipal"
                                                 class="shadow-md rounded-lg bg-slate-50 w-full max-h-56">
                                         @else
-                                            <img src="{{ asset('img/logo_inner_negro.png') }}" alt="ImagenPrincipal"
+                                            <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="ImagenPrincipal"
                                                 class="shadow-md rounded-lg bg-slate-50 w-full max-h-56">
                                         @endif
                                     </a>

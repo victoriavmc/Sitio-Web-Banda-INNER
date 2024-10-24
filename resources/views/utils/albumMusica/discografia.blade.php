@@ -15,7 +15,7 @@
     <div class=" min-h-screen">
 
 
-        <div style="background-image: url({{ asset('/img/albums/musica/musica_fondo.jpg') }})"
+        <div style="background-image: url({{ asset('/img/albums/musica/musica_fondo.webp') }})"
             class="bg-cover bg-center flex justify-center items-center h-96">
             <div class="absolute bg-black bg-opacity-30 h-96 w-full"></div>
             <h3
@@ -94,8 +94,8 @@
                                 @endif
                             @endauth
 
-                            @if ($album['imagen'] == 'imagen_por_defecto.jpg')
-                                <img src="{{ asset('img/logo_inner_negro.png') }}" alt="{{ $album['titulo'] }}">
+                            @if ($album['imagen'] == 'logo_inner.webp')
+                                <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="{{ $album['titulo'] }}">
                             @else
                                 <img src="{{ asset(Storage::url($album['imagen'])) }}" alt="{{ $album['titulo'] }}">
                             @endif

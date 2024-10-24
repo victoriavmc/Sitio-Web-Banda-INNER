@@ -50,7 +50,7 @@
                             <div class="flex px-4 space-x-4 sm:px-8">
                                 <img id="imagen"
                                     class="cursor-pointer imagen-modal object-cover object-center w-full h-24 max-w-24 rounded-lg"
-                                    src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.png') }}"
+                                    src="{{ $imagen ? asset(Storage::url($imagen)) : asset('img/logo_usuario.webp') }}"
                                     alt="Foto de perfil">
                                 <div class="flex-1 py-2 space-y-4">
                                     <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
@@ -103,7 +103,7 @@
                                             class="relative tooltip">
                                             <img title=""
                                                 class="inline-block h-10 w-10 rounded-full ring-2 ring-gray-200 hover:scale-105 transform duration-100"
-                                                src="{{ $usuarioReporto['imagen'] ? asset(Storage::url($usuarioReporto['imagen'])) : asset('img/logo_usuario.png') }}"
+                                                src="{{ $usuarioReporto['imagen'] ? asset(Storage::url($usuarioReporto['imagen'])) : asset('img/logo_usuario.webp') }}"
                                                 alt="{{ $usuarioReporto['nombre'] }}">
                                             <span class="tooltip-text">
                                                 {{ $usuarioReporto['nombre'] }}<br>

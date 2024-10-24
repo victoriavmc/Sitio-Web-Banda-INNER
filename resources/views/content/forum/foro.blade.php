@@ -14,7 +14,7 @@
     @endif
 
     <div class="bg-cover min-h-screen bg-center w-full p-10"
-        style="background-image: url('{{ asset('img/foro_fondo.jpg') }}')">
+        style="background-image: url('{{ asset('img/foro_fondo.webp') }}')">
         <!-- Buscador -->
         <div class="flex items-center justify-center gap-4">
             <div class="w-full max-w-lg bg-white bg-opacity-70 rounded-lg shadow-xl">

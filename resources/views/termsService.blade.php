@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="flex justify-end w-full">
-            <img class="w-56" src="{{ asset('img/logo_inner_negro.png') }}" alt="">
+            <img class="w-56" src="{{ asset('img/logo_inner_negro.webp') }}" alt="">
         </div>
     </div>
 </x-AppLayout>

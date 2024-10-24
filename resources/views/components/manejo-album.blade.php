@@ -9,7 +9,7 @@
     <!-- Solo incluir este campo si la acción es modificar -->
 
     <div class="wrapper bg-center justify-center min-h-screen"
-        style="background-image: url('{{ asset('img/logeo/reactivar_fondo.jpg') }}');">
+        style="background-image: url('{{ asset('img/logeo/reactivar_fondo.webp') }}');">
         <div class=" p-5 bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-2xl transform z-10 flex">
             <form id="form-reactivar" class="grid grid-cols-2 gap-5" method="POST"
                 action="{{ $accion === 1 ? route('manejo-album', ['accion' => $accion, 'tipoAlbum' => $tipoAlbum]) : route('modificarAlbumEspecifico') }}"
@@ -30,7 +30,7 @@
                         style="background-image: url('{{ asset('storage/' . $imagen) }}'); background-size: cover; background-position: center;">
 
                         <!-- Mostrar el texto solo si la imagen es la imagen por defecto -->
-                        @if ($imagen === 'imagen_por_defecto.jpg')
+                        @if ($imagen === 'logo_inner.webp')
                             <p id="placeholder-text"
                                 class="absolute inset-0 flex flex-col items-center justify-center text-gray-700 text-base font-semibold transition-opacity duration-300 group-hover:opacity-0 z-10">
                                 <svg class="w-20 h-20 text-gray-800 dark:text-white" aria-hidden="true"
@@ -110,7 +110,7 @@
                         style="background-image: url('{{ asset('storage/' . $imagen) }}'); background-size: cover; background-position: center;">
 
                         <!-- Mostrar el texto solo si la imagen es la imagen por defecto -->
-                        @if ($imagen === 'imagen_por_defecto.jpg')
+                        @if ($imagen === 'logo_inner.webp')
                             <p id="placeholder-text"
                                 class="absolute inset-0 flex flex-col items-center justify-center text-gray-700 text-base font-semibold transition-opacity duration-300 group-hover:opacity-0 z-10">
                                 <svg class="w-20 h-20 text-gray-800 dark:text-white" aria-hidden="true"

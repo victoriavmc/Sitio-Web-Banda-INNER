@@ -66,9 +66,9 @@ class PanelUsuariosController extends Controller
         if ($existeFoto) {
             $idParaURL = $existeFoto->imagenes_idimagenes;
             $imagen = Imagenes::find($idParaURL);
-            return $imagen ? asset(Storage::url($imagen->subidaImg)) : asset('img/logo_usuario.png');
+            return $imagen ? asset(Storage::url($imagen->subidaImg)) : asset('img/logo_usuario.webp');
         } else {
-            return asset('img/logo_usuario.png');
+            return asset('img/logo_usuario.webp');
         }
     }
 

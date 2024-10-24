@@ -53,7 +53,7 @@
                 @else
                     <!-- Mostrar una imagen por defecto si no hay imágenes disponibles -->
                     <div class="w-full flex justify-center">
-                        <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                        <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="Imagen por defecto"
                             class="w-80 h-full inline-block object-cover">
                     </div>
                 @endif
@@ -94,7 +94,7 @@
                                         alt="Imagen de {{ $noticiaExtra->titulo }}"
                                         class=" inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @else
-                                    <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                    <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="Imagen por defecto"
                                         class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @endif
                                 <div class="flex flex-col gap-3 items-start pt-4 lg:px-8">
@@ -126,7 +126,7 @@
                                         alt="Imagen de {{ $eventos['nombreLugar'] }}"
                                         class="inline-block h-60 rounded-xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @else
-                                    <img src="{{ asset('img/logo_inner_negro.png') }}" alt="Imagen por defecto"
+                                    <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="Imagen por defecto"
                                         class="inline-block h-60 rounded=xl w-full object-cover md:h-32 lg:h-32 lg:w-32" />
                                 @endif
                                 <div class="flex flex-col gap-3 items-start pt-4 lg:px-8">

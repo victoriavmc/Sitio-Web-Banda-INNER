@@ -14,7 +14,7 @@
                         <li class="min-w-max">
                             <p aria-label="dashboard"
                                 class="relative flex items-center space-x-4 bg-gradient-to-r from-black to-gray-600 px-2 py-3 text-white">
-                                <img class="w-8" src="{{ asset('img/sidebar/logo_menu.png') }}" alt="LogoMenu">
+                                <img class="w-8" src="{{ asset('img/sidebar/logo_menu.webp') }}" alt="LogoMenu">
                                 <span class="-mr-1 font-medium">Menu</span>
                             </p>
                         </li>
@@ -139,7 +139,7 @@
                             <li class="min-w-max">
                                 <p aria-label="dashboard"
                                     class="relative flex items-center space-x-4 bg-gradient-to-r from-black to-gray-600 px-2.5 py-3 text-white">
-                                    <img class="w-7" src="{{ asset('img/sidebar/logo_administracion.png') }}"
+                                    <img class="w-7" src="{{ asset('img/sidebar/logo_administracion.webp') }}"
                                         alt="">
                                     <span class="-mr-1 font-medium">Administracion</span>
                                 </p>

@@ -48,7 +48,7 @@
 
             <!-- Logo centrado -->
             <a class="z-10 mx-4 xl:mx-8" href="{{ route('inicio') }}">
-                <img class="xl:w-52 w-40" src="{{ asset('img/logo_inner.png') }}" alt="">
+                <img class="xl:w-52 w-40" src="{{ asset('img/logo_inner.webp') }}" alt="">
             </a>
 
             <!-- Menú derecho -->
@@ -80,7 +80,7 @@
                 @else
                     <a href="{{ route('login') }}">
                         <img type="button" class="w-10 h-10 rounded-full border bg-white border-white cursor-pointer"
-                            src="{{ asset('img/logo_usuario.png') }}" alt="Login">
+                            src="{{ asset('img/logo_usuario.webp') }}" alt="Login">
                     </a>
                 @endif
             </div>
@@ -185,7 +185,7 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_deezer.png') }}"
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_deezer.webp') }}"
                                             alt="Deezer">
                                     </a>
                                 </li>
@@ -195,7 +195,7 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_spotify.png') }}"
+                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_spotify.webp') }}"
                                             alt="Spotify">
                                     </a>
                                 </li>
@@ -205,7 +205,7 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_youtube.png') }}"
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_youtube.webp') }}"
                                             alt="YouTube">
                                     </a>
                                 </li>
@@ -215,7 +215,8 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_apple.png') }}" alt="iTunes">
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_apple.webp') }}"
+                                            alt="iTunes">
                                     </a>
                                 </li>
                             @break
@@ -224,7 +225,7 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_amazon_music.png') }}"
+                                        <img class="w-6 mr-1" src="{{ asset('img/footer/logo_amazon_music.webp') }}"
                                             alt="Amazon Music">
                                     </a>
                                 </li>
@@ -234,7 +235,7 @@
                                 <li class="text-gray-400">
                                     <a href="{{ $link->linkRedSocial }}" target="_blank"
                                         class="flex items-center me-4 md:me-6">
-                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_instagram.png') }}"
+                                        <img class="w-5 mr-1" src="{{ asset('img/footer/logo_instagram.webp') }}"
                                             alt="Instagram">
                                     </a>
                                 </li>

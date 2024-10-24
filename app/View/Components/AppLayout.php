@@ -45,18 +45,18 @@ class AppLayout extends Component
                     // Obtener la URL de la imagen
                     $this->imagenPerfil = Storage::url($imagenBD->subidaImg);
                 } else {
-                    $this->imagenPerfil = asset('img/logo_usuario.png');
+                    $this->imagenPerfil = asset('img/logo_usuario.webp');
                 }
             } else {
                 // Si no hay foto en la revisión
-                $this->imagenPerfil = asset('img/logo_usuario.png');
+                $this->imagenPerfil = asset('img/logo_usuario.webp');
             }
 
             // Obtener el nombre de usuario
             $this->nombreUsuario = $usuario->usuarioUser;
         } else {
             // Usuario no autenticado
-            $this->imagenPerfil = asset('img/logo_usuario.png');
+            $this->imagenPerfil = asset('img/logo_usuario.webp');
         }
     }
     #Recupero las redes y muestro en la vista

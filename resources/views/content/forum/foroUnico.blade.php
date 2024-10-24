@@ -15,7 +15,7 @@
                     <div class="w-full flex justify-center sm:justify-start sm:w-auto">
                         <a href="{{ route('perfil-ajeno', $autor['usuario']->idusuarios) }}">
                             <img class="object-cover w-10 h-10 rounded-full"
-                                src="{{ $autor['ruta_imagen'] ? asset(Storage::url($autor['ruta_imagen'])) : asset('img/logo_usuario.png') }}"
+                                src="{{ $autor['ruta_imagen'] ? asset(Storage::url($autor['ruta_imagen'])) : asset('img/logo_usuario.webp') }}"
                                 alt="Imagen del usuario">
                         </a>
                     </div>
@@ -219,7 +219,7 @@
             <!-- Formulario para agregar un nuevo comentario -->
             @if (Auth::user()->rol->idrol != 4)
                 <div class="card-body flex mb-2 bg-white rounded-xl shadow-xl p-4 text-black">
-                    <img src="{{ $imagen['ruta_imagen'] ? asset(Storage::url($imagen['ruta_imagen'])) : asset('img/logo_usuario.png') }}"
+                    <img src="{{ $imagen['ruta_imagen'] ? asset(Storage::url($imagen['ruta_imagen'])) : asset('img/logo_usuario.webp') }}"
                         alt="Usuario" class="w-10 h-10 rounded-full">
                     <form action="{{ route('crearComentario', $recuperoPublicacion->idcontenidos) }}" method="POST"
                         enctype="multipart/form-data" class="w-full px-4">
@@ -262,7 +262,7 @@
                                 {{-- Foto de Perfil --}}
                                 <div class="flex justify-center mt-2">
                                     <div class="w-full flex justify-center sm:justify-start sm:w-auto">
-                                        <img src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.png') }}"
+                                        <img src="{{ $comentario['imagenAutor'] ? asset(Storage::url($comentario['imagenAutor'])) : asset('img/logo_usuario.webp') }}"
                                             alt="Usuario" class="w-10 h-10 rounded-full">
 
                                     </div>
