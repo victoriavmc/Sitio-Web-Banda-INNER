@@ -174,6 +174,11 @@ class AlbumController extends Controller
                     $albumMusical = new AlbumMusical();
                     $albumMusical->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumMusical->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+                    // Guardar archivo de canción (MP3)
+                    if ($request->hasFile('archivoDsCancion')) {
+                        $audioPath = $request->file('archivoDsCancion')->store('audios', 'public');
+                        $albumMusical->archivoDsCancion = $audioPath;
+                    }
                     $albumMusical->save();
 
                     return redirect()->route('discografia')->with('alertAlbum', [
@@ -313,6 +318,20 @@ class AlbumController extends Controller
                         $this->actualizarImagen($album, $request, $tipoAlbum);
                     }
 
+                    // Guardar archivo de canción (MP3)
+                    if ($request->hasFile('archivoDsCancion')) {
+
+                        // Borrar el archivo antiguo del almacenamiento
+                        if ($album->cancion->archivoDsCancion) {
+                            Storage::disk('public')->delete($album->cancion->archivoDsCancion);
+                        }
+
+                        // Subir el nuevo archivo de audio
+                        $audioPath = $request->file('archivoDsCancion')->store('audios', 'public');
+                        $album->cancion->archivoDsCancion = $audioPath;
+                    }
+                    $album->save();
+
                     return redirect()->route('discografia')->with('alertAlbum', [
                         'type' => 'Success',
                         'message' => 'Álbum modificado correctamente.',
@@ -370,6 +389,7 @@ class AlbumController extends Controller
                 case 1:
                     $album = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
                     $this->eliminarAlbumMusical($album);
+
                     break;
 
                 case 2:
@@ -412,10 +432,14 @@ class AlbumController extends Controller
     private function eliminarAlbumMusical($album)
     {
         if (!$album) return;
-
-        // Eliminar canciones asociadas
-        Cancion::where('albumMusical_idalbumMusical', $album->idalbumMusical)->delete();
-
+        // Eliminar canciones asociadas y sus archivos de audio
+        $canciones = Cancion::where('albumMusical_idalbumMusical', $album->idalbumMusical)->get();
+        foreach ($canciones as $cancion) {
+            if ($cancion->archivoDsCancion) {
+                Storage::disk('public')->delete($cancion->archivoDsCancion);
+            }
+            $cancion->delete();
+        }
         // Eliminar el álbum
         $album->delete();
 
