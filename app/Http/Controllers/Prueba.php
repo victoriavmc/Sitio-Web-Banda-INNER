@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrdenPago;
-use Illuminate\Http\Request;
+use App\Models\Precio;
 
 class Prueba extends Controller
 {
     // Mostrar index
     public function listarComprobantes()
     {
-        $comprobantes = OrdenPago::all();
+        // Cargar relaciones precio y usuario para evitar consultas adicionales
+        $comprobantes = OrdenPago::with(['precio', 'usuario'])->get();
+
         return view('api.ordendepago', compact('comprobantes'));
     }
 }

@@ -25,7 +25,7 @@ class OrdenPago extends Model
 
     public function precio()
     {
-        return $this->hasOne(Precio::class, 'precio_idprecio', 'idprecio');
+        return $this->belongsTo(Precio::class, 'precio_idprecio', 'idprecio');
     }
 
     public function show()
