@@ -232,11 +232,8 @@
                                 <iframe src="{{ $video['linkYt'] ?? '#' }}" width="100%" height="200"
                                     frameborder="0" allowfullscreen></iframe>
                                 <h1 class="text-lg font-bold mt-2">{{ $video['titulo'] }}</h1>
-                                <!-- Título destacado -->
                                 <p class="text-sm text-gray-600">{{ $video['fecha'] }}</p>
-                                <!-- Fecha en un tono gris -->
                             </div>
-
                             @if (($index + 1) % 5 == 0 && $index != count($listaYt) - 1)
                                 <!-- Cierra la fila después de 5 videos -->
                                 <div class="flex flex-wrap justify-between gap-5">

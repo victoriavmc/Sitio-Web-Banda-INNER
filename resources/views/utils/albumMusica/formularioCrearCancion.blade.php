@@ -49,7 +49,7 @@
                         {{-- Aca deberia ser Insertar Mp3 --}}
                         <div class="w-full px-3 mb-8">
                             <label
-                                class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-green-400 bg-white p-6 text-center"
+                                class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-red-400 bg-white p-6 text-center"
                                 for="archivoDsCancion">
                                 <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Archivo de la Canción
                                 </h2>
@@ -62,7 +62,7 @@
 
                     <div class="w-full md:w-full px-3 mb-6">
                         <button
-                            class="appearance-none block w-full bg-green-700 text-gray-100 font-bold border border-gray-200 rounded-lg py-3 px-3 leading-tight hover:bg-green-600 focus:outline-none focus:bg-white focus:border-gray-500">Agregar
+                            class="appearance-none block w-full bg-red-700 text-gray-100 font-bold border border-gray-200 rounded-lg py-3 px-3 leading-tight hover:bg-red-600 focus:outline-none focus:bg-white focus:border-gray-500">Agregar
                             Cancion al Album</button>
                     </div>
 

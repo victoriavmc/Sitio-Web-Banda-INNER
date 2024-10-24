@@ -175,6 +175,10 @@ class CancionController extends Controller
     public function eliminarCancion($id)
     {
         $cancion = Cancion::findOrFail($id);
+        // Borrar el archivo antiguo del almacenamiento
+        if ($cancion->archivoDsCancion) {
+            Storage::disk('public')->delete($cancion->archivoDsCancion);
+        }
         $cancion->delete();
 
         return redirect()->back()->with('alertCancion', [

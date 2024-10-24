@@ -76,13 +76,14 @@
                             </a>
                         </li>
                         <li class="min-w-max">
-                            <a href="{{ route('underConstruction') }}"
+                            <a href="{{ route('notificaciones') }}"
                                 class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path class="fill-current text-gray-600 group-hover:text-red-500"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20">
+                                    <path
+                                        class="fill-current group-hover:fill-red-500 {{ Request::is('notificaciones') ? 'text-red-500' : 'text-gray-600' }}"
                                         d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                                    <path class="fill-current text-gray-300 group-hover:text-red-300"
+                                    <path
+                                        class="fill-current group-hover:fill-red-300 {{ Request::is('notificaciones') ? 'text-red-300' : 'text-gray-300' }}"
                                         d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
                                 </svg>
                                 <span
