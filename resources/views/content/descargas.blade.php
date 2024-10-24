@@ -1,7 +1,12 @@
 <x-AppLayout>
-    <div class="min-h-screen">
+    @if (session('alertAlbum'))
+        <x-alerts :type="session('alertAlbum')['type']">
+            {{ session('alertAlbum')['message'] }}
+        </x-alerts>
+    @endif
+    <div class="min-h-screen p-5">
         <div class="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
-            <table class="w-full table-fixed">
+            <table class="w-full table-fixed gap-2">
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="w-1/4 py-4 px-4 text-left text-gray-600 font-bold uppercase">Muestra</th>
@@ -9,12 +14,11 @@
                         <th class="w-1/4 py-4 px-4 text-left text-gray-600 font-bold uppercase">Fecha Album</th>
                         <th class="w-1/4 py-4 px-4 text-left text-gray-600 font-bold uppercase">Tipo</th>
                         <th class="w-1/4 py-4 px-4 text-left text-gray-600 font-bold uppercase">Descargar</th>
-                        <th></th>
+                        <th class="w-1/4 py-4 px-4 text-left text-gray-600 font-bold uppercase">Permitir descarga</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @foreach ($media as $item)
-                        {{-- @dd($media) --}}
                         <tr>
                             <td class="py-4 px-4 border-b border-gray-200">
                                 {{-- Muestra imagen/video o cancion --}}
@@ -80,8 +84,14 @@
                                 @endif
                             </td>
                             <td class="py-4 px-4 border-b border-gray-200">
-                                <button type="button"
-                                    class="mr-3 text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modificar</button>
+                                <form action="{{ route('descargarAlbumMusical') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="tipo" value="{{ $item['tipo'] }}">
+                                    <input type="hidden" name="idEspecifico" value="{{ $item['id'] }}">
+                                    <input type="hidden" name="descarga" value="{{ $item['descarga'] }}">
+                                    <button type="submit"
+                                        class="mr-3 text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modificar</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

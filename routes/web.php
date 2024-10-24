@@ -304,6 +304,8 @@ Route::get('/job/staff', [JobsController::class, 'indexStaff'])
     ->name('staff');
 
 Route::get('/descargas', [SuperFanController::class, 'descargas'])->name('descargas');
+
+Route::post('/descargas', [SuperFanController::class, 'descargarAlbumMusical'])->name('descargarAlbumMusical');
 ##################################################################################################
 //------------------------ CARPETA UTILS (ALBUMS) ------------------------
 // VER ALBUM Musica

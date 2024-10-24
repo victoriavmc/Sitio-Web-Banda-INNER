@@ -220,7 +220,7 @@ class AlbumController extends Controller
                     $albumImagen->save();
 
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
-                        'type' => 'success',
+                        'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
                     ]);
             }
@@ -500,7 +500,7 @@ class AlbumController extends Controller
             }
             // Redireccionar con mensaje de éxito
             return redirect()->back()->with('success', [
-                'type' => 'success',
+                'type' => 'Success',
                 'message' => 'Objeto eliminado correctamente.'
             ]);
         }
@@ -566,7 +566,7 @@ class AlbumController extends Controller
             }
 
             return redirect()->back()->with('alertAlbum', [
-                'type' => 'success',
+                'type' => 'Success',
                 'message' => 'Videos añadidos correctamente.',
             ]);
         } else {
@@ -584,7 +584,7 @@ class AlbumController extends Controller
             }
 
             return redirect()->back()->with('alertAlbum', [
-                'type' => 'success',
+                'type' => 'Success',
                 'message' => 'Imágenes añadidas correctamente.',
             ]);
         }
