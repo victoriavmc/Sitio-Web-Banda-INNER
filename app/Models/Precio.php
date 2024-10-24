@@ -17,4 +17,15 @@ class Precio extends Model
 
     // Desactivamos el timestamp por defecto de Laravel
     public $timestamps = false;
+
+    // Evento para establecer el estado por defecto
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($precio) {
+            $precio->estadoPrecio = 'Activo';
+            $precio->fechaPrecio = now();
+        });
+    }
 }

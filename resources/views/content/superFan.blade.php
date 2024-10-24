@@ -94,6 +94,12 @@
                         Manejar Descargas
                     </button>
                 </a>
+                <a href={{ route('descargas') }}>
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        Manejar Precio
+                    </button>
+                </a>
             @elseif (Auth::user()->rol->idrol == 4)
                 <div class="grid grid-cols-2 h-full gap-4 z-10 relative">
                     {{-- Lado Izquierdo Fans --}}
