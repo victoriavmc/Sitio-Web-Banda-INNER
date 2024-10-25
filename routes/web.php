@@ -416,7 +416,7 @@ Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSucces
     ->name('mercadopago.success')->middleware('auth');
 
 // Vista y descarga del comprobante
-Route::get('/mercadopago/comprobante/{id}', [MercadoPagoController::class, 'ComprobantePdf'])
+Route::get('/mercadopago/comprobante/{id}', [MercadoPagoController::class, 'comprobantePdf'])
     ->name('mercadopago.comprobante')->middleware('auth');
 
 // Lista de comprobantes
@@ -426,3 +426,7 @@ Route::get('/comprobantes', [ComprobantesController::class, 'listarComprobantes'
 // Descargar comprobantes en Excel
 Route::get('/comprobantes/excel', [ComprobantesController::class, 'descargarExcel'])
     ->name('descargar.excel')->middleware('auth');
+
+// Orden de Pago del Usuario
+Route::get('/ordenes-de-pago', [ComprobantesController::class, 'listarComprobantesUsuarioEspecifico'])
+    ->name('orden-de-pago')->middleware('auth');

@@ -4,6 +4,7 @@
 namespace App\Exports;
 
 use App\Models\OrdenPago;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -18,7 +19,7 @@ class ComprobantesExport implements FromCollection, WithHeadings, WithMapping, W
     public function collection()
     {
         // Cargar las relaciones necesarias para obtener todos los datos requeridos
-        return OrdenPago::with(['precio', 'usuario'])->get();
+        return OrdenPago::with(['precio', 'usuario'])->where('usuarios_idusuarios', Auth::user()->idusuarios)->get();
     }
 
     public function headings(): array

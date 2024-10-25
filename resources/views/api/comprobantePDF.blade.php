@@ -104,14 +104,16 @@
             <div class="header-info">
                 <p>Fecha: <span class="date">{{ $paymentDetails['diaPago'] }}</span></p>
                 <p>Número: <span class="number">{{ $paymentDetails['factura'] }}</span></p>
-                <p>Cantidad: <span class="amount">${{ number_format($paymentDetails['monto'], 2) }}</span></p>
+                <p>Cantidad: <span class="amount">${{ number_format($paymentDetails->precio['precio'], 2) }}</span></p>
             </div>
         </div>
         <div class="divider"></div>
         <div>
             <div class="item">
                 <p class="item-title">Descripción de compra</p>
-                <p class="item-value">{{ $paymentDetails['descripcion'] }}</p>
+                <p class="item-value">
+                    {{ $paymentDetails->precio['tipoServicio'] === 'Suscripcion' ? 'Suscripción Permanente a INNER!' : $paymentDetails->precio['tipoServicio'] }}
+                </p>
             </div>
             <div class="item">
                 <p class="item-title">Método de pago</p>
@@ -138,7 +140,7 @@
             </div>
             <div class="item">
                 <p class="item-title">Email del comprador</p>
-                <p class="item-value">{{ $paymentDetails['email_comprador'] }}</p>
+                <p class="item-value">{{ $email }}</p>
             </div>
             <div class="item">
                 <p class="item-title">Estado del Pago</p>

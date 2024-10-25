@@ -1,4 +1,4 @@
-<x-AppLayout>
+<x-Opciones>
     <div class="min-h-screen px-5">
         <h1 class="text-center text-4xl mt-10 mb-5 font-medium">Lista de Comprobantes</h1>
 
@@ -20,7 +20,7 @@
         </div>
 
         <!-- Contenedor para desplazamiento horizontal -->
-        <div class="overflow-x-auto">
+        <div class="container mx-auto overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
@@ -96,4 +96,4 @@
             </div>
         </div>
     </div>
-</x-AppLayout>
+</x-Opciones>

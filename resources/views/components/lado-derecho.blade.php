@@ -58,15 +58,100 @@
             Recibir descuentos a la hora de comprar entradas!
         </li>
     </ul>
-    <p class="text-center text-2xl text-red-600 font-bold">
-        Precio: $16
-    </p>
-    <div class="flex justify-center">
-        <a href={{ route('underConstruction') }} class='text-black'>
-            <button
-                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                ¡Accede a Contenido Premium!
+    <form action="#" method="POST" class="order-form">
+        @csrf
+        <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
+            Precio: ${{ $ultimoPrecio }} <span class="text-sm">(Solo efectivo o
+                transferencia)</span>
+        </p>
+
+        <h1 class="hidden product-name">Suscripcion Permanente a INNER!</h1>
+
+        <input type="hidden" id="name" name="name" value="{{ $usuario->datospersonales->nombreDP }}"
+            required />
+
+        <input type="hidden" id="surname" name="surname" value="{{ $usuario->datospersonales->apellidoDP }}"
+            required />
+
+        <input type="hidden" id="email" name="email" value="{{ $usuario->correoElectronicoUser }}" required />
+
+        <input type="hidden" id="product_id" value="1234567890" />
+        <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" />
+
+        <div class="flex justify-center">
+            <button id="checkout-btn" type="button"
+                class=" flex items-center gap-1 px-2 bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                <span class="icon-credit-card text-xl text-center mb-1.5">💳</span>
+                <p>¡Accede a Contenido Premium!</p>
             </button>
-        </a>
-    </div>
+        </div>
+    </form>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        const mp = new MercadoPago("{{ env('MERCADO_PAGO_PUBLIC_KEY') }}");
+
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            // Capturar datos del formulario
+            const nombre = document.getElementById('name').value;
+            const apellido = document.getElementById('surname').value;
+            const email = document.getElementById('email').value;
+            const productId = document.getElementById('product_id').value;
+            const productPrice = parseFloat(document.getElementById('product_price').value);
+
+            if (!nombre || !apellido || !email) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Por favor, completa todos los campos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            const orderData = {
+                product: [{
+                    id: productId,
+                    title: 'Suscripción',
+                    quantity: 1,
+                    currency_id: "ARS",
+                    unit_price: productPrice,
+                }],
+                name: nombre,
+                surname: apellido,
+                email: email,
+            };
+
+            console.log('Datos del pedido:', orderData);
+
+            // Enviar los datos al backend para crear la preferencia de pago
+            fetch('/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(preference => {
+                    if (preference.error) {
+                        throw new Error(preference.error);
+                    }
+                    mp.checkout({
+                        preference: {
+                            id: preference.id
+                        },
+                        autoOpen: true
+                    });
+                    console.log('Respuesta de la preferencia:', preference);
+                })
+                .catch(error => console.error('Error al crear la preferencia:', error));
+        });
+    </script>
 </div>

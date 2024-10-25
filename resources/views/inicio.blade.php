@@ -41,10 +41,6 @@
         </h3>
         @if ($shows->isEmpty())
             <p class=" text-2xl text-white">No hay shows registrados</p>
-            <a href="{{ route('comprobantes.listar') }}"
-                class="bg-red-500 hover:bg-red-700 transition-all duration-300 text-white flex items-center gap-1 p-2 rounded-md">
-                <span class="font-bold">LISTA DE COMPROBANTES</span>
-            </a>
         @else
             <div class="swiper">
                 <div class="slide-content mb-10">

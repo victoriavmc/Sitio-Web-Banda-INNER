@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ComprobantePago;
 use App\Models\OrdenPago;
 use Illuminate\Http\Request;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Exceptions\MPApiException;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Models\Usuario; // Asegúrate de tener el modelo adecuado para tus usuarios
@@ -28,17 +31,17 @@ class MercadoPagoController extends Controller
             return response()->json(['error' => 'Los datos del producto son requeridos.'], 400);
         }
 
-        // Paso 2: Información del comprador (esto puedes obtenerlo desde el usuario autenticado) 
+        // Paso 2: Información del comprador
         $payer = [
-            "name" => $request->input('name'), // Puedes obtener el nombre del request o usar un valor predeterminado
+            "name" => $request->input('name'),
             "surname" => $request->input('surname'),
-            "email" => $request->input('email', 'TESTUSER1956922157'),
+            "email" => $request->input('email'),
         ];
 
-        // Paso 3: Crear la solicitud de preferencia 
+        // Paso 3: Crear la solicitud de preferencia
         $requestData = $this->createPreferenceRequest($product, $payer);
 
-        // Paso 4: Crear la preferencia con el cliente de preferencia 
+        // Paso 4: Crear la preferencia con el cliente de preferencia
         $client = new PreferenceClient();
 
         try {
@@ -59,7 +62,6 @@ class MercadoPagoController extends Controller
         }
     }
 
-
     // Autenticación con Mercado Pago 
     protected function authenticate()
     {
@@ -76,12 +78,19 @@ class MercadoPagoController extends Controller
     {
         $paymentMethods = [
             "excluded_payment_methods" => [],
-            "installments" => 12,
+
+            // Excluir pago con tarjeta de crédito
+            "excluded_payment_types" => [
+                ["id" => "credit_card"],
+            ],
+
+            // Eliminar cuotas
+            "installments" => 1,
             "default_installments" => 1
         ];
 
         $backUrls = [
-            'success' => route('mercadopago.success'),  // Redirige aquí después del pago exitoso
+            'success' => route('mercadopago.success'),
             'failure' => route('mercadopago.failed')
         ];
 
@@ -91,7 +100,7 @@ class MercadoPagoController extends Controller
             "payment_methods" => $paymentMethods,
             "back_urls" => $backUrls,
             "statement_descriptor" => "INNER",
-            "external_reference" => "1234567890",  // Un identificador único
+            "external_reference" => "1234567890",
             "expires" => false,
             "auto_return" => 'approved'
         ];
@@ -113,9 +122,9 @@ class MercadoPagoController extends Controller
                 'monto' => $payment->transaction_amount,
                 'estadoPago' => $payment->status,
                 'metodoPago' => $payment->payment_method_id,
-                'email_comprador' => $payment->payer->email,
-                'nombreComprador' => $payment->payer->first_name ?? 'N/A',
-                'apellidoComprador' => $payment->payer->last_name ?? 'N/A',
+                'nomreComprador' => $payment->payer->first_name ?? 'Nombre no disponible',
+                'apellidoComprador' => $payment->payer->last_name ?? 'Apellido no disponible',
+                'emailComprador' => $payment->payer->email,
                 'diaPago' => $payment->date_approved ?? 'Fecha no disponible',
             ];
         } catch (Exception $e) {
@@ -139,24 +148,44 @@ class MercadoPagoController extends Controller
         }
 
         // Guardar los detalles del pago en la base de datos
-        OrdenPago::create($paymentDetails);
+        $OrdenPago = new OrdenPago();
+        $OrdenPago->factura = $paymentDetails['factura'];
+        $OrdenPago->metodoPago = $paymentDetails['metodoPago'];
+        $OrdenPago->diaPago = $paymentDetails['diaPago'];
+        $OrdenPago->estadoPago = $paymentDetails['estadoPago'];
+        $OrdenPago->emailComprador = $paymentDetails['emailComprador'];
+        $OrdenPago->nombreComprador =  $paymentDetails['nomreComprador'];
+        $OrdenPago->apellidoComprador = $paymentDetails['apellidoComprador'];
+        $OrdenPago->precio_idprecio = 1;
+        $OrdenPago->usuarios_idusuarios = Auth::user()->idusuarios;
+        $OrdenPago->save();
+
+        Mail::to(Auth::user()->correoElectronicoUser)->send(new ComprobantePago($paymentDetails));
+
+        // Usar el tipo de servicio para actualizar el rol del usuario
+        if ($paymentDetails['descripcion'] == 'Suscripción') {
+            // Actualizar el estado de la suscripción
+            $usuario = Usuario::find(Auth::user()->idusuarios);
+            $usuario->rol_idrol = 3; // Cambiar el rol
+            $usuario->save();
+        }
 
         // Renderizamos la vista con los detalles del pago
-        return view('payment-success', compact('paymentDetails'));
+        return view('api.payment-success', compact('paymentDetails'));
     }
 
-
-    public function comprobantePdf(Request $request, $id)
+    public function comprobantePdf($id)
     {
         // Obtener datos de la base de datos
-        $paymentDetails = OrdenPago::find($id);
+        $paymentDetails = OrdenPago::where('factura', $id)->first();
+        $email = $paymentDetails->usuario->correoElectronicoUser;
 
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
         }
 
         // Generar el PDF del comprobante
-        $pdf = PDF::loadView('comprobantePDF', compact('paymentDetails'));
+        $pdf = PDF::loadView('api.comprobantePDF', compact('paymentDetails', 'email'));
 
         // Descargar el PDF
         return $pdf->stream('comprobante_pago.pdf');

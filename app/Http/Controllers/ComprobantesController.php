@@ -29,9 +29,9 @@ class ComprobantesController extends Controller
     // En caso de que sea de un usuario
     public function listarComprobantesUsuarioEspecifico()
     {
-        $idusuario = Auth::user()->idusuarios;
+        $idusuarios = Auth::user()->idusuarios;
 
-        $comprobantes = OrdenPago::where('idusuario', $idusuario)->with(['precio', 'usuario'])->paginate(10);
+        $comprobantes = OrdenPago::where('usuarios_idusuarios', $idusuarios)->with(['precio', 'usuario'])->paginate(10);
 
         return view('api.usuarioordendepago', compact('comprobantes'));
     }
