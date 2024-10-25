@@ -83,16 +83,18 @@
                                     <span class="bg-red-500 text-white py-1 px-2 rounded-full text-xs">No</span>
                                 @endif
                             </td>
-                            <td class="py-4 px-4 border-b border-gray-200">
-                                <form action="{{ route('descargarAlbumMusical') }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="tipo" value="{{ $item['tipo'] }}">
-                                    <input type="hidden" name="idEspecifico" value="{{ $item['id'] }}">
-                                    <input type="hidden" name="descarga" value="{{ $item['descarga'] }}">
-                                    <button type="submit"
-                                        class="mr-3 text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modificar</button>
-                                </form>
-                            </td>
+                            @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
+                                <td class="py-4 px-4 border-b border-gray-200">
+                                    <form action="{{ route('descargarAlbumMusical') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="tipo" value="{{ $item['tipo'] }}">
+                                        <input type="hidden" name="idEspecifico" value="{{ $item['id'] }}">
+                                        <input type="hidden" name="descarga" value="{{ $item['descarga'] }}">
+                                        <button type="submit"
+                                            class="mr-3 text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modificar</button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
