@@ -28,6 +28,7 @@ TRUNCATE TABLE staffextra;
 TRUNCATE TABLE tipoactividad;
 TRUNCATE TABLE tipocontenido;
 TRUNCATE TABLE tipofoto;
+TRUNCATE TABLE tiponotificación;
 TRUNCATE TABLE tipostaff;
 TRUNCATE TABLE ubicacionshow;
 TRUNCATE TABLE usuarios;
