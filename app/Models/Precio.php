@@ -28,4 +28,10 @@ class Precio extends Model
             $precio->fechaPrecio = now();
         });
     }
+
+    // Relación inversa con el modelo OrdenPago
+    public function ordenesPago()
+    {
+        return $this->hasMany(OrdenPago::class, 'precio_idprecio', 'idprecio');
+    }
 }

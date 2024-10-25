@@ -41,7 +41,7 @@ class AlbumController extends Controller
         }
 
 
-        $imagen = 'imagen_por_defecto.jpg'; // Valor por defecto
+        $imagen = 'logo_inner.webp'; // Valor por defecto
 
         switch ($accion) {
             case 1:
@@ -66,7 +66,7 @@ class AlbumController extends Controller
 
                             if ($albumMusical) {
                                 $revisionImagen = $albumMusical->revisionimagenes ?? null;
-                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
+                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'logo_inner.webp';
                             }
                             break;
 
@@ -88,7 +88,7 @@ class AlbumController extends Controller
                             // Obtener la información de las imágenes asociadas al álbum
                             if ($albumImagenes) {
                                 $revisionImagen = $albumImagenes->revisionimagenes ?? null;
-                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'imagen_por_defecto.jpg';
+                                $imagen = $revisionImagen ? $revisionImagen->imagenes->subidaImg : 'logo_inner.webp';
                             }
                             break;
                     }
@@ -312,7 +312,7 @@ class AlbumController extends Controller
                 case 1:
                     //Musical
                     $album = AlbumMusical::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-                    $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
+                    $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
 
                     if ($request->file('imagen')) {
                         $this->actualizarImagen($album, $request, $tipoAlbum);
@@ -372,7 +372,7 @@ class AlbumController extends Controller
                     break;
                 case 3:
                     $album = AlbumImagenes::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
-                    $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
+                    $imagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
 
                     if ($request->file('imagen')) {
                         $this->actualizarImagen($album, $request, $tipoAlbum);

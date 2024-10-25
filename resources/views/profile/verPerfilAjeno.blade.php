@@ -6,7 +6,7 @@
         </x-alerts>
     @endif
 
-    <div class="bg-cover p-10 min-h-screen" style="background-image: url('{{ asset('img/perfil_fondo.jpg') }}')">
+    <div class="bg-cover p-10 min-h-screen" style="background-image: url('{{ asset('img/perfil_fondo.webp') }}')">
         @if (session('alertInicioSesion'))
             <x-alerts :type="session('alertInicioSesion')['type']">
                 {{ session('alertInicioSesion')['message'] }}
@@ -31,7 +31,7 @@
                                         <img id="imagen" src='{{ asset(Storage::url($imagen)) }}'
                                             class="imagen-modal cursor-pointer w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
                                     @else
-                                        <img src='{{ asset('img/logo_usuario.png') }}'
+                                        <img src='{{ asset('img/logo_usuario.webp') }}'
                                             class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
                                     @endif
 

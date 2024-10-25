@@ -180,157 +180,83 @@
                         </div>
                     </div>
 
-                    <<<<<<< HEAD {{-- Lado Derecho - SuperFans --}} <div class="text-white text-2xl">Beneficios para SuperFans
-                        <ul class="list-none pl-0">
-                            <li>Ya registrado si te suscribis podras:</li>
-                            <li class="flex items-center mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                    <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="1.5">
-                                        <path
-                                            d="M9.713 3.64c.581-.495.872-.743 1.176-.888a2.58 2.58 0 0 1 2.222 0c.304.145.595.393 1.176.888c.599.51 1.207.768 2.007.831c.761.061 1.142.092 1.46.204c.734.26 1.312.837 1.571 1.572c.112.317.143.698.204 1.46c.063.8.32 1.407.83 2.006c.496.581.744.872.889 1.176c.336.703.336 1.52 0 2.222c-.145.304-.393.595-.888 1.176a3.3 3.3 0 0 0-.831 2.007c-.061.761-.092 1.142-.204 1.46a2.58 2.58 0 0 1-1.572 1.571c-.317.112-.698.143-1.46.204c-.8.063-1.407.32-2.006.83c-.581.496-.872.744-1.176.889a2.58 2.58 0 0 1-2.222 0c-.304-.145-.595-.393-1.176-.888a3.3 3.3 0 0 0-2.007-.831c-.761-.061-1.142-.092-1.46-.204a2.58 2.58 0 0 1-1.571-1.572c-.112-.317-.143-.698-.204-1.46a3.3 3.3 0 0 0-.83-2.006c-.496-.581-.744-.872-.89-1.176a2.58 2.58 0 0 1 .001-2.222c.145-.304.393-.595.888-1.176c.52-.611.769-1.223.831-2.007c.061-.761.092-1.142.204-1.46a2.58 2.58 0 0 1 1.572-1.571c.317-.112.698-.143 1.46-.204a3.3 3.3 0 0 0 2.006-.83" />
-                                        <path
-                                            d="M12.5 14.5V8.6a.6.6 0 0 1 .6-.6h1.4m-2 6.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0" />
-                                    </g>
-                                </svg>
-                                Crear contenido y comentar en el foro.
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                    <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="1.5">
-                                        <path
-                                            d="M9.713 3.64c.581-.495.872-.743 1.176-.888a2.58 2.58 0 0 1 2.222 0c.304.145.595.393 1.176.888c.599.51 1.207.768 2.007.831c.761.061 1.142.092 1.46.204c.734.26 1.312.837 1.571 1.572c.112.317.143.698.204 1.46c.063.8.32 1.407.83 2.006c.496.581.744.872.889 1.176c.336.703.336 1.52 0 2.222c-.145.304-.393.595-.888 1.176a3.3 3.3 0 0 0-.831 2.007c-.061.761-.092 1.142-.204 1.46a2.58 2.58 0 0 1-1.572 1.571c-.317.112-.698.143-1.46.204c-.8.063-1.407.32-2.006.83c-.581.496-.872.744-1.176.889a2.58 2.58 0 0 1-2.222 0c-.304-.145-.595-.393-1.176-.888a3.3 3.3 0 0 0-2.007-.831c-.761-.061-1.142-.092-1.46-.204a2.58 2.58 0 0 1-1.571-1.572c-.112-.317-.143-.698-.204-1.46a3.3 3.3 0 0 0-.83-2.006c-.496-.581-.744-.872-.89-1.176a2.58 2.58 0 0 1 .001-2.222c.145-.304.393-.595.888-1.176c.52-.611.769-1.223.831-2.007c.061-.761.092-1.142.204-1.46a2.58 2.58 0 0 1 1.572-1.571c.317-.112.698-.143 1.46-.204a3.3 3.3 0 0 0 2.006-.83" />
-                                        <path
-                                            d="M12.5 14.5V8.6a.6.6 0 0 1 .6-.6h1.4m-2 6.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0" />
-                                    </g>
-                                </svg>
-                                Descargar todos los fondos de pantalla disponibles.
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                    <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="1.5">
-                                        <path
-                                            d="M9.713 3.64c.581-.495.872-.743 1.176-.888a2.58 2.58 0 0 1 2.222 0c.304.145.595.393 1.176.888c.599.51 1.207.768 2.007.831c.761.061 1.142.092 1.46.204c.734.26 1.312.837 1.571 1.572c.112.317.143.698.204 1.46c.063.8.32 1.407.83 2.006c.496.581.744.872.889 1.176c.336.703.336 1.52 0 2.222c-.145.304-.393.595-.888 1.176a3.3 3.3 0 0 0-.831 2.007c-.061.761-.092 1.142-.204 1.46a2.58 2.58 0 0 1-1.572 1.571c-.317.112-.698.143-1.46.204c-.8.063-1.407.32-2.006.83c-.581.496-.872.744-1.176.889a2.58 2.58 0 0 1-2.222 0c-.304-.145-.595-.393-1.176-.888a3.3 3.3 0 0 0-2.007-.831c-.761-.061-1.142-.092-1.46-.204a2.58 2.58 0 0 1-1.571-1.572c-.112-.317-.143-.698-.204-1.46a3.3 3.3 0 0 0-.83-2.006c-.496-.581-.744-.872-.89-1.176a2.58 2.58 0 0 1 .001-2.222c.145-.304.393-.595.888-1.176c.52-.611.769-1.223.831-2.007c.061-.761.092-1.142.204-1.46a2.58 2.58 0 0 1 1.572-1.571c.317-.112.698-.143 1.46-.204a3.3 3.3 0 0 0 2.006-.83" />
-                                        <path
-                                            d="M12.5 14.5V8.6a.6.6 0 0 1 .6-.6h1.4m-2 6.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0" />
-                                    </g>
-                                </svg>
-                                Descargar todas las canciones disponibles.
-                            </li>
-                            {{-- <li>- Reaccionar con "like" o "dislike" (sin poder comentar)</li> --}}
-                        </ul>
-                        <p class="text-center text-2xl text-red-600 font-bold">
-                            Precio: $1000
-                        </p>
-                        <div class="flex justify-center">
-                            <form action="#" method="POST">
-                                @csrf
-                                <button type="button"
-                                    class="btn-submit bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                    ¡Accede a Contenido Premium!
-                                </button>
-                            </form>
-                        </div>
-
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
+                    {{-- Lado Derecho SuperFan --}}
+                    <x-lado-derecho>
+                    </x-lado-derecho>
                 </div>
-                =======
-                {{-- Lado Derecho SuperFan --}}
-                <x-lado-derecho>
-                </x-lado-derecho>
-                >>>>>>> 7e3fd26540f0020835a142f3e2a2e5c133c2417c
-        </div>
-    @elseif (Auth::user()->rol->idrol == 3)
-        <div class="grid grid-cols-2 h-full gap-4 z-10 relative">
-            {{-- Lado Izquierdo Fans --}}
-            <div class="text-black text-2xl">
-                Gracias por ser SuperFan!
-                <ul class="list-none pl-0">
-                    <li>Descargas Premium:</li>
-                </ul>
-                <<<<<<< HEAD <div class="flex ">
-                    <img src="{{ asset('img/superfan_ladoIzq.png') }}" alt="Lado Izquierdo" class="object-cover">
-            </div>
-        </div>
-        =======
-        <div class="p-5 sm:p-8">
-            <div class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-                @foreach ($media as $item)
-                    @if ($item['tipo'] == 'Imagen')
-                        <div
-                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                            <img src="{{ asset(Storage::url($item['ruta'])) }}" alt="{{ $item['id'] }}" />
-                        </div>
-                        {{-- Boton para descargar automaticamente --}}
-                        <div class="mt-2 flex items-center">
-                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24">
-                                    <path fill="black"
-                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                </svg>
-                            </a>
-                        </div>
-                    @elseif ($item['tipo'] == 'Video')
-                        <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
-                            <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
-                                alt="{{ $item['id'] }}">
-                            Tu navegador no soporta el elemento de video.
-                        </video>
-                        {{-- Boton para descargar automaticamente --}}
-                        <div class="mt-2 flex items-center">
-                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24">
-                                    <path fill="black"
-                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                </svg>
-                            </a>
-                        </div>
-                    @elseif ($item['tipo'] == 'Cancion')
-                        <div
-                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                            <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}" alt="{{ $item['id'] }}" />
-                        </div>
-                        >>>>>>> 7e3fd26540f0020835a142f3e2a2e5c133c2417c
+            @elseif (Auth::user()->rol->idrol == 3)
+                <div class="grid grid-cols-2 h-full gap-4 z-10 relative">
+                    {{-- Lado Izquierdo Fans --}}
+                    <div class="text-black text-2xl">
+                        Gracias por ser SuperFan!
+                        <ul class="list-none pl-0">
+                            <li>Descargas Premium:</li>
+                        </ul>
+                        <div class="p-5 sm:p-8">
+                            <div
+                                class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
+                                @foreach ($media as $item)
+                                    @if ($item['tipo'] == 'Imagen')
+                                        <div
+                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                            <img src="{{ asset(Storage::url($item['ruta'])) }}"
+                                                alt="{{ $item['id'] }}" />
+                                        </div>
+                                        {{-- Boton para descargar automaticamente --}}
+                                        <div class="mt-2 flex items-center">
+                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="black"
+                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    @elseif ($item['tipo'] == 'Video')
+                                        <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
+                                            <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
+                                                alt="{{ $item['id'] }}">
+                                            Tu navegador no soporta el elemento de video.
+                                        </video>
+                                        {{-- Boton para descargar automaticamente --}}
+                                        <div class="mt-2 flex items-center">
+                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="black"
+                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    @elseif ($item['tipo'] == 'Cancion')
+                                        <div
+                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                            <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}"
+                                                alt="{{ $item['id'] }}" />
+                                        </div>
 
-                        <h1>{{ $item['tituloAlbum'] }}</h1>
+                                        <h1>{{ $item['tituloAlbum'] }}</h1>
 
-                        {{-- Boton para descargar automaticamente --}}
-                        <div class="mt-2 flex items-center">
-                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24">
-                                    <path fill="black"
-                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                </svg>
-                            </a>
+                                        {{-- Boton para descargar automaticamente --}}
+                                        <div class="mt-2 flex items-center">
+                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="black"
+                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
                         </div>
-                    @endif
-                @endforeach
-            </div>
-        </div>
-
-        </div>
-        {{-- Lado Derecho - SuperFans --}}
-        <div class="text-2xl">Gracias por ser parte de nuestra comunidad!
-        </div>
-        </div>
-        @endif
-    @endauth
+                    </div>
+                    {{-- Lado Derecho - SuperFans --}}
+                    <div class="text-2xl">Gracias por ser parte de nuestra comunidad!</div>
+                </div>
+            @endif
+        @endauth
     </div>
 
     <script src="https://sdk.mercadopago.com/js/v2"></script>

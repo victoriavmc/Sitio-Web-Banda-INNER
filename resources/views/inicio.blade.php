@@ -28,18 +28,23 @@
         }
     </style>
 
+    {{-- Primer pantallazo --}}
     <div class="flex justify-center bg-black">
-        <img class="h-[91vh]" src="{{ asset('img/index_fondo_ng.jpg') }}" alt="">
+        <img class="h-[91vh]" src="{{ asset('img/index_fondo_ng.webp') }}" alt="">
     </div>
 
     {{-- SHOWS --}}
     <div class="bg-gray-900 min-h-screen bg-center bg-cover flex flex-col items-center justify-center"
-        style="background-image:url({{ asset('img/index_fondo_evento.jpg') }})">
+        style="background-image:url({{ asset('img/index_fondo_evento.webp') }})">
         <h3 class="text-8xl text-uppercas font-amsterdam deepshadow text-white mb-6 text-center hover:animate-pulse">
             eventos
         </h3>
         @if ($shows->isEmpty())
             <p class=" text-2xl text-white">No hay shows registrados</p>
+            <a href="{{ route('comprobantes.listar') }}"
+                class="bg-red-500 hover:bg-red-700 transition-all duration-300 text-white flex items-center gap-1 p-2 rounded-md">
+                <span class="font-bold">LISTA DE COMPROBANTES</span>
+            </a>
         @else
             <div class="swiper">
                 <div class="slide-content mb-10">
@@ -47,7 +52,7 @@
                         @foreach ($shows as $show)
                             <div class="swiper-slide" style="display:flex; justify-content: center; width:100%;">
                                 <div class="event-card mx-2 pl-10 pb-5 text-start text-black bg-center bg-cover"
-                                    style="background-image:url({{ asset('img/index_fondo_contenido_evento.jpg') }})">
+                                    style="background-image:url({{ asset('img/index_fondo_contenido_evento.webp') }})">
                                     <div class="flex flex-col justify-around h-full">
                                         <div class="mt-10">
                                             <div class="flex justify-between">
@@ -92,7 +97,7 @@
                                         </div>
                                         <div class="flex justify-end">
                                             <img class="imagen w-24 pr-1 pb-6"
-                                                src="{{ asset('img/logo_inner_negro.png') }}" alt="">
+                                                src="{{ asset('img/logo_inner_negro.webp') }}" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +118,7 @@
     {{-- Youtube Spotify --}}
     <div class="relative min-h-screen">
         <img class="absolute inset-0 w-full h-full object-cover blur-sm"
-            src="{{ asset('img/index_fondo_spotify_yt.png') }}" alt="Fondo">
+            src="{{ asset('img/index_fondo_spotify_yt.webp') }}" alt="Fondo">
         <div class="relative z-10 lg:p-4">
             <div class="lg:grid lg:grid-cols-[40%_60%] lg:gap-2">
                 <div class="lg:p-4">
@@ -151,7 +156,7 @@
 
     {{-- NOTICIAS Y FORO --}}
     <div class="min-h-screen bg-cover p-10 flex justify-center font-amsterdam items-center bg-center"
-        style="background-image:url({{ asset('img/index_fondo_nosotros.png') }})">
+        style="background-image:url({{ asset('img/index_fondo_nosotros.webp') }})">
         <div class="bg-white bg-opacity-30 p-4 font-urbanist lg:w-[80%] xl:w-[70%] flex flex-col gap-8">
             <div class="lg:flex gap-8">
                 {{-- Columna 1: Noticias --}}
@@ -176,7 +181,7 @@
                                                     alt="Imagen de {{ $noticia->titulo }}"
                                                     class="imagen object-cover w-48 h-48 object-center" />
                                             @else
-                                                <img src="{{ asset('img/logo_inner_negro.png') }}"
+                                                <img src="{{ asset('img/logo_inner_negro.webp') }}"
                                                     alt="Imagen por defecto"
                                                     class="imagen object-cover w-full h-48 object-center" />
                                             @endif
@@ -212,7 +217,7 @@
 
                     <div class="flex flex-col justify-around h-full">
                         <div class="flex justify-center">
-                            <img class="imagen w-3/4" src="{{ asset('img/nosotros_foro.png') }}"
+                            <img class="imagen w-3/4" src="{{ asset('img/nosotros_foro.webp') }}"
                                 alt="Foro de la comunidad">
                         </div>
                         <h3 class="font-bold text-center mt-3 text-3xl">¡Para la Comunidad Apasionada!</h3>
@@ -235,7 +240,7 @@
 
     {{-- MULTIMEDIA --}}
     <div class="bg-cover min-h-screen flex justify-center items-center anchoPantalla"
-        style="background-image: url({{ asset('img/index_fondo_multi.jpg') }}); background-position: left; background-size: cover;">
+        style="background-image: url({{ asset('img/index_fondo_multi.webp') }}); background-position: left; background-size: cover;">
 
         {{-- Contenedor del contenido centrado --}}
         <div class="text-center w-max">
@@ -251,12 +256,12 @@
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_agus2.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_agus2.webp') }}"
                                     alt="Imagen 1"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_agus.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_agus.webp') }}"
                                     alt="Imagen2"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
@@ -264,19 +269,19 @@
                     </div>
                     <!-- Columnas normales 1 -->
                     <div class="col-span-1 flex items-center justify-center">
-                        <img id="imagen" src="{{ asset('img/multimedia/vertical_agus2.jpg') }}" alt="Imagen3"
+                        <img id="imagen" src="{{ asset('img/multimedia/vertical_agus2.webp') }}" alt="Imagen3"
                             class="imagen-modal cursor-pointer h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Segunda columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_herni.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_herni.webp') }}"
                                     alt="Imagen4"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_herni2.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_herni2.webp') }}"
                                     alt="Imagen5"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
@@ -284,19 +289,19 @@
                     </div>
                     <!-- Columnas normales 2 -->
                     <div class="col-span-1 flex items-center justify-center">
-                        <img id="imagen" src="{{ asset('img/multimedia/vertical_herni.jpg') }}" alt="Imagen6"
+                        <img id="imagen" src="{{ asset('img/multimedia/vertical_herni.webp') }}" alt="Imagen6"
                             class="imagen-modal cursor-pointer h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Tercera columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_tomi.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_tomi.webp') }}"
                                     alt="Imagen7"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_tomi2.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_tomi2.webp') }}"
                                     alt="Imagen8"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
@@ -304,19 +309,19 @@
                     </div>
                     <!-- Columnas normales 3 -->
                     <div class="col-span-1 flex items-center justify-center">
-                        <img id="imagen" src="{{ asset('img/multimedia/vertical_tomi.jpg') }}" alt="Imagen9"
+                        <img id="imagen" src="{{ asset('img/multimedia/vertical_tomi.webp') }}" alt="Imagen9"
                             class="imagen-modal cursor-pointer h-[25rem] w-full object-cover rounded-lg">
                     </div>
                     <!-- Cuarta columna dividida en dos filas -->
                     <div class="col-span-1">
                         <div class="grid grid-rows-2 gap-4 h-full">
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_david.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_david.webp') }}"
                                     alt="Imagen10"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
                             <div class="flex items-center justify-center">
-                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_david2.jpg') }}"
+                                <img id="imagen" src="{{ asset('img/multimedia/horizontal_david2.webp') }}"
                                     alt="Imagen11"
                                     class="imagen-modal cursor-pointer h-48 w-full object-cover rounded-lg">
                             </div>
@@ -324,7 +329,7 @@
                     </div>
                     <!-- Columnas normales 4 -->
                     <div class="col-span-1 flex items-center justify-center">
-                        <img id="imagen" src="{{ asset('img/multimedia/vertical_david.jpg') }}" alt="Imagen12"
+                        <img id="imagen" src="{{ asset('img/multimedia/vertical_david.webp') }}" alt="Imagen12"
                             class="imagen-modal cursor-pointer h-[25rem] w-full object-cover object-center rounded-lg">
                     </div>
                 </div>

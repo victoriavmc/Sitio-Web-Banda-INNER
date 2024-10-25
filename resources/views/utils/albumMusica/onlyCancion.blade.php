@@ -4,70 +4,71 @@
         <div class="flex-1 bg-indigo-100 flex-col text-center flex items-center justify-center p-4 lg:block">
             {{-- Album (ACHICAR) --}}
             <div class="flex items-center gap-4">
-                @if ($listaAlbum['imagen'] != 'imagen_por_defecto.jpg')
-                    <img src="{{ asset(Storage::url($listaAlbum['imagen'])) }}"
-                        alt="{{ $listaAlbum['titulo'] }}"class="w-32 group-hover:w-36 group-hover:h-36 h-32 object-center object-cover rounded-full transition-all duration-500 delay-500 transform" />
-                @else
-                    <img src="{{ asset('img/logo_inner_negro.png') }}"
-                        alt="{{ $listaAlbum['titulo'] }}"class="w-32 group-hover:w-36 group-hover:h-36 h-32 object-center object-cover rounded-full transition-all duration-500 delay-500 transform" />
-                @endif
-
-                <div class="w-fit transition-all transform duration-500 flex flex-wrap">
-                    <div class="flex flex-col mr-4">
-                        <h1 class="text-gray-600 dark:text-gray-200 font-bold">
-                            {{ $datosCancion['tituloCancion'] }}
-                        </h1>
-                        <p class="text-gray-400">{{ $listaAlbum['titulo'] }}</p>
+                <!-- Sector principal -->
+                <div class="flex  items-center space-x-4 mb-4">
+                    <div class="flex content-center">
+                        @if ($listaAlbum['imagen'] != 'logo_inner.webp')
+                            <img src="{{ asset(Storage::url($listaAlbum['imagen'])) }}"
+                                alt="{{ $listaAlbum['titulo'] }}"class=" w-40 transition-all duration-500 delay-500 transform" />
+                        @else
+                            <img src="{{ asset('img/logo_inner_negro.webp') }}"
+                                alt="{{ $listaAlbum['titulo'] }}"class="w-40  transition-all duration-500 delay-500 transform" />
+                        @endif
+                        <div class="flex flex-col ">
+                            <span class=" flex flex-col text-4xl">{{ $datosCancion['tituloCancion'] }}</span>
+                            <span class="flex flex-col text-xl text-gray-600">{{ $listaAlbum['titulo'] }}</span>
+                        </div>
                     </div>
 
-
-                    {{-- Para descargar si es superfan --}}
-                    @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2 || Auth::user()->rol->idrol === 3)
-                        @if ($datosCancion['archivoDsCancion'] && $datosCancion['contenidoDescargable'] == 'Si')
-                            <a href=""
-                                class="animate-bounce focus:animate-none hover:animate-none bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                <span class="ml-2">Descargar Música </span>
-                            </a>
+                    {{-- Botón Español --}}
+                    <div class="flex space-x-4 mb-8">
+                        @if (!empty($datosCancion['letraEspCancion']))
+                            <button
+                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max"
+                                onclick="showLyrics('es')">
+                                Español
+                            </button>
                         @endif
-                    @endif
+
+                        {{-- Botón Inglés --}}
+                        @if (!empty($datosCancion['letraInglesCancion']))
+                            <button
+                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max"
+                                onclick="showLyrics('en')">
+                                Inglés
+                            </button>
+                        @endif
+                    </div>
+                    <!-- Texto -->
+                    <div class="flex flex-col text-gray-600 text-sm mb-8">
+                        {{-- Letra en español (por defecto) --}}
+                        <div id="letra" class="mt-6 lg:max-w-sm">
+                            <p class="text-gray-700 mb-4">
+                                {{ !empty($datosCancion['letraEspCancion']) ? $datosCancion['letraEspCancion'] : 'Todavía no se ha cargado la letra en español.' }}
+                            </p>
+                        </div>
+
+                        {{-- Letra en inglés (oculta inicialmente) --}}
+                        <div id="letra-en" class="mt-6 lg:max-w-sm hidden">
+                            <p class="text-gray-700 mb-4">
+                                {{ !empty($datosCancion['letraInglesCancion']) ? $datosCancion['letraInglesCancion'] : 'Todavía no se ha cargado la letra en inglés.' }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex space-x-4 mb-4">
-                {{-- Botón Español --}}
-                @if (!empty($datosCancion['letraEspCancion']))
-                    <button
-                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max"
-                        onclick="showLyrics('es')">
-                        Español
-                    </button>
+                {{-- Para descargar si es superfan --}}
+                @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2 || Auth::user()->rol->idrol === 3)
+                    @if ($datosCancion['archivoDsCancion'] && $datosCancion['contenidoDescargable'] == 'Si')
+                        <a href=""
+                            class="animate-bounce focus:animate-none hover:animate-none bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                            <span class="ml-2">Descargar Música </span>
+                        </a>
+                    @endif
                 @endif
 
-                {{-- Botón Inglés --}}
-                @if (!empty($datosCancion['letraInglesCancion']))
-                    <button
-                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max"
-                        onclick="showLyrics('en')">
-                        Inglés
-                    </button>
-                @endif
-            </div>
-
-            {{-- Letra en español (por defecto) --}}
-            <div id="letra" class="mt-6 lg:max-w-sm">
-                <p class="text-sm text-gray-800">
-                    {{ !empty($datosCancion['letraEspCancion']) ? $datosCancion['letraEspCancion'] : 'Todavía no se ha cargado la letra en español.' }}
-                </p>
-            </div>
-
-            {{-- Letra en inglés (oculta inicialmente) --}}
-            <div id="letra-en" class="mt-6 lg:max-w-sm hidden">
-                <p class="text-sm text-gray-800">
-                    {{ !empty($datosCancion['letraInglesCancion']) ? $datosCancion['letraInglesCancion'] : 'Todavía no se ha cargado la letra en inglés.' }}
-                </p>
             </div>
         </div>
-
 
         {{-- DERECHA --}}
         <div class="w-full lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
@@ -160,6 +161,7 @@
                 </div>
             @endif
         </div>
+    </div>
     </div>
     {{-- Script para manejar el cambio de letras --}}
     <script>

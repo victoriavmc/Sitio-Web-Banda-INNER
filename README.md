@@ -121,3 +121,7 @@ El proyecto está diseñado para ser escalable, seguro y fácil de mantener, per
 -   extension=openssl
 -   curl.cainfo = "C:\ruta\hasta\cacert.pem"
 -   extension=mbstring
+
+### Libreria
+- composer require maatwebsite/excel:^3.1.58
+- composer require barryvdh/laravel-dompdf

@@ -41,7 +41,7 @@ class AlbumMusicaController extends Controller
             $idAlbumDatos = $album->albumdatos->idalbumDatos  ?? 'ID No disponible';
             $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
             $albumFecha = $album->albumdatos->fechaSubido ?? 'Fecha no disponible';
-            $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
+            $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
 
             // Inicializar la lista de canciones para cada álbum
             $listacanciones = [];
@@ -97,7 +97,7 @@ class AlbumMusicaController extends Controller
         // Obtener el título del álbum
         $tituloAlbum = $album->albumDatos->tituloAlbum;
         // Agregamos la imagen del album
-        $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'imagen_por_defecto.jpg';
+        $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
         // Inicializar la lista de canciones para el álbum
         $listaCanciones = [];
         // Obtener las canciones relacionadas con el álbum, excluyendo la canción actual

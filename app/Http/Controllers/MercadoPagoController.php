@@ -138,25 +138,20 @@ class MercadoPagoController extends Controller
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
         }
 
-        // Guardar los detalles del pago en la base de datos (ejemplo)
-        // OrdenPago::create($paymentDetails);
+        // Guardar los detalles del pago en la base de datos
+        OrdenPago::create($paymentDetails);
 
         // Renderizamos la vista con los detalles del pago
         return view('payment-success', compact('paymentDetails'));
     }
 
 
-    public function comprobantePdf(Request $request)
+    public function comprobantePdf(Request $request, $id)
     {
-        // Obtener los datos enviados por la query string de Mercado Pago
-        $paymentId = $request->query('payment_id');
+        // Obtener datos de la base de datos
+        $paymentDetails = OrdenPago::find($id);
 
-        if (!$paymentId) {
-            return response()->json(['error' => 'ID de pago no encontrado'], 400);
-        }
 
-        // Obtener los detalles del pago usando el payment_id
-        $paymentDetails = $this->getPaymentDetails($paymentId);
 
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);

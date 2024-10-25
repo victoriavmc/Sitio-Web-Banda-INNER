@@ -16,9 +16,11 @@ use App\Http\Controllers\SuperFanController;
 use App\Http\Controllers\cancionController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\ComprobantesController;
 use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\MercadoPagoWebhookController;
-
+// eliminar despues
+use App\Http\Controllers\Prueba;
 #Modelo
 use App\Models\Paisnacimiento;
 use App\Models\Reportes;
@@ -399,19 +401,28 @@ Route::delete('/reportes/eliminar-motivo-admin/{id}', [ReportesController::class
     ->name('eliminarMotivoAdmin')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
-Route::view('/mercadopago', 'mptest')->name('mercadopago');
+Route::view('/mercadopago', 'mptest')
+    ->name('mercadopago')->middleware('auth');
 
 // Crear preferencia de pago
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference'])
-    ->name('mercadopago.create_preference');
+    ->name('mercadopago.create_preference')->middleware('auth');
 
 // Redirecciones de éxito y error
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'failed'])
-    ->name('mercadopago.failed');
+    ->name('mercadopago.failed')->middleware('auth');
 
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'paymentSuccess'])
-    ->name('mercadopago.success');
+    ->name('mercadopago.success')->middleware('auth');
 
 // Vista y descarga del comprobante
-Route::get('/mercadopago/comprobante', [MercadoPagoController::class, 'ComprobantePdf'])
-    ->name('mercadopago.comprobante');
+Route::get('/mercadopago/comprobante/{id}', [MercadoPagoController::class, 'ComprobantePdf'])
+    ->name('mercadopago.comprobante')->middleware('auth');
+
+// Lista de comprobantes
+Route::get('/comprobantes', [ComprobantesController::class, 'listarComprobantes'])
+    ->name('comprobantes.listar')->middleware('auth');
+
+// Descargar comprobantes en Excel
+Route::get('/comprobantes/excel', [ComprobantesController::class, 'descargarExcel'])
+    ->name('descargar.excel')->middleware('auth');

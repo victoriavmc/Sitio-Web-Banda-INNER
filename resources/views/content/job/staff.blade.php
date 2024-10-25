@@ -16,7 +16,7 @@
                                 role="list">
                                 <article
                                     class="mx-auto shadow-xl bg-cover bg-center min-h-150 relative border-8 border-black transform duration-500 hover:-translate-y-12 group"
-                                    style="background-image:url('{{ asset('img/artistas/victoriavmc.png') }}');">
+                                    style="background-image:url('{{ asset('img/artistas/victoriavmc.webp') }}');">
                                     <div
                                         class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150 flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
                                         <div class="bg-black p-8 h-full justify-end flex flex-col">
@@ -31,7 +31,7 @@
                                 </article>
                                 <article
                                     class="mx-auto  shadow-xl mt-20 md:mt-0 bg-cover bg-center min-h-150 relative border-8 border-black  transform duration-500 hover:-translate-y-12   group"
-                                    style="background-image:url('{{ asset('img/artistas/santi.png') }}');">
+                                    style="background-image:url('{{ asset('img/artistas/santi.webp') }}');">
                                     <div
                                         class="bg-black relative h-full group-hover:bg-opacity-0 min-h-150  flex flex-wrap flex-col pt-[30rem] hover:bg-opacity-75 transform duration-300">
                                         <div class=" bg-black p-8 h-full justify-end flex flex-col">
@@ -64,7 +64,7 @@
                                                     class="rounded-2xl drop-shadow-md hover:drop-shadow-xl w-56 transition-all duration-200 delay-100">
                                             @else
                                                 <!-- Mostrar una imagen por defecto si no hay imagen -->
-                                                <img src="{{ asset('img/logo_usuario.png') }}" alt="Imagen por defecto"
+                                                <img src="{{ asset('img/logo_usuario.webp') }}" alt="Imagen por defecto"
                                                     class="rounded-2xl drop-shadow-md hover:drop-shadow-xl w-56 transition-all duration-200 delay-100">
                                             @endif
                                         </a>

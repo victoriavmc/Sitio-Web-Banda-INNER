@@ -90,7 +90,7 @@ class SuperFanController extends Controller
                     'tituloAlbum' => $tituloAlbum,
                     'fechaAlbum' => $fechaAlbum,
                     'id' => $imagen->albumImagenescol,
-                    'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default.jpg',
+                    'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default',
                     'descarga' => $imagen->revisionImagenes->imagenes->contenidoDescargable ?? '#',
 
                 ];
@@ -106,7 +106,7 @@ class SuperFanController extends Controller
                     'tituloAlbum' => $tituloAlbum,
                     'fechaAlbum' => $fechaAlbum,
                     'id' => $video->idalbumVideo,
-                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default.mp4',
+                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default',
                     'descarga' => $video->videos->contenidoDescargable ?? '#',
                 ];
             }
@@ -127,7 +127,7 @@ class SuperFanController extends Controller
                         'tituloAlbum' => $titulo,
                         'fechaAlbum' => $fechaAlbum,
                         'id' => $cancion->idcancion,
-                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default.mp3',
+                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default',
                         'descarga' => $cancion->contenidoDescargable ?? '#',
                     ];
                 }
@@ -165,7 +165,7 @@ class SuperFanController extends Controller
                         'tituloAlbum' => $tituloAlbum,
                         'fechaAlbum' => $fechaAlbum,
                         'id' => $imagen->albumImagenescol,
-                        'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default.jpg',
+                        'ruta' => $imagen->revisionImagenes->imagenes->subidaImg ?? 'ruta/default',
                     ];
                 }
             }
@@ -182,7 +182,7 @@ class SuperFanController extends Controller
                     'tituloAlbum' => $tituloAlbum,
                     'fechaAlbum' => $fechaAlbum,
                     'id' => $video->idalbumVideo,
-                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default.mp4',
+                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default',
                 ];
             }
 
@@ -203,7 +203,7 @@ class SuperFanController extends Controller
                         'fechaAlbum' => $fechaAlbum,
                         'fotoAlbum' => $fotoAlbum,
                         'id' => $cancion->idcancion,
-                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default.mp3',
+                        'ruta' => $cancion->archivoDsCancion ?? 'ruta/default',
                     ];
                 }
             }
