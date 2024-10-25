@@ -191,7 +191,7 @@ class SuperFanController extends Controller
 
             foreach ($albumMusical as $musica) {
                 $idMusica = $musica->idalbumMusical;
-                $fotoAlbum = $musica->revisionimagenes->imagenes->subidaImg;
+                $fotoAlbum = $musica->revisionimagenes->imagenes->subidaImg ?? 'ruta/default';
                 $cancionesAlbum = Cancion::where('albumMusical_idalbumMusical', $idMusica)->where('contenidoDescargable', 'Sí')->get();
 
                 foreach ($cancionesAlbum as $cancion) {
