@@ -12,6 +12,6 @@ class NotificacionesController extends Controller
     {
 
         $tipoNotificaciones = TipoNotificacion::all();
-        return view('profile.notificaciones', compact('tipoNotificaciones'));
+        return view('content.notificaciones', compact('tipoNotificaciones'));
     }
 }

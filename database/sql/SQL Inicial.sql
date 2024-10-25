@@ -292,7 +292,7 @@ CREATE TABLE `datospersonales` (
   KEY `fk_datosPersonales_PaisNacimiento1_idx` (`PaisNacimiento_idPaisNacimiento`),
   CONSTRAINT `fk_datosPersonales_PaisNacimiento1` FOREIGN KEY (`PaisNacimiento_idPaisNacimiento`) REFERENCES `paisnacimiento` (`idPaisNacimiento`),
   CONSTRAINT `fk_datosPersonales_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,6 +301,7 @@ CREATE TABLE `datospersonales` (
 
 LOCK TABLES `datospersonales` WRITE;
 /*!40000 ALTER TABLE `datospersonales` DISABLE KEYS */;
+INSERT INTO `datospersonales` VALUES (1,'Victoria Valentina','Maidana Corti','2002-02-16','Femenino',1,9);
 /*!40000 ALTER TABLE `datospersonales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,7 +322,7 @@ CREATE TABLE `historialusuario` (
   PRIMARY KEY (`idhistorialusuario`),
   KEY `fk_historialusuario_datospersonales1_idx` (`datospersonales_idDatosPersonales`),
   CONSTRAINT `fk_historialusuario_datospersonales1` FOREIGN KEY (`datospersonales_idDatosPersonales`) REFERENCES `datospersonales` (`idDatosPersonales`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,6 +331,7 @@ CREATE TABLE `historialusuario` (
 
 LOCK TABLES `historialusuario` WRITE;
 /*!40000 ALTER TABLE `historialusuario` DISABLE KEYS */;
+INSERT INTO `historialusuario` VALUES (1,'Activo','No','2024-10-24',NULL,1);
 /*!40000 ALTER TABLE `historialusuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -510,7 +512,7 @@ CREATE TABLE `ordenpago` (
   `estadoPago` varchar(255) NOT NULL,
   `nombreComprador` varchar(105) NOT NULL,
   `apellidoComprador` varchar(105) NOT NULL,
-  `precio_idprecio` int NOT NULL,
+  `precio_idprecio` int DEFAULT NULL,
   `usuarios_idusuarios` int NOT NULL,
   PRIMARY KEY (`idordenpago`),
   KEY `fk_suscripcion_usuarios1_idx` (`usuarios_idusuarios`),
@@ -563,8 +565,10 @@ DROP TABLE IF EXISTS `precio`;
 CREATE TABLE `precio` (
   `idprecio` int NOT NULL AUTO_INCREMENT,
   `precio` decimal(10,0) NOT NULL,
+  `tipoServicio` varchar(45) NOT NULL,
   `estadoPrecio` varchar(45) NOT NULL DEFAULT 'Activo',
-  `referenciaIdFicticio` int NOT NULL,
+  `fechaPrecio` datetime NOT NULL,
+  `referenciaIdFicticio` int DEFAULT NULL,
   PRIMARY KEY (`idprecio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -835,6 +839,7 @@ DROP TABLE IF EXISTS `tiponotificación`;
 CREATE TABLE `tiponotificación` (
   `idtipoNotificación` int NOT NULL AUTO_INCREMENT,
   `nombreNotificacion` varchar(75) DEFAULT NULL,
+  `descripcionNotificacion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idtipoNotificación`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -845,7 +850,7 @@ CREATE TABLE `tiponotificación` (
 
 LOCK TABLES `tiponotificación` WRITE;
 /*!40000 ALTER TABLE `tiponotificación` DISABLE KEYS */;
-INSERT INTO `tiponotificación` VALUES (1,'Shows'),(2,'Noticias'),(3,'Foro'),(4,'Nuevo Contenido Descargable'),(5,'Nuevo Contenido de Galeria'),(6,'Nuevo álbum de Música');
+INSERT INTO `tiponotificación` VALUES (1,'Shows',NULL),(2,'Noticias',NULL),(3,'Foro',NULL),(4,'Nuevo Contenido Descargable',NULL),(5,'Nuevo Contenido de Galeria',NULL),(6,'Nuevo álbum de Música',NULL);
 /*!40000 ALTER TABLE `tiponotificación` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -914,7 +919,7 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`idusuarios`),
   KEY `fk_usuarios_rol1_idx` (`rol_idrol`),
   CONSTRAINT `fk_usuarios_rol1` FOREIGN KEY (`rol_idrol`) REFERENCES `roles` (`idrol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -923,6 +928,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'amuquy','$2y$12$FX24GIr63hb0oFnHDKyPIeOc.mQhgRDh/Ozmehtvc3/pUrGT41Cu2',NULL,'victoriavmcortitrabajos@gmail.com',4);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -985,4 +991,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 12:46:29
+-- Dump completed on 2024-10-24 23:08:55
