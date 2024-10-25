@@ -314,25 +314,6 @@ CREATE TABLE `datospersonales` (
 /*!40101 SET character_set_client = @saved_cs_client */
 ;
 --
--- Dumping data for table `datospersonales`
---
-LOCK TABLES `datospersonales` WRITE;
-/*!40000 ALTER TABLE `datospersonales` DISABLE KEYS */
-;
-INSERT INTO `datospersonales`
-VALUES (
-    1,
-    'Victoria Valentina',
-    'Maidana Corti',
-    '2002-02-16',
-    'Femenino',
-    1,
-    9
-  );
-/*!40000 ALTER TABLE `datospersonales` ENABLE KEYS */
-;
-UNLOCK TABLES;
---
 -- Table structure for table `historialusuario`
 --
 DROP TABLE IF EXISTS `historialusuario`;
@@ -353,17 +334,6 @@ CREATE TABLE `historialusuario` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */
 ;
---
--- Dumping data for table `historialusuario`
---
-LOCK TABLES `historialusuario` WRITE;
-/*!40000 ALTER TABLE `historialusuario` DISABLE KEYS */
-;
-INSERT INTO `historialusuario`
-VALUES (1, 'Activo', 'No', '2024-10-24', NULL, 1);
-/*!40000 ALTER TABLE `historialusuario` ENABLE KEYS */
-;
-UNLOCK TABLES;
 --
 -- Table structure for table `imagenes`
 --
@@ -500,37 +470,16 @@ LOCK TABLES `motivos` WRITE;
 /*!40000 ALTER TABLE `motivos` DISABLE KEYS */
 ;
 INSERT INTO `motivos`
-VALUES (
-    1,
-    'Publicó múltiples mensajes de spam en diferentes temas'
-  ),
-(
-    2,
-    'Utilizó lenguaje ofensivo y despectivo en sus comentarios'
-  ),
-(
-    3,
-    'Acosó repetidamente a otros usuarios en el foro'
-  ),
+VALUES (1,'Publicó múltiples mensajes de spam en diferentes temas'),
+(2,'Utilizó lenguaje ofensivo y despectivo en sus comentarios'),
+(3,'Acosó repetidamente a otros usuarios en el foro'),
 (4, 'Publicó contenido inapropiado y ofensivo'),
 (5, 'Se hizo pasar por otro usuario o moderador'),
 (6, 'Violó repetidamente las reglas del foro'),
-(
-    7,
-    'Publicó enlaces a sitios web maliciosos o peligrosos'
-  ),
-(
-    8,
-    'Incitó a la violencia o al odio hacia grupos específicos'
-  ),
-(
-    9,
-    'Utilizó múltiples cuentas para manipular discusiones'
-  ),
-(
-    10,
-    'Recibió múltiples denuncias de otros usuarios por conducta inapropiada'
-  ),
+(7,'Publicó enlaces a sitios web maliciosos o peligrosos'),
+(8,'Incitó a la violencia o al odio hacia grupos específicos'),
+(9,'Utilizó múltiples cuentas para manipular discusiones'),
+(10,'Recibió múltiples denuncias de otros usuarios por conducta inapropiada'),
 (11, 'Publicó imágenes inapropiadas');
 /*!40000 ALTER TABLE `motivos` ENABLE KEYS */
 ;
@@ -1142,48 +1091,12 @@ LOCK TABLES `tiponotificación` WRITE;
 /*!40000 ALTER TABLE `tiponotificación` DISABLE KEYS */
 ;
 INSERT INTO `tiponotificación`
-VALUES (
-    1,
-    'Shows',
-    'Próximos eventos y conciertos en vivo. No te pierdas las fechas, lugares y detalles de nuestras presentaciones para disfrutar la mejor música en directo.
-
-'
-  ),
-  (
-    2,
-    'Noticias',
-    'Últimas novedades y actualizaciones sobre lanzamientos, colaboraciones y todo lo relacionado con nuestro proyecto musical y comunidad.
-
-'
-  ),
-  (
-    3,
-    'Foro',
-    'Discute y comparte opiniones con otros usuarios. Únete a debates, resuelve dudas o participa en conversaciones sobre música, eventos y temas de interés.
-
-'
-  ),
-  (
-    4,
-    'Nuevo Contenido Descargable',
-    'Descargas exclusivas disponibles para ti. Accede a nuevo material como partituras, fondos, videos, y más, diseñado especialmente para nuestra comunidad.
-
-'
-  ),
-  (
-    5,
-    'Nuevo Contenido de Galeria',
-    'Fotos y videos recientes añadidos a la galería. Revive momentos especiales y descubre material visual inédito de nuestros eventos y actividades.
-
-'
-  ),
-  (
-    6,
-    'Nuevo álbum de Música',
-    'Escucha nuestro nuevo álbum. Explora las canciones recién lanzadas y disfruta de la evolución de nuestro sonido. ¡Disponible ahora en todas las plataformas!
-
-'
-  );
+VALUES (1,'Shows','Próximos eventos y conciertos en vivo. No te pierdas las fechas, lugares y detalles de nuestras presentaciones para disfrutar la mejor música en directo.'),
+  (2,'Noticias','Últimas novedades y actualizaciones sobre lanzamientos, colaboraciones y todo lo relacionado con nuestro proyecto musical y comunidad.'),
+  (3,'Foro','Discute y comparte opiniones con otros usuarios. Únete a debates, resuelve dudas o participa en conversaciones sobre música, eventos y temas de interés.'),
+  (4,'Nuevo Contenido Descargable','Descargas exclusivas disponibles para ti. Accede a nuevo material como partituras, fondos, videos, y más, diseñado especialmente para nuestra comunidad.' ),
+  (5,'Nuevo Contenido de Galeria','Fotos y videos recientes añadidos a la galería. Revive momentos especiales y descubre material visual inédito de nuestros eventos y actividades.'),
+  (6,'Nuevo álbum de Música','Escucha nuestro nuevo álbum. Explora las canciones recién lanzadas y disfruta de la evolución de nuestro sonido. ¡Disponible ahora en todas las plataformas!');
 ;
 /*!40000 ALTER TABLE `tiponotificación` ENABLE KEYS */
 ;
@@ -1273,24 +1186,6 @@ CREATE TABLE `usuarios` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */
 ;
---
--- Dumping data for table `usuarios`
---
-LOCK TABLES `usuarios` WRITE;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */
-;
-INSERT INTO `usuarios`
-VALUES (
-    1,
-    'amuquy',
-    '$2y$12$FX24GIr63hb0oFnHDKyPIeOc.mQhgRDh/Ozmehtvc3/pUrGT41Cu2',
-    NULL,
-    'victoriavmcortitrabajos@gmail.com',
-    4
-  );
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */
-;
-UNLOCK TABLES;
 --
 -- Table structure for table `videos`
 --
