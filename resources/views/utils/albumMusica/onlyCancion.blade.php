@@ -56,11 +56,11 @@
                         </div>
                     </div>
                 </div>
-
                 {{-- Para descargar si es superfan --}}
                 @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2 || Auth::user()->rol->idrol === 3)
                     @if ($datosCancion['archivoDsCancion'] && $datosCancion['contenidoDescargable'] == 'Si')
-                        <a href=""
+                        {{-- Boton para descargar automaticamente --}}
+                        <a href="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}" download
                             class="animate-bounce focus:animate-none hover:animate-none bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                             <span class="ml-2">Descargar Música </span>
                         </a>

@@ -174,16 +174,16 @@ class SuperFanController extends Controller
             $albumVideos = AlbumVideo::where('albumDatos_idalbumDatos', $albumDato->idalbumDatos)->get();
 
             foreach ($albumVideos as $video) {
-                $idVideo = $video->videos_idvideos;
-                $albumVideos = Videos::where('idvideos', $idVideo)->where('contenidoDescargable', 'Sí')->get();
-                $tipo = 'Video';
-                $media[] = [
-                    'tipo' => $tipo,
-                    'tituloAlbum' => $tituloAlbum,
-                    'fechaAlbum' => $fechaAlbum,
-                    'id' => $video->idalbumVideo,
-                    'ruta' => $video->videos->subidaVideo ?? 'ruta/default',
-                ];
+                if ($video->videos->contenidoDescargable === 'Sí') {
+                    $tipo = 'Video';
+                    $media[] = [
+                        'tipo' => $tipo,
+                        'tituloAlbum' => $tituloAlbum,
+                        'fechaAlbum' => $fechaAlbum,
+                        'id' => $video->idalbumVideo,
+                        'ruta' => $video->videos->subidaVideo ?? 'ruta/default',
+                    ];
+                }
             }
 
             // Relacionar con canciones
@@ -191,7 +191,7 @@ class SuperFanController extends Controller
 
             foreach ($albumMusical as $musica) {
                 $idMusica = $musica->idalbumMusical;
-                $fotoAlbum = $musica->revisionimagenes->imagenes->subidaImg;
+                $fotoAlbum = $musica->revisionimagenes->imagenes->subidaImg ?? 'ruta/default';
                 $cancionesAlbum = Cancion::where('albumMusical_idalbumMusical', $idMusica)->where('contenidoDescargable', 'Sí')->get();
 
                 foreach ($cancionesAlbum as $cancion) {

@@ -151,8 +151,6 @@ class MercadoPagoController extends Controller
         // Obtener datos de la base de datos
         $paymentDetails = OrdenPago::find($id);
 
-
-
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
         }
