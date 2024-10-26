@@ -103,81 +103,86 @@
             @elseif (Auth::user()->rol->idrol == 4)
                 <div class="grid grid-cols-2 h-full gap-4 z-10 relative">
                     {{-- Lado Izquierdo Fans --}}
-                    <div class="text-black text-2xl">
+                    <div class="text-black text-2xl ml-4">
                         Gracias por ser Fan!
-                        <ul class="list-none pl-0 p-4">
+                        <ul class="list-none pl-0 p-4 ml-2">
                             <li>Descargas Gratuitas:</li>
                         </ul>
-                        @php
-                            $contadorImagenes = 0; // Contador para las imágenes
-                            $contadorVideos = 0; // Contador para los videos
-                            $contadorCanciones = 0; // Contador para los Canciones
-                        @endphp
-                        <div class="p-5 sm:p-8">
-                            <div
-                                class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-                                @foreach ($media as $item)
-                                    @if ($item['tipo'] == 'Imagen' && $contadorImagenes < 3)
-                                        <div
-                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                                            <img src="{{ asset(Storage::url($item['ruta'])) }}" alt="{{ $item['id'] }}" />
-                                        </div>
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                        @php
-                                            $contadorImagenes++; // Incrementar contador de imágenes solo cuando se muestra una
-                                        @endphp
-                                    @elseif ($item['tipo'] == 'Video' && $contadorVideos < 1)
-                                        <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
-                                            <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
-                                                alt="{{ $item['id'] }}">
-                                            Tu navegador no soporta el elemento de video.
-                                        </video>
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                        @php
-                                            $contadorVideos++; // Incrementar contador de videos solo cuando se muestra uno
-                                        @endphp
-                                    @elseif ($item['tipo'] == 'Cancion' && $contadorCanciones < 1)
-                                        <div
-                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                                            <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}"
-                                                alt="{{ $item['id'] }}" />
-                                        </div>
-                                        <h1>{{ $item['tituloAlbum'] }}</h1>
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                        @php
-                                            $contadorCanciones++; // Incrementar contador de canciones
-                                        @endphp
-                                    @endif
-                                @endforeach
+                        @if (empty($media))
+                            <p class="italic">No hay contenido disponible para descargar en estos momentos.</p>
+                        @else
+                            @php
+                                $contadorImagenes = 0; // Contador para las imágenes
+                                $contadorVideos = 0; // Contador para los videos
+                                $contadorCanciones = 0; // Contador para los Canciones
+                            @endphp
+                            <div class="p-5 sm:p-8">
+                                <div
+                                    class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
+                                    @foreach ($media as $item)
+                                        @if ($item['tipo'] == 'Imagen' && $contadorImagenes < 3)
+                                            <div
+                                                class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                                <img src="{{ asset(Storage::url($item['ruta'])) }}"
+                                                    alt="{{ $item['id'] }}" />
+                                            </div>
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            @php
+                                                $contadorImagenes++; // Incrementar contador de imágenes solo cuando se muestra una
+                                            @endphp
+                                        @elseif ($item['tipo'] == 'Video' && $contadorVideos < 1)
+                                            <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
+                                                <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
+                                                    alt="{{ $item['id'] }}">
+                                                Tu navegador no soporta el elemento de video.
+                                            </video>
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            @php
+                                                $contadorVideos++; // Incrementar contador de videos solo cuando se muestra uno
+                                            @endphp
+                                        @elseif ($item['tipo'] == 'Cancion' && $contadorCanciones < 1)
+                                            <div
+                                                class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                                <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}"
+                                                    alt="{{ $item['id'] }}" />
+                                            </div>
+                                            <h1>{{ $item['tituloAlbum'] }}</h1>
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            @php
+                                                $contadorCanciones++; // Incrementar contador de canciones
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     {{-- Lado Derecho SuperFan --}}
                     <x-lado-derecho>
@@ -188,68 +193,72 @@
                     {{-- Lado Izquierdo Fans --}}
                     <div class="text-black text-2xl">
                         Gracias por ser SuperFan!
-                        <ul class="list-none pl-0">
+                        <ul class="list-none pl-0 mt-4 mb-4">
                             <li>Descargas Premium:</li>
                         </ul>
-                        <div class="p-5 sm:p-8">
-                            <div
-                                class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-                                @foreach ($media as $item)
-                                    @if ($item['tipo'] == 'Imagen')
-                                        <div
-                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                                            <img src="{{ asset(Storage::url($item['ruta'])) }}"
-                                                alt="{{ $item['id'] }}" />
-                                        </div>
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    @elseif ($item['tipo'] == 'Video')
-                                        <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
-                                            <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
-                                                alt="{{ $item['id'] }}">
-                                            Tu navegador no soporta el elemento de video.
-                                        </video>
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    @elseif ($item['tipo'] == 'Cancion')
-                                        <div
-                                            class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                                            <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}"
-                                                alt="{{ $item['id'] }}" />
-                                        </div>
+                        @if (empty($media))
+                            <p class="italic">No hay contenido disponible para descargar en estos momentos.</p>
+                        @else
+                            <div class="p-5 sm:p-8">
+                                <div
+                                    class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
+                                    @foreach ($media as $item)
+                                        @if ($item['tipo'] == 'Imagen')
+                                            <div
+                                                class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                                <img src="{{ asset(Storage::url($item['ruta'])) }}"
+                                                    alt="{{ $item['id'] }}" />
+                                            </div>
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        @elseif ($item['tipo'] == 'Video')
+                                            <video class="h-24 w-24 imagen-modal cursor-pointer" controls>
+                                                <source src="{{ asset(Storage::url($item['ruta'])) }}" type="video/mp4"
+                                                    alt="{{ $item['id'] }}">
+                                                Tu navegador no soporta el elemento de video.
+                                            </video>
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        @elseif ($item['tipo'] == 'Cancion')
+                                            <div
+                                                class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
+                                                <img src="{{ asset(Storage::url($item['fotoAlbum'])) }}"
+                                                    alt="{{ $item['id'] }}" />
+                                            </div>
 
-                                        <h1>{{ $item['tituloAlbum'] }}</h1>
+                                            <h1>{{ $item['tituloAlbum'] }}</h1>
 
-                                        {{-- Boton para descargar automaticamente --}}
-                                        <div class="mt-2 flex items-center">
-                                            <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="black"
-                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    @endif
-                                @endforeach
+                                            {{-- Boton para descargar automaticamente --}}
+                                            <div class="mt-2 flex items-center">
+                                                <a href="{{ asset(Storage::url($item['ruta'])) }}" download>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="black"
+                                                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     {{-- Lado Derecho - SuperFans --}}
                     <div class="text-2xl">Gracias por ser parte de nuestra comunidad!</div>
