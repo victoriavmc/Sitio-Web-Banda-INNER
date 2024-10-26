@@ -2,129 +2,134 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Precio;
+use App\Models\Precios;
+use App\Models\PrecioServicios;
 use Illuminate\Http\Request;
 
 class PrecioController extends Controller
 
 {
-    // Validar
-    public function rules()
-    {
-        return [
-            'precio' => 'required|numeric|min:0',
-            'idFicticio' => 'required|integer',
-            'tipoServicio' => 'required|string|in:Suscripción,Show',
-        ];
-    }
+    // // Validar
+    // public function rules()
+    // {
+    //     return [
+    //         'precio' => 'required|numeric|min:0',
+    //         'idFicticio' => 'required|integer',
+    //         'tipoServicio' => 'required|string|in:Suscripción,Show',
+    //     ];
+    // }
 
-    // Logica de crear precio
-    public function logicaCrearPrecio($precio, $idFicticio, $tipoServicio)
-    {
-        //Creo un Precio
-        $precioNuevo = new Precio();
-        $precioNuevo->precio = $precio;
-        $precioNuevo->referenciaIdFicticio = $idFicticio;
-        $precioNuevo->tipoServicio = $tipoServicio;
-        $precioNuevo->save();
+    // // Logica de crear precio
+    // public function logicaCrearPrecio($precio, $idFicticio, $tipoServicio)
+    // {
+    //     //Creo un Precio
+    //     $precioNuevo = new Precios();
+    //     $precioNuevo->precio = $precio;
+    //     $precioNuevo->save();
 
-        return $precioNuevo;
-    }
+    //     $precioNuevo2 = new PrecioServicios();
+    //     $precioNuevo2->referenciaIdFicticio = $idFicticio;
+    //     $precioNuevo2->tipoServicio = $tipoServicio;
+    //     $precioNuevo2->precioId = $precioNuevo->idprecios;
+    //     $precioNuevo2->save();
 
-    // Agregar/Modificar Precio
-    public function agregarPrecio(Request $request)
-    {
-        $this->rules($request);
+    //     return $precioNuevo, $precioNuevo2;
+    // }
 
-        $precio = $request->input('precio');
-        $idFicticio = $request->input('idFicticio');
-        $tipoServicio = $request->input('tipoServicio');
+    // // Agregar/Modificar Precio
+    // public function agregarPrecio(Request $request)
+    // {
+    //     $this->rules($request);
 
-        // ID del precio actual, si existe
-        $precioActual = $request->input('idPrecio');
+    //     $precio = $request->input('precio');
+    //     $idFicticio = $request->input('idFicticio');
+    //     $tipoServicio = $request->input('tipoServicio');
 
-        // Inactivar el precio actual si existe y es de tipo 'Suscripcion'
-        if ($tipoServicio === 'Suscripción') {
-            // Buscar si el nuevo precio ya existe en la base de datos
-            $precioExistente = Precio::where('precio', $precio)
-                ->where('tipoServicio', $tipoServicio)
-                ->first();
+    //     // ID del precio actual, si existe
+    //     $precioActual = $request->input('idPrecio');
 
-            // Si el precio ya existe y está inactivo, activarlo
-            if ($precioExistente) {
-                $precioExistente->estadoPrecio = 'Activo';
-                $precioExistente->save();
-                return response()->json(['message' => 'Precio existente activado con éxito']);
-            }
+    //     // Inactivar el precio actual si existe y es de tipo 'Suscripcion'
+    //     if ($tipoServicio === 'Suscripción') {
+    //         // Buscar si el nuevo precio ya existe en la base de datos
+    //         $precioExistente = Precios::where('precio', $precio)
+    //             ->where('tipoServicio', $tipoServicio)
+    //             ->first();
 
-            // Inactivar el precio actual si existe
-            if ($precioActual) {
-                $precioAnterior = Precio::find($precioActual);
-                if ($precioAnterior) {
-                    $precioAnterior->estadoPrecio = 'Inactivo';
-                    $precioAnterior->save();
-                }
-            }
-        } elseif ($tipoServicio === 'Show') {
-            // Verificar si el precio ya existe para el idFicticio específico
-            $precioExistente = Precio::where('precio', $precio)
-                ->where('tipoServicio', $tipoServicio)
-                ->where('referenciaIdFicticio', $idFicticio) // Asegúrate de que coincida con el idFicticio
-                ->first();
+    //         // Si el precio ya existe y está inactivo, activarlo
+    //         if ($precioExistente) {
+    //             $precioExistente->estadoPrecio = 'Activo';
+    //             $precioExistente->save();
+    //             return response()->json(['message' => 'Precio existente activado con éxito']);
+    //         }
 
-            // Si el precio ya existe y está inactivo, activarlo
-            if ($precioExistente && $precioExistente->estadoPrecio === 'Inactivo') {
-                $precioExistente->estadoPrecio = 'Activo';
-                $precioExistente->referenciaIdFicticio = $idFicticio; // Asigna el idFicticio
-                $precioExistente->save();
-                return response()->json(['message' => 'Precio existente activado con éxito']);
-            }
+    //         // Inactivar el precio actual si existe
+    //         if ($precioActual) {
+    //             $precioAnterior = Precio::find($precioActual);
+    //             if ($precioAnterior) {
+    //                 $precioAnterior->estadoPrecio = 'Inactivo';
+    //                 $precioAnterior->save();
+    //             }
+    //         }
+    //     } elseif ($tipoServicio === 'Show') {
+    //         // Verificar si el precio ya existe para el idFicticio específico
+    //         $precioExistente = Precio::where('precio', $precio)
+    //             ->where('tipoServicio', $tipoServicio)
+    //             ->where('referenciaIdFicticio', $idFicticio) // Asegúrate de que coincida con el idFicticio
+    //             ->first();
 
-            // Si el precio ya está en uso por otro show, no lo inactivamos.
-            // Verificamos si hay otro show que esté usando este precio
-            $precioUsadoPorOtroShow = Precio::where('precio', $precio)
-                ->where('tipoServicio', $tipoServicio)
-                ->where('estadoPrecio', 'Activo')
-                ->where('referenciaIdFicticio', '!=', $idFicticio) // Asegúrate de que no sea el mismo show
-                ->exists();
+    //         // Si el precio ya existe y está inactivo, activarlo
+    //         if ($precioExistente && $precioExistente->estadoPrecio === 'Inactivo') {
+    //             $precioExistente->estadoPrecio = 'Activo';
+    //             $precioExistente->referenciaIdFicticio = $idFicticio; // Asigna el idFicticio
+    //             $precioExistente->save();
+    //             return response()->json(['message' => 'Precio existente activado con éxito']);
+    //         }
 
-            if (!$precioUsadoPorOtroShow) {
-                // Inactivar el precio actual si existe
-                if ($precioActual) {
-                    $precioAnterior = Precio::find($precioActual);
-                    if ($precioAnterior) {
-                        $precioAnterior->estadoPrecio = 'Inactivo';
-                        $precioAnterior->save();
-                    }
-                }
-            }
-        } else {
-            // Si no existe el precio, crear un nuevo precio
-            $this->logicaCrearPrecio($precio, $idFicticio, $tipoServicio);
+    //         // Si el precio ya está en uso por otro show, no lo inactivamos.
+    //         // Verificamos si hay otro show que esté usando este precio
+    //         $precioUsadoPorOtroShow = Precio::where('precio', $precio)
+    //             ->where('tipoServicio', $tipoServicio)
+    //             ->where('estadoPrecio', 'Activo')
+    //             ->where('referenciaIdFicticio', '!=', $idFicticio) // Asegúrate de que no sea el mismo show
+    //             ->exists();
 
-            return response()->json(['message' => 'Precio agregado con éxito']);
-        }
-    }
+    //         if (!$precioUsadoPorOtroShow) {
+    //             // Inactivar el precio actual si existe
+    //             if ($precioActual) {
+    //                 $precioAnterior = Precio::find($precioActual);
+    //                 if ($precioAnterior) {
+    //                     $precioAnterior->estadoPrecio = 'Inactivo';
+    //                     $precioAnterior->save();
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         // Si no existe el precio, crear un nuevo precio
+    //         $this->logicaCrearPrecio($precio, $idFicticio, $tipoServicio);
+
+    //         return response()->json(['message' => 'Precio agregado con éxito']);
+    //     }
+    // }
 
     // Ver el último precio según el tipo de servicio
-    public function verUltimoPrecio(Request $request)
-    {
-        $idFicticio = $request->input('idFicticio');
+    // public function verUltimoPrecio(Request $request)
+    // {
+    //     $idFicticio = $request->input('idFicticio');
 
-        if ($request->input('tipoServicio') === 'Suscripción') {
-            // Último precio de suscripción
-            $ultimoPrecio = Precio::where('tipoServicio', 'Suscripción')
-                ->where('estadoPrecio', 'Activo')
-                ->first();
-        } else {
-            // Último precio para un show específico
-            $ultimoPrecio = Precio::where('tipoServicio', 'Show')
-                ->where('referenciaIdFicticio', $idFicticio)
-                ->where('estadoPrecio', 'Activo')
-                ->orderBy('fechaPrecio', 'desc')
-                ->first();
-        }
+    //     // if ($request->input('tipoServicio') === 'Suscripción') {
+    //     //     // Último precio de suscripción
+    //     //     $ultimoPrecio = Precios::where('tipoServicio', 'Suscripción')
+    //     //         ->where('estadoPrecio', 'Activo')
+    //     //         ->first();
+    //     // } else {
+    //     //     // Último precio para un show específico
+    //     //     $ultimoPrecio = Precios::where('tipoServicio', 'Show')
+    //     //         ->where('referenciaIdFicticio', $idFicticio)
+    //     //         ->where('estadoPrecio', 'Activo')
+    //     //         ->orderBy('fechaPrecio', 'desc')
+    //     //         ->first();
+    //     // }
 
-        return response()->json($ultimoPrecio);
-    }
+    //     return response()->json($ultimoPrecio);
+    // }
 }

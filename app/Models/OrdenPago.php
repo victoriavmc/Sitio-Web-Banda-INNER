@@ -23,13 +23,8 @@ class OrdenPago extends Model
         return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
     }
 
-    public function precio()
+    public function precioServicio()
     {
-        return $this->belongsTo(Precio::class, 'precio_idprecio', 'idprecio');
-    }
-
-    public function show()
-    {
-        return $this->hasOne(Show::class, 'ordenpago_idordenpago', 'idordenpago');
+        return $this->belongsTo(PrecioServicios::class, 'precioServicio_idprecioServicio', 'idprecioServicio');
     }
 }

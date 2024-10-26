@@ -2,7 +2,8 @@
 
 namespace App\View\Components;
 
-use App\Models\Precio;
+use App\Models\Precios;
+use App\Models\PrecioServicios;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,10 @@ class LadoDerecho extends Component
         $this->usuario = Auth::user();
 
         // Último precio de suscripción
-        $ultimoPrecio = Precio::where('tipoServicio', 'Suscripción')
-            ->where('estadoPrecio', 'Activo')
-            ->orderBy('fechaPrecio', 'desc')
+        $ultimoPrecio = PrecioServicios::where('tipoServicio', 'Suscripción')
             ->first();
 
-        return $this->ultimoPrecio = $ultimoPrecio->precio;
+        return $ultimoPrecio;
     }
 
     /**

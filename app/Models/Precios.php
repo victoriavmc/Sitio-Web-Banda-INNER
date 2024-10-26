@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Precio extends Model
+class Precios extends Model
 {
     // Definimos la tabla correspondiente
-    protected $table = 'precio';
+    protected $table = 'precios';
 
     // Definimos la clave primaria
-    protected $primaryKey = 'idprecio';
+    protected $primaryKey = 'idprecios';
 
     // Habilitamos el autoincremento
     public $incrementing = true;
@@ -25,13 +25,11 @@ class Precio extends Model
 
         static::creating(function ($precio) {
             $precio->estadoPrecio = 'Activo';
-            $precio->fechaPrecio = now();
         });
     }
-
-    // Relación inversa con el modelo OrdenPago
-    public function ordenesPago()
+    // Relación con PrecioServicios (cada precio pertenece a un precioServicio)
+    public function precioServicio()
     {
-        return $this->hasMany(OrdenPago::class, 'precio_idprecio', 'idprecio');
+        return $this->belongsTo(PrecioServicios::class, 'precioServicio_idprecioServicio', 'idprecioServicio');
     }
 }

@@ -35,9 +35,4 @@ class Show extends Model
     {
         return $this->belongsTo(LugarLocal::class, 'lugarLocal_idlugarLocal', 'idlugarLocal');
     }
-
-    public function ordenpago()
-    {
-        return $this->belongsTo(OrdenPago::class, 'ordenpago_idordenpago', 'idordenpago');
-    }
 }
