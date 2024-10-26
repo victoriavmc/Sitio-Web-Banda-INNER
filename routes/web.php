@@ -431,3 +431,7 @@ Route::get('/ordenes-de-pago', [ComprobantesController::class, 'listarComprobant
 
 ####
 Route::post('/actualizar-precio', [PrecioController::class, 'cambiaPrecioSuscripcion'])->name('actualizar.precio');
+
+
+Route::get('/notificaciones', [NotificacionesController::class, 'notificaciones'])->name('notificaciones.index')->middleware('auth');
+Route::post('/notificaciones/guardar', [NotificacionesController::class, 'guardarPreferencias'])->name('notificaciones.guardar')->middleware('auth');
