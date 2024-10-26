@@ -102,7 +102,7 @@
                                 class="block px-4 py-2 hover:bg-gray-600 hover:text-white">Ajustes</a>
                         </li>
                         <li>
-                            <a href="{{ route('underConstruction') }}"
+                            <a href="{{ route('notificaciones') }}"
                                 class="block px-4 py-2 hover:bg-gray-600 hover:text-white">Notificaciones</a>
                         </li>
                     </ul>

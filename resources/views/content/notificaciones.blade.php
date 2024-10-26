@@ -19,10 +19,10 @@
 
                         <div class="flex flex-col justify-between py-2 max-w-max">
                             <h1 class="text-2xl lg:text-2xl">{{ $notificaciones->nombreNotificacion }}</h1>
+                            <p class="text-sm lg:text-sm">{{ $notificaciones->descripcionNotificacion }}</p>
                             <div class="flex items-center gap-2">
                                 {{-- Qu el color del check sea rojo --}}
                                 <input type="hidden" name="activo[]" value="0">
-
                                 <input type="checkbox" name="activo[]" id="{{ $notificaciones->idtipoNotificación }}">
                                 <label class="text-lg" for="{{ $notificaciones->idtipoNotificación }}">Activar</label>
                             </div>
