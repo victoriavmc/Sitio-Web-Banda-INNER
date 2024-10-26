@@ -125,3 +125,4 @@ El proyecto está diseñado para ser escalable, seguro y fácil de mantener, per
 ### Libreria
 - composer require maatwebsite/excel:^3.1.58
 - composer require barryvdh/laravel-dompdf
+- composer require "mercadopago/dx-php:3.0.0"

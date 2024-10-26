@@ -141,7 +141,7 @@
                 <img src="{{ asset('img/index_fondo_ng.webp') }}" alt="Producto Ejemplo" />
             </div>
             <div class="product-info">
-                <h1 class="product-name">Suscripcion Permanente a INNER!</h1>
+                <h1 class="product-name">Suscripción Permanente a INNER!</h1>
                 <div class="product-price" id="product-price">$1000 <span class="text-sm">(Solo efectivo o
                         transferencia)</span></div>
                 <hr />

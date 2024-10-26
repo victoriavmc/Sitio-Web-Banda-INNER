@@ -60,8 +60,8 @@ class Usuario extends Authenticatable
         return $this->contraseniaUser;
     }
 
-    public function suscripcion()
+    public function ordenpago()
     {
-        return $this->hasOne(Suscripcion::class, 'usuarios_idusuarios', 'idusuarios');
+        return $this->hasOne(ordenpago::class, 'usuarios_idusuarios', 'idusuarios');
     }
 }

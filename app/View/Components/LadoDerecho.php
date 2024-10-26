@@ -19,6 +19,7 @@ class LadoDerecho extends Component
      */
     public function __construct()
     {
+        $this->usuario = Auth::user();
         // Buscar precios de servicios de tipo "Suscripción" con referenciaIdFicticio igual a 0
         $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 0)
             ->where('tipoServicio', 'Suscripción')

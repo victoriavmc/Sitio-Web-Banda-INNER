@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Mail;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Models\Usuario; // Asegúrate de tener el modelo adecuado para tus usuarios
-use App\Models\Suscripcion; // Asegúrate de tener el modelo Suscripcion
 
 class MercadoPagoController extends Controller
 {

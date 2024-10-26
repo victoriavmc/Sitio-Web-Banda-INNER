@@ -65,36 +65,45 @@
             Proximamente!
         </p>
     @else
-        <form action="#" method="POST" class="order-form">
-            @csrf
+        <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
+            Precio: ${{ $ultimoPrecio }} <span class="text-sm">(Solo efectivo o
+                transferencia)</span>
+        </p>
 
-            <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
-                Precio: ${{ $ultimoPrecio }} <span class="text-sm">(Solo efectivo o
-                    transferencia)</span>
+        @guest
+            <p class="text-center text-lg text-gray-600 mb-2">
+                Para comprar entradas, debes estar registrado en el sistema.
             </p>
+        @endguest
 
-            {{-- <h1 class="hidden product-name">Suscripcion Permanente a INNER!</h1>
+        {{-- MERCADO PAGO --}}
+        @auth
+            <form action="#" method="POST" class="order-form">
+                @csrf
+                <h1 class="hidden product-name">Suscripción Permanente a INNER!</h1>
 
-            <input type="hidden" id="name" name="name" value="{{ $usuario->datospersonales->nombreDP }}"
-                required />
 
-            <input type="hidden" id="surname" name="surname" value="{{ $usuario->datospersonales->apellidoDP }}"
-                required />
+                <input type="hidden" id="name" name="name" value="{{ $usuario->datospersonales->nombreDP }}"
+                    required />
 
-            <input type="hidden" id="email" name="email" value="{{ $usuario->correoElectronicoUser }}"
-                required />
+                <input type="hidden" id="surname" name="surname" value="{{ $usuario->datospersonales->apellidoDP }}"
+                    required />
 
-            <input type="hidden" id="product_id" value="1234567890" />
-            <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" /> --}}
+                <input type="hidden" id="email" name="email" value="{{ $usuario->correoElectronicoUser }}"
+                    required />
 
-            <div class="flex justify-center">
-                <button id="checkout-btn" type="button"
-                    class=" flex items-center gap-1 px-2 bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                    <span class="icon-credit-card text-xl text-center mb-1.5">💳</span>
-                    <p>¡Accede a Contenido Premium!</p>
-                </button>
-            </div>
-        </form>
+                <input type="hidden" id="product_id" value="1234567890" />
+                <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" />
+
+                <div class="flex justify-center">
+                    <button id="checkout-btn" type="button"
+                        class=" flex items-center gap-1 px-2 bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        <span class="icon-credit-card text-xl text-center mb-1.5">💳</span>
+                        <p>¡Hacete SuperFan!</p>
+                    </button>
+                </div>
+            </form>
+        @endauth
     @endif
 
 
