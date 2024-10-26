@@ -560,7 +560,6 @@ class AlbumController extends Controller
 
         // Verifica si la validación falló
         if ($validator->fails()) {
-            dd($validator->errors());
             return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
                 'type' => 'Warning',
                 'message' => 'Error al cargar datos.',

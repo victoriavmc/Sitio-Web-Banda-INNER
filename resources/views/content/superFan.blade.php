@@ -87,17 +87,60 @@
         {{-- {{ dd($media) }} --}}
         @auth
             {{-- En caso de ser 1 o 2 --}}
-            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+            @if (Auth::user()->rol->idrol == 1)
                 <a href={{ route('descargas') }}>
                     <button type="submit"
                         class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                         Manejar Descargas
                     </button>
                 </a>
-                <a href={{ route('descargas') }}>
+                <!-- Botón para abrir el modal -->
+                <a href="javascript:void(0);" onclick="openModal()">
                     <button type="submit"
                         class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                         Manejar Precio
+                    </button>
+                </a>
+
+                <!-- Modal -->
+                <div id="precioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <!-- Título del Modal -->
+                        <h2 class="text-lg font-bold mb-4">Actualizar Precio</h2>
+
+                        <!-- Formulario para Cargar Nuevo Precio -->
+                        <form id="precioForm" method="POST" action="{{ route('actualizar.precio') }}">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="precio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
+                                <input type="number" step="0.01" name="precio" id="precio"
+                                    class="mt-1 p-2 border border-gray-300 rounded w-full" required>
+
+                                <!-- Inputs ocultos corregidos -->
+                                <input type="hidden" name="idFicticio" id="idFicticio" value="0">
+                                <input type="hidden" name="tipoServicio" id="tipoServicio" value="Suscripción">
+                            </div>
+
+                            <!-- Botones del Modal -->
+                            <div class="flex justify-end">
+                                <button type="button" onclick="closeModal()"
+                                    class="bg-gray-500 hover:bg-gray-400 text-white text-xs font-bold py-2 px-4 rounded mr-2">
+                                    Cancelar
+                                </button>
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 rounded">
+                                    Actualizar Precio
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            @elseif (Auth::user()->rol->idrol == 2)
+                <a href={{ route('descargas') }}>
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        Manejar Descargas
                     </button>
                 </a>
             @elseif (Auth::user()->rol->idrol == 4)
@@ -272,4 +315,16 @@
             <img id="modalImage" class="max-w-7xl h-3/4 rounded-lg">
         </div>
     </div>
+    <script>
+        // Función para abrir el modal
+        function openModal() {
+            document.getElementById('precioModal').classList.remove('hidden');
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('precioModal').classList.add('hidden');
+        }
+    </script>
+
 </x-AppLayout>

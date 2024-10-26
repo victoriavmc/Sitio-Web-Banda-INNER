@@ -19,11 +19,9 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ComprobantesController;
 use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\MercadoPagoWebhookController;
-// eliminar despues
-use App\Http\Controllers\Prueba;
+use App\Http\Controllers\PrecioController;
 #Modelo
 use App\Models\Paisnacimiento;
-use App\Models\Reportes;
 use Illuminate\Support\Facades\Route;
 
 //----------------------- SUELTOS 
@@ -430,3 +428,6 @@ Route::get('/comprobantes/excel', [ComprobantesController::class, 'descargarExce
 // Orden de Pago del Usuario
 Route::get('/ordenes-de-pago', [ComprobantesController::class, 'listarComprobantesUsuarioEspecifico'])
     ->name('orden-de-pago')->middleware('auth');
+
+####
+Route::post('/actualizar-precio', [PrecioController::class, 'cambiaPrecioSuscripcion'])->name('actualizar.precio');
