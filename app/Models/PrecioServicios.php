@@ -18,11 +18,12 @@ class PrecioServicios extends Model
     // Desactivamos el timestamp por defecto de Laravel
     public $timestamps = false;
 
-    // Relación con `Precio` (un `precioServicio` puede tener muchos `precios`)
+    // En el modelo PrecioServicios
     public function precios()
     {
-        return $this->hasMany(Precio::class, 'precioServicio_idprecioServicio', 'idprecioServicio');
+        return $this->hasMany(Precios::class, 'idprecios', 'precios_idprecios');
     }
+
 
     // Relación con `OrdenPago` (un `precioServicio` puede tener muchas `ordenesPago`)
     public function ordenesPago()

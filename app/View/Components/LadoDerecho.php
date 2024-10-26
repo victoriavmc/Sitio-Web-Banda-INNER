@@ -19,14 +19,27 @@ class LadoDerecho extends Component
      */
     public function __construct()
     {
-        $this->usuario = Auth::user();
+        // Buscar precios de servicios de tipo "Suscripción" con referenciaIdFicticio igual a 0
+        $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 0)
+            ->where('tipoServicio', 'Suscripción')
+            ->get();
 
-        // Último precio de suscripción
-        $ultimoPrecio = PrecioServicios::where('tipoServicio', 'Suscripción')
-            ->first();
+        // Recorrer los precios encontrados
+        foreach ($preciosServicios as $servicio) {
+            // Buscar el primer precio activo usando la relación
+            $ultimoPrecio = $servicio->precios()->where('estadoPrecio', 'Activo')->first();
 
-        return $ultimoPrecio;
+            // Si existe un precio activo, asignarlo a la propiedad
+            if ($ultimoPrecio) {
+                $this->ultimoPrecio = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+                return; // Salimos del constructor
+            }
+        }
+
+        // Si no se encuentra ningún precio activo, asignar null
+        $this->ultimoPrecio = null;
     }
+
 
     /**
      * Get the view / contents that represent the component.

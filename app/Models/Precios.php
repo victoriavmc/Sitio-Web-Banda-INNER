@@ -23,13 +23,14 @@ class Precios extends Model
     {
         parent::boot();
 
-        static::creating(function ($precio) {
-            $precio->estadoPrecio = 'Activo';
+        static::creating(function ($precios) {
+            $precios->estadoPrecio = 'Activo';
         });
     }
-    // Relación con PrecioServicios (cada precio pertenece a un precioServicio)
+
+    // En el modelo Precios
     public function precioServicio()
     {
-        return $this->belongsTo(PrecioServicios::class, 'precioServicio_idprecioServicio', 'idprecioServicio');
+        return $this->belongsTo(PrecioServicios::class, 'precios_idprecios', 'idprecioServicio');
     }
 }

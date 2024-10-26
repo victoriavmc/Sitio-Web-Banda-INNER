@@ -6,7 +6,7 @@ use App\Exports\ComprobantesExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\OrdenPago;
-use App\Models\Precio;
+use App\Models\Precios;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 

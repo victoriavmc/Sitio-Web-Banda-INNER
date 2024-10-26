@@ -132,4 +132,6 @@ class PrecioController extends Controller
 
     //     return response()->json($ultimoPrecio);
     // }
+
+
 }

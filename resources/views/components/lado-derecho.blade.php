@@ -58,6 +58,7 @@
             Recibir descuentos a la hora de comprar entradas!
         </li>
     </ul>
+
     {{-- En caso de que no exista $ultimo precio --}}
     @if (!isset($ultimoPrecio))
         <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
@@ -72,7 +73,7 @@
                     transferencia)</span>
             </p>
 
-            <h1 class="hidden product-name">Suscripcion Permanente a INNER!</h1>
+            {{-- <h1 class="hidden product-name">Suscripcion Permanente a INNER!</h1>
 
             <input type="hidden" id="name" name="name" value="{{ $usuario->datospersonales->nombreDP }}"
                 required />
@@ -84,7 +85,7 @@
                 required />
 
             <input type="hidden" id="product_id" value="1234567890" />
-            <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" />
+            <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" /> --}}
 
             <div class="flex justify-center">
                 <button id="checkout-btn" type="button"
