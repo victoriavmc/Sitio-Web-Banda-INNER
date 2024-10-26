@@ -79,7 +79,7 @@ class PrecioController extends Controller
         $validator = Validator::make($request->all(), $this->rules());
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
+            return redirect()->back()->withErrors($validator)->withInput()->with('alertRegistro', [
                 'type' => 'Warning',
                 'message' => 'Error al cargar datos.',
             ]);
@@ -127,5 +127,9 @@ class PrecioController extends Controller
                 }
             }
         }
+        return redirect()->back()->with('alertRegistro', [
+            'type' => 'Success',
+            'message' => 'Precio Actualizado correctamente!.',
+        ]);
     }
 }

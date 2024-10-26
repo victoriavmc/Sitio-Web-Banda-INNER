@@ -105,16 +105,22 @@
                 <!-- Modal -->
                 <div id="precioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                        <!-- Título del Modal -->
-                        <h2 class="text-lg font-bold mb-4">Actualizar Precio</h2>
-
+                        <h2 class="text-lg font-bold mb-4">
+                            @if (!$precioAnterior)
+                                Agregar Precio
+                            @else
+                                Actualizar Precio
+                            @endif
+                        </h2>
                         <!-- Formulario para Cargar Nuevo Precio -->
                         <form id="precioForm" method="POST" action="{{ route('actualizar.precio') }}">
                             @csrf
                             <div class="mb-4">
                                 <label for="precio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
                                 <input type="number" step="0.01" name="precio" id="precio"
-                                    class="mt-1 p-2 border border-gray-300 rounded w-full" required>
+                                    class="mt-1 p-2 border border-gray-300 rounded w-full" required
+                                    value="{{ old('precio', $precioAnterior) }}">
+                                <!-- Muestra el precio anterior si existe -->
 
                                 <!-- Inputs ocultos corregidos -->
                                 <input type="hidden" name="idFicticio" id="idFicticio" value="0">
