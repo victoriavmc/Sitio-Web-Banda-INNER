@@ -216,7 +216,7 @@
                                 </a>
                             </li>
                             <li class="min-w-max">
-                                <a href="{{ route('underConstruction') }}"
+                                <a href="{{ route('superFan') }}"
                                     class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                         fill="currentColor">
@@ -228,8 +228,8 @@
                                             clip-rule="evenodd" />
                                     </svg>
                                     <span
-                                        class="-mr-1 font-medium group-hover:text-red-500 {{ Request::is('suscripcion') ? 'text-red-500' : 'text-gray-600' }}">Definir
-                                        Precio de Suscripcion
+                                        class="-mr-1 font-medium group-hover:text-red-500 {{ Request::is('suscripcion') ? 'text-red-500' : 'text-gray-600' }}">Manejar
+                                        Acceso Exclusivo
                                     </span>
                                 </a>
                             </li>
