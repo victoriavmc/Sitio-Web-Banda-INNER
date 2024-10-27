@@ -20,23 +20,21 @@ class LadoDerecho extends Component
     public function __construct()
     {
         $this->usuario = Auth::user();
-        // Buscar precios de servicios de tipo "Suscripción" con referenciaIdFicticio igual a 0
+
+        // Recupero el ultimoprecio
         $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 0)
             ->where('tipoServicio', 'Suscripción')
-            ->get();
+            ->first();
 
-        // Recorrer los precios encontrados
-        foreach ($preciosServicios as $servicio) {
-            // Buscar el primer precio activo usando la relación
-            $ultimoPrecio = $servicio->precios()->where('estadoPrecio', 'Activo')->first();
+        // Buscar el primer precio activo usando la relación
+        $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
 
-            // Si existe un precio activo, asignarlo a la propiedad
-            if ($ultimoPrecio) {
-                // Array asoc que guarda el id del servicio y el precio
-                $this->ultimoPrecio['idprecioServicio'] = $servicio->idprecioServicio; // Asignamos el id del servicio
-                $this->ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
-                return; // Salimos del constructor
-            }
+        // Si existe un precio activo, asignarlo a la propiedad
+        if ($ultimoPrecio) {
+            // Array asoc que guarda el id del servicio y el precio
+            $this->ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
+            $this->ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+            return; // Salimos del constructor
         }
 
         // Si no se encuentra ningún precio activo, asignar null

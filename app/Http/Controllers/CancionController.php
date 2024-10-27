@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AlbumMusical;
 use App\Models\Cancion;
+use App\Models\Notificaciones;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -59,6 +61,30 @@ class CancionController extends Controller
         }
     }
 
+    //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
+    public function creadoAlbumNotificar($tituloAlbum, $titulo)
+    {
+        // Recuperar las notificaciones según el tipo
+        $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', 5)->get();
+
+        foreach ($notificados as $noti) {
+            $usuariosNotificar = $noti->usuarios_idusuarios;
+            $maildeusuario = Usuario::find($usuariosNotificar);
+
+            // Verificar que el usuario exista antes de intentar acceder a su correo
+            if ($maildeusuario) {
+                $correo = $maildeusuario->correoElectronicoUser;
+
+                // Lógica para enviar el correo según el tipo de notificación
+                // Lógica específica para álbum musical
+                // $tituloAlbum paso el titulo del album y titulo de cancion
+                // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
+
+            }
+        }
+    }
+
+
     // Guardar canción
     public function guardarCancion(Request $request, $id)
     {
@@ -74,6 +100,10 @@ class CancionController extends Controller
         $this->guardarAudioSiExiste($cancion, $request);
 
         $cancion->save();
+
+        $tituloAlbum = AlbumMusical::find($id);
+
+        $this->creadoAlbumNotificar($tituloAlbum->tituloAlbum, $cancion->tituloCancion);
 
         return redirect()->route('discografia')->with('alertCancion', [
             'type' => 'Success',

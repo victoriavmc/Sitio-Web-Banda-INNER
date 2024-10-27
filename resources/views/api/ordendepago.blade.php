@@ -72,7 +72,9 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $item['nombreComprador'] . ' ' . $item['apellidoComprador'] }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $item->usuario->usuarioUser }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $item->usuario->datosPersonales->nombreDP . ' ' . $item->usuario->datosPersonales->apellidoDP }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $item->usuario->correoElectronicoUser }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('mercadopago.comprobante', $item['idordenpago']) }}" target="_blank">

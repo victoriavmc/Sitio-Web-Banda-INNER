@@ -17,4 +17,9 @@ class TipoNotificacion extends Model
 
     // Desactivamos el timestamp por defecto de Laravel
     public $timestamps = false;
+    // Definimos la relación inversa con Notificaciones
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificaciones::class, 'tipoNotificación_idtipoNotificación', 'idtipoNotificación');
+    }
 }

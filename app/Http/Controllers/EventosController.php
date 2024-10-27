@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Imagenes;
 use App\Models\LugarLocal;
+use App\Models\Notificaciones;
 use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
 use App\Models\Show;
 use App\Models\UbicacionShow;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -170,6 +172,30 @@ class eventosController extends Controller
         return view('events.crearevento', compact('ubicaciones', 'lugares'));
     }
 
+
+    //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
+    public function creadoAlbumNotificar($tituloShow)
+    {
+        // Recuperar las notificaciones según el tipo
+        $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', 1)->get();
+
+        foreach ($notificados as $noti) {
+            $usuariosNotificar = $noti->usuarios_idusuarios;
+            $maildeusuario = Usuario::find($usuariosNotificar);
+
+            // Verificar que el usuario exista antes de intentar acceder a su correo
+            if ($maildeusuario) {
+                $correo = $maildeusuario->correoElectronicoUser;
+
+                // Lógica para enviar el correo según el tipo de notificación
+                // Lógica específica para Shows
+                // $tituloAlbum paso el titulo del album y titulo de cancion
+                // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
+
+            }
+        }
+    }
+
     public function crearEvento(Request $request)
     {
         // Validar los campos
@@ -254,6 +280,8 @@ class eventosController extends Controller
         }
 
         $evento->save();
+        $msj = 'Tenemos un nuevo show! En ' . $nuevoLugar->nombreLugar . ' el día ' . $evento->fechashow . '.';
+        $this->creadoAlbumNotificar($msj);
 
         // Redirigir a la vista de eventos con un mensaje de éxito
         return redirect()->route('eventos')->with('alertCrear', [

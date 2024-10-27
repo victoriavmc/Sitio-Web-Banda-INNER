@@ -17,10 +17,27 @@ use Illuminate\Support\Facades\Auth;
 
 class SuperFanController extends Controller
 {
+    // Obtener el último precio activo de suscripción
+    public function mostrarPrecio()
+    {
+        $precioServicio = PrecioServicios::where('referenciaIdFicticio', 0)
+            ->where('tipoServicio', 'Suscripción')
+            ->first();
+
+        if ($precioServicio) {
+            $ultimoPrecio = $precioServicio->precios->where('estadoPrecio', 'Activo')->first();
+            return $ultimoPrecio ? $ultimoPrecio->precio : null;
+        }
+
+        return null;
+    }
+
     public function indexSuperFan()
     {
         $media = $this->descargaVer();
-        return view('content.superFan', ['media' => $media]);
+        // Obtener el último precio activo de suscripción
+        $precioAnterior = $this->mostrarPrecio();
+        return view('content.superFan', compact('precioAnterior', 'media'));
     }
 
     //modificarPara Descargar
