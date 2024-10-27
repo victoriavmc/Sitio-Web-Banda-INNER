@@ -149,17 +149,50 @@ class MercadoPagoController extends Controller
         // Guardar los detalles del pago en la base de datos
         $OrdenPago = new OrdenPago();
         $OrdenPago->factura = $paymentDetails['factura'];
-        $OrdenPago->metodoPago = $paymentDetails['metodoPago'];
+
+        switch ($paymentDetails['metodoPago']) {
+            case 'account_money':
+                $metodoPago = 'Dinero en Cuenta';
+                break;
+
+            case 'debit_card':
+                $metodoPago = 'Tarjeta de Débito';
+                break;
+
+            default:
+                $metodoPago = $paymentDetails['metodoPago'];
+                break;
+        }
+
+        switch ($paymentDetails['estadoPago']) {
+            case 'approved':
+                $estadoPago = 'Aprobado';
+                break;
+
+            case 'pending':
+                $estadoPago = 'Pendiente';
+                break;
+
+            case 'rejected':
+                $estadoPago = 'Rechazado';
+                break;
+
+            default:
+                $estadoPago = $paymentDetails['metodoPago'];
+                break;
+        }
+
+        $OrdenPago->metodoPago = $metodoPago;
         $OrdenPago->diaPago = $paymentDetails['diaPago'];
-        $OrdenPago->estadoPago = $paymentDetails['estadoPago'];
+        $OrdenPago->estadoPago = $estadoPago;
         $OrdenPago->emailComprador = $paymentDetails['emailComprador'];
         $OrdenPago->nombreComprador =  $paymentDetails['nomreComprador'];
         $OrdenPago->apellidoComprador = $paymentDetails['apellidoComprador'];
-        $OrdenPago->precio_idprecio = 1;
+        $OrdenPago->precioServicio_idprecioServicio = 1;
         $OrdenPago->usuarios_idusuarios = Auth::user()->idusuarios;
         $OrdenPago->save();
 
-        Mail::to(Auth::user()->correoElectronicoUser)->send(new ComprobantePago($paymentDetails));
+        // Mail::to(Auth::user()->correoElectronicoUser)->send(new ComprobantePago($paymentDetails));
 
         // Usar el tipo de servicio para actualizar el rol del usuario
         if ($paymentDetails['descripcion'] == 'Suscripción') {
@@ -177,14 +210,13 @@ class MercadoPagoController extends Controller
     {
         // Obtener datos de la base de datos
         $paymentDetails = OrdenPago::where('factura', $id)->first();
-        $email = $paymentDetails->usuario->correoElectronicoUser;
 
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);
         }
 
         // Generar el PDF del comprobante
-        $pdf = PDF::loadView('api.comprobantePDF', compact('paymentDetails', 'email'));
+        $pdf = PDF::loadView('api.comprobantePDF', compact('paymentDetails'));
 
         // Descargar el PDF
         return $pdf->stream('comprobante_pago.pdf');

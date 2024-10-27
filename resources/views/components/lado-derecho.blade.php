@@ -60,13 +60,13 @@
     </ul>
 
     {{-- En caso de que no exista $ultimo precio --}}
-    @if (!isset($ultimoPrecio))
+    @if (!isset($ultimoPrecio['precio']))
         <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
             Proximamente!
         </p>
     @else
         <p id="product-price" class="text-center text-2xl text-red-600 mb-2 font-bold">
-            Precio: ${{ $ultimoPrecio }} <span class="text-sm">(Solo efectivo o
+            Precio: ${{ $ultimoPrecio['precio'] }} <span class="text-sm">(Solo efectivo o
                 transferencia)</span>
         </p>
 
@@ -92,8 +92,9 @@
                 <input type="hidden" id="email" name="email" value="{{ $usuario->correoElectronicoUser }}"
                     required />
 
+
                 <input type="hidden" id="product_id" value="1234567890" />
-                <input type="hidden" id="product_price" value="{{ $ultimoPrecio }}" />
+                <input type="hidden" id="product_price" value="{{ $ultimoPrecio['precio'] }}" />
 
                 <div class="flex justify-center">
                     <button id="checkout-btn" type="button"

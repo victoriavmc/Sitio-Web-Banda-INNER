@@ -21,7 +21,7 @@
             /* border-gray-400 */
             padding: 1.5rem;
             /* p-6 */
-            width: 650px;
+            width: 100vh;
             background-color: white;
             /* bg-white */
         }
@@ -104,7 +104,9 @@
             <div class="header-info">
                 <p>Fecha: <span class="date">{{ $paymentDetails['diaPago'] }}</span></p>
                 <p>Número: <span class="number">{{ $paymentDetails['factura'] }}</span></p>
-                <p>Cantidad: <span class="amount">${{ number_format($paymentDetails->precio['precio'], 2) }}</span></p>
+                <p>Cantidad: <span
+                        class="amount">${{ number_format($paymentDetails->precioservicio->precios->first()->precio, 2) }}</span>
+                </p>
             </div>
         </div>
         <div class="divider"></div>
@@ -112,7 +114,7 @@
             <div class="item">
                 <p class="item-title">Descripción de compra</p>
                 <p class="item-value">
-                    {{ $paymentDetails->precio['tipoServicio'] === 'Suscripcion' ? 'Suscripción Permanente a INNER!' : $paymentDetails->precio['tipoServicio'] }}
+                    {{ $paymentDetails->precioServicio->tipoServicio === 'Suscripción' ? 'Suscripción Permanente a INNER!' : $paymentDetails->precioServicio->tipoServicio }}
                 </p>
             </div>
             <div class="item">
@@ -120,8 +122,6 @@
                 <p class="item-value">
                     @if ($paymentDetails['metodoPago'] === 'account_money')
                         Dinero en Cuenta
-                    @elseif($paymentDetails['metodoPago'] === 'credit_card')
-                        Tarjeta de Crédito
                     @elseif($paymentDetails['metodoPago'] === 'debit_card')
                         Tarjeta de Débito
                     @else
@@ -140,7 +140,7 @@
             </div>
             <div class="item">
                 <p class="item-title">Email del comprador</p>
-                <p class="item-value">{{ $email }}</p>
+                <p class="item-value">{{ $paymentDetails['emailComprador'] }}</p>
             </div>
             <div class="item">
                 <p class="item-title">Estado del Pago</p>

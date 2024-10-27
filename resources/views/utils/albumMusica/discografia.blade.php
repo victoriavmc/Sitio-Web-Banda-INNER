@@ -25,7 +25,7 @@
         </div>
         <div class="container mx-auto max-w-4xl mt-10  pb-3">
             <!-- Centering wrapper -->
-            <h2 class="text-4xl font-bold text-center mb-5">ALBUMS</h2>
+            <h2 class="text-4xl font-bold text-center">ALBUMS</h2>
             @auth
                 @if (Auth::user()->rol->idrol === 1)
                     <!-- Formulario para crear un álbum musical -->
@@ -46,30 +46,10 @@
             @else
                 @foreach ($listaAlbum as $album)
                     <div class="flex w-full justify-center gap-12 border-b border-gray-300 pb-3">
-                        <div class="border w-[300px] max-h-72 border-gray-300 flex">
+                        <div class="relative border w-[300px] h-[280px] border-gray-300 flex">
                             @auth
                                 @if (Auth::user()->rol->idrol === 1)
-                                    <div class="flex gap-3 absolute pl-3 pt-3">
-                                        {{-- Borrar album especifico --}}
-                                        <form action="{{ route('eliminarAlbumEspecifico') }}" id="btnEliminarAlbum"
-                                            method="POST">
-                                            @csrf
-                                            @method('POST')
-                                            <input type="hidden" name="accion" value=3>
-                                            <input type="hidden" name="tipoAlbum" value=1>
-                                            <input type="hidden" name="idAlbumEspecifico"
-                                                value="{{ $album['idAlbumDatos'] }}">
-                                            <button type="submit"
-                                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                                <svg class="w-5 h-5 text-white" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                                </svg>
-                                            </button>
-                                        </form>
+                                    <div class="flex justify-end gap-3 absolute pr-3 pt-3 w-full">
                                         {{-- Modificar album especifico --}}
                                         <form action="{{ route('crear-album') }}" method="GET">
                                             @csrf
@@ -90,14 +70,37 @@
                                                 </svg>
                                             </button>
                                         </form>
+
+                                        {{-- Borrar album especifico --}}
+                                        <form action="{{ route('eliminarAlbumEspecifico') }}" id="btnEliminarAlbum"
+                                            method="POST">
+                                            @csrf
+                                            @method('POST')
+                                            <input type="hidden" name="accion" value=3>
+                                            <input type="hidden" name="tipoAlbum" value=1>
+                                            <input type="hidden" name="idAlbumEspecifico"
+                                                value="{{ $album['idAlbumDatos'] }}">
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                                <svg class="w-5 h-5 text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
                                 @endif
                             @endauth
 
                             @if ($album['imagen'] == 'logo_inner.webp')
-                                <img src="{{ asset('img/logo_inner_negro.webp') }}" alt="{{ $album['titulo'] }}">
+                                <img class="m-0 w-full" src="{{ asset('img/logo_inner_negro.webp') }}"
+                                    alt="{{ $album['titulo'] }}">
                             @else
-                                <img src="{{ asset(Storage::url($album['imagen'])) }}" alt="{{ $album['titulo'] }}">
+                                <img class="m-0 w-full" src="{{ asset(Storage::url($album['imagen'])) }}"
+                                    alt="{{ $album['titulo'] }}">
                             @endif
                         </div>
 

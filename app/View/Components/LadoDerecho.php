@@ -12,7 +12,7 @@ use Illuminate\View\Component;
 class LadoDerecho extends Component
 {
     public $usuario;
-    public $ultimoPrecio;
+    public $ultimoPrecio = [];
 
     /**
      * Create a new component instance.
@@ -32,7 +32,9 @@ class LadoDerecho extends Component
 
             // Si existe un precio activo, asignarlo a la propiedad
             if ($ultimoPrecio) {
-                $this->ultimoPrecio = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+                // Array asoc que guarda el id del servicio y el precio
+                $this->ultimoPrecio['idprecioServicio'] = $servicio->idprecioServicio; // Asignamos el id del servicio
+                $this->ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
                 return; // Salimos del constructor
             }
         }

@@ -41,8 +41,6 @@ class AlbumController extends Controller
         }
 
 
-        $imagen = 'logo_inner.webp'; // Valor por defecto
-
         switch ($accion) {
             case 1:
                 return view('components.manejo-album', compact('accion', 'tipoAlbum', 'titulo', 'imagen', 'video'));
@@ -560,7 +558,6 @@ class AlbumController extends Controller
 
         // Verifica si la validación falló
         if ($validator->fails()) {
-            dd($validator->errors());
             return redirect()->back()->withErrors($validator)->withInput()->with('alertAlbum', [
                 'type' => 'Warning',
                 'message' => 'Error al cargar datos.',

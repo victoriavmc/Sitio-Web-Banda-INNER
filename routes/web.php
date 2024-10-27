@@ -401,7 +401,7 @@ Route::delete('/reportes/eliminar-motivo-admin/{id}', [ReportesController::class
     ->name('eliminarMotivoAdmin')->middleware('auth');
 ##################################################################################################
 // Rutas para Mercado Pago
-Route::view('/mercadopago', 'mptest')
+Route::view('/mercadopago', 'api.mptest')
     ->name('mercadopago')->middleware('auth');
 
 // Crear preferencia de pago

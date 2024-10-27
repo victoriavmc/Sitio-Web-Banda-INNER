@@ -42,7 +42,6 @@ class AlbumMusicaController extends Controller
             $albumTitulo = $album->albumdatos->tituloAlbum ?? 'Título no disponible';
             $albumFecha = $album->albumdatos->fechaSubido ?? 'Fecha no disponible';
             $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
-
             // Inicializar la lista de canciones para cada álbum
             $listacanciones = [];
 
@@ -86,24 +85,32 @@ class AlbumMusicaController extends Controller
     //Redirecciona a la cancion
     public function verCancion($id)
     {
+        $links = $this->linksRedes();
+
         // Buscar la canción por ID
         $cancion = Cancion::findOrFail($id);
         $datosCancion = $cancion;
 
         // Obtener el ID del álbum al que pertenece la canción
         $idAlbum = $cancion->albumMusical_idalbumMusical;
+
         // Buscar el álbum usando el ID obtenido
         $album = AlbumMusical::findOrFail($idAlbum);
+
         // Obtener el título del álbum
         $tituloAlbum = $album->albumDatos->tituloAlbum;
+
         // Agregamos la imagen del album
         $albumImagen = $album->revisionimagenes->imagenes->subidaImg ?? 'logo_inner.webp';
+
         // Inicializar la lista de canciones para el álbum
         $listaCanciones = [];
+
         // Obtener las canciones relacionadas con el álbum, excluyendo la canción actual
         $canciones = Cancion::where('albumMusical_idalbumMusical', $idAlbum)
             ->where('idcancion', '!=', $id) // Filtrar para excluir la canción actual
             ->get();
+
         // Verificar si hay canciones antes de recorrer
         if ($canciones->isNotEmpty()) {
             foreach ($canciones as $cancion) {
@@ -124,6 +131,6 @@ class AlbumMusicaController extends Controller
         #Envio RedesSociales
         $recuperoRedesSociales = $this->linksRedes();
         // Pasar los datos a la vista
-        return view('utils.albumMusica.onlyCancion', compact('datosCancion', 'listaAlbum', 'recuperoRedesSociales'));
+        return view('utils.albumMusica.onlyCancion', compact('datosCancion', 'listaAlbum', 'recuperoRedesSociales', 'links'));
     }
 }

@@ -1,6 +1,6 @@
 <x-AppLayout>
-    <div class="flex flex-col mx-3 mt-6 min-h-screen lg:flex-row">
-        <div class="w-full lg:w-1/3 m-1">
+    <div class="flex justify-center min-h-screen p-5">
+        <div class="w-full max-h-max lg:w-1/3 m-1">
             <form action="{{ route('guardar-cancion', ['id' => $idAlbum]) }}" method="POST" enctype="multipart/form-data"
                 class="w-full bg-white shadow-md p-6">
                 @csrf
@@ -21,7 +21,7 @@
                     {{ $tituloAlbum }}
                 </h1>
 
-                <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="flex flex-wrap">
                     <div class="w-full md:w-full px-3 mb-6">
                         <label class="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
                             htmlFor="category_name">Nombre de Canción</label>
@@ -47,11 +47,11 @@
                     </div>
                     <div class="w-full px-3 mb-8">
                         {{-- Aca deberia ser Insertar Mp3 --}}
-                        <div class="w-full px-3 mb-8">
+                        <div class="w-full">
                             <label
                                 class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-red-400 bg-white p-6 text-center"
                                 for="archivoDsCancion">
-                                <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Archivo de la Canción
+                                <h2 class="text-xl font-medium text-gray-700 tracking-wide">Archivo de la Canción
                                 </h2>
                                 <p class="mt-2 text-gray-500 tracking-wide">Inserte la canción (mp3, mp4, ogg, wav).</p>
                                 <input id="archivoDsCancion" type="file" class="hidden" name="archivoDsCancion"

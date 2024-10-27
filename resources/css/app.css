@@ -109,6 +109,13 @@ a:hover {
     width: 50%;
 }
 
+img,
+video {
+    width: 100%;
+    display: block;
+    margin-bottom: 8px; /* Margen inferior para evitar solapamiento */
+}
+
 .form-group input:first-child {
     margin-right: 25px;
 }

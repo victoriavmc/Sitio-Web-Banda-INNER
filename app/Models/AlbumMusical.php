@@ -18,7 +18,7 @@ class AlbumMusical extends Model
 
     public function revisionImagenes()
     {
-        return $this->belongsTo(RevisionImagenes::class, 'revisionImagenes_idrevisionImagenescol', 'idrevisionImagenescol');
+        return $this->belongsTo(RevisionImagenes::class, 'revisionimagenes_idrevisionImagenescol', 'idrevisionImagenescol');
     }
 
     public function cancion()
