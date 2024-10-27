@@ -40,7 +40,7 @@ class NotificacionesController extends Controller
                 }
             }
         }
-        return redirect()->back()->with('alertRegistro', [
+        return redirect()->back()->with('alerta', [
             'type' => 'Success',
             'message' => 'Preferencias guardadas con éxito.',
         ]);
@@ -50,7 +50,7 @@ class NotificacionesController extends Controller
     public function cancelarTodo()
     {
         Notificaciones::where('usuarios_idusuarios', Auth::user()->idusuarios)->delete();
-        return redirect()->back()->with('alertRegistro', [
+        return redirect()->back()->with('alerta', [
             'type' => 'Success',
             'message' => 'Preferencias canceladas con éxito.',
         ]);

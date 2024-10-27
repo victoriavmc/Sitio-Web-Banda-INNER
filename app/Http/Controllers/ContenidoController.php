@@ -10,6 +10,7 @@ use App\Models\Imagenes;
 use App\Models\Interacciones;
 use App\Models\ImagenesContenido;
 use App\Models\LugarLocal;
+use App\Models\Notificaciones;
 use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
 use App\Models\Show;
@@ -883,6 +884,7 @@ class ContenidoController extends Controller
         switch ($type) {
             case 1:
                 #Si es foro
+                $this->creadoAlbumNotificar(3,  $contenido->titulo, '');
                 return redirect()->route('foro')->with('alertForo', [
                     'type' => 'Success',
                     'message' => 'Publicacion creada con éxito.',
@@ -890,6 +892,7 @@ class ContenidoController extends Controller
                 break;
             case 2:
                 #Si es noticias
+                $this->creadoAlbumNotificar(2,  $contenido->titulo, '');
                 return redirect()->route('noticias')->with('alertNoticia', [
                     'type' => 'Success',
                     'message' => 'Noticia creada con éxito.',
@@ -928,6 +931,9 @@ class ContenidoController extends Controller
 
         // Guardar el comentario
         $comentario->save();
+
+        $tituloForo = Contenidos::find($idContent);
+        $this->creadoAlbumNotificar(1, $tituloForo->tipoContenido, 'comentarios');
 
         return redirect()->route('foroUnico', ['data' => $idContent])->with('alertPublicacion', [
             'type' => 'Success',
@@ -1125,5 +1131,46 @@ class ContenidoController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
+    public function creadoAlbumNotificar($tipoNotificacion, $titulo, $comentario)
+    {
+        // Recuperar las notificaciones según el tipo
+        $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', $tipoNotificacion)->get();
+
+        foreach ($notificados as $noti) {
+            $usuariosNotificar = $noti->usuarios_idusuarios;
+            $maildeusuario = Usuario::find($usuariosNotificar);
+
+            // Verificar que el usuario exista antes de intentar acceder a su correo
+            if ($maildeusuario) {
+                $correo = $maildeusuario->correoElectronicoUser;
+
+                // Lógica para enviar el correo según el tipo de notificación
+                switch ($tipoNotificacion) {
+                    case 1:
+                        // Lógica específica para Crearon Cometarios en la publicacion Prueba del foro.
+                        // $titulo; paso el titulo
+                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
+                        break;
+                    case 2:
+                        // Lógica específica para Noticias
+                        // $titulo; paso el titulo
+                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
+                        break;
+
+                    case 3:
+                        // Lógica específica para Foro
+                        // $titulo; paso el titulo
+                        // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
+                        break;
+
+                    default:
+                        // Manejar otros casos si es necesario
+                        break;
+                }
+            }
+        }
     }
 }

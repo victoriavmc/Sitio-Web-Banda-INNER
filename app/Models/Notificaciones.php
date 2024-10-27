@@ -30,4 +30,9 @@ class Notificaciones extends Model
 
         return $this->belongsTo(TipoNotificacion::class, 'tipoNotificación_idtipoNotificación', 'idtipoNotificación');
     }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuarios_idusuarios', 'idusuarios');
+    }
 }

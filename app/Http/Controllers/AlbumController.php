@@ -8,7 +8,9 @@ use App\Models\AlbumMusical;
 use App\Models\AlbumVideo;
 use App\Models\Cancion;
 use App\Models\Imagenes;
+use App\Models\Notificaciones;
 use App\Models\RevisionImagenes;
+use App\Models\Usuario;
 use App\Models\Videos;
 
 use Illuminate\Http\Request;
@@ -18,6 +20,42 @@ use Illuminate\Support\Facades\Validator;
 
 class AlbumController extends Controller
 {
+    //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
+    public function creadoAlbumNotificar($tipoNotificacion, $titulo)
+    {
+        // Recuperar las notificaciones según el tipo
+        $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', $tipoNotificacion)->get();
+
+        foreach ($notificados as $noti) {
+            $usuariosNotificar = $noti->usuarios_idusuarios;
+            $maildeusuario = Usuario::find($usuariosNotificar);
+
+            // Verificar que el usuario exista antes de intentar acceder a su correo
+            if ($maildeusuario) {
+                $correo = $maildeusuario->correoElectronicoUser;
+
+                // Lógica para enviar el correo según el tipo de notificación
+                switch ($tipoNotificacion) {
+                    case 4:
+                        // Lógica específica para álbum de imagen o video
+                        // $titulo; paso el titulo
+                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
+                        break;
+
+                    case 5:
+                        // Lógica específica para álbum musical
+                        // $titulo; paso el titulo
+                        // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
+                        break;
+
+                    default:
+                        // Manejar otros casos si es necesario
+                        break;
+                }
+            }
+        }
+    }
+
     public function manejarAlbum(Request $request)
     {
         $accion = (int) $request->accion;
@@ -181,6 +219,10 @@ class AlbumController extends Controller
                     }
                     $albumMusical->save();
 
+                    // Aca envion 
+                    $this->creadoAlbumNotificar(5,  $album->tituloAlbum);
+
+
                     return redirect()->route('discografia')->with('alertAlbum', [
                         'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
@@ -210,6 +252,9 @@ class AlbumController extends Controller
                     $albumVideo->videos_idvideos = $video->idvideos;
                     $albumVideo->save();
 
+                    // Aca envion 
+                    $this->creadoAlbumNotificar(4,  $album->tituloAlbum);
+
                     // Redirigir a la ruta después de guardar los videos
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
@@ -223,7 +268,8 @@ class AlbumController extends Controller
                     $albumImagen->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumImagen->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
                     $albumImagen->save();
-
+                    // Aca envion 
+                    $this->creadoAlbumNotificar(4,  $album->tituloAlbum);
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
@@ -587,7 +633,8 @@ class AlbumController extends Controller
                     return redirect()->back()->withErrors('Uno o más archivos de video son inválidos.');
                 }
             }
-
+            // Aca envion 
+            $this->creadoAlbumNotificar(4,  'Videos');
             return redirect()->back()->with('alertAlbum', [
                 'type' => 'Success',
                 'message' => 'Videos añadidos correctamente.',
@@ -605,7 +652,8 @@ class AlbumController extends Controller
                     return redirect()->back()->withErrors('Uno o más archivos de imagen son inválidos.');
                 }
             }
-
+            // Aca envion 
+            $this->creadoAlbumNotificar(4,  'Imágenes');
             return redirect()->back()->with('alertAlbum', [
                 'type' => 'Success',
                 'message' => 'Imágenes añadidas correctamente.',

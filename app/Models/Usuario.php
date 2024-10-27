@@ -64,4 +64,9 @@ class Usuario extends Authenticatable
     {
         return $this->hasOne(ordenpago::class, 'usuarios_idusuarios', 'idusuarios');
     }
+
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificaciones::class, 'usuarios_idusuarios');
+    }
 }

@@ -1,4 +1,9 @@
 <x-AppLayout>
+    @if (session('alerta'))
+        <x-alerts :type="session('alerta')['type']">
+            {{ session('alerta')['message'] }}
+        </x-alerts>
+    @endif
     <div class="min-h-screen">
         <div style="background-image: url({{ asset('/img/albums/musica/musica_fondo.webp') }})"
             class="bg-cover bg-center flex justify-center items-center h-96">
