@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!-- Foro-->
-                <div class="max-w-7xl px-4" style="margin: 0">
+                <div class="w-full px-4" style="margin: 0">
                     <div class=" w-full sm:w-auto flex gap-4 items-center justify-between sm:items-start">
                         <a href="{{ route('perfil-ajeno', $autor['usuario']->idusuarios) }}">
                             <p class="font-display my-1 text-xl font-semibold text-black" itemprop="author">

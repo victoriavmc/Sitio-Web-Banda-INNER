@@ -18,7 +18,7 @@
             <div class="flex flex-col gap-1">
                 <label for="image" class="font-semibold text-lg">Imagen/es (* Es opcional, pero la primera es para la
                     portada)</label>
-                <input type="file" name="imagen[]" class="rounded-xl" multiple>
+                <input type="file" name="imagen[]" accept="image/*" class="rounded-xl" multiple>
             </div>
             <!-- Botón de Crear Publicación -->
             <button type="submit"

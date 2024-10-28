@@ -25,9 +25,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class PerfilController extends Controller
 {
@@ -248,17 +249,33 @@ class PerfilController extends Controller
             'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+
         $usuarioBD = $this->identificaUsername();
 
         if ($request->hasFile('imagen')) {
+
+            // Crear una instancia de ImageManager
+            $manager = new ImageManager(new Driver());
+
+            // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+            $filename = uniqid() . '.webp';
+            $path = public_path('storage/img/' . $filename);
+
             // Guardar la imagen en el almacenamiento
-            $path = $request->file('imagen')->store('img', 'public');
+            $imgSubida = $manager->read($request->file('imagen'));
+
+            // Convertir la imagen a formato webp y redimensionarla
+            $imgSubida->toWebp(60);
+            $imgSubida->resize(500, 500)->save($path);
+
+            // Crear una nueva entrada en la tabla Imagenes
             $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
+            $imagen->subidaImg = 'img/' . $filename;
             $imagen->fechaSubidaImg = now();
             $imagen->contenidoDescargable = 'No';
             $imagen->save();
 
+            // Obtener el ID del usuario y de la imagen
             $userId = $usuarioBD->idusuarios;
             $idFoto = $imagen->idimagenes;
 

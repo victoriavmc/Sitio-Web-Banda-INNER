@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AlbumController extends Controller
 {
@@ -162,9 +164,22 @@ class AlbumController extends Controller
     public function guardarImagenSiExiste($imagen, $tipo)
     {
         if ($imagen && $imagen->isValid()) {
-            $path = $imagen->store('img', 'public');
+
+            // Crear una instancia de ImageManager
+            $manager = new ImageManager(new Driver());
+
+            // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+            $filename = uniqid() . '.webp';
+            $path = public_path('storage/img/' . $filename);
+
+            // Guardar la imagen en el almacenamiento
+            $imgSubida = $manager->read($imagen);
+
+            // Convertir la imagen a formato webp y redimensionarla
+            $imgSubida->toWebp(75)->save($path);
+
             $imagenModel = new Imagenes();
-            $imagenModel->subidaImg = $path;
+            $imagenModel->subidaImg = 'img/' . $filename;
             $imagenModel->fechaSubidaImg = now();
             $imagenModel->save();
             $revImg = new RevisionImagenes();

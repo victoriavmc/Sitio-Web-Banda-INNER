@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Validation\Rule;
 
 class eventosController extends Controller
@@ -262,10 +264,21 @@ class eventosController extends Controller
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('img', 'public');
+            // Crear una instancia de ImageManager
+            $manager = new ImageManager(new Driver());
+
+            // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+            $filename = uniqid() . '.webp';
+            $path = public_path('storage/img/' . $filename);
+
+            // Guardar la imagen en el almacenamiento
+            $imgSubida = $manager->read($request->file('imagen'));
+
+            // Convertir la imagen a formato webp y redimensionarla
+            $imgSubida->toWebp(75)->save($path);
 
             $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
+            $imagen->subidaImg = 'img/' . $filename;
             $imagen->fechaSubidaImg = now();
             $imagen->contenidoDescargable = 'No';
             $imagen->save();
@@ -388,12 +401,22 @@ class eventosController extends Controller
                 $revisionImagen->delete();
             }
 
-            // Subir la nueva imagen
-            $path = $request->file('imagen')->store('img', 'public');
+            // Crear una instancia de ImageManager
+            $manager = new ImageManager(new Driver());
+
+            // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+            $filename = uniqid() . '.webp';
+            $path = public_path('storage/img/' . $filename);
+
+            // Guardar la imagen en el almacenamiento
+            $imgSubida = $manager->read($path = $request->file('imagen'));
+
+            // Convertir la imagen a formato webp y redimensionarla
+            $imgSubida->toWebp(75)->save($path);
 
             // Guardar la nueva imagen en la tabla "imagenes"
             $imagen = new Imagenes();
-            $imagen->subidaImg = $path;
+            $imagen->subidaImg = 'img/' . $filename;
             $imagen->fechaSubidaImg = now();
             $imagen->contenidoDescargable = 'No';
             $imagen->save();

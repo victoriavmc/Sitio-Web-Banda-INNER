@@ -89,7 +89,7 @@
                         @if ($tipo == 2)
                             <img id="imagen" src="{{ asset(Storage::url($media['rutaEspecifica'])) }}"
                                 alt="{{ $media['idEspecificoObjeto'] }}"
-                                class="w-full h-80 m-0 imagen-modal cursor-pointer">
+                                class="w-full max-h-96 m-0 imagen-modal cursor-pointer">
                         @else
                             <video class="w-full h-80" controls>
                                 <source src="{{ asset(Storage::url($media['rutaEspecifica'])) }}" type="video/mp4"

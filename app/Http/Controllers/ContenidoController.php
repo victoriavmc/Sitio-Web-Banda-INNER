@@ -26,7 +26,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\Switch_;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\DB;
 
 class ContenidoController extends Controller
@@ -208,11 +209,23 @@ class ContenidoController extends Controller
         // Manejar nuevas imágenes subidas
         if ($request->hasFile('imagen')) {
             foreach ($request->file('imagen') as $imageFile) {
-                $path = $imageFile->store('img', 'public');
+
+                // Crear una instancia de ImageManager
+                $manager = new ImageManager(new Driver());
+
+                // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+                $filename = uniqid() . '.webp';
+                $path = public_path('storage/img/' . $filename);
+
+                // Guardar la imagen en el almacenamiento
+                $imgSubida = $manager->read($imageFile);
+
+                // Convertir la imagen a formato webp y redimensionarla
+                $imgSubida->toWebp(75)->save($path);
 
                 // Guardar la imagen en la base de datos
                 $imagen = new Imagenes();
-                $imagen->subidaImg = $path;
+                $imagen->subidaImg = 'img/' . $filename;
                 $imagen->fechaSubidaImg = now();
                 $imagen->contenidoDescargable = 'No';
                 $imagen->save();
@@ -522,7 +535,7 @@ class ContenidoController extends Controller
         $recuperoLikes = $this->contadorEstrellasVisual($recuperoLikes); // Mostrar Estrellas
 
         // Envío los datos necesarios a la vista
-        return view('/content/forum/foro', compact('recuperoPublicaciones', 'recuperoLikes', 'contadorComentarios'));
+        return view('content.forum.foro', compact('recuperoPublicaciones', 'recuperoLikes', 'contadorComentarios'));
     }
 
     #Solo imagen
@@ -817,9 +830,22 @@ class ContenidoController extends Controller
         } elseif ($tipoFoto == 2) {
             $tipoFoto = 2;
         }
+
+        // Crear una instancia de ImageManager
+        $manager = new ImageManager(new Driver());
+
+        // Crear la ruta de almacenamiento de la imagen y el nombre del archivo
+        $filename = uniqid() . '.webp';
+        $path = public_path('storage/img/' . $filename);
+
+        // Guardar la imagen en el almacenamiento
+        $imgSubida = $manager->read($imagenFile);
+
+        // Convertir la imagen a formato webp y redimensionarla
+        $imgSubida->toWebp(75)->save($path);
+
         $imagen = new Imagenes();
-        $rutaImagen = $imagenFile->store('img', 'public');
-        $imagen->subidaImg = $rutaImagen;
+        $imagen->subidaImg = 'img/' . $filename;
         $imagen->fechaSubidaImg = now();
         $imagen->contenidoDescargable = 'No';
         $imagen->save();

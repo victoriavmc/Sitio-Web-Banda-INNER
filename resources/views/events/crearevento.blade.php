@@ -140,7 +140,7 @@
                     <!-- Imagen de Portada -->
                     <div class="flex flex-col gap-1">
                         <label class="font-semibold text-lg" for="imagen">Imagen de Portada</label>
-                        <input class="rounded-xl" type="file" name="imagen" multiple>
+                        <input class="rounded-xl" type="file" name="imagen" accept="image/*" multiple>
                         @error('imagen')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror

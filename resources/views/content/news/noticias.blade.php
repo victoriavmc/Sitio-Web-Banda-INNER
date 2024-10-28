@@ -22,7 +22,7 @@
 
                 <div class="flex items-center justify-center gap-5">
                     <div class="w-full max-w-lg bg-white bg-opacity-70 rounded-lg shadow-xl">
-                        <form action="{{ route('eventos') }}" method="GET"
+                        <form action="{{ route('noticias') }}" method="GET"
                             class="w-full max-w-lg bg-white rounded-lg shadow-xl">
                             <div
                                 class="flex items-center px-3.5 py-2 text-gray-400 group hover:ring-1 hover:ring-red-500 focus-within:!ring-2 ring-inset focus-within:!ring-red-500 rounded-md">

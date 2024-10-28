@@ -54,7 +54,7 @@
                 <div class="flex flex-col gap-1">
                     <label class="font-semibold text-lg" for="imagen">Imagen/es (*Opcional, pero la primera es
                         portada)</label>
-                    <input class="rounded-xl" type="file" name="imagen[]" multiple>
+                    <input class="rounded-xl" type="file" name="imagen[]" accept="image/*" multiple>
                     @error('imagen')
                         <p class="text-red-600 text-sm">{{ $message }}</p>
                     @enderror

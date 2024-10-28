@@ -64,8 +64,8 @@
                             <label for="imagen-usuario" class="block text-sm font-medium text-black"> Cambiar
                                 Imagen</label>
                             <div class="relative flex h-10 w-full min-w-[200px] max-w-[26rem]">
-                                <input id="file-upload-{{ $artista['id'] }}" type="file" name="imagen"
-                                    class="peer hidden" required
+                                <input id="file-upload-{{ $artista['id'] }}" type="file" accept="image/*"
+                                    name="imagen" class="peer hidden" required
                                     onchange="actualizarNombreArchivo({{ $artista['id'] }})" />
                                 <label for="file-upload-{{ $artista['id'] }}"
                                     class="absolute right-1 top-1 z-10 select-none rounded bg-red-500 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:shadow-lg hover:bg-red-600 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] cursor-pointer">

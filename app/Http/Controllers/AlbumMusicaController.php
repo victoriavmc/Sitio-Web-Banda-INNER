@@ -3,19 +3,9 @@
 namespace App\Http\Controllers;
 
 #Clases
-use App\Models\AlbumDatos;
 use App\Models\AlbumMusical;
 use App\Models\Cancion;
-use App\Models\Imagenes;
 use App\Models\RedesSociales;
-use App\Models\RevisionImagenes;
-
-#Otros
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\FuncCall;
 
 class AlbumMusicaController extends Controller
 {
