@@ -89,12 +89,29 @@
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                             <div class="flex flex-col gap-3">
                                 @if (now() < $show->fechashow)
-                                    <a href="{{ $show->linkCompraEntrada }}" target="_blank">
+                                    <form action="" method="post">
+
+                                        <h1 class="hidden product-name">Entrada para el concierto en
+                                            {{ $show->nombreLugar }}!</h1>
+
+                                        <input type="hidden" id="name" name="name"
+                                            value="{{ $usuario->datospersonales->nombreDP }}" required />
+
+                                        <input type="hidden" id="surname" name="surname"
+                                            value="{{ $usuario->datospersonales->apellidoDP }}" required />
+
+                                        <input type="hidden" id="email" name="email"
+                                            value="{{ $usuario->correoElectronicoUser }}" required />
+
+                                        <input type="hidden" id="product_id" value="1234567890" />
+                                        <input type="hidden" id="product_price"
+                                            value="{{ $ultimoPrecio['precio'] }}" />
+
                                         <button
-                                            class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6">
+                                            class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6">
                                             <p>Adquirir Entrada</p>
                                         </button>
-                                    </a>
+                                    </form>
                                 @endif
 
                                 {{-- <a href="{{ $show->linkCompraEntrada }}" target="_blank">
@@ -148,26 +165,17 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.formEliminarUsuario').forEach(element => {
-                element.addEventListener('submit', async function(event) {
-                    event.preventDefault(); // Evita que se envíe el formulario inmediatamente
-                    const result = await Swal.fire({
-                        title: "¿Estás seguro?",
-                        text: "¡No puedes revertir los cambios!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Sí, borrarlo!"
-                    });
-                    if (result.isConfirmed) {
-                        this.submit(); // Solo envía el formulario si se confirma
-                    }
-                });
-            });
-        });
+        // Mercado pago
 
+
+
+
+
+
+
+
+
+        // No se que hace, pero no lo toco xd
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search');
             const eventosContainer = document.getElementById('eventosContainer');

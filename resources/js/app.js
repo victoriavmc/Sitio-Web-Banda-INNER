@@ -45,6 +45,26 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.formEliminarUsuario').forEach(element => {
+        element.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Evita que se envíe el formulario inmediatamente
+            const result = await Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No puedes revertir los cambios!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, borrarlo!"
+            });
+            if (result.isConfirmed) {
+                this.submit(); // Solo envía el formulario si se confirma
+            }
+        });
+    });
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     // Seleccionar todas las imágenes con la clase `imagen-modal`
     const imagenes = document.querySelectorAll(".imagen-modal");

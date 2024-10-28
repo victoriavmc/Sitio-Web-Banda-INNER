@@ -7,6 +7,7 @@ use App\Models\LugarLocal;
 use App\Models\Notificaciones;
 use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
+use App\Models\PrecioServicios;
 use App\Models\Show;
 use App\Models\UbicacionShow;
 use App\Models\Usuario;
@@ -36,10 +37,32 @@ class eventosController extends Controller
                 ->orWhere('fechashow', 'like', '%' . $search . '%');
         }
 
+        // Recupero el ultimoprecio
+        $ultimoPrecio = [];
+
+        $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 1)
+            ->where('tipoServicio', 'Suscripción')
+            ->first();
+
+        // Buscar el primer precio activo usando la relación
+        $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
+
+        // Si existe un precio activo, asignarlo a la propiedad
+        if ($ultimoPrecio) {
+            // Array asoc que guarda el id del servicio y el precio
+            $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
+            $ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+            return; // Salimos del constructor
+        }
+
+        // Si no se encuentra ningún precio activo, asignar null
+        $ultimoPrecio = null;
+
         // Obtén los eventos ordenados por fecha
         $shows = $query->orderBy('fechashow', 'desc')->get();
+        $usuario = Auth::user();
 
-        return view('events.eventos', compact('shows'));
+        return view('events.eventos', compact('shows', 'usuario'));
     }
 
     public function lugaresCargados(Request $request)
