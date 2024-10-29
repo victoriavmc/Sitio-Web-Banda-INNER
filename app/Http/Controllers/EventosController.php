@@ -41,7 +41,7 @@ class eventosController extends Controller
         $ultimoPrecio = [];
 
         $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 1)
-            ->where('tipoServicio', 'Suscripción')
+            ->where('tipoServicio', 'Show')
             ->first();
 
         // Buscar el primer precio activo usando la relación
@@ -52,7 +52,6 @@ class eventosController extends Controller
             // Array asoc que guarda el id del servicio y el precio
             $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
             $ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
-            return; // Salimos del constructor
         }
 
         // Si no se encuentra ningún precio activo, asignar null
