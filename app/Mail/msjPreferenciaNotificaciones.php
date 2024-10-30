@@ -48,7 +48,7 @@ class msjPreferenciaNotificaciones extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.msjPreferenciaNotificaciones',
+            view: 'emails.MsjPreferenciaNotificaciones',
         );
     }
 

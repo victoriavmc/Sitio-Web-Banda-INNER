@@ -9,6 +9,7 @@ use App\Models\Notificaciones;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -78,13 +79,11 @@ class CancionController extends Controller
 
                 // Lógica para enviar el correo según el tipo de notificación
                 // Lógica específica para álbum musical
-                // $tituloAlbum paso el titulo del album y titulo de cancion
-                // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
-
+                $msj = 'Se ha agregado al álbum musical: ' . $tituloAlbum . ' la canción: ' . $titulo;
+                Mail::to($correo)->send(new msjNotificaciones('Canciones', $msj));
             }
         }
     }
-
 
     // Guardar canción
     public function guardarCancion(Request $request, $id)
@@ -104,7 +103,7 @@ class CancionController extends Controller
 
         $tituloAlbum = AlbumMusical::find($id);
 
-        $this->creadoAlbumNotificar($tituloAlbum->tituloAlbum, $cancion->tituloCancion);
+        $this->creadoAlbumNotificar($tituloAlbum->albumDatos->tituloAlbum, $cancion->tituloCancion);
 
         return redirect()->route('discografia')->with('alertCancion', [
             'type' => 'Success',

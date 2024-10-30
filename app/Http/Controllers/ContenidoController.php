@@ -913,7 +913,7 @@ class ContenidoController extends Controller
             case 1:
                 #Si es foro
                 $msj = "Han creado una nueva publicacion al foro:" . ' "' .  $contenido->titulo . '".';
-                $this->creadoAlbumNotificar(3,  $msj);
+                $this->creadoContenidoNotificar(3,  $msj);
                 return redirect()->route('foro')->with('alertForo', [
                     'type' => 'Success',
                     'message' => 'Publicacion creada con éxito.',
@@ -922,7 +922,7 @@ class ContenidoController extends Controller
             case 2:
                 #Si es noticias
                 $msj = "Han creado una nueva noticia:" . ' "' .  $contenido->titulo . '".';
-                $this->creadoAlbumNotificar(2,  $msj);
+                $this->creadoContenidoNotificar(2,  $msj);
                 return redirect()->route('noticias')->with('alertNoticia', [
                     'type' => 'Success',
                     'message' => 'Noticia creada con éxito.',
@@ -964,7 +964,7 @@ class ContenidoController extends Controller
 
         $tituloForo = Contenidos::find($idContent);
         $msj = "Han hecho un comentario en la publicacion:" . ' "' . $tituloForo->titulo . '".';
-        $this->creadoAlbumNotificar(1, $msj);
+        $this->creadoContenidoNotificar(3, $msj);
 
         return redirect()->route('foroUnico', ['data' => $idContent])->with('alertPublicacion', [
             'type' => 'Success',
@@ -1165,7 +1165,7 @@ class ContenidoController extends Controller
     }
 
     //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
-    public function creadoAlbumNotificar($tipoNotificacion, $mensaje)
+    public function creadoContenidoNotificar($tipoNotificacion, $msj)
     {
         // Recuperar las notificaciones según el tipo
         $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', $tipoNotificacion)->get();
@@ -1181,17 +1181,17 @@ class ContenidoController extends Controller
 
                 case 1:
                     // Comentario o Foro - Han hecho un comentario en la publicacion X 
-                    // Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
+                    Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
                     break;
 
                 case 2:
                     // Han creado una nueva noticia "NombreNoticia" 
-                    // Mail::to($correo)->send(new msjNotificaciones($album));
+                    Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
                     break;
 
                 case 3:
                     // Han creado una nueva publicacion al foro "NombreForo"
-                    // Mail::to($correo)->send(new msjNotificaciones($album));
+                    Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
                     break;
             }
         }

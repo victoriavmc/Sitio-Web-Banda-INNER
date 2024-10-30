@@ -11,7 +11,6 @@ use App\Models\PrecioServicios;
 use App\Models\Show;
 use App\Models\TipoNotificacion;
 use App\Models\UbicacionShow;
-use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -51,9 +50,8 @@ class eventosController extends Controller
             // Si existe un precio activo, asignarlo a la propiedad
             if ($ultimoPrecio) {
                 // Array asoc que guarda el id del servicio y el precio
-                $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
-                $ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
-                return; // Salimos del constructor
+                $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio;
+                $ultimoPrecio['precio'] = $ultimoPrecio->precio;
             }
         } catch (\Throwable $th) {
             $ultimoPrecio = null;

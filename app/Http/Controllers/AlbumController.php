@@ -10,6 +10,7 @@ use App\Models\Cancion;
 use App\Models\Imagenes;
 use App\Models\Notificaciones;
 use App\Models\RevisionImagenes;
+use App\Models\TipoNotificacion;
 use App\Models\Usuario;
 use App\Models\Videos;
 
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Mail\msjNotificaciones;
+use Illuminate\Support\Facades\Mail;
 
 class AlbumController extends Controller
 {
@@ -27,6 +30,8 @@ class AlbumController extends Controller
     {
         // Recuperar las notificaciones según el tipo
         $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', $tipoNotificacion)->get();
+
+        $nombreDescripcion = TipoNotificacion::find($tipoNotificacion)->nombreNotificacion;
 
         foreach ($notificados as $noti) {
             $usuariosNotificar = $noti->usuarios_idusuarios;
@@ -41,17 +46,15 @@ class AlbumController extends Controller
                     case 4:
                         // Lógica específica para álbum de imagen o video
                         // $titulo; paso el titulo
-                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
+                        $msj = 'Se ha creado un nuevo album de imagen o video titulado: ' . $titulo;
+                        Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
                         break;
 
                     case 5:
                         // Lógica específica para álbum musical
                         // $titulo; paso el titulo
-                        // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
-                        break;
-
-                    default:
-                        // Manejar otros casos si es necesario
+                        $msj = 'Se ha creado un nuevo álbum musical: ' . $titulo;
+                        Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
                         break;
                 }
             }
@@ -148,13 +151,13 @@ class AlbumController extends Controller
         // Agrega reglas dependiendo del tipo de álbum
         if ($tipoAlbum == 1) {
             // Álbum de tipo 1: solo una imagen
-            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg|max:2048';
         } elseif ($tipoAlbum == 2) {
             // Álbum de tipo 2: solo un video
             $rules['video'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
         } elseif ($tipoAlbum == 3) {
             // Álbum de tipo 3: solo una imagen
-            $rules['imagen'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['imagen'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
         }
 
         return $rules;
@@ -225,16 +228,17 @@ class AlbumController extends Controller
                     $albumMusical = new AlbumMusical();
                     $albumMusical->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumMusical->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
+
                     // Guardar archivo de canción (MP3)
                     if ($request->hasFile('archivoDsCancion')) {
                         $audioPath = $request->file('archivoDsCancion')->store('audios', 'public');
                         $albumMusical->archivoDsCancion = $audioPath;
                     }
+
                     $albumMusical->save();
 
                     // Aca envion 
                     $this->creadoAlbumNotificar(5,  $album->tituloAlbum);
-
 
                     return redirect()->route('discografia')->with('alertAlbum', [
                         'type' => 'Success',
@@ -273,20 +277,23 @@ class AlbumController extends Controller
                         'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
                     ]);
-
                     break;
+
                 case "3":
                     $revImg = $this->guardarImagenSiExiste($request->file('imagen'), 2);
                     $albumImagen = new AlbumImagenes();
                     $albumImagen->albumDatos_idalbumDatos = $album->idalbumDatos;
                     $albumImagen->revisionImagenes_idrevisionImagenescol = $revImg->idrevisionImagenescol ?? null;
                     $albumImagen->save();
+
                     // Aca envion 
                     $this->creadoAlbumNotificar(4,  $album->tituloAlbum);
+
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',
                         'message' => 'Álbum creado correctamente.',
                     ]);
+                    break;
             }
         }
     }

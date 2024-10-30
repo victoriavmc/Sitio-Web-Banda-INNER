@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrecioServicios extends Model
 {
     // Definimos la tabla correspondiente
-    protected $table = 'precioServicio';
+    protected $table = 'precioservicio';
 
     // Definimos la clave primaria
     protected $primaryKey = 'idprecioServicio';

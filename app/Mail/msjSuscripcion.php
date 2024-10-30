@@ -45,7 +45,7 @@ class msjSuscripcion extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.msjSuscripcion',
+            view: 'emails.MsjSuscripcion',
         );
     }
 

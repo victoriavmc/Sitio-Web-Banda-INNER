@@ -13,7 +13,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RedesSocialesController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\SuperFanController;
-use App\Http\Controllers\cancionController;
+use App\Http\Controllers\CancionController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ComprobantesController;

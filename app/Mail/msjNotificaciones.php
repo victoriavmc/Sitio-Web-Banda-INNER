@@ -41,7 +41,7 @@ class msjNotificaciones extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.msjNotificaciones',
+            view: 'emails.MsjNotificaciones',
         );
     }
 

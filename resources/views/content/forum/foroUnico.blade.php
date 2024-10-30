@@ -7,9 +7,9 @@
     @endif
 
     <div class="flex justify-center items-center min-h-screen p-10 flex-col">
-        <div>
+        <div class="w-[100%] sm:w-[60%]">
             <div
-                class="flex bg-white space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 px-4 py-8 dark:border-gray-400 shadow-lg rounded-lg">
+                class="flex flex-col sm:flex-row bg-white space-y-4 sm:space-y-0 sm:space-x-6 px-4 py-8 dark:border-gray-400 shadow-lg rounded-lg">
                 <!-- Quien sube la publicacion -->
                 <div class="flex justify-center">
                     <div class="w-full flex justify-center sm:justify-start sm:w-auto">
@@ -21,10 +21,11 @@
                     </div>
                 </div>
                 <!-- Foro-->
-                <div class="w-full px-4" style="margin: 0">
+                <div class="w-full sm:px-4" style="margin: 0">
                     <div class=" w-full sm:w-auto flex gap-4 items-center justify-between sm:items-start">
                         <a href="{{ route('perfil-ajeno', $autor['usuario']->idusuarios) }}">
-                            <p class="font-display my-1 text-xl font-semibold text-black" itemprop="author">
+                            <p class="font-display my-1 text-base sm:text-xl font-medium sm:font-semibold text-black"
+                                itemprop="author">
                                 {{ $autor['usuario']->usuarioUser }} | {{ $autor['usuario']->rol->rol }}
                             </p>
                         </a>
@@ -115,13 +116,15 @@
                     </div>
                     <div class="max-w-3xl mx-auto">
                         <!-- Foro cabecera -->
-                        <h1 class="text-3xl text-black font-bold mb-4">{{ $recuperoPublicacion->titulo }}
+                        <h1 class="text-xl font-semibold sm:text-3xl text-black sm:font-bold mb-4">
+                            {{ $recuperoPublicacion->titulo }}
                         </h1>
                         <p class="text-black text-sm mb-4">Publicado el: {{ $recuperoPublicacion->fechaSubida }}
                         </p>
 
                         <!-- Foro contenido -->
-                        <div class="prose text-black text-base mb-4 prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
+                        <div
+                            class="prose text-black text-sm sm:text-base mb-4 prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
                             {{ $recuperoPublicacion->descripcion }}
                         </div>
                         <!-- Imagen Principal -->
@@ -222,7 +225,7 @@
                     <img src="{{ $imagen['ruta_imagen'] ? asset(Storage::url($imagen['ruta_imagen'])) : asset('img/logo_usuario.webp') }}"
                         alt="Usuario" class="w-10 h-10 rounded-full">
                     <form action="{{ route('crearComentario', $recuperoPublicacion->idcontenidos) }}" method="POST"
-                        enctype="multipart/form-data" class="w-full px-4">
+                        enctype="multipart/form-data" class="w-full sm:px-4">
                         @csrf
                         <div class="form-group relative mb-2">
                             <textarea name="contenido" id="contenido"
@@ -258,7 +261,7 @@
                     @foreach ($comentarios as $comentario)
                         <div class="bg-white rounded-xl">
                             <div
-                                class="flex my-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 px-4 py-4 dark:border-gray-400 shadow-lg rounded-lg">
+                                class="flex flex-col my-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 px-4 py-4 dark:border-gray-400 shadow-lg rounded-lg">
                                 {{-- Foto de Perfil --}}
                                 <div class="flex justify-center mt-2">
                                     <div class="w-full flex justify-center sm:justify-start sm:w-auto">
@@ -269,17 +272,18 @@
                                 </div>
 
                                 {{-- Contenido Principal --}}
-                                <div class="w-full px-4 flex flex-col" style="margin: 0">
+                                <div class="w-full sm:px-4 flex flex-col" style="margin: 0">
                                     {{-- Autor --}}
                                     <div class="w-full sm:w-auto flex justify-between items-end">
                                         <div class="flex items-end gap-1">
                                             <a class="flex items-center"
                                                 href="{{ route('perfil-ajeno', $comentario['autor']->idusuarios) }}">
-                                                <p class="text-xl font-semibold text-black">
+                                                <p
+                                                    class="text-base sm:text-xl font-medium sm:font-semibold text-black">
                                                     {{ $comentario['autor']->usuarioUser }} </p>
                                             </a>
 
-                                            <p class="text-xs font-bold mb-[3px] text-gray-500">
+                                            <p class="text-xs sm:font-bold mb-[3px] text-gray-500">
                                                 {{ $comentario['comentario']->fechaComent }}</p>
                                         </div>
 
