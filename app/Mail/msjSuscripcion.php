@@ -9,20 +9,24 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class msjNotificaciones extends Mailable
+class msjSuscripcion extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $nombreDescripcion;
-    public $msj;
+    public $idordenpago;
+    public $factura;
+    public $monto;
+    public $diaPago;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($nombreDescripcion, $msj)
+    public function __construct($idordenpago, $factura, $monto, $diaPago)
     {
-        $this->nombreDescripcion = $nombreDescripcion;
-        $this->msj = $msj;
+        $this->idordenpago = $idordenpago;
+        $this->factura = $factura;
+        $this->monto = $monto;
+        $this->diaPago = $diaPago;
     }
 
     /**
@@ -31,7 +35,7 @@ class msjNotificaciones extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Tienes nuevas notificaciones',
+            subject: 'Msj Suscripcion',
         );
     }
 
@@ -41,7 +45,7 @@ class msjNotificaciones extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.msjNotificaciones',
+            view: 'emails.msjSuscripcion',
         );
     }
 

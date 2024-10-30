@@ -158,6 +158,11 @@ class PanelUsuariosController extends Controller
     #Modifica rol
     public function modificarRol(Request $request, $id)
     {
+        $request->validate([
+            'rol' => 'required|integer',
+            'especialidad' => 'nullable|integer',
+        ]);
+
         // Encontrar el usuario
         $usuario = Usuario::find($id);
 
@@ -173,7 +178,6 @@ class PanelUsuariosController extends Controller
 
             // Asignar la especialidad seleccionada y una imagen por defecto si no existe
             $staffExtra->tipoStaff_idtipoStaff = $request->input('especialidad');
-            $staffExtra->imagenes_idimagenes = 78;
 
             // Guardar o actualizar el registro
             $staffExtra->save();

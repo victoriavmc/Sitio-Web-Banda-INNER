@@ -429,9 +429,13 @@ Route::get('/comprobantes/excel', [ComprobantesController::class, 'descargarExce
 Route::get('/ordenes-de-pago', [ComprobantesController::class, 'listarComprobantesUsuarioEspecifico'])
     ->name('orden-de-pago')->middleware('auth');
 
-####
 Route::post('/actualizar-precio', [PrecioController::class, 'cambiaPrecioSuscripcion'])->name('actualizar.precio');
 
+Route::get('/notificaciones', [NotificacionesController::class, 'notificaciones'])
+    ->name('notificaciones.index')->middleware('auth');
 
-Route::get('/notificaciones', [NotificacionesController::class, 'notificaciones'])->name('notificaciones.index')->middleware('auth');
-Route::post('/notificaciones/guardar', [NotificacionesController::class, 'guardarPreferencias'])->name('notificaciones.guardar')->middleware('auth');
+Route::post('/notificaciones/guardar', [NotificacionesController::class, 'guardarPreferencias'])
+    ->name('notificaciones.guardar')->middleware('auth');
+
+Route::post('/notificaciones/cancelar', [NotificacionesController::class, 'cancelarTodo'])
+    ->name('notificaciones.cancelar')->middleware('auth');

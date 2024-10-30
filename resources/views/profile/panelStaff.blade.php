@@ -272,12 +272,12 @@
                 {{ $usuarios->links() }}
             </div>
         </div>
-        </div>
 
         {{-- Modal --}}
-        <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto">
+        <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto"
+            onclick="closeModal()">
             <div class="flex h-screen items-center justify-center">
-                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                     <div class="mt-3 text-center">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">Cambiar Rol</h3>
                     </div>
@@ -291,15 +291,26 @@
                                     Selecciona el Rol
                                 </label>
                                 <select id="rol" name="rol"
-                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none">
-                                    <option value="" selected disabled>-- Selecciona el tipo de rol --</option>
+                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none"
+                                    onchange="toggleEspecialidad(this.value)">
+
+                                    <!-- Opción predeterminada oculta -->
+                                    <option value="" disabled>-- Selecciona el tipo de rol --</option>
+
+                                    <!-- Filtramos los roles Fan y Superfan -->
                                     @foreach ($roles as $rol)
-                                        <option value="{{ $rol->idrol }}">{{ $rol->rol }}</option>
+                                        @if ($rol->idrol != 3 && $rol->idrol != 4)
+                                            <!-- Excluimos Fan y Superfan -->
+                                            <option value="{{ $rol->idrol }}" {{ $loop->first ? 'selected' : '' }}>
+                                                {{ $rol->rol }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
-                            <!-- Select de Especialidades de Staff (oculto por defecto) -->
-                            <div id="especialidad-container" class="mb-4 hidden">
+
+                            <!-- Select de Especialidades de Staff (visible por defecto) -->
+                            <div id="especialidad-container" class="mb-4">
                                 <label for="especialidad" class="block text-gray-700 text-sm font-bold mb-2">
                                     Selecciona la Especialidad del Staff
                                 </label>
@@ -328,112 +339,89 @@
                     </div>
                 </div>
             </div>
-
-            <script>
-                const baseUrl = "{{ url('/panel-de-staff/modificar-rol') }}";
-                // Código para ordenación
-                document.addEventListener('DOMContentLoaded', () => {
-                    const table = document.querySelector('table');
-                    const headers = table.querySelectorAll('th');
-
-                    headers.forEach((header, index) => {
-                        header.addEventListener('click', () => {
-                            const rows = Array.from(table.querySelectorAll('tbody tr'));
-                            const isAscending = header.classList.contains('asc');
-
-                            rows.sort((rowA, rowB) => {
-                                const cellA = rowA.children[index].innerText.trim();
-                                const cellB = rowB.children[index].innerText.trim();
-                                const a = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
-                                const b = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
-                                return isAscending ? (a > b ? 1 : -1) : (a < b ? 1 : -1);
-                            });
-
-                            rows.forEach(row => table.querySelector('tbody').appendChild(row));
-
-                            headers.forEach(header => header.classList.remove('asc', 'desc'));
-                            header.classList.add(isAscending ? 'desc' : 'asc');
-                        });
-                    });
-                });
-
-                // Código para búsqueda en vivo
-                document.addEventListener('DOMContentLoaded', () => {
-                    const searchInput = document.querySelector('#simple-search');
-                    const table = document.querySelector('table');
-                    const rows = table.querySelectorAll('tbody tr');
-
-                    searchInput.addEventListener('input', () => {
-                        const searchValue = searchInput.value.toLowerCase();
-
-                        rows.forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            const isMatch = Array.from(cells).some(cell =>
-                                cell.innerText.toLowerCase().includes(searchValue)
-                            );
-
-                            row.style.display = isMatch ? '' : 'none';
-                        });
-                    });
-                });
-
-                function toggleEspecialidad(rolId) {
-                    const staffRoleIds = [3, 4]; // IDs de roles que pertenecen al staff
-                    const especialidadContainer = document.getElementById('especialidad-container');
-
-                    if (staffRoleIds.includes(parseInt(rolId))) {
-                        especialidadContainer.classList.remove('hidden');
-                    } else {
-                        especialidadContainer.classList.add('hidden');
-                    }
-                }
-
-                function openModal(button) {
-                    const usuarioId = button.getAttribute('data-usuario-id');
-
-                    const form = document.querySelector('#modal form');
-
-                    form.action = `${baseUrl}/${usuarioId}`;
-
-                    document.getElementById('modal').classList.remove('hidden');
-                }
-
-                function closeModal() {
-                    document.getElementById('modal').classList.add('hidden');
-                }
-
-                function toggleDropdown(event) {
-                    // Obtener el botón clicado
-                    const button = event.currentTarget;
-                    const usuarioId = button.getAttribute('data-usuario-id'); // Asegúrate de pasar este atributo
-                    const dropdown = document.getElementById('dropdownMenu-' + usuarioId);
-
-                    // Verificar si el menú actual está visible
-                    const isDropdownVisible = !dropdown.classList.contains('hidden');
-
-                    // Cerrar todos los menús abiertos
-                    document.querySelectorAll('[id^="dropdownMenu"]').forEach(menu => {
-                        menu.classList.add('hidden');
-                    });
-
-                    // Si el menú estaba oculto, mostrarlo, si estaba visible, ya se cerró
-                    if (!isDropdownVisible) {
-                        dropdown.classList.remove('hidden');
-                    }
-                }
-
-                // Cerrar el desplegable si se hace clic fuera de él
-                document.addEventListener('click', function(event) {
-                    // Busca todos los menús desplegables
-                    document.querySelectorAll('[id^="dropdownMenu"]').forEach(function(dropdown) {
-                        // Verifica si el clic ocurrió fuera del menú desplegable y del botón que lo abre
-                        if (!dropdown.contains(event.target) && !event.target.closest(
-                                'button[onclick="toggleDropdown(event)"]')) {
-                            dropdown.classList.add('hidden');
-                        }
-                    });
-                });
-            </script>
+        </div>
     @endif
+    <script>
+        const baseUrl = "{{ url('/panel-de-staff/modificar-rol') }}";
+        // Código para ordenación
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.querySelector('table');
+            const headers = table.querySelectorAll('th');
+
+            headers.forEach((header, index) => {
+                header.addEventListener('click', () => {
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    const isAscending = header.classList.contains('asc');
+
+                    rows.sort((rowA, rowB) => {
+                        const cellA = rowA.children[index].innerText.trim();
+                        const cellB = rowB.children[index].innerText.trim();
+                        const a = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
+                        const b = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
+                        return isAscending ? (a > b ? 1 : -1) : (a < b ? 1 : -1);
+                    });
+
+                    rows.forEach(row => table.querySelector('tbody').appendChild(row));
+
+                    headers.forEach(header => header.classList.remove('asc', 'desc'));
+                    header.classList.add(isAscending ? 'desc' : 'asc');
+                });
+            });
+        });
+
+        // Código para búsqueda en vivo
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('#simple-search');
+            const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tbody tr');
+
+            searchInput.addEventListener('input', () => {
+                const searchValue = searchInput.value.toLowerCase();
+
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const isMatch = Array.from(cells).some(cell =>
+                        cell.innerText.toLowerCase().includes(searchValue)
+                    );
+
+                    row.style.display = isMatch ? '' : 'none';
+                });
+            });
+        });
+
+        function openModal(button) {
+            const usuarioId = button.getAttribute('data-usuario-id');
+
+            const form = document.querySelector('#modal form');
+
+            form.action = `${baseUrl}/${usuarioId}`;
+
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        function toggleDropdown(event) {
+            // Obtener el botón clicado
+            const button = event.currentTarget;
+            const usuarioId = button.getAttribute('data-usuario-id'); // Asegúrate de pasar este atributo
+            const dropdown = document.getElementById('dropdownMenu-' + usuarioId);
+
+            // Verificar si el menú actual está visible
+            const isDropdownVisible = !dropdown.classList.contains('hidden');
+
+            // Cerrar todos los menús abiertos
+            document.querySelectorAll('[id^="dropdownMenu"]').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+
+            // Si el menú estaba oculto, mostrarlo, si estaba visible, ya se cerró
+            if (!isDropdownVisible) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+    </script>
 
 </x-Opciones>

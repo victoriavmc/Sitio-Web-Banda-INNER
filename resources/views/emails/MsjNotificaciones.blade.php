@@ -1,6 +1,7 @@
 <x-EmailLayout>
     <h1>¡Tienes nuevas notificaciones!</h1>
-    <p>Tenemos actualizaciones en {{ $mensaje }}!. <br>
-        No te pierdas nuestras últimas actualizaciones y mantente al día con todo lo que tenemos para ofrecerte.</p>
+    <p>¡Hemos actualizado {{ $nombreDescripcion }}!</p>
+    <p>{{ $msj }}</p>
+    <p>No te pierdas nuestras últimas novedades y mantente al tanto de todo lo que tenemos para ofrecer.</p>
     <p>Visita nuestro sitio web para más detalles.</p>
 </x-EmailLayout>

@@ -4,13 +4,9 @@
     <p>Hemos recibido un reporte sobre tu cuenta. Tras una revisión exhaustiva, hemos determinado que se han incumplido
         las normas de nuestra comunidad.</p>
     <p>Los motivos por los que hemos decidido suspenderte son: </p>
-    <div>
-        <ul style="list-style: none">
-            @foreach ($motivosNombres as $motivo)
-                <li style="color: red">{{ $motivo }}</li>
-            @endforeach
-        </ul>
-    </div>
+    @foreach ($motivosNombres as $motivo)
+        <p style="color: red">{{ $motivo }}</p>
+    @endforeach
     <p>Como resultado de esta situación, hemos decidido eliminar la actividad relacionada y <strong>bloquear tu
             cuenta</strong>.</p>
     <p>La suspensión será efectiva desde el <strong>{{ $fechaInicia }}</strong> hasta el

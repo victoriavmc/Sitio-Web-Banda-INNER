@@ -104,6 +104,8 @@
                                             value="{{ $usuario->correoElectronicoUser }}" required />
 
                                         <input type="hidden" id="product_id" value="1234567890" />
+                                        <input type="hidden" id="idprecioServicio" name="idprecioServicio"
+                                            value="{{ $ultimoPrecio['idprecioServicio'] }}" />
                                         <input type="hidden" id="product_price"
                                             value="{{ $ultimoPrecio['precio'] }}" />
 

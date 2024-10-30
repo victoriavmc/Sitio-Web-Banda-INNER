@@ -2,27 +2,34 @@
 
 namespace App\Mail;
 
+use App\Models\TipoNotificacion;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class msjNotificaciones extends Mailable
+class msjPreferenciaNotificaciones extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $nombreDescripcion;
-    public $msj;
+    public $notificacionesMarcadas;
+    public $nombreNotificacion;
+    public $accion;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($nombreDescripcion, $msj)
+    public function __construct($notificacionesMarcadas = [], $accion = 0)
     {
-        $this->nombreDescripcion = $nombreDescripcion;
-        $this->msj = $msj;
+        $this->notificacionesMarcadas = $notificacionesMarcadas;
+
+        foreach ($this->notificacionesMarcadas as $notificacion) {
+            // Agregar a un array las notificaciones de la base de datos
+            $this->nombreNotificacion[] = TipoNotificacion::find($notificacion)->nombreNotificacion;
+        }
+
+        $this->accion = $accion;
     }
 
     /**
@@ -31,7 +38,7 @@ class msjNotificaciones extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Tienes nuevas notificaciones',
+            subject: 'Actualizaste tus preferencias!',
         );
     }
 
@@ -41,7 +48,7 @@ class msjNotificaciones extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.msjNotificaciones',
+            view: 'emails.msjPreferenciaNotificaciones',
         );
     }
 

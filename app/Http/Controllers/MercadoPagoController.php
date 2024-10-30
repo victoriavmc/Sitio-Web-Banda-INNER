@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ComprobantePago;
+use App\Mail\msjSuscripcion;
 use App\Models\OrdenPago;
 use Illuminate\Http\Request;
 use MercadoPago\MercadoPagoConfig;
@@ -23,8 +23,14 @@ class MercadoPagoController extends Controller
         $this->authenticate();
         Log::info('Autenticado con éxito');
 
+        if (Auth::user()->rol_idrol == 3) {
+            return response()->json(['error' => 'Ya tienes una suscripción activa.'], 400);
+        }
+
         // Paso 1: Obtener la información del producto desde la solicitud JSON
-        $product = $request->input('product'); // Asumiendo que envías un campo 'product' con los datos
+        $product = $request->input('product');
+
+        $idprecioServicio = $request->input('idprecioServicio');
 
         if (empty($product) || !is_array($product)) {
             return response()->json(['error' => 'Los datos del producto son requeridos.'], 400);
@@ -38,7 +44,7 @@ class MercadoPagoController extends Controller
         ];
 
         // Paso 3: Crear la solicitud de preferencia
-        $requestData = $this->createPreferenceRequest($product, $payer);
+        $requestData = $this->createPreferenceRequest($product, $payer, $idprecioServicio);
 
         // Paso 4: Crear la preferencia con el cliente de preferencia
         $client = new PreferenceClient();
@@ -73,7 +79,7 @@ class MercadoPagoController extends Controller
     }
 
     // Función para crear la estructura de preferencia 
-    protected function createPreferenceRequest($items, $payer): array
+    protected function createPreferenceRequest($items, $payer, $idprecioServicio): array
     {
         $paymentMethods = [
             "excluded_payment_methods" => [],
@@ -99,7 +105,7 @@ class MercadoPagoController extends Controller
             "payment_methods" => $paymentMethods,
             "back_urls" => $backUrls,
             "statement_descriptor" => "INNER",
-            "external_reference" => "1234567890",
+            "external_reference" => $idprecioServicio,
             "expires" => false,
             "auto_return" => 'approved'
         ];
@@ -124,6 +130,7 @@ class MercadoPagoController extends Controller
                 'nomreComprador' => $payment->payer->first_name ?? 'Nombre no disponible',
                 'apellidoComprador' => $payment->payer->last_name ?? 'Apellido no disponible',
                 'emailComprador' => $payment->payer->email,
+                'idprecioServicio' => $payment->external_reference,
                 'diaPago' => $payment->date_approved ?? 'Fecha no disponible',
             ];
         } catch (Exception $e) {
@@ -188,11 +195,11 @@ class MercadoPagoController extends Controller
         $OrdenPago->emailComprador = $paymentDetails['emailComprador'];
         $OrdenPago->nombreComprador =  $paymentDetails['nomreComprador'];
         $OrdenPago->apellidoComprador = $paymentDetails['apellidoComprador'];
-        $OrdenPago->precioServicio_idprecioServicio = 1;
+        $OrdenPago->precioServicio_idprecioServicio = $paymentDetails['idprecioServicio'];
         $OrdenPago->usuarios_idusuarios = Auth::user()->idusuarios;
         $OrdenPago->save();
 
-        // Mail::to(Auth::user()->correoElectronicoUser)->send(new ComprobantePago($paymentDetails));
+        $idordenpago = $OrdenPago->idordenpago;
 
         // Usar el tipo de servicio para actualizar el rol del usuario
         if ($paymentDetails['descripcion'] == 'Suscripción') {
@@ -200,6 +207,12 @@ class MercadoPagoController extends Controller
             $usuario = Usuario::find(Auth::user()->idusuarios);
             $usuario->rol_idrol = 3; // Cambiar el rol
             $usuario->save();
+
+            Mail::to(Auth::user()->correoElectronicoUser)->send(new msjSuscripcion($idordenpago, $paymentDetails['factura'], $paymentDetails['monto'], $paymentDetails['diaPago']));
+        }
+
+        if ($paymentDetails['descripcion'] == 'Show') {
+            // Mail::to(Auth::user()->correoElectronicoUser)->send(new msjNotificaciones($paymentDetails['descripcion'], $paymentDetails['monto']));
         }
 
         // Renderizamos la vista con los detalles del pago

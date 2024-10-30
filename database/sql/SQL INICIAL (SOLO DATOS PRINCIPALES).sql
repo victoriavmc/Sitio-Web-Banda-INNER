@@ -511,6 +511,7 @@ CREATE TABLE `ordenpago` (
   `estadoPago` varchar(255) NOT NULL,
   `nombreComprador` varchar(105) NOT NULL,
   `apellidoComprador` varchar(105) NOT NULL,
+  'emailComprador' varchar(105) NOT NULL,
   `usuarios_idusuarios` int NOT NULL,
   `precioServicio_idprecioServicio` int NOT NULL,
   PRIMARY KEY (`idordenpago`),

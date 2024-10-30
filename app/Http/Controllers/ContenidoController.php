@@ -16,9 +16,11 @@ use App\Models\RevisionImagenes;
 use App\Models\Show;
 use App\Models\Usuario;
 use App\Models\Reportes;
+use App\Models\TipoNotificacion;
 
 use App\Mail\msjReporto;
 use App\Mail\msjReportaron;
+use App\Mail\msjNotificaciones;
 
 #OTROS
 use Illuminate\Support\Facades\Storage;
@@ -910,7 +912,8 @@ class ContenidoController extends Controller
         switch ($type) {
             case 1:
                 #Si es foro
-                $this->creadoAlbumNotificar(3,  $contenido->titulo, '');
+                $msj = "Han creado una nueva publicacion al foro:" . ' "' .  $contenido->titulo . '".';
+                $this->creadoAlbumNotificar(3,  $msj);
                 return redirect()->route('foro')->with('alertForo', [
                     'type' => 'Success',
                     'message' => 'Publicacion creada con éxito.',
@@ -918,7 +921,8 @@ class ContenidoController extends Controller
                 break;
             case 2:
                 #Si es noticias
-                $this->creadoAlbumNotificar(2,  $contenido->titulo, '');
+                $msj = "Han creado una nueva noticia:" . ' "' .  $contenido->titulo . '".';
+                $this->creadoAlbumNotificar(2,  $msj);
                 return redirect()->route('noticias')->with('alertNoticia', [
                     'type' => 'Success',
                     'message' => 'Noticia creada con éxito.',
@@ -959,7 +963,8 @@ class ContenidoController extends Controller
         $comentario->save();
 
         $tituloForo = Contenidos::find($idContent);
-        $this->creadoAlbumNotificar(1, $tituloForo->tipoContenido, 'comentarios');
+        $msj = "Han hecho un comentario en la publicacion:" . ' "' . $tituloForo->titulo . '".';
+        $this->creadoAlbumNotificar(1, $msj);
 
         return redirect()->route('foroUnico', ['data' => $idContent])->with('alertPublicacion', [
             'type' => 'Success',
@@ -1160,42 +1165,34 @@ class ContenidoController extends Controller
     }
 
     //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
-    public function creadoAlbumNotificar($tipoNotificacion, $titulo, $comentario)
+    public function creadoAlbumNotificar($tipoNotificacion, $mensaje)
     {
         // Recuperar las notificaciones según el tipo
         $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', $tipoNotificacion)->get();
 
+        // Recuperamos el nombre de que se actualizo en especifico
+        $nombreDescripcion = TipoNotificacion::find($tipoNotificacion)->nombreNotificacion;
+
         foreach ($notificados as $noti) {
-            $usuariosNotificar = $noti->usuarios_idusuarios;
-            $maildeusuario = Usuario::find($usuariosNotificar);
+            $correo = $noti->usuario->correoElectronicoUser;
 
-            // Verificar que el usuario exista antes de intentar acceder a su correo
-            if ($maildeusuario) {
-                $correo = $maildeusuario->correoElectronicoUser;
+            // Lógica para enviar el correo según el tipo de notificación
+            switch ($tipoNotificacion) {
 
-                // Lógica para enviar el correo según el tipo de notificación
-                switch ($tipoNotificacion) {
-                    case 1:
-                        // Lógica específica para Crearon Cometarios en la publicacion Prueba del foro.
-                        // $titulo; paso el titulo
-                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
-                        break;
-                    case 2:
-                        // Lógica específica para Noticias
-                        // $titulo; paso el titulo
-                        // Mail::to($correo)->send(new NotificacionNuevaGaleria($album));
-                        break;
+                case 1:
+                    // Comentario o Foro - Han hecho un comentario en la publicacion X 
+                    // Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
+                    break;
 
-                    case 3:
-                        // Lógica específica para Foro
-                        // $titulo; paso el titulo
-                        // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
-                        break;
+                case 2:
+                    // Han creado una nueva noticia "NombreNoticia" 
+                    // Mail::to($correo)->send(new msjNotificaciones($album));
+                    break;
 
-                    default:
-                        // Manejar otros casos si es necesario
-                        break;
-                }
+                case 3:
+                    // Han creado una nueva publicacion al foro "NombreForo"
+                    // Mail::to($correo)->send(new msjNotificaciones($album));
+                    break;
             }
         }
     }

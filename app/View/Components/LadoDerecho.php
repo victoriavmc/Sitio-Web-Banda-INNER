@@ -27,18 +27,19 @@ class LadoDerecho extends Component
             ->first();
 
         // Buscar el primer precio activo usando la relación
-        $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
+        try {
+            $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
 
-        // Si existe un precio activo, asignarlo a la propiedad
-        if ($ultimoPrecio) {
-            // Array asoc que guarda el id del servicio y el precio
-            $this->ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
-            $this->ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
-            return; // Salimos del constructor
+            // Si existe un precio activo, asignarlo a la propiedad
+            if ($ultimoPrecio) {
+                // Array asoc que guarda el id del servicio y el precio
+                $this->ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
+                $this->ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+                return; // Salimos del constructor
+            }
+        } catch (\Throwable $th) {
+            $this->ultimoPrecio = null;
         }
-
-        // Si no se encuentra ningún precio activo, asignar null
-        $this->ultimoPrecio = null;
     }
 
 

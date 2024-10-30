@@ -72,7 +72,7 @@
 
         @guest
             <p class="text-center text-lg text-gray-600 mb-2">
-                Para comprar entradas, debes estar registrado en el sistema.
+                Para pagar la suscripcion, debes estar registrado en el sistema.
             </p>
         @endguest
 
@@ -92,13 +92,14 @@
                 <input type="hidden" id="email" name="email" value="{{ $usuario->correoElectronicoUser }}"
                     required />
 
-
                 <input type="hidden" id="product_id" value="1234567890" />
+                <input type="hidden" id="idprecioServicio" name="idprecioServicio"
+                    value="{{ $ultimoPrecio['idprecioServicio'] }}" />
                 <input type="hidden" id="product_price" value="{{ $ultimoPrecio['precio'] }}" />
 
                 <div class="flex justify-center">
                     <button id="checkout-btn" type="button"
-                        class=" flex items-center gap-1 px-2 bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                        class="flex items-center gap-1 px-2 bg-red-500 hover:bg-red-400 text-white text-xs font-bold p-1 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                         <span class="icon-credit-card text-xl text-center mb-1.5">💳</span>
                         <p>¡Hacete SuperFan!</p>
                     </button>
@@ -119,6 +120,7 @@
             const email = document.getElementById('email').value;
             const productId = document.getElementById('product_id').value;
             const productPrice = parseFloat(document.getElementById('product_price').value);
+            const idprecioServicio = document.getElementById('idprecioServicio').value;
 
             if (!nombre || !apellido || !email) {
                 Swal.fire({
@@ -141,6 +143,7 @@
                 name: nombre,
                 surname: apellido,
                 email: email,
+                idprecioServicio: idprecioServicio,
             };
 
             console.log('Datos del pedido:', orderData);

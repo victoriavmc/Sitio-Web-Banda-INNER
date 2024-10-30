@@ -38,18 +38,18 @@
                 @endforeach
             </div>
 
-            <a class="underline flex justify-center mb-4 italic text-base" href="">Cancelar la suscripción a
-                todos
-                los
-                correos
-                electrónicos</a>
-
             <div class="mb-10 text-center ">
                 <button type="submit"
                     class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">
                     Guardar Preferencias
                 </button>
             </div>
+        </form>
+        <form action="{{ route('notificaciones.cancelar') }}" method="POST">
+            @csrf
+            <button type="submit" class="underline flex justify-center mb-4 italic text-base">
+                Cancelar la suscripción a todos los correos electrónicos
+            </button>
         </form>
     </div>
 </x-AppLayout>

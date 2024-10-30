@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\msjNotificaciones;
 use App\Models\AlbumMusical;
 use App\Models\Cancion;
 use App\Models\Notificaciones;

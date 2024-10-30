@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Notificaciones;
 use App\Models\TipoNotificacion;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\msjPreferenciaNotificaciones;
 use Illuminate\Http\Request;
 
 class NotificacionesController extends Controller
@@ -40,6 +41,22 @@ class NotificacionesController extends Controller
                 }
             }
         }
+
+        // Array de notificaciones marcadas
+        $notificacionesMarcadas = Notificaciones::where('usuarios_idusuarios', Auth::user()->idusuarios)
+            ->pluck('tipoNotificación_idtipoNotificación')->toArray();
+
+        if (empty($notificacionesMarcadas)) {
+            Mail::to(Auth::user()->correoElectronicoUser)->send(new msjPreferenciaNotificaciones());
+            return redirect()->back()->with('alerta', [
+                'type' => 'Success',
+                'message' => 'Preferencias canceladas con exito.',
+            ]);
+        }
+
+        // Email de confirmación
+        Mail::to(Auth::user()->correoElectronicoUser)->send(new msjPreferenciaNotificaciones($notificacionesMarcadas, 1));
+
         return redirect()->back()->with('alerta', [
             'type' => 'Success',
             'message' => 'Preferencias guardadas con éxito.',
@@ -49,7 +66,16 @@ class NotificacionesController extends Controller
     // Cancelar todo tipo de notificacion
     public function cancelarTodo()
     {
-        Notificaciones::where('usuarios_idusuarios', Auth::user()->idusuarios)->delete();
+        if (empty(Notificaciones::where('usuarios_idusuarios', Auth::user()->idusuarios)->delete())) {
+            return redirect()->back()->with('alerta', [
+                'type' => 'Warning',
+                'message' => 'No hay notificaciones para cancelar.',
+            ]);
+        }
+
+        // Email de confirmación
+        Mail::to(Auth::user()->correoElectronicoUser)->send(new msjPreferenciaNotificaciones());
+
         return redirect()->back()->with('alerta', [
             'type' => 'Success',
             'message' => 'Preferencias canceladas con éxito.',

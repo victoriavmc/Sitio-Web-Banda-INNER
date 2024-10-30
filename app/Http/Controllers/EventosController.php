@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\msjNotificaciones;
 use App\Models\Imagenes;
 use App\Models\LugarLocal;
 use App\Models\Notificaciones;
-use App\Models\RedesSociales;
 use App\Models\RevisionImagenes;
 use App\Models\PrecioServicios;
 use App\Models\Show;
+use App\Models\TipoNotificacion;
 use App\Models\UbicacionShow;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Illuminate\Validation\Rule;
 
 class eventosController extends Controller
 {
@@ -44,18 +45,19 @@ class eventosController extends Controller
             ->where('tipoServicio', 'Show')
             ->first();
 
-        // Buscar el primer precio activo usando la relación
-        $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
+        try {
+            $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
 
-        // Si existe un precio activo, asignarlo a la propiedad
-        if ($ultimoPrecio) {
-            // Array asoc que guarda el id del servicio y el precio
-            $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
-            $ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+            // Si existe un precio activo, asignarlo a la propiedad
+            if ($ultimoPrecio) {
+                // Array asoc que guarda el id del servicio y el precio
+                $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio; // Asignamos el id del servicio
+                $ultimoPrecio['precio'] = $ultimoPrecio->precio; // Asignamos el valor a la propiedad
+                return; // Salimos del constructor
+            }
+        } catch (\Throwable $th) {
+            $ultimoPrecio = null;
         }
-
-        // Si no se encuentra ningún precio activo, asignar null
-        $ultimoPrecio = null;
 
         // Obtén los eventos ordenados por fecha
         $shows = $query->orderBy('fechashow', 'desc')->get();
@@ -198,25 +200,20 @@ class eventosController extends Controller
 
 
     //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
-    public function creadoAlbumNotificar($tituloShow)
+    public function creadoEventoNotificar($msj)
     {
         // Recuperar las notificaciones según el tipo
         $notificados = Notificaciones::where('tipoNotificación_idtipoNotificación', 1)->get();
 
+        // Recuperamos el nombre de que se actualizo en especifico
+        $nombreDescripcion = TipoNotificacion::find(1)->nombreNotificacion;
+
+        // Recorro todos los usuarios que tiene marcado para que le notifique
         foreach ($notificados as $noti) {
-            $usuariosNotificar = $noti->usuarios_idusuarios;
-            $maildeusuario = Usuario::find($usuariosNotificar);
+            $correo = $noti->usuario->correoElectronicoUser;
 
-            // Verificar que el usuario exista antes de intentar acceder a su correo
-            if ($maildeusuario) {
-                $correo = $maildeusuario->correoElectronicoUser;
-
-                // Lógica para enviar el correo según el tipo de notificación
-                // Lógica específica para Shows
-                // $tituloAlbum paso el titulo del album y titulo de cancion
-                // Mail::to($correo)->send(new NotificacionNuevaMusical($album));
-
-            }
+            // Pasamos el NombreDescripcion. Y el mensaje especifico.
+            Mail::to($correo)->send(new msjNotificaciones($nombreDescripcion, $msj));
         }
     }
 
@@ -233,7 +230,7 @@ class eventosController extends Controller
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
-            'linkCompra' => 'required|url|min:3|max:255'
+            'linkCompra' => 'min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
@@ -316,7 +313,7 @@ class eventosController extends Controller
 
         $evento->save();
         $msj = 'Tenemos un nuevo show! En ' . $nuevoLugar->nombreLugar . ' el día ' . $evento->fechashow . '.';
-        $this->creadoAlbumNotificar($msj);
+        $this->creadoEventoNotificar($msj);
 
         // Redirigir a la vista de eventos con un mensaje de éxito
         return redirect()->route('eventos')->with('alertCrear', [
@@ -346,7 +343,7 @@ class eventosController extends Controller
             'numero' => 'nullable|numeric',
             'nuevo_provincia' => 'nullable|string|max:255',
             'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
-            'linkCompra' => 'required|url|min:3|max:255'
+            'linkCompra' => 'min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'lugar.required_without' => 'Debe seleccionar un lugar si no está agregando uno nuevo.',

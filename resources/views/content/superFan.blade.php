@@ -5,6 +5,13 @@
             {{ session('alertRegistro')['message'] }}
         </x-alerts>
     @endif
+
+    @if (session('alertSuscripcion'))
+        {{-- Componente de alerta para el registro exitoso o fallido --}}
+        <x-alerts :type="session('alertSuscripcion')['type']">
+            {{ session('alertSuscripcion')['message'] }}
+        </x-alerts>
+    @endif
     <div class="relative min-h-screen flex flex-col gap-10 p-5 bg-cover">
         {{-- Si es invitado --}}
         @guest
@@ -116,7 +123,8 @@
                         <form id="precioForm" method="POST" action="{{ route('actualizar.precio') }}">
                             @csrf
                             <div class="mb-4">
-                                <label for="precio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
+                                <label for="precio" class="block text-sm font-medium text-gray-700">Nuevo
+                                    Precio</label>
                                 <input type="number" step="0.01" name="precio" id="precio"
                                     class="mt-1 p-2 border border-gray-300 rounded w-full" required
                                     value="{{ old('precio', $precioAnterior) }}">
