@@ -212,16 +212,29 @@ class LoginController extends Controller
                 // Redirigir a la página de reactivación de cuenta
 
                 // mensaje alerta existe un usuario con ese correo electronico
-                if ($historialUsuario->fechaFinaliza < now()) {
+                if ($historialUsuario->fechaFinaliza > now()) {
                     return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
                         'type' => 'Warning',
                         'message' => 'Su cuenta se encuentra Inactiva. Reactivala siguiendo los pasos',
                     ]);
                 }
+                break;
+
+            case 'Suspendido':
+
+                if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                    $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
+                } else {
+                    $usuarioExistente = Usuario::where('usuarioUser', $request->email)->first();
+                }
+
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
 
                 return redirect()->route('login')->with('alertRegistro', [
                     'type' => 'Warning',
-                    'message' => 'Su usuario ha sido baneado hasta el dia ' . $historialUsuario->fechaFinaliza . ' , no podrá acceder.',
+                    'message' => 'Su usuario ha sido suspendido hasta el dia ' . $historialUsuario->fechaFinaliza . ' , no podrá acceder.',
                 ]);
                 break;
 

@@ -318,7 +318,7 @@ class ReportesController extends Controller
                 'array',
                 'min:1' // Asegura que haya al menos un motivo seleccionado
             ],
-            'fechaDesbaneo' => 'required_if:manejarReporte,1',
+            'fechaDesbaneo' => 'required_if:manejarReporte,1|date|after:now',
         ]);
 
         // Obtengo el usuario reportado
@@ -425,7 +425,7 @@ class ReportesController extends Controller
                     $historial = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDato->idDatosPersonales)->first();
 
                     if ($historial) {
-                        $historial->estado = 'Inactivo';
+                        $historial->estado = 'Suspendido';
                         $historial->fechaInicia = now();
                         $historial->fechaFinaliza = $request->fechaDesbaneo;
                         $historial->save();
@@ -440,7 +440,7 @@ class ReportesController extends Controller
 
                 return redirect()->route($route)->with('alertReporte', [
                     'type' => 'Success',
-                    'message' => 'La cuenta ha sido suspendida por ' . now()->diffInDays($request->fechaDesbaneo) . ' días.',
+                    'message' => 'La cuenta ha sido suspendida hasta la fecha: ' . $request->fechaDesbaneo . ' con éxito!',
                 ]);
 
                 break;
