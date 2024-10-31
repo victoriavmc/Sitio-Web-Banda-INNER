@@ -354,7 +354,6 @@ class AlbumController extends Controller
         $tipoAlbum = (int) $request->tipoAlbum;
         $idAlbumEspecifico = $request->idAlbumEspecifico;
 
-
         if ($accion == '2') {
             if ($tipoAlbum == 2) {
                 // Valida los datos
@@ -371,6 +370,7 @@ class AlbumController extends Controller
                     'message' => 'Error al cargar datos.',
                 ]);
             }
+
             // MODIFICAR
             $albumDatos = AlbumDatos::findOrFail($idAlbumEspecifico);
             if ($request->has('titulo')) {
@@ -379,6 +379,7 @@ class AlbumController extends Controller
             if ($request->has('fecha')) {
                 $albumDatos->fechaSubido = $request->fecha;
             }
+
             $albumDatos->save();
 
             switch ($tipoAlbum) {
@@ -417,7 +418,7 @@ class AlbumController extends Controller
                     $videoAnterior = Videos::find($idVideoEspecifico);
 
                     // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
-                    if ($request->has('videos')) {
+                    if ($request->has('video')) {
 
                         // Elimina del storage el video anterior
                         Storage::disk('public')->delete($videoAnterior->subidaVideo);
@@ -437,11 +438,12 @@ class AlbumController extends Controller
 
                         // Asigna el ID del video al álbum
                         $album->videos_idvideos = $video->idvideos;
+                        $album->save();
 
                         $videoAnterior->delete();
                     }
 
-                    $album->save();
+
 
                     return redirect()->route('albumGaleria')->with('alertAlbum', [
                         'type' => 'Success',

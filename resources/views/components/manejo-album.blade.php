@@ -87,6 +87,9 @@
                         <!-- Input de archivo oculto para cargar el video -->
                         <input type="file" name="video" id="cover_video" class="hidden" accept="video/*"
                             onchange="previewVideo(event)">
+                        @error('video')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
 
                         <!-- Botón para seleccionar un video -->
                         <div
