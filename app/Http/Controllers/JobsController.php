@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 
 class JobsController extends Controller
 {
-
     public function ImagenesContenido($idContent)
     {
         $rutasImg = [];

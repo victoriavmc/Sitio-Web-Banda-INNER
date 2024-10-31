@@ -85,7 +85,8 @@
                                 Confirmar Cambio
                             </button>
                         </form>
-                        <a href="{{ $artista['link'] }}" class="flex gap-2" target="_blank">
+                        <a href="{{ $artista['link'] ?? '#' }}" class="flex gap-2"
+                            onclick="{{ $artista['link'] ? '' : 'event.preventDefault(); location.reload();' }}">
                             <div class="rounded-lg shadow-md">
                                 <h1 class="text-lg font-bold mb-2 uppercase">
                                     @foreach (str_split($artista['nombre']) as $letra)
