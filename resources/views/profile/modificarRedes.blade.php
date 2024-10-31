@@ -101,38 +101,38 @@
                                 class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-green-400 hover:text-gray-900">Agregar
                                 Red</span>
                         </button>
+                    @elseif ($rol == 2)
+                        <h2 class="my-2 text-lg text-black font-semibold">Staff: {{ $especialidad }}
+                        </h2>
+                        <form class="space-y-4" action="{{ route('guardar-redes-staff') }}" method="POST">
+                            @csrf
+                            <label for="{{ $redSocialStaff->nombreRedSocial ?? '' }}"
+                                class="block text-sm font-medium text-gray-700">Red social:</label>
+                            <input type="url" id="{{ $redSocialStaff->nombreRedSocial ?? '' }}"
+                                name="redSocialStaff" value="{{ $redSocialStaff->linkRedSocial ?? '' }}"
+                                class="mt-1 text-gray-700 block w-full border p-1 border-gray-400 rounded-md shadow-sm" />
+                            @error('redSocialStaff')
+                                <span class="font-bold text-red-500">{{ $message }}</span>
+                            @enderror
+                            <div class="flex gap-4">
+                                <button class="relative" type="submit">
+                                    <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
+                                    <span
+                                        class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-blue-400 hover:text-gray-900">Modificar
+                                        Red</span>
+                                </button>
+                        </form>
+                        <form method="POST" action="{{ route('eliminar-red-social-staff') }}">
+                            @csrf
+                            <button class="relative" type="submit">
+                                <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
+                                <span
+                                    class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-red-600 hover:text-gray-900">Eliminar
+                                    Red Social</span>
+                            </button>
+                        </form>
+                    @endif
                 </div>
-            @elseif ($rol == 2)
-                <h2 class="my-2 text-lg text-black font-semibold">Staff: {{ $especialidad }}
-                </h2>
-                <form class="space-y-4" action="{{ route('guardar-redes-staff') }}" method="POST">
-                    @csrf
-                    <label for="{{ $redSocialStaff->nombreRedSocial ?? '' }}"
-                        class="block text-sm font-medium text-gray-700">Red social:</label>
-                    <input type="url" id="{{ $redSocialStaff->nombreRedSocial ?? '' }}" name="redSocialStaff"
-                        value="{{ $redSocialStaff->linkRedSocial ?? '' }}"
-                        class="mt-1 text-gray-700 block w-full border p-1 border-gray-400 rounded-md shadow-sm" />
-                    @error('redSocialStaff')
-                        <span class="font-bold text-red-500">{{ $message }}</span>
-                    @enderror
-                    <div class="flex gap-4">
-                        <button class="relative" type="submit">
-                            <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
-                            <span
-                                class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-blue-400 hover:text-gray-900">Modificar
-                                Red</span>
-                        </button>
-                </form>
-                <form method="POST" action="{{ route('eliminar-red-social-staff') }}">
-                    @csrf
-                    <button class="relative" type="submit">
-                        <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
-                        <span
-                            class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-red-600 hover:text-gray-900">Eliminar
-                            Red Social</span>
-                    </button>
-                </form>
-                @endif
             </div>
         </div>
     </div>
