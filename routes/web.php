@@ -202,6 +202,9 @@ Route::put('/eventos/modificar/{id}', [EventosController::class, 'modificarEvent
 
 Route::delete('/eventos/eliminar/{id}', [EventosController::class, 'eliminarEvento'])
     ->name('eliminar-evento')->middleware('auth');
+
+Route::post('/eventos/actualizar-precio/{id}', [EventosController::class, 'actualizarPrecio'])
+    ->name('actualizar-precio')->middleware('auth');
 ##################################################################################################
 //----------------------- CARPETA CONTENIDO -----------------------
 #

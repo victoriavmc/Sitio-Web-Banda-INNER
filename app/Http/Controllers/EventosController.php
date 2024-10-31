@@ -502,4 +502,24 @@ class eventosController extends Controller
             'message' => 'Se ha borrado el evento!',
         ]);
     }
+
+    public function actualizarPrecio(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'precio' => 'required|min:1|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $precioServicio = PrecioServicios::find($id);
+        $precioServicio->precio = $request->input('precio');
+        $precioServicio->save();
+
+        return redirect()->back()->with('alertModificar', [
+            'type' => 'Success',
+            'message' => 'Se ha actualizado el precio!',
+        ]);
+    }
 }
