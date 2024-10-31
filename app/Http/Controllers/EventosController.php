@@ -513,9 +513,10 @@ class eventosController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $precioServicio = PrecioServicios::find($id);
-        $precioServicio->precio = $request->input('precio');
-        $precioServicio->save();
+        // Si ya existe un precioServicio asociado lo edita, si no existe lo crea
+        $precioServicio = PrecioServicios::where('referenciaIdFicticio', 1)
+            ->where('tipoServicio', 'Show')
+            ->first();
 
         return redirect()->back()->with('alertModificar', [
             'type' => 'Success',

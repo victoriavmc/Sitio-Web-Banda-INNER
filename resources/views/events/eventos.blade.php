@@ -197,7 +197,7 @@
                         <input type="number" name="precio" id="precio" class="mt-1 block w-full" required>
                     </div>
                     <div class="flex justify-end gap-4">
-                        <button type="button" id="closeDeleteModalBtn"
+                        <button type="button" id="closeDeleteModalBtn" onclick="closeModal()"
                             class="bg-gray-500 hover:bg-gray-400 text-white text-base font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">
                             Cancelar
                         </button>

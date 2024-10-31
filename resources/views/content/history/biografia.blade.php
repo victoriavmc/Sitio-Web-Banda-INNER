@@ -13,8 +13,13 @@
 
             @auth
                 @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                    <a href="{{ route('crearP', 1) }}"
-                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Crear</a>
+                    <form action="{{ route('crearP', 1) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                            Crear
+                        </button>
+                    </form>
                 @endif
             @endauth
         </div>

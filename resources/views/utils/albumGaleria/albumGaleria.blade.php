@@ -64,6 +64,7 @@
                                                     <form action="{{ route('crear-album') }}" method="GET">
                                                         @csrf
                                                         <input type="hidden" name="accion" value=2>
+
                                                         <input type="hidden" name="tipoAlbum" value=3>
 
                                                         <input type="hidden" name="idAlbumEspecifico"
