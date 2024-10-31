@@ -49,7 +49,9 @@ class JobsController extends Controller
         $lista = [];
         // Recorro las entidades
         foreach ($entidades as $entidad) {
+            dd();
             if ($tipo === 'artista') {
+
                 $nombre = $entidad->staffExtra->usuario->datosPersonales->nombreDP;
                 $apellido = $entidad->staffExtra->usuario->datosPersonales->apellidoDP;
                 $rol = $entidad->staffExtra->tipoStaff->nombreStaff;

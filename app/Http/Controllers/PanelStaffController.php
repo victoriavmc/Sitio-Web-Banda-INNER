@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 #Clases
 
 use App\Models\Actividad;
+use App\Models\Artistas;
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
 use App\Models\Usuario;
@@ -156,11 +157,21 @@ class panelStaffController extends Controller
         }
     }
 
+    #En caso de ser de tipo artista
+    public function tipoArtista() {}
+
     #Modificamos el rol
     public function modificarRol(Request $request, $id)
     {
         // Encontrar el usuario
         $usuario = Usuario::find($id);
+
+        // RolAnteriorDelStaff
+        $seleccionoArtista = TipodeStaff::find($usuario->staffExtra->tipoStaff_idtipoStaff)->artista;
+        if ($seleccionoArtista == 'Si') {
+            $artista = Artistas::where('staffextra_idstaffExtra', $usuario->staffExtra->tipoStaff_idtipoStaff)->first();
+            $artista->delete();
+        }
 
         // Actualizar el rol del usuario
         $nuevoRol = $request->rol;
@@ -169,6 +180,7 @@ class panelStaffController extends Controller
 
         // Si el rol nuevo pertenece a Staff (2), guardar la especialidad en StaffExtra
         if ($nuevoRol == 2) {
+
             // Verificar si ya existe un registro en StaffExtra para este usuario
             $staffExtra = StaffExtra::firstOrNew(['usuarios_idusuarios' => $usuario->idusuarios]);
 
@@ -177,6 +189,13 @@ class panelStaffController extends Controller
 
             // Guardar o actualizar el registro
             $staffExtra->save();
+
+            $seleccionoArtista = TipodeStaff::find($staffExtra->tipoStaff_idtipoStaff)->artista;
+            if ($seleccionoArtista == 'Si') {
+                $artista = new Artistas();
+                $artista->staffExtra_idstaffExtra = $staffExtra->idstaffExtra;
+                $artista->save();
+            }
         }
 
         // Redirigir con un mensaje de éxito

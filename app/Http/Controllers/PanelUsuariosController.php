@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 #CLASES
 
 use App\Models\Actividad;
-use App\Models\Comentarios;
-use App\Models\Contenidos;
+use App\Models\Artistas;
 use App\Models\DatosPersonales;
 use App\Models\HistorialUsuario;
 use App\Models\Imagenes;
-use App\Models\ImagenesContenido;
 use App\Models\Interacciones;
 use App\Models\Notificaciones;
 use App\Models\Reportes;
@@ -20,7 +18,6 @@ use App\Models\TipodeStaff;
 use App\Models\Usuario;
 
 #Otros
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -187,6 +184,13 @@ class PanelUsuariosController extends Controller
 
             // Guardar o actualizar el registro
             $staffExtra->save();
+
+            $seleccionoArtista = TipodeStaff::find($staffExtra->tipoStaff_idtipoStaff)->artista;
+            if ($seleccionoArtista == 'Si') {
+                $artista = new Artistas();
+                $artista->staffExtra_idstaffExtra = $staffExtra->idstaffExtra;
+                $artista->save();
+            }
         }
 
         // Redirigir con un mensaje de éxito
