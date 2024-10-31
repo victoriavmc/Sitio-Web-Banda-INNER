@@ -11,6 +11,7 @@ use App\Models\HistorialUsuario;
 use App\Models\Imagenes;
 use App\Models\ImagenesContenido;
 use App\Models\Interacciones;
+use App\Models\Notificaciones;
 use App\Models\Reportes;
 use App\Models\RevisionImagenes;
 use App\Models\Roles;
@@ -282,6 +283,9 @@ class PanelUsuariosController extends Controller
             $usuario->usuarioUser = null;
             $usuario->save();
         }
+
+        //Eliminamos notificacoines del usuario
+        $notificaciones = Notificaciones::where('usuarios_idusuarios', $id)->delete();
 
         if ($tieneReportes === 0) {
             // Si no hay reportes, eliminamos al usuario de la tabla

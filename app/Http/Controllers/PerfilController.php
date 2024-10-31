@@ -13,6 +13,7 @@ use App\Models\Usuario;
 use App\Models\Reportes;
 use App\Models\Comentarios;
 use App\Models\HistorialUsuario;
+use App\Models\Notificaciones;
 use App\Models\Interacciones;
 
 #Mails
@@ -569,6 +570,9 @@ class PerfilController extends Controller
                 $usuario->usuarioUser = null;
                 $usuario->save();
             }
+
+            //Eliminamos notificacines del usuario
+            $notificaciones = Notificaciones::where('usuarios_idusuarios', $id)->delete();
 
             // Si no hay reportes, eliminamos al usuario de la tabla
             Reportes::where('usuarios_idusuarios', $id)->delete();

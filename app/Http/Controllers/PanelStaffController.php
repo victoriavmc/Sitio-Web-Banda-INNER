@@ -11,6 +11,7 @@ use App\Models\Usuario;
 use App\Models\RevisionImagenes;
 use App\Models\Imagenes;
 use App\Models\Interacciones;
+use App\Models\Notificaciones;
 use App\Models\Reportes;
 use App\Models\Roles;
 use App\Models\StaffExtra;
@@ -250,6 +251,9 @@ class panelStaffController extends Controller
                 $staffextra->save();
             }
         }
+
+        //Eliminamos notificacoines del usuario
+        $notificaciones = Notificaciones::where('usuarios_idusuarios', $id)->delete();
 
         // Verificar si el usuario tiene reportes asociados (aquí asumo que tienes un atributo 'reportes')
         $tieneReportes = Reportes::where('usuarios_idusuarios', $id)->first();
