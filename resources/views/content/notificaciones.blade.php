@@ -19,9 +19,9 @@
             <div class="container my-10 lg:grid lg:grid-cols-2 p-8 rounded-lg bg-white shadow-lg mx-auto text-black">
                 @foreach ($tipoNotificaciones as $notificacion)
                     <div class="grid grid-cols-[40%_60%] w-full gap-5">
-                        <div class="w-full h-48 border">
+                        {{-- <div class="w-full h-48 border">
                             <img src="" alt="">
-                        </div>
+                        </div> --}}
 
                         <div class="flex flex-col justify-between py-2 max-w-max">
                             <h1 class="text-2xl lg:text-2xl">{{ $notificacion->nombreNotificacion }}</h1>
