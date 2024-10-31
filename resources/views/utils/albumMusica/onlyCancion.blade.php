@@ -50,15 +50,16 @@
 
 
                         {{-- Para descargar si es superfan --}}
-                        @auth
-                            @if (Auth::user()->rol->idrol != 4)
-                                @if ($datosCancion['archivoDsCancion'])
-                                    {{-- No se tiene que poder descargar --}}
-                                    <audio controls>
-                                        <source src="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}"
-                                            type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
+
+                        @if ($datosCancion['archivoDsCancion'])
+                            {{-- No se tiene que poder descargar --}}
+                            <audio controls>
+                                <source src="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}"
+                                    type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            @auth
+                                @if (Auth::user()->rol->idrol != 4)
                                     {{-- Boton para descargar automaticamente --}}
                                     @if ($datosCancion['contenidoDescargable'] == 'Si')
                                         <a href="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}" download>
@@ -75,8 +76,8 @@
                                         </a>
                                     @endif
                                 @endif
-                            @endif
-                        @endauth
+                            @endauth
+                        @endif
                     </div>
                 </div>
             </div>
