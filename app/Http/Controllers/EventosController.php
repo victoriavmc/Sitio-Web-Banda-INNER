@@ -517,6 +517,19 @@ class eventosController extends Controller
         $precio = new Precios();
         $precio->precio = $request->input('precio');
         $precio->estadoPrecio = 'Activo';
+        $precio->save();
+
+        if (!precioServicios::where('referenciaIdFicticio', 1)->where('tipoServicio', 'Show')->exists()) {
+            $precioServicio = new PrecioServicios();
+            $precioServicio->referenciaIdFicticio = 1;
+            $precioServicio->tipoServicio = 'Show';
+            $precioServicio->precios_idprecios = $precio->idprecios;
+        } else {
+            $precioServicio = PrecioServicios::where('referenciaIdFicticio', 1)->where('tipoServicio', 'Show')->first();
+            $precioServicio->precios_idprecios = $precio->idprecios;
+        }
+
+        $precioServicio->save();
 
         return redirect()->back()->with('alertModificar', [
             'type' => 'Success',
