@@ -176,8 +176,7 @@
                                 $contadorCanciones = 0; // Contador para los Canciones
                             @endphp
                             <div class="p-5 sm:p-8">
-                                <div
-                                    class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
+                                <div class="grid grid-template-column-4 gap-5 [&>img:not(:first-child)]:mt-8">
                                     @foreach ($media as $item)
                                         @if ($item['tipo'] == 'Imagen' && $contadorImagenes < 3)
                                             <div
