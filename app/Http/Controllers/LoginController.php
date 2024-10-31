@@ -124,10 +124,9 @@ class LoginController extends Controller
 
                 $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
                 $idhistorialUsuario = $historialUsuario->idhistorialusuario;
-                // Redirigir a la página de contacto
 
                 // Mensaje alerta: el usuario se encuentra baneado.
-                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
+                return redirect()->route('inicio')
                     ->with('alertBaneo', [
                         'type' => 'warning',
                         'message' => 'Su usuario ha sido baneado, no podrá acceder.',
@@ -250,10 +249,9 @@ class LoginController extends Controller
 
                 $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
                 $idhistorialUsuario = $historialUsuario->idhistorialusuario;
-                // Redirigir a la página de contacto
 
                 // Mensaje alerta: el usuario se encuentra baneado.
-                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
+                return redirect()->route('inicio')
                     ->with('alertBaneo', [
                         'type' => 'Warning',
                         'message' => 'Su usuario ha sido baneado, no podrá acceder.',
@@ -311,7 +309,7 @@ class LoginController extends Controller
                 ]);
                 break;
 
-            case 'Inactivo':
+            case 'Suspendido':
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
                 $pin = Str::random(6);
 
@@ -342,23 +340,6 @@ class LoginController extends Controller
                 ]);
                 break;
 
-            case 'Baneado':
-                // Opción 3: Usuario baneado
-                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
-
-                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
-
-                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
-                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
-                // Redirigir a la página de contacto
-
-                // Mensaje alerta: el usuario se encuentra baneado.
-                return redirect()->route('contacto', ['id' => $idhistorialUsuario])
-                    ->with('alertBaneo', [
-                        'type' => 'Warning',
-                        'message' => 'Su usuario ha sido baneado, no podrá acceder.',
-                    ]);
-
             case 'Activo':
                 // Obtener el valor del campo 'email' del request
                 $input = $request->input('email');
@@ -384,9 +365,23 @@ class LoginController extends Controller
                     'type' => 'Warning',
                     'message' => 'Por favor, revisa tu correo electrónico donde se te envió el pin de olvido. Si no ves el correo en tu bandeja de entrada, asegúrate de revisar también la carpeta de spam o correo no deseado.',
                 ]);
+                break;
 
+            default:
+                // Opción 3: Usuario baneado o inactivo
+                $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
 
-                // Redirigir al perfil con un mensaje de éxito si la autenticación fue exitosa
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+                $idhistorialUsuario = $historialUsuario->idhistorialusuario;
+
+                // Mensaje alerta: el usuario se encuentra baneado.
+                return redirect()->route('inicio')
+                    ->with('alertBaneo', [
+                        'type' => 'Warning',
+                        'message' => 'Su usuario ha sido baneado o eliminado, no podrá acceder.',
+                    ]);
                 break;
         }
     }

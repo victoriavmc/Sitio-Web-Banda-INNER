@@ -93,6 +93,7 @@
                                         class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-blue-400 hover:text-gray-900">Modificar
                                         Red</span>
                                 </button>
+
                         </form>
                         <button class="relative mr-2" type="button" onclick="openModal(this)">
                             <span class="absolute top-0 left-0 mt-1 ml-1 h-full w-full rounded bg-black"></span>
@@ -131,16 +132,16 @@
                             Red Social</span>
                     </button>
                 </form>
+                @endif
             </div>
-            @endif
         </div>
-    </div>
     </div>
     </div>
 
     {{-- Modal --}}
-    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto">
-        <div class="flex h-screen items-center justify-center">
+    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto"
+        onclick="closeModal(event)">
+        <div class="flex h-screen items-center justify-center" onclick="event.stopPropagation();">
             <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
                 <div class="mt-3 text-center">
                     <h3 class="text-lg leading-6 font-medium text-gray-900">Agregar Red Social</h3>
@@ -194,16 +195,20 @@
         const baseUrl = "{{ url('/perfil/agregar-red') }}";
 
         function openModal(button) {
-
             const form = document.querySelector('#modal form');
-
             form.action = `${baseUrl}`;
-
             document.getElementById('modal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
+        function closeModal(event) {
+            // Solo cerrar si el clic es en el fondo, no en el contenido
+            if (event) {
+                if (event.target === document.getElementById('modal')) {
+                    document.getElementById('modal').classList.add('hidden');
+                }
+            } else {
+                document.getElementById('modal').classList.add('hidden');
+            }
         }
     </script>
 </x-Opciones>
