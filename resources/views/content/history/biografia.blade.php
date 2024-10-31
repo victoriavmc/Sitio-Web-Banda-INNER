@@ -26,8 +26,8 @@
                     title="Banda">
                 </div>
             @else
-                <div class="bg-cover bg-center w-full text-center overflow-hidden"
-                    style="min-height: 400px; width: 600px; background-image:url('{{ asset('img/logo_inner_negro.webp') }}');"
+                <div class="bg-cover bg-center mx-auto"
+                    style="min-height: 400px; width: 700px; background-image:url('{{ asset('img/logo_inner_negro.webp') }}');"
                     title="Banda">
                 </div>
             @endif

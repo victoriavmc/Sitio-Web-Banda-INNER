@@ -6,6 +6,7 @@ use App\Mail\msjNotificaciones;
 use App\Models\Imagenes;
 use App\Models\LugarLocal;
 use App\Models\Notificaciones;
+use App\Models\Precios;
 use App\Models\RevisionImagenes;
 use App\Models\PrecioServicios;
 use App\Models\Show;
@@ -513,10 +514,9 @@ class eventosController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Si ya existe un precioServicio asociado lo edita, si no existe lo crea
-        $precioServicio = PrecioServicios::where('referenciaIdFicticio', 1)
-            ->where('tipoServicio', 'Show')
-            ->first();
+        $precio = new Precios();
+        $precio->precio = $request->input('precio');
+        $precio->estadoPrecio = 'Activo';
 
         return redirect()->back()->with('alertModificar', [
             'type' => 'Success',
