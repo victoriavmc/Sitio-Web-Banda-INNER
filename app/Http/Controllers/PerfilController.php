@@ -631,7 +631,7 @@ class PerfilController extends Controller
             Auth::logout();
 
             // Redirigir a la página de inicio
-            return redirect('inicio')->with('alertBorrar', [
+            return redirect()->route('inicio')->with('alertBorrar', [
                 'type' => 'Success',
                 'message' => 'Se ha borrado la cuenta con éxito!',
             ]);

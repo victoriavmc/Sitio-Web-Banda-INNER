@@ -54,14 +54,17 @@ class eventosController extends Controller
                 $ultimoPrecio['precio'] = $ultimoPrecio->precio;
             }
         } catch (\Throwable $th) {
-            $ultimoPrecio = null;
+            $ultimoPrecio = [
+                'idprecioServicio' => null,
+                'precio' => null
+            ];
         }
 
         // Obtén los eventos ordenados por fecha
         $shows = $query->orderBy('fechashow', 'desc')->get();
         $usuario = Auth::user();
 
-        return view('events.eventos', compact('shows', 'usuario'));
+        return view('events.eventos', compact('shows', 'usuario', 'ultimoPrecio'));
     }
 
     public function lugaresCargados(Request $request)

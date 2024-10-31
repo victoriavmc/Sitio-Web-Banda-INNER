@@ -78,7 +78,6 @@
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
                             <p class="text-lg">
                                 {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
-                            <p class="text-lg">
                             <p class="text-4xl font-medium text-black leading-none">
                                 {{ $show->lugarlocal->nombreLugar }}
                             </p>
@@ -104,8 +103,10 @@
                                             value="{{ $usuario->correoElectronicoUser }}" required />
 
                                         <input type="hidden" id="product_id" value="1234567890" />
+
                                         <input type="hidden" id="idprecioServicio" name="idprecioServicio"
                                             value="{{ $ultimoPrecio['idprecioServicio'] }}" />
+
                                         <input type="hidden" id="product_price"
                                             value="{{ $ultimoPrecio['precio'] }}" />
 
@@ -166,16 +167,74 @@
         @endif
     </div>
 
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
-        // Mercado pago
+        const mp = new MercadoPago("{{ env('MERCADO_PAGO_PUBLIC_KEY') }}");
 
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            // Capturar datos del formulario
+            const nombre = document.getElementById('name').value;
+            const apellido = document.getElementById('surname').value;
+            const email = document.getElementById('email').value;
+            const productId = document.getElementById('product_id').value;
+            const productPrice = parseFloat(document.getElementById('product_price').value);
+            const idprecioServicio = document.getElementById('idprecioServicio').value;
 
+            if (!nombre || !apellido || !email) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Por favor, completa todos los campos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
 
+            const orderData = {
+                product: [{
+                    id: productId,
+                    title: 'Suscripción',
+                    quantity: 1,
+                    currency_id: "ARS",
+                    unit_price: productPrice,
+                }],
+                name: nombre,
+                surname: apellido,
+                email: email,
+                idprecioServicio: idprecioServicio,
+            };
 
+            console.log('Datos del pedido:', orderData);
 
-
-
-
+            // Enviar los datos al backend para crear la preferencia de pago
+            fetch('/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(preference => {
+                    if (preference.error) {
+                        throw new Error(preference.error);
+                    }
+                    mp.checkout({
+                        preference: {
+                            id: preference.id
+                        },
+                        autoOpen: true
+                    });
+                    console.log('Respuesta de la preferencia:', preference);
+                })
+                .catch(error => console.error('Error al crear la preferencia:', error));
+        });
 
         // No se que hace, pero no lo toco xd
         document.addEventListener('DOMContentLoaded', function() {
