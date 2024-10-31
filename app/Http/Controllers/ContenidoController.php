@@ -180,7 +180,6 @@ class ContenidoController extends Controller
         if ($request->has('imagenesEliminadas')) {
             foreach ($request->imagenesEliminadas as $idImagen) {
                 if ($idImagen) {
-                    // dd($idImagen);
                     // $imagenContenido = $idImagen->idimagenescontenido;
 
                     $imagen = ImagenesContenido::find($idImagen);

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 
 class JobsController extends Controller
 {
-
     public function ImagenesContenido($idContent)
     {
         $rutasImg = [];
@@ -49,7 +48,6 @@ class JobsController extends Controller
         $lista = [];
         // Recorro las entidades
         foreach ($entidades as $entidad) {
-            dd();
             if ($tipo === 'artista') {
 
                 $nombre = $entidad->staffExtra->usuario->datosPersonales->nombreDP;
