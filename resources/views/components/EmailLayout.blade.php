@@ -84,27 +84,32 @@
                         @if ($redSocial->linkRedSocial)
                             @switch($redSocial->nombreRedSocial)
                                 @case('Deezer')
-                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
                                     |
                                 @break
 
                                 @case('Spotify')
-                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
                                     |
                                 @break
 
                                 @case('Youtube')
-                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
                                     |
                                 @break
 
                                 @case('iTunes')
-                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
                                     |
                                 @break
 
                                 @case('Amazon Music')
-                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank" rel="noopener noreferrer"></a>
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
                                     |
                                 @break
                             @endswitch
