@@ -158,6 +158,8 @@ class AlbumController extends Controller
         } elseif ($tipoAlbum == 3) {
             // Álbum de tipo 3: solo una imagen
             $rules['imagen'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+        } elseif ($tipoAlbum == 4) {
+            $rules['video'] = 'nullable|file|mimes:mp4,mov,avi,mkv|max:20480';
         }
 
         return $rules;
@@ -354,8 +356,13 @@ class AlbumController extends Controller
 
 
         if ($accion == '2') {
-            // Valida los datos
-            $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
+            if ($tipoAlbum == 2) {
+                // Valida los datos
+                $validator = Validator::make($request->all(), $this->rules(4));
+            } else {
+                // Valida los datos
+                $validator = Validator::make($request->all(), $this->rules($tipoAlbum));
+            }
 
             // Verifica si la validación falló
             if ($validator->fails()) {
@@ -407,11 +414,14 @@ class AlbumController extends Controller
                     // Videos
                     $album = AlbumVideo::where('albumDatos_idalbumDatos', $idAlbumEspecifico)->first();
                     $idVideoEspecifico = $album->videos_idvideos;
-                    $video = Videos::find($idVideoEspecifico);
+                    $videoAnterior = Videos::find($idVideoEspecifico);
 
                     // Si se agregan videos, se deben crear nuevos álbumes con el mismo ID de álbum de datos
                     if ($request->has('videos')) {
-                        $video->delete();
+
+                        // Elimina del storage el video anterior
+                        Storage::disk('public')->delete($videoAnterior->subidaVideo);
+
                         // Asigna el archivo de video a la variable
                         $videoFile = $request->file('video');
 
@@ -427,6 +437,8 @@ class AlbumController extends Controller
 
                         // Asigna el ID del video al álbum
                         $album->videos_idvideos = $video->idvideos;
+
+                        $videoAnterior->delete();
                     }
 
                     $album->save();

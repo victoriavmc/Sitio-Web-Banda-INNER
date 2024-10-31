@@ -27,7 +27,7 @@
             <!-- Centering wrapper -->
             <h2 class="text-4xl font-bold text-center">ALBUMS</h2>
             @auth
-                @if (Auth::user()->rol->idrol === 1)
+                @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
                     <!-- Formulario para crear un álbum musical -->
                     <form method="get" action="{{ route('crear-album') }}">
                         @csrf
@@ -48,7 +48,7 @@
                     <div class="flex w-full justify-center gap-12 border-b border-gray-300 pb-3">
                         <div class="relative border w-[300px] h-[280px] border-gray-300 flex">
                             @auth
-                                @if (Auth::user()->rol->idrol === 1)
+                                @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
                                     <div class="flex justify-end gap-3 absolute pr-3 pt-3 w-full">
                                         {{-- Modificar album especifico --}}
                                         <form action="{{ route('crear-album') }}" method="GET">
@@ -112,7 +112,7 @@
                                 </div>
                                 @if (!$album['canciones'])
                                     @auth
-                                        @if (Auth::user()->rol->idrol === 1)
+                                        @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
                                             <a href="{{ route('formulario-crear-cancion', $album['id']) }}" type="submit"
                                                 class="bg-red-500 mb-4 hover:bg-red-400 mt-4 text-white text-xs font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
                                                 Agregar Canción
