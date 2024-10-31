@@ -83,6 +83,12 @@
                     @foreach ($recuperoRedesSociales as $redSocial)
                         @if ($redSocial->linkRedSocial)
                             @switch($redSocial->nombreRedSocial)
+                                @case('Instagram')
+                                    <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
+                                    |
+                                @break
+
                                 @case('Deezer')
                                     <a href="{{ $redSocial->linkRedSocial }}" target="_blank"
                                         rel="noopener noreferrer">{{ $redSocial->nombreRedSocial }}</a>
