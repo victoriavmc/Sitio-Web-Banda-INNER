@@ -50,28 +50,30 @@
 
 
                         {{-- Para descargar si es superfan --}}
-                        @if (Auth::user()->rol->idrol != 4)
-                            @if ($datosCancion['archivoDsCancion'] && $datosCancion['contenidoDescargable'] == 'Si')
-                                <audio controls>
-                                    <source src="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}"
-                                        type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
-                                {{-- Boton para descargar automaticamente --}}
-                                <a href="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}" download>
-                                    <button
-                                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-1 px-2 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                        <svg class="w-5.5 h-5.5 text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
-                                        </svg>
-                                    </button>
-                                </a>
+                        @auth
+                            @if (Auth::user()->rol->idrol != 4)
+                                @if ($datosCancion['archivoDsCancion'] && $datosCancion['contenidoDescargable'] == 'Si')
+                                    <audio controls>
+                                        <source src="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}"
+                                            type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                    {{-- Boton para descargar automaticamente --}}
+                                    <a href="{{ asset(Storage::url($datosCancion['archivoDsCancion'])) }}" download>
+                                        <button
+                                            class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-1 px-2 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
+                                            <svg class="w-5.5 h-5.5 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
+                                            </svg>
+                                        </button>
+                                    </a>
+                                @endif
                             @endif
-                        @endif
+                        @endauth
                     </div>
                 </div>
             </div>

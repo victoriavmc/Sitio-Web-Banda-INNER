@@ -13,13 +13,8 @@
 
             @auth
                 @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                    <form action="{{ route('crearP', 1) }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                            Crear
-                        </button>
-                    </form>
+                    <a href="{{ route('verFormularioBiografia') }}"
+                        class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Crear</a>
                 @endif
             @endauth
         </div>
@@ -31,8 +26,8 @@
                     title="Banda">
                 </div>
             @else
-                <div class="bg-cover bg-center text-center overflow-hidden"
-                    style="min-height: 600px; background-image:url('{{ asset('img/logo_inner_negro.webp') }}');"
+                <div class="bg-cover bg-center w-full text-center overflow-hidden"
+                    style="min-height: 400px; width: 600px; background-image:url('{{ asset('img/logo_inner_negro.webp') }}');"
                     title="Banda">
                 </div>
             @endif
@@ -71,7 +66,7 @@
                     <div class="mx-auto ">
                         <div class="flex flex-col justify-center">
                             <div class="flex flex-col justify-center">
-                                <h2 class="text-center font-semibold text-3xl text-black">¡Escúchanos!</h2>
+                                <h2 class="text-center font-semibold text-3xl mt-4 text-black">¡Escúchanos!</h2>
                                 <div class="flex flex-wrap items-center justify-center gap-10 mt-2 md:justify-around">
                                     @foreach ($recuperoRedesSociales as $redSocial)
                                         @if ($redSocial->linkRedSocial)

@@ -823,6 +823,12 @@ class ContenidoController extends Controller
         return view('content.news.crearnoticias');
     }
 
+    #VER FORMULARIO CREAR BIOGRAFIA
+    public function verFormularioBiografia()
+    {
+        return view('content.history.crearbiografia');
+    }
+
     // Método para manejar la carga de la imagen y su revisión
     private function manejarImagenYRevision($imagenFile, $tipoFoto)
     {
@@ -926,6 +932,15 @@ class ContenidoController extends Controller
                 return redirect()->route('noticias')->with('alertNoticia', [
                     'type' => 'Success',
                     'message' => 'Noticia creada con éxito.',
+                ]);
+                break;
+            case 3:
+                #Si es biografia
+                // $msj = "Han creado una nueva biografía:" . ' "' .  $contenido->titulo . '".';
+                // $this->creadoContenidoNotificar(1,  $msj);
+                return redirect()->route('biografia')->with('alertBiografia', [
+                    'type' => 'Success',
+                    'message' => 'Biografía creada con éxito.',
                 ]);
                 break;
         }

@@ -216,6 +216,9 @@ Route::get('/superFan', [SuperFanController::class, 'indexSuperFan'])
 Route::get('/biografia', [ContenidoController::class, 'indexBiografia'])
     ->name('biografia');
 
+Route::get('/biografia/crearbiografia', [ContenidoController::class, 'verFormularioBiografia'])
+    ->name('verFormularioBiografia');
+
 Route::get('/biografia/modificar/{id}/{tipo}', [ContenidoController::class, 'editarP'])
     ->name('editarP')->middleware('auth');
 
