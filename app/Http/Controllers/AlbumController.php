@@ -157,7 +157,7 @@ class AlbumController extends Controller
             $rules['video'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
         } elseif ($tipoAlbum == 3) {
             // Álbum de tipo 3: solo una imagen
-            $rules['imagen'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg|max:2048';
         } elseif ($tipoAlbum == 4) {
             $rules['video'] = 'nullable|file|mimes:mp4,mov,avi,mkv|max:20480';
         }
