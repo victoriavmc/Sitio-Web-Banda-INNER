@@ -63,7 +63,7 @@
         @if ($shows->isEmpty())
             <p class="text-center text-2xl text-gray-500">No se encontraron eventos</p>
         @else
-            <div class="relative grid grid-cols-2 gap-5">
+            <div class="relative grid lg:grid-cols-2 gap-5">
                 @foreach ($shows as $show)
                     <div class="relative items-start text-black bg-white p-3 rounded-xl shadow-xl"
                         style="display: grid; grid-template-columns:30% 35% 35%">
@@ -88,7 +88,7 @@
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                             <div class="flex flex-col gap-3">
                                 @if (now() < $show->fechashow)
-                                    <form action="" method="post">
+                                    <form class="w-max h-max" action="" method="">
 
                                         <h1 class="hidden product-name">Entrada para el concierto en
                                             {{ $show->nombreLugar }}!</h1>
@@ -110,8 +110,8 @@
                                         <input type="hidden" id="product_price"
                                             value="{{ $ultimoPrecio['precio'] }}" />
 
-                                        <button
-                                            class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700 mt-6">
+                                        <button id="checkout-btn" type="button"
+                                            class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
                                             <p>Adquirir Entrada</p>
                                         </button>
                                     </form>
@@ -125,7 +125,7 @@
                             </div>
                         </div>
                         {{-- Google Maps --}}
-                        <div id="mapa" class="z-0 w-full h-full"></div>
+                        {{-- <div id="mapa" class="z-0 w-full h-full"></div> --}}
                         {{-- CRUD EVENTOS --}}
                         @auth
                             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)

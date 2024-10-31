@@ -38,7 +38,10 @@ class LadoDerecho extends Component
                 return; // Salimos del constructor
             }
         } catch (\Throwable $th) {
-            $this->ultimoPrecio = null;
+            $this->ultimoPrecio = [
+                'idprecioServicio' => null,
+                'precio' => null,
+            ];
         }
     }
 
