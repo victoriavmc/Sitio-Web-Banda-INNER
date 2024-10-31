@@ -135,8 +135,8 @@
                                             class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 w-max border-b-[1px] border-zinc-200 py-5 pl-5 pr-4">
                                             <a href="{{ route('perfil-ajeno', $usuario->idusuarios) }}">
                                                 <p
-                                                    class="text-sm font-medium {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'text-red-500' : 'text-zinc-950' }}">
-                                                    {{ $usuario->datosPersonales->historialUsuario->first()->estado === 'Inactivo' ? 'Ex-empleado' : 'Activo' }}
+                                                    class="text-sm font-medium {{ $usuario->datosPersonales->historialUsuario->first()->estado != 'Activo' ? 'text-red-500' : 'text-zinc-950' }}">
+                                                    {{ $usuario->datosPersonales->historialUsuario->first()->estado != 'Activo' ? 'Ex-empleado' : 'Activo' }}
                                                 </p>
                                             </a>
                                         </td>

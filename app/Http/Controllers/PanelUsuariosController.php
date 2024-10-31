@@ -42,7 +42,8 @@ class PanelUsuariosController extends Controller
             ->join('historialusuario', 'usuarios.idusuarios', '=', 'historialusuario.datospersonales_idDatosPersonales') // Join con historial_usuario
             ->where(function ($query) {
                 $query->where('historialusuario.estado', 'Activo')
-                    ->orWhere('historialusuario.estado', 'Suspendido');
+                    ->orWhere('historialusuario.estado', 'Suspendido')
+                    ->orWhere('historialusuario.estado', 'Baneado');
             });
 
         // Filtro de búsqueda
