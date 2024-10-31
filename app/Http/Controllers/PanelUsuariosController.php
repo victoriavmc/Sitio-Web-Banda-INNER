@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PanelUsuariosController extends Controller
 {
-    #Lista los usuarios Fans y SuperFans.
+    # Lista los usuarios Fans y SuperFans.
     public function listar(Request $request)
     {
         // Cargar los usuarios con los datos personales y la imagen de perfil
@@ -38,7 +38,12 @@ class PanelUsuariosController extends Controller
                     $query->where('tipodefoto_idtipodefoto', 1)->with('imagenes');
                 },
                 'datosPersonales'
-            ]);
+            ])
+            ->join('historialusuario', 'usuarios.idusuarios', '=', 'historialusuario.datospersonales_idDatosPersonales') // Join con historial_usuario
+            ->where(function ($query) {
+                $query->where('historialusuario.estado', 'Activo')
+                    ->orWhere('historialusuario.estado', 'Suspendido');
+            });
 
         // Filtro de búsqueda
         if ($request->has('busqueda')) {
@@ -50,8 +55,10 @@ class PanelUsuariosController extends Controller
         }
 
         // Paginación de usuarios
-        $perPage = $request->input('per_page', 6); // 6 es el valor predeterminado
-        return $usuarios = $query->paginate($perPage);
+        $perPage = $request->input('per_page', 6);
+        $usuarios = $query->paginate($perPage);
+
+        return $usuarios;
     }
 
     #Mira la imagenes de cada usuario y pasamos ruta si existe
