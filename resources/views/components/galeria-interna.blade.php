@@ -19,41 +19,43 @@
             </x-alerts>
         @endif
 
-        @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
-            <div class="flex justify-center items-center">
-                {{-- Agregar más videos o imágenes --}}
-                <form action="{{ route('agregarVideoAlbum') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="idAlbumEspecifico" value="{{ $idDato }}">
-                    <input type="hidden" name="tipo" value="{{ $tipo }}">
+        @auth
+            @if (Auth::user()->rol->idrol === 1 || Auth::user()->rol->idrol === 2)
+                <div class="flex justify-center items-center">
+                    {{-- Agregar más videos o imágenes --}}
+                    <form action="{{ route('agregarVideoAlbum') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="idAlbumEspecifico" value="{{ $idDato }}">
+                        <input type="hidden" name="tipo" value="{{ $tipo }}">
 
-                    <div class="flex flex-col justify-center items-center gap-3">
-                        <div class="rounded-md border border-red-500 bg-gray-50 p-4 shadow-md w-36">
-                            <label for="upload" class="flex flex-col items-center gap-2 cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 fill-white stroke-red-500"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <span class="font-bold text-center text-red-500">
-                                    {{ $tipo == 1 ? 'Agrega videos' : 'Agrega imágenes' }}
-                                </span>
-                            </label>
-                            <input id="upload"
-                                class="hidden mt-2 w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
-                                type="file" name="{{ $tipo == 1 ? 'videos[]' : 'imagenes[]' }}" multiple
-                                accept="{{ $tipo == 1 ? 'video/*' : 'image/*' }}" required />
+                        <div class="flex flex-col justify-center items-center gap-3">
+                            <div class="rounded-md border border-red-500 bg-gray-50 p-4 shadow-md w-36">
+                                <label for="upload" class="flex flex-col items-center gap-2 cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 fill-white stroke-red-500"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <span class="font-bold text-center text-red-500">
+                                        {{ $tipo == 1 ? 'Agrega videos' : 'Agrega imágenes' }}
+                                    </span>
+                                </label>
+                                <input id="upload"
+                                    class="hidden mt-2 w-full border-none placeholder:text-base pl-0 text-black bg-black bg-opacity-0"
+                                    type="file" name="{{ $tipo == 1 ? 'videos[]' : 'imagenes[]' }}" multiple
+                                    accept="{{ $tipo == 1 ? 'video/*' : 'image/*' }}" required />
+                            </div>
+                            <div>
+                                <button type="submit"
+                                    class="w-full bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 rounded">
+                                    Subir Contenido
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button type="submit"
-                                class="w-full bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 rounded">
-                                Subir Contenido
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        @endif
+                    </form>
+                </div>
+            @endif
+        @endauth
 
         {{-- Imagenes o Videos --}}
         <div

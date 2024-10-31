@@ -90,6 +90,8 @@
                                 @if (now() < $show->fechashow)
                                     <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
                                         method="">
+
+
                                         <h1 class="hidden product-name">Entrada para el concierto en
                                             {{ $show->lugarlocal->nombreLugar }}!</h1>
 
@@ -135,7 +137,8 @@
                         @auth
                             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
                                 <div class="z-10 absolute flex gap-3 w-full p-4 justify-end">
-                                    <button type="button" id="btn-precio" data-show-id="{{ $show->idshow }}"
+                                    <button type="button" id="btn-precio-{{ $show->idshow }}"
+                                        onclick="openModal({{ $show->idshow }})"
                                         class="bg-green-500 hover:bg-green-700 text-white font-bold p-1 rounded">
                                         <svg class="w-5 h-5 text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -187,16 +190,12 @@
         <div class="fixed inset-0 z-20 bg-gray-800 bg-opacity-50 flex justify-center items-center">
             <div class="bg-white p-6 rounded-md w-1/3">
                 <h2 class="text-xl font-bold mb-4">Actualizar Precio</h2>
-                <form action="{{ route('actualizar-precio') }}" method="POST">
+                <form id="form-actualizar-precio" action="" method="POST">
                     @csrf
-
                     <div class="mb-4">
                         <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
-                        <input type="number" name="precio" id="precio"
-                            class="mt-1 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            placeholder="Precio" required>
+                        <input type="number" name="precio" id="precio" class="mt-1 block w-full" required>
                     </div>
-
                     <div class="flex justify-end gap-4">
                         <button type="button" id="closeDeleteModalBtn"
                             class="bg-gray-500 hover:bg-gray-400 text-white text-base font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">
@@ -283,18 +282,15 @@
         }
 
         // Modal para cambiar precio del evento
-        const modalPrecio = document.getElementById('modal-precio');
-        const btnPrecio = document.getElementById('btn-precio');
+        function openModal(id) {
+            const form = document.getElementById('form-actualizar-precio');
+            form.action = `/eventos/actualizar-precio/${id}`;
+            document.getElementById('modal-precio').classList.remove('hidden');
+        }
 
-        btnPrecio.addEventListener('click', () => {
-            modalPrecio.classList.toggle('hidden');
-        });
-
-        // Cerrar modal
-        const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
-        closeDeleteModalBtn.addEventListener('click', () => {
-            modalPrecio.classList.toggle('hidden');
-        });
+        function closeModal() {
+            document.getElementById('modal-precio').classList.add('hidden');
+        }
 
         // No se que hace, pero no lo toco xd
         document.addEventListener('DOMContentLoaded', function() {
