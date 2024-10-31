@@ -51,16 +51,26 @@ class CancionController extends Controller
     #Guardo audio #VER
     public function guardarAudioSiExiste(Cancion $cancion, Request $request)
     {
+        // Verificar si se ha marcado la opción de eliminar el archivo
+        if ($request->has('eliminarCancion') && $cancion->archivoDsCancion) {
+            Storage::disk('public')->delete($cancion->archivoDsCancion);
+            return null; // Retornamos null para eliminar la referencia en la base de datos
+        }
+
+        // Guardar el nuevo archivo si se ha subido uno
         if ($request->hasFile('archivoDsCancion')) {
-            // Eliminar el archivo anterior si se está actualizando
+            // Eliminar el archivo anterior si ya existe
             if ($cancion->archivoDsCancion) {
                 Storage::disk('public')->delete($cancion->archivoDsCancion);
             }
 
             // Guardar el nuevo archivo de audio
             $filePath = $request->file('archivoDsCancion')->store('audio', 'public');
-            return $cancion->archivoDsCancion = $filePath;
+            return $filePath;
         }
+
+        // Retornar el archivo existente si no se ha subido uno nuevo y no se marca eliminar
+        return $cancion->archivoDsCancion;
     }
 
     //Cada que se cree algun album nuevo debe enviar notificacion al usuario que marco el tiponotificacion especifico
@@ -117,23 +127,30 @@ class CancionController extends Controller
         if ($request->input('album_correcto') === 'no') {
             $nuevoAlbumId = $request->input('otroAlbum');
 
-            // Asegurarte de que se ha proporcionado un nuevo álbum
             if (empty($nuevoAlbumId)) {
                 throw ValidationException::withMessages([
                     'otroAlbum' => 'Se requiere seleccionar un nuevo álbum si se indica que no es el álbum correcto.',
                 ]);
             }
 
-            // Cambiar el álbum de la canción
             $cancion->albumMusical_idalbumMusical = $nuevoAlbumId;
         }
-        // Actualizar los datos existentes
+
+        // Actualizar los datos de la canción
         $cancion->tituloCancion = $request->tituloCancion;
         $cancion->letraEspCancion = $request->letraEspCancion;
         $cancion->letraInglesCancion = $request->letraInglesCancion;
-        // Guardar el nuevo audio si existe
+
+        // Lógica de eliminación de archivo si se ha marcado la opción
+        if ($request->has('eliminarCancion') && $cancion->archivoDsCancion) {
+            Storage::delete('public/' . $cancion->archivoDsCancion);
+            $cancion->archivoDsCancion = null; // Actualizamos a null en la base de datos
+        }
+
+        // Guardar el nuevo audio si se subió uno
         $cancion->archivoDsCancion = $this->guardarAudioSiExiste($cancion, $request);
-        $cancion->save(); // Guardar los cambios en la canción
+
+        $cancion->save();
     }
 
     // Mostrar formulario de agregar canción o modificar
@@ -177,9 +194,12 @@ class CancionController extends Controller
         $idAlbum = $cancion->albumMusical_idalbumMusical;
         $album = AlbumMusical::findOrFail($idAlbum);
         $tituloAlbum = $album->albumDatos->tituloAlbum;
-
         $albumesDisponibles = AlbumMusical::all();
-        return view('utils.albumMusica.formularioModificarCancion', compact('cancion', 'tituloAlbum', 'albumesDisponibles'));
+
+        // URL del archivo de audio actual
+        $audioActualUrl = $cancion->archivoDsCancion ? asset('storage/' . $cancion->archivoDsCancion) : null;
+
+        return view('utils.albumMusica.formularioModificarCancion', compact('cancion', 'tituloAlbum', 'albumesDisponibles', 'audioActualUrl'));
     }
 
     // Guardar cambios en una canción existente

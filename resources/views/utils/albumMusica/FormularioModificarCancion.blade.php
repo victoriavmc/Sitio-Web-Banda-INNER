@@ -84,18 +84,34 @@
                             name="letraInglesCancion">{{ old('letraInglesCancion', $cancion->letraInglesCancion) }}</textarea>
                     </div>
 
+                    <!-- Campo de archivo de la canción -->
                     <div class="w-full px-3 mb-8">
-                        <div class="w-full px-3 mb-8">
-                            <label
-                                class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-green-400 bg-white p-6 text-center"
-                                for="archivoDsCancion">
-                                <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Archivo de la Canción
-                                </h2>
-                                <p class="mt-2 text-gray-500 tracking-wide">Inserte la canción (mp3, mp4, ogg, wav).</p>
-                                <input id="archivoDsCancion" type="file" class="hidden" name="archivoDsCancion"
-                                    accept="audio/*" />
-                            </label>
-                        </div>
+                        @if ($audioActualUrl)
+                            <!-- Reproducción de la canción actual -->
+                            <label class="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2">Canción
+                                actual:</label>
+                            <audio controls class="w-full mb-4">
+                                <source src="{{ $audioActualUrl }}" type="audio/mpeg">
+                                Tu navegador no soporta la reproducción de audio.
+                            </audio>
+
+                            <!-- Checkbox para eliminar la canción actual -->
+                            <div class="flex items-center mb-4">
+                                <input type="checkbox" id="eliminarCancion" name="eliminarCancion" value="1"
+                                    class="mr-2" />
+                                <label for="eliminarCancion">Eliminar canción actual</label>
+                            </div>
+                        @endif
+
+                        <!-- Campo para cargar nueva canción -->
+                        <label
+                            class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-green-400 bg-white p-6 text-center"
+                            for="archivoDsCancion">
+                            <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Archivo de la Canción</h2>
+                            <p class="mt-2 text-gray-500 tracking-wide">Inserte la canción (mp3, mp4, ogg, wav).</p>
+                            <input id="archivoDsCancion" type="file" class="hidden" name="archivoDsCancion"
+                                accept="audio/*" />
+                        </label>
                     </div>
 
                     <div class="w-full md:w-full px-3 mb-6">
