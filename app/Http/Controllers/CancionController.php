@@ -100,15 +100,16 @@ class CancionController extends Controller
     {
         $cancion = new Cancion();
         // Asignar datos de la canción
-        $cancion->idcancion = $cancion->idcancion;
         $cancion->albumMusical_idalbumMusical = $id;
         $cancion->tituloCancion = $request->tituloCancion;
         $cancion->letraEspCancion = $request->letraEspCancion;
         $cancion->letraInglesCancion = $request->letraInglesCancion;
 
-        // Manejar archivo de audio
-        $this->guardarAudioSiExiste($cancion, $request);
+        // Manejar archivo de audio y guardar la ruta en la propiedad archivoDsCancion
+        $archivoRuta = $this->guardarAudioSiExiste($cancion, $request);
+        $cancion->archivoDsCancion = $archivoRuta;
 
+        // Guardar la canción en la base de datos
         $cancion->save();
 
         $tituloAlbum = AlbumMusical::find($id);

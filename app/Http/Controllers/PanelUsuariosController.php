@@ -32,9 +32,6 @@ class PanelUsuariosController extends Controller
     {
         // Cargar los usuarios con los datos personales y la imagen de perfil
         $query = Usuario::whereIn('rol_idrol', [3, 4])
-            ->whereHas('datosPersonales.historialUsuario', function ($q) {
-                $q->where('estado', '!=', 'Inactivo');
-            })
             ->with([
                 'revisionImagenes' => function ($query) {
                     // Filtrar para traer solo la imagen de perfil (idtipodefoto = 1)
