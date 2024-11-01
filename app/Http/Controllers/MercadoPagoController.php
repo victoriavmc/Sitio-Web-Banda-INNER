@@ -23,10 +23,6 @@ class MercadoPagoController extends Controller
         $this->authenticate();
         Log::info('Autenticado con éxito');
 
-        if (Auth::user()->rol_idrol == 3) {
-            return response()->json(['error' => 'Ya tienes una suscripción activa.'], 400);
-        }
-
         // Paso 1: Obtener la información del producto desde la solicitud JSON
         $product = $request->input('product');
 
@@ -211,10 +207,6 @@ class MercadoPagoController extends Controller
             Mail::to(Auth::user()->correoElectronicoUser)->send(new msjSuscripcion($idordenpago, $paymentDetails['factura'], $paymentDetails['monto'], $paymentDetails['diaPago']));
         }
 
-        if ($paymentDetails['descripcion'] == 'Show') {
-            // Mail::to(Auth::user()->correoElectronicoUser)->send(new msjNotificaciones($paymentDetails['descripcion'], $paymentDetails['monto']));
-        }
-
         // Renderizamos la vista con los detalles del pago
         return view('api.payment-success', compact('paymentDetails'));
     }
@@ -222,7 +214,7 @@ class MercadoPagoController extends Controller
     public function comprobantePdf($id)
     {
         // Obtener datos de la base de datos
-        $paymentDetails = OrdenPago::where('factura', $id)->first();
+        $paymentDetails = OrdenPago::find($id) ?? OrdenPago::where('factura', $id)->first();
 
         if (!$paymentDetails) {
             return response()->json(['error' => 'No se pudieron recuperar los detalles del pago'], 500);

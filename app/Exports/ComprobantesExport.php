@@ -19,7 +19,11 @@ class ComprobantesExport implements FromCollection, WithHeadings, WithMapping, W
     public function collection()
     {
         // Cargar las relaciones necesarias para obtener todos los datos requeridos
-        return OrdenPago::with(['precio', 'usuario'])->where('usuarios_idusuarios', Auth::user()->idusuarios)->get();
+        if (Auth::user()->rol->idrol == 1) {
+            return OrdenPago::with(['precioServicio', 'usuario'])->get();
+        }
+
+        return OrdenPago::with(['precioServicio', 'usuario'])->where('usuarios_idusuarios', Auth::user()->idusuarios)->get();
     }
 
     public function headings(): array
@@ -48,8 +52,8 @@ class ComprobantesExport implements FromCollection, WithHeadings, WithMapping, W
             $orden->diaPago,
             $orden->estadoPago,
             $orden->metodoPago,
-            $orden->precio->precio,
-            $orden->precio->tipoServicio,
+            $orden->precioServicio->precios->first()->precio,
+            $orden->precioServicio->tipoServicio,
             $orden->nombreComprador . ' ' . $orden->apellidoComprador,
             $orden->usuario->usuarioUser,
             $orden->usuario->correoElectronicoUser,

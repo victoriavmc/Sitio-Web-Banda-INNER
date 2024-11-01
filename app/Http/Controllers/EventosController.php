@@ -12,6 +12,7 @@ use App\Models\PrecioServicios;
 use App\Models\Show;
 use App\Models\TipoNotificacion;
 use App\Models\UbicacionShow;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -314,7 +315,10 @@ class eventosController extends Controller
         }
 
         $evento->save();
-        $msj = 'Tenemos un nuevo show! En ' . $nuevoLugar->nombreLugar . ' el día ' . $evento->fechashow . '.';
+
+        // Dar formato a la fecha y hora del show
+        $fechaFormateada = Carbon::parse($evento->fechashow)->format('d/m/Y H:i');
+        $msj = 'Tenemos un nuevo show! En ' . $request->input('nuevo_lugar') . ' el día ' . $fechaFormateada . '.';
         $this->creadoEventoNotificar($msj);
 
         // Redirigir a la vista de eventos con un mensaje de éxito

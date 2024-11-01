@@ -87,42 +87,44 @@
                             <p class="event-date text-lg">
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                             <div class="flex flex-col gap-3">
-                                @if (now() < $show->fechashow)
-                                    <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
-                                        method="">
+                                @auth
+                                    @if (now() < $show->fechashow)
+                                        <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
+                                            method="">
 
 
-                                        <h1 class="hidden product-name">Entrada para el concierto en
-                                            {{ $show->lugarlocal->nombreLugar }}!</h1>
+                                            <h1 class="hidden product-name">Entrada para el concierto en
+                                                {{ $show->lugarlocal->nombreLugar }}!</h1>
 
-                                        <input type="hidden" id="name-{{ $show->idshow }}" name="name"
-                                            value="{{ $usuario->datospersonales->nombreDP }}" required />
+                                            <input type="hidden" id="name-{{ $show->idshow }}" name="name"
+                                                value="{{ $usuario->datospersonales->nombreDP }}" required />
 
-                                        <input type="hidden" id="surname-{{ $show->idshow }}" name="surname"
-                                            value="{{ $usuario->datospersonales->apellidoDP }}" required />
+                                            <input type="hidden" id="surname-{{ $show->idshow }}" name="surname"
+                                                value="{{ $usuario->datospersonales->apellidoDP }}" required />
 
-                                        <input type="hidden" id="email-{{ $show->idshow }}" name="email"
-                                            value="{{ $usuario->correoElectronicoUser }}" required />
+                                            <input type="hidden" id="email-{{ $show->idshow }}" name="email"
+                                                value="{{ $usuario->correoElectronicoUser }}" required />
 
-                                        <input type="hidden" id="product_id-{{ $show->idshow }}"
-                                            value="evento-{{ $show->idshow }}" />
+                                            <input type="hidden" id="product_id-{{ $show->idshow }}"
+                                                value="evento-{{ $show->idshow }}" />
 
-                                        <input type="hidden" id="idprecioServicio-{{ $show->idshow }}"
-                                            name="idprecioServicio" value="{{ $ultimoPrecio['idprecioServicio'] }}" />
+                                            <input type="hidden" id="idprecioServicio-{{ $show->idshow }}"
+                                                name="idprecioServicio" value="{{ $ultimoPrecio['idprecioServicio'] }}" />
 
-                                        <input type="hidden" id="product_price-{{ $show->idshow }}"
-                                            value="{{ $ultimoPrecio['precio'] }}" />
+                                            <input type="hidden" id="product_price-{{ $show->idshow }}"
+                                                value="{{ $ultimoPrecio['precio'] }}" />
 
-                                        @if ($ultimoPrecio['precio'] != null)
-                                            <button id="checkout-btn-{{ $show->idshow }}" type="button"
-                                                onclick="handleCheckout({{ $show->idshow }})"
-                                                class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
-                                                <span class="icon-credit-card text-xl text-center mb-2 mr-1">💳</span>
-                                                <p>Adquirir Entrada</p>
-                                            </button>
-                                        @endif
-                                    </form>
-                                @endif
+                                            @if ($ultimoPrecio['precio'] != null)
+                                                <button id="checkout-btn-{{ $show->idshow }}" type="button"
+                                                    onclick="handleCheckout({{ $show->idshow }})"
+                                                    class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
+                                                    <span class="icon-credit-card text-xl text-center mb-2 mr-1">💳</span>
+                                                    <p>Adquirir Entrada</p>
+                                                </button>
+                                            @endif
+                                        </form>
+                                    @endif
+                                @endauth
 
                                 {{-- <a href="{{ $show->linkCompraEntrada }}" target="_blank">
                                 <button class="boton-vermas">
@@ -131,8 +133,10 @@
                             </a> --}}
                             </div>
                         </div>
+
                         {{-- Google Maps --}}
                         {{-- <div id="mapa" class="z-0 w-full h-full"></div> --}}
+
                         {{-- CRUD EVENTOS --}}
                         @auth
                             @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
@@ -281,6 +285,7 @@
                 .catch(error => console.error('Error al crear la preferencia:', error));
         }
 
+        // DOM CONTENT LOADED
         // Modal para cambiar precio del evento
         function openModal(id) {
             const form = document.getElementById('form-actualizar-precio');
