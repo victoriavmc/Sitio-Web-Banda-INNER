@@ -67,8 +67,9 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $item['diaPago'] }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $item['estadoPago'] }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $item['metodoPago'] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $item->precio->precio }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $item->precio->tipoServicio }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $item->precioservicio->precios->first()->precio }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $item->precioservicio->tipoServicio }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $item['nombreComprador'] . ' ' . $item['apellidoComprador'] }}
                             </td>

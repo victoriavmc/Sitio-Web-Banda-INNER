@@ -16,7 +16,7 @@ class ComprobantesController extends Controller
     public function listarComprobantes()
     {
         // Cargar relaciones precio y usuario para evitar consultas adicionales
-        $comprobantes = OrdenPago::with(['precio', 'usuario'])->paginate(10);
+        $comprobantes = OrdenPago::with(['precioservicio', 'usuario'])->paginate(10);
 
         return view('api.ordendepago', compact('comprobantes'));
     }
@@ -31,7 +31,7 @@ class ComprobantesController extends Controller
     {
         $idusuarios = Auth::user()->idusuarios;
 
-        $comprobantes = OrdenPago::where('usuarios_idusuarios', $idusuarios)->with(['precio', 'usuario'])->paginate(10);
+        $comprobantes = OrdenPago::where('usuarios_idusuarios', $idusuarios)->with(['precioservicio', 'usuario'])->paginate(10);
 
         return view('api.usuarioordendepago', compact('comprobantes'));
     }
