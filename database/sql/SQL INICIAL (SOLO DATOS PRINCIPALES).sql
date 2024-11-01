@@ -898,7 +898,7 @@ CREATE TABLE `tipostaff` (
 
 LOCK TABLES `tipostaff` WRITE;
 /*!40000 ALTER TABLE `tipostaff` DISABLE KEYS */;
-INSERT INTO `tipostaff` VALUES (1,'Bass Guitar'),(2,'Cameraman'),(3,'Designer'),(4,'Drummer'),(5,'Filmmaker'),(6,'Gods of the Page'),(7,'Guitar'),(8,'Lighting Technician'),(9,'Manages'),(10,'Photographer'),(11,'Press'),(12,'Sound Technician'),(13,'Stage Manager or Technician'),(14,'Vocalist and Guitar');
+INSERT INTO `tipostaff` VALUES (1,'Bass Guitar','Si'),(2,'Cameraman','No'),(3,'Designer','No'),(4,'Drummer','Si'),(5,'Filmmaker','No'),(6,'Gods of the Page','No'),(7,'Guitar','Si'),(8,'Lighting Technician','No'),(9,'Manages','No'),(10,'Photographer','No'),(11,'Press','No'),(12,'Sound Technician','No'),(13,'Stage Manager or Technician','No'),(14,'Vocalist and Guitar','Si');
 /*!40000 ALTER TABLE `tipostaff` ENABLE KEYS */;
 UNLOCK TABLES;
 

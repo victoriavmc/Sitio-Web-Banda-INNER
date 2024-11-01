@@ -117,12 +117,20 @@ El proyecto está diseñado para ser escalable, seguro y fácil de mantener, per
 -   extension=pdo_mysql
 -   extension=mysqli
 -   extension=fileinfo
+-   extension=gd
 -   extension=zip
+-   extension=mbstring
 -   extension=openssl
 -   curl.cainfo = "C:\ruta\hasta\cacert.pem"
 -   extension=mbstring
 
+## Parte 2
+
+-   post_max_size = 20M
+-   upload_max_filesize = 20M
+
 ### Libreria
-- composer require maatwebsite/excel:^3.1.58
-- composer require barryvdh/laravel-dompdf
-- composer require "mercadopago/dx-php:3.0.0"
+
+-   composer require maatwebsite/excel:^3.1.58
+-   composer require barryvdh/laravel-dompdf
+-   composer require "mercadopago/dx-php:3.0.0"
