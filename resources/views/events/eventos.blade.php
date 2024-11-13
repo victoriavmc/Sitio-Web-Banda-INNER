@@ -83,54 +83,52 @@
                             </p>
                             <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
 
-                            {{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
+                            <p>{{ $show->lugarlocal->calle . ', ' . $show->lugarlocal->numero }}</p>
                             <p class="event-date text-lg">
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}hs</p>
                             <div class="flex flex-col gap-3">
                                 @auth
+
                                     @if (now() < $show->fechashow)
-                                        <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
-                                            method="">
+                                        @foreach ($preciosServicios as $servicio)
+                                            @if ($servicio->precios_idprecios != null && $servicio->referenciaIdFicticio == $show->idshow)
+                                                <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
+                                                    method="">
 
+                                                    <h1 class="hidden product-name">Entrada para el concierto en
+                                                        {{ $show->lugarlocal->nombreLugar }}!</h1>
 
-                                            <h1 class="hidden product-name">Entrada para el concierto en
-                                                {{ $show->lugarlocal->nombreLugar }}!</h1>
+                                                    <input type="hidden" id="name-{{ $show->idshow }}" name="name"
+                                                        value="{{ $usuario->datospersonales->nombreDP }}" required />
 
-                                            <input type="hidden" id="name-{{ $show->idshow }}" name="name"
-                                                value="{{ $usuario->datospersonales->nombreDP }}" required />
+                                                    <input type="hidden" id="surname-{{ $show->idshow }}" name="surname"
+                                                        value="{{ $usuario->datospersonales->apellidoDP }}" required />
 
-                                            <input type="hidden" id="surname-{{ $show->idshow }}" name="surname"
-                                                value="{{ $usuario->datospersonales->apellidoDP }}" required />
+                                                    <input type="hidden" id="email-{{ $show->idshow }}" name="email"
+                                                        value="{{ $usuario->correoElectronicoUser }}" required />
 
-                                            <input type="hidden" id="email-{{ $show->idshow }}" name="email"
-                                                value="{{ $usuario->correoElectronicoUser }}" required />
+                                                    <input type="hidden" id="product_id-{{ $show->idshow }}"
+                                                        value="evento-{{ $show->idshow }}" />
 
-                                            <input type="hidden" id="product_id-{{ $show->idshow }}"
-                                                value="evento-{{ $show->idshow }}" />
+                                                    <input type="hidden" id="idprecioServicio-{{ $show->idshow }}"
+                                                        name="idprecioServicio"
+                                                        value="{{ $servicio->idprecioServicio }}" />
 
-                                            <input type="hidden" id="idprecioServicio-{{ $show->idshow }}"
-                                                name="idprecioServicio" value="{{ $ultimoPrecio['idprecioServicio'] }}" />
+                                                    <input type="hidden" id="product_price-{{ $show->idshow }}"
+                                                        value="{{ $servicio->precios->first()->precio }}" />
 
-                                            <input type="hidden" id="product_price-{{ $show->idshow }}"
-                                                value="{{ $ultimoPrecio['precio'] }}" />
-
-                                            @if ($ultimoPrecio['precio'] != null)
-                                                <button id="checkout-btn-{{ $show->idshow }}" type="button"
-                                                    onclick="handleCheckout({{ $show->idshow }})"
-                                                    class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
-                                                    <span class="icon-credit-card text-xl text-center mb-2 mr-1">💳</span>
-                                                    <p>Adquirir Entrada</p>
-                                                </button>
+                                                    <button id="checkout-btn-{{ $show->idshow }}" type="button"
+                                                        onclick="handleCheckout({{ $show->idshow }})"
+                                                        class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
+                                                        <span
+                                                            class="icon-credit-card text-xl text-center mb-2 mr-1">💳</span>
+                                                        <p>Adquirir Entrada ${{ $servicio->precios->first()->precio }}</p>
+                                                    </button>
+                                                </form>
                                             @endif
-                                        </form>
+                                        @endforeach
                                     @endif
                                 @endauth
-
-                                {{-- <a href="{{ $show->linkCompraEntrada }}" target="_blank">
-                                <button class="boton-vermas">
-                                    <p>Ver en Google Maps</p>
-                                </button>
-                            </a> --}}
                             </div>
                         </div>
 
@@ -139,7 +137,7 @@
 
                         {{-- CRUD EVENTOS --}}
                         @auth
-                            @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
+                            @if (Auth::user()->rol->idrol == 1)
                                 <div class="z-10 absolute flex gap-3 w-full p-4 justify-end">
                                     <button type="button" id="btn-precio-{{ $show->idshow }}"
                                         onclick="openModal({{ $show->idshow }})"
@@ -229,16 +227,6 @@
             const productPrice = parseFloat(document.getElementById(`product_price-${showId}`).value);
             const idprecioServicio = document.getElementById(`idprecioServicio-${showId}`).value;
 
-            if (!nombre || !apellido || !email) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Por favor, completa todos los campos.',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
-
             const orderData = {
                 product: [{
                     id: productId,
@@ -282,7 +270,12 @@
                     });
                     console.log('Respuesta de la preferencia:', preference);
                 })
-                .catch(error => console.error('Error al crear la preferencia:', error));
+                .catch(error => Swal.fire({
+                    title: 'Error!',
+                    text: 'Error al realizar la compra, intentelo de nuevo mas tarde.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                }));
         }
 
         // DOM CONTENT LOADED

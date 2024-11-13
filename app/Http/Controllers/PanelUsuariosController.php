@@ -229,9 +229,8 @@ class PanelUsuariosController extends Controller
             $existeFoto->delete();
 
             if ($imagen) {
-                if (Storage::exists($imagen->subidaImg)) {
-                    Storage::delete($imagen->subidaImg);
-                }
+                Storage::disk('public')->delete($imagen->subidaImg);
+
                 $imagen->delete();
             }
             return true;

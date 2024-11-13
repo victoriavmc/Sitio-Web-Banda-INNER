@@ -196,10 +196,8 @@ class ContenidoController extends Controller
 
                     $revImg->delete();
 
-                    // Eliminar del almacenamiento
-                    if (Storage::exists($imagen->subidaImg)) {
-                        Storage::delete($imagen->subidaImg);
-                    }
+                    // Eliminar del almacenamiento                    
+                    Storage::disk('public')->delete($imagen->subidaImg);
 
                     // Eliminar de la base de datos
                     $imagen->delete();

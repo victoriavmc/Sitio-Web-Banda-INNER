@@ -31,17 +31,7 @@
                                     </h1>
                                     <p class="text-gray-700">{{ $usuario->usuarioUser }}</p>
                                 </div>
-                                <hr class="my-6 border-t border-gray-300">
-                                <div class="flex flex-col">
-                                    <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Contenido
-                                        Descargable
-                                        como {{ $usuario->rol->rol }}</span>
-                                    <ul>
-                                        <li class="text-gray-700 mb-2">Escuchar</li>
-                                        <li class="text-gray-700 mb-2">Fondos</li>
-                                        <li class="text-gray-700 mb-2">Premium</li>
-                                    </ul>
-                                </div>
+                                <hr class="my-1 border-t border-gray-300">
                             </div>
                         </div>
                         <div class="col-span-4 sm:col-span-9">

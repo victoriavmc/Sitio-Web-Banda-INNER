@@ -39,34 +39,13 @@ class eventosController extends Controller
                 ->orWhere('fechashow', 'like', '%' . $search . '%');
         }
 
-        // Recupero el ultimoprecio
-        $ultimoPrecio = [];
-
-        $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 1)
-            ->where('tipoServicio', 'Show')
-            ->first();
-
-        try {
-            $ultimoPrecio = $preciosServicios->precios->where('estadoPrecio', 'Activo')->first();
-
-            // Si existe un precio activo, asignarlo a la propiedad
-            if ($ultimoPrecio) {
-                // Array asoc que guarda el id del servicio y el precio
-                $ultimoPrecio['idprecioServicio'] = $preciosServicios->idprecioServicio;
-                $ultimoPrecio['precio'] = $ultimoPrecio->precio;
-            }
-        } catch (\Throwable $th) {
-            $ultimoPrecio = [
-                'idprecioServicio' => null,
-                'precio' => null
-            ];
-        }
+        $preciosServicios = PrecioServicios::where('referenciaIdFicticio', '>', 0)->get();
 
         // Obtén los eventos ordenados por fecha
         $shows = $query->orderBy('fechashow', 'desc')->get();
         $usuario = Auth::user();
 
-        return view('events.eventos', compact('shows', 'usuario', 'ultimoPrecio'));
+        return view('events.eventos', compact('shows', 'usuario', 'preciosServicios'));
     }
 
     public function lugaresCargados(Request $request)
@@ -233,7 +212,6 @@ class eventosController extends Controller
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
-            'linkCompra' => 'min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'calle.required_if' => 'La calle es obligatoria cuando se agrega un nuevo lugar.',
@@ -282,7 +260,6 @@ class eventosController extends Controller
         $evento->fechashow = $request->input('fecha');
         $evento->ubicacionShow_idubicacionShow = $ubicacionId;
         $evento->lugarLocal_idlugarLocal = $lugarId;
-        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
@@ -315,6 +292,15 @@ class eventosController extends Controller
         }
 
         $evento->save();
+
+        $idevento = $evento->idshow;
+
+        $precioServicio = new PrecioServicios();
+
+        $precioServicio->tipoServicio = 'Show';
+        $precioServicio->referenciaIdFicticio = $idevento;
+
+        $precioServicio->save();
 
         // Dar formato a la fecha y hora del show
         $fechaFormateada = Carbon::parse($evento->fechashow)->format('d/m/Y H:i');
@@ -349,7 +335,6 @@ class eventosController extends Controller
             'numero' => 'nullable|numeric',
             'nuevo_provincia' => 'nullable|string|max:255',
             'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
-            'linkCompra' => 'min:3|max:255'
         ], [
             'nuevo_lugar.required_without' => 'Debe agregar un nuevo lugar o seleccionar uno existente.',
             'lugar.required_without' => 'Debe seleccionar un lugar si no está agregando uno nuevo.',
@@ -405,7 +390,6 @@ class eventosController extends Controller
         $evento->fechashow = $request->input('fecha');
         $evento->ubicacionShow_idubicacionShow = $ubicacionId; // Asignar el ID de la ubicación
         $evento->lugarLocal_idlugarLocal = $lugarId; // Asignar el ID del lugar
-        $evento->linkCompraEntrada = $request->input('linkCompra');
 
         // Manejar la subida de imagen
         if ($request->hasFile('imagen')) {
@@ -416,9 +400,7 @@ class eventosController extends Controller
                 // Obtener la imagen asociada a la revisión
                 $imagen = Imagenes::find($revisionImagen->imagenes_idimagenes);
                 if ($imagen) {
-                    if (Storage::disk('public')->exists($imagen->subidaImg)) {
-                        Storage::disk('public')->delete($imagen->subidaImg);
-                    }
+                    Storage::disk('public')->delete($imagen->subidaImg);
                     $imagen->delete();
                 }
 
@@ -487,10 +469,7 @@ class eventosController extends Controller
 
                 // Eliminar la imagen del almacenamiento y de la base de datos
                 if ($imagen) {
-                    if (Storage::disk('public')->exists($imagen->subidaImg)) {
-                        Storage::disk('public')->delete($imagen->subidaImg);
-                    }
-
+                    Storage::disk('public')->delete($imagen->subidaImg);
                     $imagen->delete();  // Eliminar la imagen de la base de datos
                 }
             } else {
@@ -518,22 +497,13 @@ class eventosController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $precio = new Precios();
+        $precioServicio = PrecioServicios::where('referenciaIdFicticio', $id)->where('tipoServicio', 'Show')->first();
+
+        $precio = Precios::find($precioServicio->precios_idprecios);
+
         $precio->precio = $request->input('precio');
-        $precio->estadoPrecio = 'Activo';
+
         $precio->save();
-
-        if (!precioServicios::where('referenciaIdFicticio', 1)->where('tipoServicio', 'Show')->exists()) {
-            $precioServicio = new PrecioServicios();
-            $precioServicio->referenciaIdFicticio = 1;
-            $precioServicio->tipoServicio = 'Show';
-            $precioServicio->precios_idprecios = $precio->idprecios;
-        } else {
-            $precioServicio = PrecioServicios::where('referenciaIdFicticio', 1)->where('tipoServicio', 'Show')->first();
-            $precioServicio->precios_idprecios = $precio->idprecios;
-        }
-
-        $precioServicio->save();
 
         return redirect()->back()->with('alertModificar', [
             'type' => 'Success',

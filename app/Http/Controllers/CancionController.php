@@ -144,7 +144,7 @@ class CancionController extends Controller
 
         // Lógica de eliminación de archivo si se ha marcado la opción
         if ($request->has('eliminarCancion') && $cancion->archivoDsCancion) {
-            Storage::delete('public/' . $cancion->archivoDsCancion);
+            Storage::disk('public')->delete($cancion->archivoDsCancion);
             $cancion->archivoDsCancion = null; // Actualizamos a null en la base de datos
         }
 

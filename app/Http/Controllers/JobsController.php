@@ -137,12 +137,8 @@ class JobsController extends Controller
             $existeFoto->delete(); // Luego, eliminar la revisión
 
             // Ahora eliminar el archivo del almacenamiento
-            if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
-                Storage::delete($imagenAnterior->subidaImg);
-            }
-
-            // Eliminar el registro de la imagen anterior
             if ($imagenAnterior) {
+                Storage::disk('public')->delete($imagenAnterior->subidaImg);
                 $imagenAnterior->delete();
             }
         }

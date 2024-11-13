@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\DB;
 class UpdateShowStatus extends Command
 {
     protected $signature = 'shows:update-status';
-    protected $description = 'Actualizar el estado de los shows a Inactivo si la fecha ha pasado y borrar linkCompraEntrada';
+    protected $description = 'Actualizar el estado de los shows a Inactivo si la fecha ha pasado';
 
     public function handle()
     {
-        // Actualizar el estado y borrar linkCompraEntrada
+        // Actualizar el estado
         DB::table('show')
             ->where('fechashow', '<', now())
-            ->update(['estadoShow' => 'Inactivo', 'linkCompraEntrada' => null]);
+            ->update(['estadoShow' => 'Inactivo']);
     }
 }

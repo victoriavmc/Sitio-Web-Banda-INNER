@@ -297,7 +297,7 @@ class ReportesController extends Controller
 
             // Verificar si la imagen existe en el almacenamiento Imagen y eliminarla
             if ($imagenAnterior && Storage::exists($imagenAnterior->subidaImg)) {
-                Storage::delete($imagenAnterior->subidaImg);
+                Storage::disk('public')->delete($imagenAnterior->subidaImg);
             }
 
             // Eliminar la entrada de la imagen

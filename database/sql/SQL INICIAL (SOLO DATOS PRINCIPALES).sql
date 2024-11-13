@@ -724,7 +724,6 @@ CREATE TABLE `show` (
   `idshow` int NOT NULL AUTO_INCREMENT,
   `fechashow` datetime NOT NULL,
   `estadoShow` varchar(45) DEFAULT 'Activo',
-  `linkCompraEntrada` varchar(255) DEFAULT NULL,
   `ubicacionShow_idubicacionShow` int NOT NULL,
   `revisionImagenes_idrevisionImagenescol` int DEFAULT NULL,
   `lugarLocal_idlugarLocal` int NOT NULL,

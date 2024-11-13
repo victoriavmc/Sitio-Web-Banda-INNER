@@ -218,12 +218,13 @@ class panelStaffController extends Controller
             $existeFoto->delete();
 
             // Eliminar el archivo del almacenamiento y el registro de la imagen anterior
-            if ($imagen && Storage::exists($imagen->subidaImg)) {
-                Storage::delete($imagen->subidaImg);
+            if ($imagen) {
+                Storage::disk('public')->delete($imagen->subidaImg);
             }
 
             // Ahora eliminar el registro de la imagen anterior
             $imagen->delete();
+
             return redirect()->route('panel-de-staff')->with('alertEliminacion', [
                 'type' => 'Success',
                 'message' => 'Imagen eliminada exitosamente',

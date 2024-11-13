@@ -435,7 +435,11 @@ Route::get('/comprobantes/excel', [ComprobantesController::class, 'descargarExce
 Route::get('/ordenes-de-pago', [ComprobantesController::class, 'listarComprobantesUsuarioEspecifico'])
     ->name('orden-de-pago')->middleware('auth');
 
-Route::post('/actualizar-precio', [PrecioController::class, 'cambiaPrecioSuscripcion'])->name('actualizar.precio');
+Route::post('/actualizar-precio', [PrecioController::class, 'cambiaPrecioSuscripcion'])
+    ->name('actualizar.precio')->middleware('auth');
+
+Route::post('/eliminar-precio', [PrecioController::class, 'eliminarPrecioSubscripcion'])
+    ->name('eliminar.precio')->middleware('auth');
 
 Route::get('/notificaciones', [NotificacionesController::class, 'notificaciones'])
     ->name('notificaciones.index')->middleware('auth');
