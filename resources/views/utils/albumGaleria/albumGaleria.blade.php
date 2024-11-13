@@ -199,8 +199,7 @@
                                             @endif
                                         @endauth
                                     </div>
-
-                                    <a class="relative"
+                                    <a
                                         href="{{ route('mostrar.de.uno', ['idAlbumEspecifico' => $album['idAlbumEspecifico'], 'tipo' => 1]) }}">
                                         @if (!empty($album['medios']))
                                             <video class="flex justify-center max-h-96 w-full rounded-lg object-cover"
@@ -220,7 +219,6 @@
                                         </div>
                                     </a>
                                 </div>
-
                             </div>
                         @endforeach
                     </div>
