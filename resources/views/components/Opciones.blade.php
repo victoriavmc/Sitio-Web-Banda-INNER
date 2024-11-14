@@ -7,10 +7,10 @@
 
     <div class="absolute bg-gray-100">
         <div
-            class="sidebar w-[3.35rem] min-h-screen overflow-hidden border-r hover:w-64 hover:bg-white hover:shadow-lg transition-all duration-300">
+            class="sidebar w-[3.35rem] h-[100vh] overflow-hidden border-r hover:w-64 hover:bg-white hover:shadow-lg transition-all duration-300">
             <div class="flex flex-col justify-between pt-2 pb-6">
                 <div>
-                    <ul class="mt-8 space-y-2 tracking-wide">
+                    <ul class="mt-6 space-y-2 tracking-wide">
                         <li class="min-w-max">
                             <p aria-label="dashboard"
                                 class="relative flex items-center space-x-4 bg-gradient-to-r from-black to-gray-600 px-2 py-3 text-white">

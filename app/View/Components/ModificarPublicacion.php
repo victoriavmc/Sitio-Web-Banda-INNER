@@ -19,7 +19,7 @@ class ModificarPublicacion extends Component
 
     public function render()
     {
-        return view('components.modificar-publicacion', [
+        return view('components.Modificar-publicacion', [
             'action' => $this->action,
             'contenido' => $this->contenido,
             'imagenes' => $this->imagenes, // Pasa las imágenes a la vista del componente

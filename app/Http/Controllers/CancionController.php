@@ -200,7 +200,7 @@ class CancionController extends Controller
         // URL del archivo de audio actual
         $audioActualUrl = $cancion->archivoDsCancion ? asset('storage/' . $cancion->archivoDsCancion) : null;
 
-        return view('utils.albumMusica.formularioModificarCancion', compact('cancion', 'tituloAlbum', 'albumesDisponibles', 'audioActualUrl'));
+        return view('utils.albumMusica.FormularioModificarCancion', compact('cancion', 'tituloAlbum', 'albumesDisponibles', 'audioActualUrl'));
     }
 
     // Guardar cambios en una canción existente
