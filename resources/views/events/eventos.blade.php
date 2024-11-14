@@ -24,7 +24,7 @@
         <div class="flex mb-5">
             @auth
                 @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                    <div class="flex gap-4 mt-4 absolute z-10">
+                    <div class="flex gap-4 mt-4 flex-col mr-5 lg:mr-0 lg:flex-row xl:absolute z-10">
                         <div class="flex items-center gap-10">
                             <a href="{{ route('crear-formulario') }}"
                                 class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Agregar</a>
@@ -33,7 +33,7 @@
                         <div class="flex items-center gap-10">
                             <a href="{{ route('lugares-cargados') }}"
                                 class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">
-                                Lugares y ubicaciones cargadas
+                                Lugares y ubicaciones
                             </a>
                         </div>
                     </div>
@@ -65,9 +65,9 @@
         @else
             <div class="relative grid lg:grid-cols-2 gap-5">
                 @foreach ($shows as $show)
-                    <div class="relative items-start text-black bg-white p-3 rounded-xl shadow-xl"
-                        style="display: grid; grid-template-columns:30% 35% 35%">
-                        <img class="h-full rounded-xl"
+                    <div
+                        class="relative items-start grid sm:grid-cols-[30%_35%_35%] text-black bg-white p-3 rounded-xl shadow-xl">
+                        <img class="h-64 rounded-xl m-0"
                             src="{{ $show->revisionImagenes && $show->revisionImagenes->imagenes
                                 ? asset(Storage::url($show->revisionImagenes->imagenes->subidaImg))
                                 : asset('img\logo_inner_negro.webp') }}"
@@ -78,7 +78,7 @@
                                 {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
                             <p class="text-lg">
                                 {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}</p>
-                            <p class="text-4xl font-medium text-black leading-none">
+                            <p class="text-4xl break-words font-medium text-black leading-none">
                                 {{ $show->lugarlocal->nombreLugar }}
                             </p>
                             <p class="text-lg">{{ $show->lugarlocal->localidad }}</p>
@@ -91,7 +91,10 @@
 
                                     @if (now() < $show->fechashow)
                                         @foreach ($preciosServicios as $servicio)
-                                            @if ($servicio->precios_idprecios != null && $servicio->referenciaIdFicticio == $show->idshow)
+                                            @if (
+                                                $servicio->precios_idprecios != null &&
+                                                    $servicio->referenciaIdFicticio == $show->idshow &&
+                                                    $servicio->precios->first()->estadoPrecio != 'Inactivo')
                                                 <form id="form-{{ $show->idshow }}" class="w-max h-max" action=""
                                                     method="">
 
@@ -122,7 +125,7 @@
                                                         class="group max-w-max inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-red-500 text-white hover:bg-red-400 hover:text-white focus:ring-slate-700">
                                                         <span
                                                             class="icon-credit-card text-xl text-center mb-2 mr-1">💳</span>
-                                                        <p>Adquirir Entrada ${{ $servicio->precios->first()->precio }}</p>
+                                                        <p>Comprar</p>
                                                     </button>
                                                 </form>
                                             @endif
@@ -133,7 +136,7 @@
                         </div>
 
                         {{-- Google Maps --}}
-                        {{-- <div id="mapa" class="z-0 w-full h-full"></div> --}}
+                        <div id="mapa" class="z-0 w-full mt-3 h-64 sm:w-full sm:mt-0 sm:h-full"></div>
 
                         {{-- CRUD EVENTOS --}}
                         @auth
@@ -163,7 +166,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </a>
-                                    <form class="formEliminarUsuario"
+                                    <form class="formEliminarEvento"
                                         action="{{ route('eliminar-evento', $show->idshow) }}" method="POST">
                                         @csrf
                                         @method('DELETE')

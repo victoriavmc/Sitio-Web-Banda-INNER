@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.formEliminarUsuario').forEach(element => {
+    document.querySelectorAll('.formEliminarEvento').forEach(element => {
         element.addEventListener('submit', async function(event) {
             event.preventDefault(); // Evita que se envíe el formulario inmediatamente
             const result = await Swal.fire({

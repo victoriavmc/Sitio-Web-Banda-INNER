@@ -208,7 +208,7 @@
                         @foreach ($actividadesReportadas['comentarios'] as $contenido)
                             <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
                                 <div class="flex items-center justify-between">
-                                    <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                    <a href={{ route('foroUnico', $contenido['id']) }}>
                                         <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
                                             {{ $contenido['tituloContenido'] }}
                                         </h3>
@@ -221,8 +221,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
-                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
                                                 <svg class="w-6 h-6 text-white" aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     fill="none" viewBox="0 0 24 24">
@@ -333,7 +332,8 @@
                         @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
                             <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
                                 <div class="flex items-center justify-between">
-                                    <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                    {{-- @dd($contenido['idComentario']) --}}
+                                    <a href={{ route('foroUnico', $contenido['id']) }}>
                                         <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
                                             {{ $contenido['tituloContenido'] }}
                                         </h3>
@@ -346,8 +346,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center"
-                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');">
+                                                class="bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-2 border-b-4 border-red-700 hover:border-red-500 rounded flex items-center">
                                                 <svg class="w-6 h-6 text-white" aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     fill="none" viewBox="0 0 24 24">
@@ -465,7 +464,7 @@
                     @foreach ($actividadesNoReportadas['comentarios'] as $contenido)
                         <div class="relative p-5 mb-4 bg-white border-2 border-red-500 rounded-lg">
                             <div class="flex items-center justify-between">
-                                <a href={{ route('foroUnico', $contenido['idComentario']) }}>
+                                <a href={{ route('foroUnico', $contenido['id']) }}>
                                     <h3 class="my-2 ml-3 text-2xl font-bold text-gray-800">
                                         {{ $contenido['tituloContenido'] }}
                                     </h3>

@@ -303,18 +303,22 @@ class ContenidoController extends Controller
     }
 
     #ORDENAR PARA EL INDEX NOTICIAS Y FORO
-    public function ordenarNF($tipoContenido, $tipo)
+    public function ordenarNF($tipoContenido, $tipo, $query = null)
     {
+        if (!$query) {
+            // Si no se pasa una consulta, obtenemos todos los contenidos
+            $query = Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido);
+        }
+
         switch ($tipo) {
             case 1: // Más reciente
-                return $this->contenidosReducidos($tipoContenido, 'desc');
+                return $query->orderBy('fechaSubida', 'desc')->get();
 
             case 2: // Más antiguo
-                return $this->contenidosReducidos($tipoContenido, 'asc');
+                return $query->orderBy('fechaSubida', 'asc')->get();
 
             case 3: // Mayor número de interacciones (punteo)
-                return Contenidos::where('tipoContenido_idtipoContenido', $tipoContenido)
-                    ->leftJoin('interacciones', 'contenidos.actividad_idActividad', '=', 'interacciones.actividad_idActividad')
+                return $query->leftJoin('interacciones', 'contenidos.actividad_idActividad', '=', 'interacciones.actividad_idActividad')
                     ->select(
                         'contenidos.*',
                         DB::raw('COALESCE(SUM(interacciones.megusta + interacciones.nomegusta), 0) as totalInteracciones')
@@ -327,7 +331,7 @@ class ContenidoController extends Controller
                     });
 
             default: // Orden por defecto (más reciente)
-                return $this->contenidosReducidos($tipoContenido, 'desc');
+                return $query->orderBy('fechaSubida', 'desc')->get();
         }
     }
 
@@ -338,8 +342,21 @@ class ContenidoController extends Controller
         // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
         $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
 
-        // Recupero solo publicaciones de Noticias y las ordeno según el parámetro
-        $recuperoNoticias = $this->ordenarNF(2, $orden); // Tipo de contenido 2 para Noticias
+        // Inicializo la consulta para obtener las noticias
+        $query = Contenidos::where('tipoContenido_idtipoContenido', 2); // Filtra solo noticias
+
+        // Si se ha enviado un término de búsqueda, aplicamos el filtro
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'like', '%' . $search . '%') // Busca en el título
+                    ->orWhere('descripcion', 'like', '%' . $search . '%') // Busca en la descripción
+                    ->orWhere('fechaSubida', 'like', '%' . $search . '%'); // Busca en fechaSubida
+            });
+        }
+
+        // Recupero las noticias ordenadas según el parámetro, pasando la consulta con los filtros aplicados
+        $recuperoNoticias = $this->ordenarNF(2, $orden, $query); // Llamo al método para ordenar con la consulta filtrada
 
         // Recorro las publicaciones para obtener las imágenes asociadas
         foreach ($recuperoNoticias as $noticias) {
@@ -348,6 +365,7 @@ class ContenidoController extends Controller
 
         return view('/content/news/noticias', compact('recuperoNoticias'));
     }
+
 
     #Apartado solo 4 Noticias
     public function soloCuatroNoticias($data)
@@ -525,8 +543,21 @@ class ContenidoController extends Controller
         // Recupero el tipo de orden si es que fue enviado por la vista (1: más reciente, 2: más antiguo, 3: más interacciones)
         $orden = $request->query('orden', 1); // Valor por defecto: 1 (más reciente)
 
-        // Recupero solo publicaciones del foro y las ordeno según el parámetro
-        $recuperoPublicaciones = $this->ordenarNF(1, $orden); // Tipo de contenido 1 para Foro
+        // Inicializo la consulta para obtener las publicaciones del foro
+        $query = Contenidos::where('tipoContenido_idtipoContenido', 1); // Tipo de contenido 1 para Foro
+
+        // Si se ha enviado un término de búsqueda, aplicamos el filtro
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'like', '%' . $search . '%') // Busca en el título
+                    ->orWhere('descripcion', 'like', '%' . $search . '%') // Busca en la descripción
+                    ->orWhere('fechaSubida', 'like', '%' . $search . '%'); // Busca en fechaSubida
+            });
+        }
+
+        // Recupero las publicaciones del foro ordenadas según el parámetro
+        $recuperoPublicaciones = $this->ordenarNF(1, $orden, $query); // Llamo al método para ordenar con la consulta filtrada
 
         // Recupero los comentarios y las interacciones (likes y dislikes)
         $contadorComentarios = $this->contadorComentarios($recuperoPublicaciones);

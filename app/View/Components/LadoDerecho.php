@@ -24,6 +24,7 @@ class LadoDerecho extends Component
         // Recupero el ultimoprecio
         $preciosServicios = PrecioServicios::where('referenciaIdFicticio', 0)
             ->where('tipoServicio', 'Suscripción')
+            ->orderBy('idprecioServicio', 'desc')
             ->first();
 
         // Buscar el primer precio activo usando la relación

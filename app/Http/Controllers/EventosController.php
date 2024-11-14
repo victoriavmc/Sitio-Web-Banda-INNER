@@ -487,6 +487,21 @@ class eventosController extends Controller
         ]);
     }
 
+    public function mostrarPrecio($id)
+    {
+        $precioServicio = PrecioServicios::where('referenciaIdFicticio', $id)
+            ->where('tipoServicio', 'Show')
+            ->orderBy('idprecioServicio', 'desc')
+            ->first();
+
+        if ($precioServicio) {
+            $precio = Precios::find($precioServicio->precios_idprecios);
+            return $precio;
+        }
+
+        return null;
+    }
+
     public function actualizarPrecio(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -497,13 +512,27 @@ class eventosController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $precio = $this->mostrarPrecio($id);
+
+        if ($precio) {
+            $precio->estadoPrecio = 'Inactivo';
+            $precio->save();
+        }
+
         $precioServicio = PrecioServicios::where('referenciaIdFicticio', $id)->where('tipoServicio', 'Show')->first();
 
-        $precio = Precios::find($precioServicio->precios_idprecios);
+        // Crear un nuevo precio y asociarlo
+        $nuevoPrecio = Precios::create(['precio' => $request->precio]);
 
-        $precio->precio = $request->input('precio');
-
-        $precio->save();
+        if ($precioServicio && $precioServicio->precios_idprecios === null) {
+            $precioServicio->precios_idprecios === $nuevoPrecio->idprecios;
+        } else {
+            PrecioServicios::create([
+                'tipoServicio' => 'Show',
+                'referenciaIdFicticio' => $id,
+                'precios_idprecios' => $nuevoPrecio->idprecios,
+            ]);
+        }
 
         return redirect()->back()->with('alertModificar', [
             'type' => 'Success',

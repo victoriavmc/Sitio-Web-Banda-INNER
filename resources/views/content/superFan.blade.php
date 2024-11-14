@@ -1,13 +1,11 @@
 <x-AppLayout>
-    @if (session('alertRegistro'))
-        {{-- Componente de alerta para el registro exitoso o fallido --}}
-        <x-alerts :type="session('alertRegistro')['type']">
-            {{ session('alertRegistro')['message'] }}
+    @if (session('alertPrecio'))
+        <x-alerts :type="session('alertPrecio')['type']">
+            {{ session('alertPrecio')['message'] }}
         </x-alerts>
     @endif
 
     @if (session('alertSuscripcion'))
-        {{-- Componente de alerta para el registro exitoso o fallido --}}
         <x-alerts :type="session('alertSuscripcion')['type']">
             {{ session('alertSuscripcion')['message'] }}
         </x-alerts>
@@ -130,10 +128,6 @@
                                         class="mt-1 p-2 border border-gray-300 rounded w-full" required
                                         value="{{ old('precio', $precioAnterior) }}">
                                     <!-- Muestra el precio anterior si existe -->
-
-                                    <!-- Inputs ocultos corregidos -->
-                                    <input type="hidden" name="idFicticio" id="idFicticio" value="0">
-                                    <input type="hidden" name="tipoServicio" id="tipoServicio" value="Suscripción">
                                 </div>
 
                                 <!-- Botones del Modal -->
@@ -141,7 +135,7 @@
                                     <div>
                                         <button type="submit" id="precioForm"
                                             class="bg-green-500 hover:bg-green-400 text-white text-xs font-bold py-2 px-4 mr-2 rounded">
-                                            Actualizar Precio
+                                            {{ !$precioAnterior ? 'Agregar Precio' : 'Actualizar Precio' }}
                                         </button>
                                         <button type="button" onclick="closeModal()"
                                             class="bg-gray-500 hover:bg-gray-400 text-white text-xs font-bold py-2 px-4 rounded">
@@ -150,11 +144,15 @@
                                     </div>
 
                             </form>
-                            <form action="{{ route('eliminar.precio') }}">
-                                <button class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 rounded">
-                                    Eliminar Precio
-                                </button>
-                            </form>
+                            @if ($precioAnterior)
+                                <form action="{{ route('eliminar.precio') }}" method="POST">
+                                    @csrf
+                                    <button
+                                        class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold py-2 px-4 rounded">
+                                        Eliminar Precio
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -189,7 +187,8 @@
                                     <div class="flex">
                                         <div
                                             class="imagen-modal cursor-pointer h-24 w-24 overflow-hidden rounded-lg ring-2 ring-gray-700 dark:ring-gray-100">
-                                            <img src="{{ asset(Storage::url($item['ruta'])) }}" alt="{{ $item['id'] }}" />
+                                            <img src="{{ asset(Storage::url($item['ruta'])) }}"
+                                                alt="{{ $item['id'] }}" />
                                         </div>
                                         {{-- Boton para descargar automaticamente --}}
                                         <div class="mt-2 flex items-center">

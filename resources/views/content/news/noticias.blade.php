@@ -12,9 +12,9 @@
             <div class="">
                 @auth
                     @if (Auth::user()->rol->idrol == 1 || Auth::user()->rol->idrol == 2)
-                        <div class="w-full flex justify-end">
+                        <div class="w-full mb-5 xl:mb-0 flex justify-center xl:justify-end">
                             <a href="{{ route('verFormularioNoticia') }}"
-                                class="mt-1.5 absolute bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Crear
+                                class="mt-1.5 xl:absolute bg-red-500 hover:bg-red-400 text-white text-base font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-max">Crear
                                 Noticia</a>
                         </div>
                     @endif

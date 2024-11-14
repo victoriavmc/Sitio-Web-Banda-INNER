@@ -22,6 +22,7 @@ class SuperFanController extends Controller
     {
         $precioServicio = PrecioServicios::where('referenciaIdFicticio', 0)
             ->where('tipoServicio', 'Suscripción')
+            ->orderBy('idprecioServicio', 'desc')
             ->first();
 
         if ($precioServicio) {

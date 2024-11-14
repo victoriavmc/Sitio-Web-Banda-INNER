@@ -15,6 +15,9 @@ class Precios extends Model
     // Habilitamos el autoincremento
     public $incrementing = true;
 
+    // Asignacion masiva
+    protected $fillable = ['precio'];
+
     // Desactivamos el timestamp por defecto de Laravel
     public $timestamps = false;
 

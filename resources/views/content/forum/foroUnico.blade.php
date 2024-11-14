@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="max-w-3xl mx-auto">
+                    <div class=" mx-auto">
                         <!-- Foro cabecera -->
                         <h1 class="text-xl font-semibold sm:text-3xl text-black sm:font-bold mb-4">
                             {{ $recuperoPublicacion->titulo }}
@@ -379,7 +379,7 @@
                                     </div>
 
                                     {{-- Contenido del comentario --}}
-                                    <div class="max-w-3xl">
+                                    <div class="">
                                         <p class="text-base mb-2 text-black font-medium break-words">
                                             {{ $comentario['comentario']->descripcion }}
                                         </p>

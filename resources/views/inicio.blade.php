@@ -47,27 +47,29 @@
                     <div class="swiper-wrapper">
                         @foreach ($shows as $show)
                             <div class="swiper-slide" style="display:flex; justify-content: center; width:100%;">
-                                <div class="event-card mx-2 pl-10 pb-5 text-start text-black bg-center bg-cover"
+                                <div class="event-card mx-2 pl-2 xl:pl-10 pb-5 text-start text-black bg-center bg-cover"
                                     style="background-image:url({{ asset('img/index_fondo_contenido_evento.webp') }})">
                                     <div class="flex flex-col justify-around h-full">
                                         <div class="mt-10">
                                             <div class="flex justify-between">
-                                                <p class="event-date font-semibold text-2xl">
+                                                <p class="event-date font-semibold text-lg xl:text-2xl">
                                                     {{ \Carbon\Carbon::parse($show->fechashow)->format('d F Y') }}</p>
-                                                <p class="event-date font-semibold text-2xl pr-4">
+                                                <p class="event-date font-semibold text-lg xl:text-2xl pr-4">
                                                     {{ \Carbon\Carbon::parse($show->fechashow)->format('H:i') }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center justify-center">
-                                            <p class="event-title text-center font-bold text-5xl pr-4">
+                                            <p
+                                                class="event-title break-words text-center font-bold text-2xl xl:text-4xl pr-4">
                                                 {{ $show->lugarlocal->nombreLugar }}
                                             </p>
                                         </div>
                                         <div>
-                                            <p class="event-location font-medium text-lg pr-4">
+                                            <p class="event-location break-words font-medium text-base xl:text-lg pr-4">
                                                 {{ $show->lugarlocal->calle . ' ' . $show->lugarlocal->numero }}
                                             </p>
-                                            <p class="event-location font-medium text-lg pr-4">
+                                            <p class="event-location break-words font-medium text-base xl:text-lg pr-4">
+                                            <p class="event-location font-medium text-base xl:text-lg pr-4">
                                                 {{ $show->ubicacionshow->provinciaLugar . ', ' . $show->ubicacionshow->paisLugar }}
                                             </p>
                                         </div>
