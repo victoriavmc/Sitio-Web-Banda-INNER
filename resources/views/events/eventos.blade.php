@@ -136,7 +136,7 @@
                         </div>
 
                         {{-- Google Maps --}}
-                        <div id="mapa" class="z-0 w-full mt-3 h-64 sm:w-full sm:mt-0 sm:h-full"></div>
+                        {{-- <div id="mapa" class="z-0 w-full mt-3 h-64 sm:w-full sm:mt-0 sm:h-full"></div> --}}
 
                         {{-- CRUD EVENTOS --}}
                         @auth
