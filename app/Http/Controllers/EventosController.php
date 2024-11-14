@@ -209,7 +209,7 @@ class eventosController extends Controller
             'provincia' => 'required_without:nuevo_provincia|string|max:255',
             'nuevo_provincia' => 'required_without:provincia|string|max:255',
             'pais' => 'required_if:nuevo_provincia,!=,null|string|max:255',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'calle' => 'required_if:nuevo_lugar,!=,null|string|max:255',
             'numero' => 'required_if:nuevo_lugar,!=,null|numeric',
         ], [
@@ -330,7 +330,7 @@ class eventosController extends Controller
             'nuevo_lugar' => 'nullable|string|max:255',
             'lugar' => 'required_without:nuevo_lugar|string|max:255',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'calle' => 'nullable|string|max:255',
             'numero' => 'nullable|numeric',
             'nuevo_provincia' => 'nullable|string|max:255',

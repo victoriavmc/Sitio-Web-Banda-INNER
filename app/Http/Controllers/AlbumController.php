@@ -151,13 +151,13 @@ class AlbumController extends Controller
         // Agrega reglas dependiendo del tipo de álbum
         if ($tipoAlbum == 1) {
             // Álbum de tipo 1: solo una imagen
-            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
         } elseif ($tipoAlbum == 2) {
             // Álbum de tipo 2: solo un video
             $rules['video'] = 'required|file|mimes:mp4,mov,avi,mkv|max:20480';
         } elseif ($tipoAlbum == 3) {
             // Álbum de tipo 3: solo una imagen
-            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['imagen'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
         } elseif ($tipoAlbum == 4) {
             $rules['video'] = 'nullable|file|mimes:mp4,mov,avi,mkv|max:20480';
         }
@@ -623,7 +623,7 @@ class AlbumController extends Controller
             case 2:
                 // Álbum de tipo 2: varias imágenes
                 $rules['imagenes'] = 'required|array';
-                $rules['imagenes.*'] = 'image|mimes:jpeg,png,jpg,gif|max:2048'; // Validación para cada imagen
+                $rules['imagenes.*'] = 'image|mimes:jpeg,png,jpg,webp|max:2048'; // Validación para cada imagen
                 break;
         }
         return $rules;

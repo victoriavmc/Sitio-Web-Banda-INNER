@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        {{-- Album de Imagenes --}}
+        {{-- Album de Imagenes --}} =>
         <section id="album-imagenes">
             <div class="mx-auto w-full max-w-7xl px-5 pt-10 md:px-10">
                 <a href="#" class="relative flex justify-center items-end">

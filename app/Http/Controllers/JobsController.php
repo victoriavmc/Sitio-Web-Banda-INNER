@@ -113,7 +113,7 @@ class JobsController extends Controller
     {
         // Validar la imagen
         $request->validate([
-            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         // Encontrar el artista por ID
