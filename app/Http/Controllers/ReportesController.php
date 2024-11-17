@@ -316,9 +316,9 @@ class ReportesController extends Controller
             'motivo' => [
                 'required_if:manejarReporte,1',
                 'array',
-                'min:1' // Asegura que haya al menos un motivo seleccionado
+                'min:1'
             ],
-            'fechaDesbaneo' => 'required_if:manejarReporte,1|date|after:now',
+            'fechaDesbaneo' => 'nullable|required_if:manejarReporte,1|date|after:now',
         ]);
 
         // Obtengo el usuario reportado

@@ -174,7 +174,6 @@ class CancionController extends Controller
                 $letraInglesCancion = $cancion->letraInglesCancion;
                 $descargable = $cancion->archivoDsCancion;
 
-
                 $listaCancion[] = [
                     'idCancion' => $idCancion,
                     'tituloCancion' => $tituloCancion,

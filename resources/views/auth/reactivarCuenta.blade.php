@@ -13,6 +13,7 @@
             <!-- Columna de la imagen -->
             <div class="image-column flex-1 flex justify-center items-center p-4">
                 @if ($fotoDePerfil)
+                    @dd($fotoDePerfil)
                     <img class="pequeño w-72 rounded-md" src="{{ asset($fotoDePerfil) }}" alt="AgusFacha">
                 @else
                     <img class="pequeño w-72 rounded-md" src="{{ asset('img/logo_usuario.webp') }}" alt="AgusFacha">

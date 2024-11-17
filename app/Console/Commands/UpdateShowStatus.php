@@ -16,5 +16,9 @@ class UpdateShowStatus extends Command
         DB::table('show')
             ->where('fechashow', '<', now())
             ->update(['estadoShow' => 'Inactivo']);
+
+        DB::table('historialusuario')
+            ->where('fechaFinaliza', '<', now())
+            ->update(['estado' => 'Inactivo']);
     }
 }

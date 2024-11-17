@@ -389,7 +389,7 @@ Route::get('/reportes/{id}', [ReportesController::class, 'manejoreporte'])
 Route::get('/reportes/decidir-reporte/{id}', [ReportesController::class, 'vistaDecideReporte'])
     ->name('vistaDecideReporte')->middleware('auth');
 
-Route::post('/reportes/decidir-reporte/{id}', [ReportesController::class, 'decideReportes'])
+Route::post('/reportes/accion-reporte/{id}', [ReportesController::class, 'decideReportes'])
     ->name('decideReporte')->middleware('auth');
 
 Route::delete('/repotes/eliminar-motivo/{id}', [ReportesController::class, 'eliminarMotivo'])

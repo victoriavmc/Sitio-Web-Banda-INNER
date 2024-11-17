@@ -116,6 +116,17 @@ class LoginController extends Controller
                 ]);
                 break;
 
+            case 'Suspendido':
+                $idDatosPersonales = $usuarioExistente->DatosPersonales->idDatosPersonales;
+
+                $historialUsuario = HistorialUsuario::where('datospersonales_idDatosPersonales', $idDatosPersonales)->first();
+
+                return redirect()->route('login')->with('alertRegistro', [
+                    'type' => 'Warning',
+                    'message' => 'Su usuario ha sido suspendido hasta el dia ' . $historialUsuario->fechaFinaliza . ' , no podrá acceder.',
+                ]);
+                break;
+
             case 'Baneado':
                 // Opción 3: Usuario baneado
                 $usuarioExistente = Usuario::where('correoElectronicoUser', $request->email)->first();
@@ -131,7 +142,6 @@ class LoginController extends Controller
                         'type' => 'warning',
                         'message' => 'Su usuario ha sido baneado, no podrá acceder.',
                     ]);
-
 
             default:
                 // El usuario existe pero no está inactivo ni baneado (no permitir registro)
@@ -209,9 +219,7 @@ class LoginController extends Controller
                 $idhistorialUsuario = $historialUsuario->idhistorialusuario;
 
                 // Redirigir a la página de reactivación de cuenta
-
-                // mensaje alerta existe un usuario con ese correo electronico
-                if ($historialUsuario->fechaFinaliza > now()) {
+                if ($historialUsuario->fechaFinaliza < now()) {
                     return redirect()->route('reactivar-cuenta', ['id' => $idhistorialUsuario])->with('alertRegistro', [
                         'type' => 'Warning',
                         'message' => 'Su cuenta se encuentra Inactiva. Reactivala siguiendo los pasos',
@@ -256,7 +264,6 @@ class LoginController extends Controller
                         'type' => 'Warning',
                         'message' => 'Su usuario ha sido baneado, no podrá acceder.',
                     ]);
-
 
             case 'Activo':
                 $fail = $this->verificarCorreoUsuario($request);
@@ -309,7 +316,7 @@ class LoginController extends Controller
                 ]);
                 break;
 
-            case 'Suspendido':
+            case 'Inactivo':
                 // Opción 2: Usuario inactivo (posibilidad de reactivar cuenta)
                 $pin = Str::random(6);
 
